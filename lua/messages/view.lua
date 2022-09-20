@@ -1,52 +1,120 @@
 local Highlight = require("messages.highlight")
 local Config = require("messages.config")
+local Render = require("messages.render")
 
-local M = {
-	buf = nil,
-	win = nil,
-}
+local M = {}
 
-function M.show()
-	M.buf = vim.api.nvim_create_buf(false, true)
-	M.win = vim.api.nvim_open_win(M.buf, false, {
-		relative = "editor",
-		focusable = false,
-		width = 40,
-		height = 10,
-		anchor = "NE",
-		row = 1,
-		col = vim.o.columns,
-		style = "minimal",
-		border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" },
-	})
+---@type table<string, Renderer>
+M.handlers = {}
+
+---@param opts? {event: string, kind?:string}
+local function id(opts)
+	opts = opts or { event = "default" }
+	return opts.event .. (opts.kind and ("." .. opts.kind) or "")
 end
 
-function M.render(chunks)
-	local lines = { "" }
-	local highlights = {}
-	for _, chunk in ipairs(chunks) do
-		local attr_id, text = unpack(chunk)
-		local hl = Highlight.get_hl(attr_id)
-		for _, l in ipairs(vim.fn.split(text, "\n", true)) do
-			if l == "" then
-				table.insert(lines, "")
-			else
-				local line = lines[#lines]
-				table.insert(highlights, {
-					hl = hl,
-					line = #lines - 1,
-					from = #line,
-					to = #line + #l,
-				})
-				lines[#lines] = line .. l
-			end
+---@param opts? {event: string, kind?:string}
+function M.get(opts)
+	opts = opts or { event = "default" }
+	return M.handlers[id(opts)] or M.handlers[opts.event] or M.handlers.default
+end
+
+---@param handler MessageHandler
+function M.add(handler)
+	local opts = handler.opts or {}
+	opts.title = "Messages " .. id(handler)
+	local renderer = handler.renderer
+	if type(renderer) == "string" then
+		renderer = Render.new(renderer, opts)
+	end
+	M.handlers[id(handler)] = renderer
+end
+
+---@class MessageHandler
+---@field event string
+---@field kind? string
+---@field renderer string|Renderer
+---@field opts? table
+
+function M.setup()
+	M.add({ event = "default", renderer = "float" })
+	M.add({ event = "msg_show", renderer = "notify" })
+	M.add({
+		event = "msg_showmode",
+		renderer = "notify",
+		opts = { level = vim.log.levels.WARN },
+	})
+	M.add({
+		event = "msg_showcmd",
+		renderer = "notify",
+		opts = { level = vim.log.levels.WARN },
+	})
+	M.add({
+		event = "msg_show",
+		kind = "echoerr",
+		renderer = "notify",
+		opts = { level = vim.log.levels.ERROR, replace = false },
+	})
+	M.add({
+		event = "msg_show",
+		kind = "lua_error",
+		renderer = "notify",
+		opts = { level = vim.log.levels.ERROR, replace = false },
+	})
+	M.add({
+		event = "msg_show",
+		kind = "rpc_error",
+		renderer = "notify",
+		opts = { level = vim.log.levels.ERROR, replace = false },
+	})
+	M.add({
+		event = "msg_show",
+		kind = "emsg",
+		renderer = "notify",
+		opts = { level = vim.log.levels.ERROR, replace = false },
+	})
+	M.add({
+		event = "msg_show",
+		kind = "wmsg",
+		renderer = "notify",
+		opts = { level = vim.log.levels.WARN, replace = false },
+	})
+	vim.schedule(M.run)
+end
+
+M._queue = {}
+M.running = false
+
+function M.run()
+	M.running = true
+	while #M._queue > 0 do
+		local opts = table.remove(M._queue, 1)
+		if opts.event == "msg_clear" then
+			M.msg_clear()
+		end
+		if opts.clear then
+			M.get(opts):clear()
+		end
+		if opts.chunks then
+			M.get(opts):add(opts.chunks)
 		end
 	end
+	for k, r in pairs(M.handlers) do
+		r:render()
+	end
+	vim.defer_fn(M.run, 100)
+end
 
-	vim.api.nvim_buf_set_lines(M.buf, 0, -1, false, lines)
-	dumpp(highlights)
-	for _, hl in ipairs(highlights) do
-		vim.api.nvim_buf_add_highlight(M.buf, Config.ns, hl.hl, hl.line, hl.from, hl.to)
+---@param opts { event: string, kind?: string, chunks: table}
+function M.queue(opts)
+	table.insert(M._queue, opts)
+end
+
+function M.msg_clear()
+	for k, r in pairs(M.handlers) do
+		if k:find("msg_show") == 1 then
+			r:clear()
+		end
 	end
 end
 
