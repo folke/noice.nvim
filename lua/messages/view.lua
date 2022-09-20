@@ -99,7 +99,7 @@ function M.run()
 			M.get(opts):add(opts.chunks)
 		end
 	end
-	for k, r in pairs(M.handlers) do
+	for _, r in pairs(M.handlers) do
 		r:render()
 	end
 	vim.defer_fn(M.run, 100)

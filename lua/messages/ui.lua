@@ -41,8 +41,26 @@ function M.handle_msg_show(event, kind, content, replace_last)
 		vim.api.nvim_input("<cr>")
 		return
 	end
+	if kind == "confirm" then
+		return M.handle_confirm()
+	end
 	local clear_kinds = { "echo", "search_count" }
-	View.queue({ event = event, kind = kind, chunks = content, clear = vim.tbl_contains(clear_kinds, kind) })
+	local clear = vim.tbl_contains(clear_kinds, kind)
+	View.queue({
+		event = event,
+		kind = kind,
+		chunks = content,
+		clear = clear,
+		nowait = (kind == "confirm"),
+	})
+end
+
+function M.handle_confirm()
+	-- detach and reattach on the next schedule, so the user can do the confirmation
+	M.disable()
+	vim.schedule(function()
+		M.enable()
+	end)
 end
 
 function M.handle_msg_history_show(event, entries)
