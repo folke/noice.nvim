@@ -57,7 +57,6 @@ function Renderer:render_buf(buf, opts)
 			vim.api.nvim_buf_add_highlight(buf, Config.ns, hl.hl, hl.line + (opts.offset or 0), hl.from, hl.to)
 		end
 	end
-	vim.cmd.redraw()
 end
 
 function Renderer:add(chunks)

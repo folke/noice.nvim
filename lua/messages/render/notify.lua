@@ -31,7 +31,7 @@ return function(renderer)
 				vim.api.nvim_win_set_config(win, opts)
 			end
 			renderer:render_buf(buf, { lines = false, offset = 2 })
-			vim.cmd([[redraw]])
+			-- vim.cmd([[redraw]])
 		end,
 	})
 end
