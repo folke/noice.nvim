@@ -91,11 +91,12 @@ function M.update()
 	end
 
 	if #chunks > 0 then
+		local opts = Config.options.cmdline.syntax_highlighting and { filetype = "vim" } or {}
 		Handlers.queue({
 			event = "cmdline",
 			chunks = chunks,
 			highlights = cursors,
-			opts = { filetype = "vim" },
+			opts = opts,
 			clear = true,
 		})
 	else
