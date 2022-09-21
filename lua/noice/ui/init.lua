@@ -17,7 +17,11 @@ M.attached = false
 
 function M.attach()
 	M.attached = true
-	vim.ui_attach(Config.ns, { ext_messages = true, ext_popupmenu = true }, function(event, ...)
+	vim.ui_attach(Config.ns, {
+		ext_messages = true,
+		ext_cmdline = Config.options.cmdline.enabled, -- cmdline is implicitely enabled by enabling messages, but this might change in the future
+		ext_popupmenu = Config.options.cmdline.enabled, -- when cmdline is enabled, also enable popupmenu
+	}, function(event, ...)
 		if not inside_redraw then
 			M.handle(event, ...)
 		end
