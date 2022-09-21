@@ -14,32 +14,45 @@ function M.on_showmode(event, content)
 	end
 end
 M.on_showcmd = M.on_showmode
+M.on_ruler = M.on_showmode
 
 function M.on_show(event, kind, content, replace_last)
 	if kind == "return_prompt" then
 		return vim.api.nvim_input("<cr>")
 	end
+
 	if kind == "confirm" then
-		return M.on_confirm()
+		return M.on_confirm(event, kind, content)
 	end
+
 	local clear_kinds = { "echo" }
 	local clear = replace_last or vim.tbl_contains(clear_kinds, kind)
+
 	Handlers.queue({
 		event = event,
 		kind = kind,
 		chunks = content,
 		clear = clear,
-		nowait = (kind == "confirm"),
 	})
 end
 
-function M.on_confirm()
+function M.on_confirm(event, kind, content)
 	-- detach and reattach on the next schedule, so the user can do the confirmation
-	local ui = require("noice.ui")
-	ui.detach()
-	vim.schedule(function()
-		ui.attach()
-	end)
+	-- local ui = require("noice.ui")
+	-- ui.detach()
+	-- vim.schedule(function()
+	-- 	ui.attach()
+	-- end)
+	table.insert(content, { "Cursor", " " })
+
+	Handlers._process({
+		event = event,
+		kind = kind,
+		chunks = content,
+		clear = true,
+	}):render()
+	require("noice.ui").redraw()
+	Handlers.queue({ event = event, kind = kind, hide = true })
 end
 
 function M.on_history_show(event, entries)
