@@ -59,8 +59,9 @@ end
 ---@field opts? table
 
 function M.setup()
-	M.add({ event = "default", renderer = "float" })
+	M.add({ event = "default", renderer = "popup" })
 	M.add({ event = "msg_show", renderer = "notify" })
+	M.add({ event = "msg_history_show", renderer = "popup" })
 	M.add({
 		event = { "msg_showmode", "msg_showcmd" },
 		renderer = "notify",
