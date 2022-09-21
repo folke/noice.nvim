@@ -8,6 +8,7 @@ M.defaults = {
 	throttle = 1000 / 30,
 	cmdline = {
 		enabled = true,
+		syntax_highlighting = true, -- apply vim (and injected lua) syntax highlighting to the cmdline
 		menu = "popup", -- @type "popup" | "wild"
 	},
 }
