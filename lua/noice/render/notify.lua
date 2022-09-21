@@ -1,5 +1,12 @@
 ---@param renderer Renderer
 return function(renderer)
+	if not renderer.visible then
+		if renderer.win and vim.api.nvim_win_is_valid(renderer.win) then
+			vim.api.nvim_win_close(renderer.win, true)
+		end
+		return
+	end
+
 	local text = renderer:get_text()
 	local level = renderer.opts.level or "info"
 
@@ -31,7 +38,6 @@ return function(renderer)
 				vim.api.nvim_win_set_config(win, opts)
 			end
 			renderer:render_buf(buf, { highlights_only = false, offset = 2 })
-			vim.cmd([[redraw]])
 		end,
 	})
 end
