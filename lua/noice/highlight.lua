@@ -28,6 +28,9 @@ end
 M.cache = {}
 
 function M.get_hl(attr_id)
+	if type(attr_id) == "string" then
+		return attr_id
+	end
 	if not M.cache[attr_id] then
 		local attrs = M.attr2entry(attr_id)
 		local hl_group = "MessagesAttr" .. tostring(attr_id)
