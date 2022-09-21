@@ -2,7 +2,8 @@
   "lua-dev": {
     "library": {
       "plugins": [
-        "nui.nvim"
+        "nui.nvim",
+        "nvim-cmp"
       ]
     }
   }
