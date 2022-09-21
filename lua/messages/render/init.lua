@@ -1,5 +1,6 @@
 local Highlight = require("messages.highlight")
 local Config = require("messages.config")
+local NuiLine = require("nui.line")
 
 local M = {}
 
@@ -13,8 +14,7 @@ local M = {}
 
 ---@class Renderer
 ---@field _render RenderFunc
----@field lines string[]
----@field highlights Highlight[]
+---@field lines NuiLine[]
 ---@field opts? table
 ---@field dirty boolean
 ---@field _clear boolean
@@ -29,7 +29,6 @@ function M.new(render, opts)
 		opts = opts or {},
 		dirty = false,
 		lines = {},
-		highlights = {},
 	}, Renderer)
 end
 
@@ -49,20 +48,31 @@ end
 
 function Renderer:render_buf(buf, opts)
 	opts = opts or {}
-	if opts.lines ~= false then
-		vim.api.nvim_buf_set_lines(buf, 0, -1, false, self.lines)
-	end
-	if opts.highlights ~= false then
-		for _, hl in ipairs(self.highlights) do
-			vim.api.nvim_buf_add_highlight(buf, Config.ns, hl.hl, hl.line + (opts.offset or 0), hl.from, hl.to)
+	for l, line in ipairs(self.lines) do
+		if opts.highlights_only then
+			line:highlight(buf, Config.ns, l + (opts.offset or 0))
+		else
+			line:render(buf, Config.ns, l + (opts.offset or 0))
 		end
 	end
+end
+
+function Renderer:get_text()
+	return table.concat(
+		vim.tbl_map(
+			---@param l NuiLine
+			function(l)
+				return l:content()
+			end,
+			self.lines
+		),
+		"\n"
+	)
 end
 
 function Renderer:add(chunks)
 	if self._clear then
 		self.lines = {}
-		self.highlights = {}
 		self._clear = false
 	end
 	self.dirty = true
@@ -74,16 +84,10 @@ function Renderer:add(chunks)
 
 		local function append(l)
 			if #self.lines == 0 then
-				table.insert(self.lines, "")
+				table.insert(self.lines, NuiLine())
 			end
 			local line = self.lines[#self.lines]
-			table.insert(self.highlights, {
-				hl = hl,
-				line = #self.lines - 1,
-				from = #line,
-				to = #line + #l,
-			})
-			self.lines[#self.lines] = line .. l
+			line:append(l, hl)
 		end
 
 		while text ~= "" do
@@ -91,7 +95,7 @@ function Renderer:add(chunks)
 			if nl then
 				local str = text:sub(1, nl - 1)
 				append(str)
-				table.insert(self.lines, "")
+				table.insert(self.lines, NuiLine())
 				text = text:sub(nl + 1)
 			else
 				append(text)
