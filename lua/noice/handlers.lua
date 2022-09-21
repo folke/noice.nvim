@@ -138,8 +138,9 @@ function M.handle(event)
 		if process(event):render() then
 			require("noice.ui").redraw()
 		end
+	else
+		table.insert(M._queue, event)
 	end
-	table.insert(M._queue, event)
 end
 
 M.running = false
