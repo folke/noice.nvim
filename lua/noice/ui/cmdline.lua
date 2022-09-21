@@ -98,6 +98,7 @@ function M.update()
 			highlights = cursors,
 			opts = opts,
 			clear = true,
+			nowait = true,
 		})
 	else
 		Handlers.queue({

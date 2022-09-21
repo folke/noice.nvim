@@ -45,13 +45,13 @@ function M.on_confirm(event, kind, content)
 	-- end)
 	table.insert(content, { "Cursor", " " })
 
-	Handlers._process({
+	Handlers.queue({
 		event = event,
 		kind = kind,
 		chunks = content,
 		clear = true,
-	}):render()
-	require("noice.ui").redraw()
+		nowait = true,
+	})
 	Handlers.queue({ event = event, kind = kind, hide = true })
 end
 

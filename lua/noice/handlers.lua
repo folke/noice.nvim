@@ -5,7 +5,7 @@ local M = {}
 
 ---@type table<string, Renderer>
 M.handlers = {
-	default = Render.new("nop"),
+	default = Render.new(function() end),
 }
 
 ---@param opts? {event: string, kind?:string}
@@ -61,7 +61,8 @@ end
 
 function M.setup()
 	M.add({ event = "default", renderer = "split" })
-	M.add({ event = "msg_show", renderer = "notify" })
+	M.add({ event = "msg_show", renderer = "split" })
+	M.add({ event = "msg_show", kind = { "echo", "echomsg", "" }, renderer = "notify" })
 	M.add({ event = "msg_show", kind = "confirm", renderer = "cmdline" })
 	M.add({ event = "cmdline", renderer = "cmdline" })
 	M.add({ event = "msg_history_show", renderer = "split" })
@@ -93,6 +94,7 @@ end
 ---@field clear? boolean
 ---@field hide? boolean
 ---@field show? boolean
+---@field nowait? boolean
 
 local function msg_clear()
 	for k, r in pairs(M.handlers) do
@@ -132,6 +134,11 @@ end
 
 ---@param event RenderEvent
 function M.queue(event)
+	if event.nowait then
+		if M._process(event):render() then
+			require("noice.ui").redraw()
+		end
+	end
 	table.insert(M._queue, event)
 end
 
