@@ -3,6 +3,7 @@ local function setup(opts)
 	local event = require("nui.utils.autocmd").event
 
 	opts = vim.tbl_deep_extend("force", {}, {
+		enter = false,
 		relative = "editor",
 		position = "bottom",
 		size = "20%",
@@ -42,11 +43,7 @@ local function get_split(renderer)
 		return split
 	end
 
-	renderer.split = setup({
-		border = {
-			text = { top = " Messages " },
-		},
-	})
+	renderer.split = setup({})
 	return renderer.split
 end
 
