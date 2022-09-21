@@ -60,11 +60,11 @@ end
 ---@field opts? table
 
 function M.setup()
-	M.add({ event = "default", renderer = "popup" })
+	M.add({ event = "default", renderer = "split" })
 	M.add({ event = "msg_show", renderer = "notify" })
 	M.add({ event = "msg_show", kind = "confirm", renderer = "cmdline" })
 	M.add({ event = "cmdline", renderer = "cmdline" })
-	M.add({ event = "msg_history_show", renderer = "popup" })
+	M.add({ event = "msg_history_show", renderer = "split" })
 	M.add({
 		event = { "msg_showmode", "msg_showcmd", "msg_ruler" },
 		renderer = "notify",
