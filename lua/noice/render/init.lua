@@ -4,8 +4,6 @@ local NuiLine = require("nui.line")
 
 local M = {}
 
-M.nop = function() end
-
 ---@class Highlight
 ---@field hl string
 ---@field line number
