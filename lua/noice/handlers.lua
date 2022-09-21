@@ -21,17 +21,35 @@ end
 
 ---@param handler MessageHandler
 function M.add(handler)
-	local opts = handler.opts or {}
-	opts.title = opts.title or "Noice"
-	if Config.options.debug then
-		opts.title = opts.title .. " (" .. id(handler) .. ")"
+	local events = handler.event
+	if type(events) ~= "table" then
+		events = { events }
 	end
 
-	local renderer = handler.renderer
-	if type(renderer) == "string" then
-		renderer = Render.new(renderer, opts)
+	local kinds = handler.kind
+	if type(kinds) ~= "table" then
+		kinds = { kinds }
 	end
-	M.handlers[id(handler)] = renderer
+
+	for _, event in ipairs(events) do
+		-- handle special case where kind = nil
+		for k = 1, math.max(#kinds, 1) do
+			local kind = kinds[k]
+			local hid = id({ event = event, kind = kind })
+
+			local opts = vim.deepcopy(handler.opts or {})
+			opts.title = opts.title or "Noice"
+			if Config.options.debug then
+				opts.title = opts.title .. " (" .. hid .. ")"
+			end
+
+			local renderer = handler.renderer
+			if type(renderer) == "string" then
+				renderer = Render.new(renderer, opts)
+			end
+			M.handlers[hid] = renderer
+		end
+	end
 end
 
 ---@class MessageHandler
@@ -44,36 +62,13 @@ function M.setup()
 	M.add({ event = "default", renderer = "float" })
 	M.add({ event = "msg_show", renderer = "notify" })
 	M.add({
-		event = "msg_showmode",
-		renderer = "notify",
-		opts = { level = vim.log.levels.WARN },
-	})
-	M.add({
-		event = "msg_showcmd",
+		event = { "msg_showmode", "msg_showcmd" },
 		renderer = "notify",
 		opts = { level = vim.log.levels.WARN },
 	})
 	M.add({
 		event = "msg_show",
-		kind = "echoerr",
-		renderer = "notify",
-		opts = { level = vim.log.levels.ERROR, replace = false },
-	})
-	M.add({
-		event = "msg_show",
-		kind = "lua_error",
-		renderer = "notify",
-		opts = { level = vim.log.levels.ERROR, replace = false },
-	})
-	M.add({
-		event = "msg_show",
-		kind = "rpc_error",
-		renderer = "notify",
-		opts = { level = vim.log.levels.ERROR, replace = false },
-	})
-	M.add({
-		event = "msg_show",
-		kind = "emsg",
+		kind = { "echoerr", "lua_error", "rpc_error", "emsg" },
 		renderer = "notify",
 		opts = { level = vim.log.levels.ERROR, replace = false },
 	})
@@ -106,7 +101,7 @@ function M.run()
 	for _, r in pairs(M.handlers) do
 		r:render()
 	end
-	vim.defer_fn(M.run, 100)
+	vim.defer_fn(M.run, Config.options.throttle)
 end
 
 ---@param opts { event: string, kind?: string, chunks: table}

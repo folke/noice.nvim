@@ -1,31 +1,30 @@
-local View = require("noice.view")
+local Handlers = require("noice.handlers")
 
 local M = {}
 
 function M.on_clear()
-	View.queue({ event = "msg_clear" })
+	Handlers.queue({ event = "msg_clear" })
 end
 
 function M.on_showmode(event, content)
 	if vim.tbl_isempty(content) then
-		View.queue({ event = event, clear = true })
+		Handlers.queue({ event = event, clear = true })
 	else
-		View.queue({ event = event, chunks = content, clear = true })
+		Handlers.queue({ event = event, chunks = content, clear = true })
 	end
 end
 M.on_showcmd = M.on_showmode
 
 function M.on_show(event, kind, content, replace_last)
 	if kind == "return_prompt" then
-		vim.api.nvim_input("<cr>")
-		return
+		return vim.api.nvim_input("<cr>")
 	end
 	if kind == "confirm" then
 		return M.on_confirm()
 	end
 	local clear_kinds = { "echo" }
 	local clear = replace_last or vim.tbl_contains(clear_kinds, kind)
-	View.queue({
+	Handlers.queue({
 		event = event,
 		kind = kind,
 		chunks = content,
@@ -50,7 +49,7 @@ function M.on_history_show(event, entries)
 		table.insert(contents, { 0, "\n" })
 		vim.list_extend(contents, content)
 	end
-	View.queue({ event = event, chunks = contents })
+	Handlers.queue({ event = event, chunks = contents })
 end
 
 return M
