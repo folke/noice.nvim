@@ -3,7 +3,8 @@
     "library": {
       "plugins": [
         "nui.nvim",
-        "nvim-cmp"
+        "nvim-cmp",
+        "nvim-notify"
       ]
     }
   }
