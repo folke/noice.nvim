@@ -65,4 +65,6 @@ function M.on_history_show(event, entries)
 	Handlers.queue({ event = event, chunks = contents })
 end
 
+function M.on_history_clear() end
+
 return M
