@@ -92,7 +92,7 @@ function M.update()
 
 	if #chunks > 0 then
 		local opts = Config.options.cmdline.syntax_highlighting and { filetype = "vim" } or {}
-		Handlers.queue({
+		Handlers.handle({
 			event = "cmdline",
 			chunks = chunks,
 			highlights = cursors,
@@ -101,7 +101,7 @@ function M.update()
 			nowait = true,
 		})
 	else
-		Handlers.queue({
+		Handlers.handle({
 			event = "cmdline",
 			hide = true,
 		})

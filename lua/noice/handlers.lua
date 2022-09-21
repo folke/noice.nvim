@@ -105,7 +105,7 @@ local function msg_clear()
 end
 
 ---@param event RenderEvent
-function M._process(event)
+local function process(event)
 	if event.event == "msg_clear" then
 		msg_clear()
 	else
@@ -133,9 +133,9 @@ function M._process(event)
 end
 
 ---@param event RenderEvent
-function M.queue(event)
+function M.handle(event)
 	if event.nowait then
-		if M._process(event):render() then
+		if process(event):render() then
 			require("noice.ui").redraw()
 		end
 	end
@@ -153,7 +153,7 @@ function M.run()
 		Config.options.throttle,
 		vim.schedule_wrap(function()
 			while #M._queue > 0 do
-				M._process(table.remove(M._queue, 1))
+				process(table.remove(M._queue, 1))
 			end
 			local rendered = 0
 			for _, r in pairs(M.handlers) do

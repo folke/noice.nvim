@@ -3,14 +3,14 @@ local Handlers = require("noice.handlers")
 local M = {}
 
 function M.on_clear()
-	Handlers.queue({ event = "msg_clear" })
+	Handlers.handle({ event = "msg_clear" })
 end
 
 function M.on_showmode(event, content)
 	if vim.tbl_isempty(content) then
-		Handlers.queue({ event = event, clear = true })
+		Handlers.handle({ event = event, clear = true })
 	else
-		Handlers.queue({ event = event, chunks = content, clear = true })
+		Handlers.handle({ event = event, chunks = content, clear = true })
 	end
 end
 M.on_showcmd = M.on_showmode
@@ -28,7 +28,7 @@ function M.on_show(event, kind, content, replace_last)
 	local clear_kinds = { "echo" }
 	local clear = replace_last or vim.tbl_contains(clear_kinds, kind)
 
-	Handlers.queue({
+	Handlers.handle({
 		event = event,
 		kind = kind,
 		chunks = content,
@@ -45,14 +45,14 @@ function M.on_confirm(event, kind, content)
 	-- end)
 	table.insert(content, { "Cursor", " " })
 
-	Handlers.queue({
+	Handlers.handle({
 		event = event,
 		kind = kind,
 		chunks = content,
 		clear = true,
 		nowait = true,
 	})
-	Handlers.queue({ event = event, kind = kind, hide = true })
+	Handlers.handle({ event = event, kind = kind, hide = true })
 end
 
 function M.on_history_show(event, entries)
@@ -62,7 +62,7 @@ function M.on_history_show(event, entries)
 		table.insert(contents, { 0, "\n" })
 		vim.list_extend(contents, content)
 	end
-	Handlers.queue({ event = event, chunks = contents })
+	Handlers.handle({ event = event, chunks = contents })
 end
 
 function M.on_history_clear() end
