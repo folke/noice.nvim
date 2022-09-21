@@ -12,7 +12,7 @@ M.nop = function() end
 ---@field from number
 ---@field to number
 
----@alias RenderFunc fun(renderer: Renderer, clear?: boolean)
+---@alias RenderFunc fun(renderer: Renderer)
 
 ---@class Renderer
 ---@field _render RenderFunc
@@ -25,11 +25,11 @@ M.nop = function() end
 local Renderer = {}
 Renderer.__index = Renderer
 
----@param render string
+---@param render string|RenderFunc
 ---@param opts? table
 function M.new(render, opts)
 	return setmetatable({
-		_render = M[render],
+		_render = type(render) == "function" and render or M[render],
 		opts = opts or {},
 		dirty = false,
 		visible = true,
