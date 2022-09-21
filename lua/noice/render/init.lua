@@ -4,6 +4,8 @@ local NuiLine = require("nui.line")
 
 local M = {}
 
+M.nop = function() end
+
 ---@class Highlight
 ---@field hl string
 ---@field line number
@@ -15,9 +17,11 @@ local M = {}
 ---@class Renderer
 ---@field _render RenderFunc
 ---@field lines NuiLine[]
+---@field highlights Highlight[]
 ---@field opts? table
 ---@field dirty boolean
 ---@field _clear boolean
+---@field visible boolean
 local Renderer = {}
 Renderer.__index = Renderer
 
@@ -28,6 +32,8 @@ function M.new(render, opts)
 		_render = M[render],
 		opts = opts or {},
 		dirty = false,
+		visible = true,
+		highlights = {},
 		lines = {},
 	}, Renderer)
 end
@@ -39,7 +45,19 @@ function Renderer:render()
 			vim.notify(err, "error", { title = "Messages" })
 		end
 		self.dirty = false
+		return true
 	end
+	return false
+end
+
+function Renderer:show()
+	self.dirty = self.visible == false
+	self.visible = true
+end
+
+function Renderer:hide()
+	self.dirty = self.visible == true
+	self.visible = false
 end
 
 function Renderer:clear()
@@ -48,11 +66,31 @@ end
 
 function Renderer:render_buf(buf, opts)
 	opts = opts or {}
+	local offset = opts.offset or 0
 	for l, line in ipairs(self.lines) do
 		if opts.highlights_only then
-			line:highlight(buf, Config.ns, l + (opts.offset or 0))
+			line:highlight(buf, Config.ns, l + offset)
 		else
-			line:render(buf, Config.ns, l + (opts.offset or 0))
+			line:render(buf, Config.ns, l + offset)
+		end
+	end
+	for _, hl in ipairs(self.highlights) do
+		local line_width = self.lines[hl.line + 1]:width()
+		if hl.from >= line_width then
+			-- end of line, so use a virtual text
+			vim.api.nvim_buf_set_extmark(buf, Config.ns, hl.line + offset, hl.from, {
+				virt_text = { { " ", "Cursor" } },
+				virt_text_win_col = hl.from,
+				strict = false,
+				hl_group = hl.hl,
+			})
+		else
+			-- use a regular extmark
+			vim.api.nvim_buf_set_extmark(buf, Config.ns, hl.line + offset, hl.from, {
+				end_col = hl.to,
+				strict = false,
+				hl_group = hl.hl,
+			})
 		end
 	end
 end
@@ -76,6 +114,7 @@ function Renderer:add(chunks)
 		self._clear = false
 	end
 	self.dirty = true
+	self.visible = true
 	for _, chunk in ipairs(chunks) do
 		local attr_id, text = unpack(chunk)
 		local hl = Highlight.get_hl(attr_id)
