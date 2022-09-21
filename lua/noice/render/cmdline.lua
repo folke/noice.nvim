@@ -43,6 +43,9 @@ return function(renderer)
 	local popup = get_popup(renderer)
 	if renderer.visible then
 		popup:show()
+		if renderer.opts.filetype then
+			vim.api.nvim_buf_set_option(popup.bufnr, "filetype", renderer.opts.filetype)
+		end
 		renderer:render_buf(popup.bufnr)
 		popup:update_layout({
 			position = {

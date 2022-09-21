@@ -89,11 +89,13 @@ function M.update()
 			line = line + 1
 		end
 	end
+
 	if #chunks > 0 then
 		Handlers.queue({
 			event = "cmdline",
 			chunks = chunks,
 			highlights = cursors,
+			opts = { filetype = "vim" },
 			clear = true,
 		})
 	else
