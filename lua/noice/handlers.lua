@@ -1,11 +1,12 @@
-local Highlight = require("noice.highlight")
 local Config = require("noice.config")
 local Render = require("noice.render")
 
 local M = {}
 
 ---@type table<string, Renderer>
-M.handlers = {}
+M.handlers = {
+	default = Render.new("nop"),
+}
 
 ---@param opts? {event: string, kind?:string}
 local function id(opts)
@@ -61,9 +62,11 @@ end
 function M.setup()
 	M.add({ event = "default", renderer = "popup" })
 	M.add({ event = "msg_show", renderer = "notify" })
+	M.add({ event = "msg_show", kind = "confirm", renderer = "cmdline" })
+	M.add({ event = "cmdline", renderer = "cmdline" })
 	M.add({ event = "msg_history_show", renderer = "popup" })
 	M.add({
-		event = { "msg_showmode", "msg_showcmd" },
+		event = { "msg_showmode", "msg_showcmd", "msg_ruler" },
 		renderer = "notify",
 		opts = { level = vim.log.levels.WARN },
 	})
@@ -82,40 +85,78 @@ function M.setup()
 	vim.schedule(M.run)
 end
 
-M._queue = {}
-M.running = false
+---@class RenderEvent
+---@field event string
+---@field chunks? table
+---@field opts? table
+---@field highlights? table
+---@field clear? boolean
+---@field hide? boolean
+---@field show? boolean
 
-function M.run()
-	M.running = true
-	while #M._queue > 0 do
-		local opts = table.remove(M._queue, 1)
-		if opts.event == "msg_clear" then
-			M.msg_clear()
-		end
-		if opts.clear then
-			M.get(opts):clear()
-		end
-		if opts.chunks then
-			M.get(opts):add(opts.chunks)
-		end
-	end
-	for _, r in pairs(M.handlers) do
-		r:render()
-	end
-	vim.defer_fn(M.run, Config.options.throttle)
-end
-
----@param opts { event: string, kind?: string, chunks: table}
-function M.queue(opts)
-	table.insert(M._queue, opts)
-end
-
-function M.msg_clear()
+local function msg_clear()
 	for k, r in pairs(M.handlers) do
 		if k:find("msg_show") == 1 then
 			r:clear()
 		end
 	end
+end
+
+---@param event RenderEvent
+function M._process(event)
+	if event.event == "msg_clear" then
+		msg_clear()
+	else
+		local renderer = M.get(event)
+		if event.opts then
+			renderer.opts = vim.tbl_deep_extend("force", renderer.opts, event.opts)
+		end
+		if event.highlights then
+			renderer.highlights = event.highlights
+		end
+		if event.clear then
+			renderer:clear()
+		end
+		if event.hide then
+			renderer:hide()
+		end
+		if event.show then
+			renderer:show()
+		end
+		if event.chunks then
+			renderer:add(event.chunks)
+		end
+		return renderer
+	end
+end
+
+---@param event RenderEvent
+function M.queue(event)
+	table.insert(M._queue, event)
+end
+
+M.running = false
+M._queue = {}
+
+function M.run()
+	M.running = true
+
+	vim.loop.new_timer():start(
+		Config.options.throttle,
+		Config.options.throttle,
+		vim.schedule_wrap(function()
+			while #M._queue > 0 do
+				M._process(table.remove(M._queue, 1))
+			end
+			local rendered = 0
+			for _, r in pairs(M.handlers) do
+				rendered = rendered + (r:render() and 1 or 0)
+			end
+			if rendered > 0 then
+				require("noice.ui").redraw()
+			end
+		end)
+	)
 end
 
 return M
