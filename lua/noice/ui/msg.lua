@@ -1,21 +1,9 @@
-local Config = require("messages.config")
-local View = require("messages.view")
+local View = require("noice.view")
 
 local M = {}
 
-function M.handle(event, ...)
-	if event == "msg_show" then
-		M.on_show(event, ...)
-	elseif event == "msg_showmode" then
-		M.on_showmode(event, ...)
-	elseif event == "msg_showcmd" then
-		M.on_showcmd(event, ...)
-	elseif event == "msg_clear" then
-		View.queue({ event = "msg_clear" })
-	elseif event == "return_prompt" then
-	elseif event == "msg_history_show" then
-		M.on_history_show(event, ...)
-	end
+function M.on_clear()
+	View.queue({ event = "msg_clear" })
 end
 
 function M.on_showmode(event, content)
@@ -48,10 +36,10 @@ end
 
 function M.on_confirm()
 	-- detach and reattach on the next schedule, so the user can do the confirmation
-	local ui = require("messages.ui")
-	ui.disable()
+	local ui = require("noice.ui")
+	ui.detach()
 	vim.schedule(function()
-		ui.enable()
+		ui.attach()
 	end)
 end
 

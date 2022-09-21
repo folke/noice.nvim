@@ -1,5 +1,5 @@
-local Highlight = require("messages.highlight")
-local Config = require("messages.config")
+local Highlight = require("noice.highlight")
+local Config = require("noice.config")
 local NuiLine = require("nui.line")
 
 local M = {}
@@ -107,7 +107,7 @@ end
 
 setmetatable(M, {
 	__index = function(_, key)
-		return require("messages.render." .. key)
+		return require("noice.render." .. key)
 	end,
 })
 

@@ -1,6 +1,6 @@
-local Highlight = require("messages.highlight")
-local Config = require("messages.config")
-local Render = require("messages.render")
+local Highlight = require("noice.highlight")
+local Config = require("noice.config")
+local Render = require("noice.render")
 
 local M = {}
 
@@ -22,7 +22,11 @@ end
 ---@param handler MessageHandler
 function M.add(handler)
 	local opts = handler.opts or {}
-	opts.title = "Messages " .. id(handler)
+	opts.title = opts.title or "Noice"
+	if Config.options.debug then
+		opts.title = opts.title .. " (" .. id(handler) .. ")"
+	end
+
 	local renderer = handler.renderer
 	if type(renderer) == "string" then
 		renderer = Render.new(renderer, opts)
@@ -31,8 +35,8 @@ function M.add(handler)
 end
 
 ---@class MessageHandler
----@field event string
----@field kind? string
+---@field event string|string[]
+---@field kind? string|string[]
 ---@field renderer string|Renderer
 ---@field opts? table
 
