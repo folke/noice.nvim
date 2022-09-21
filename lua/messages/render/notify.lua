@@ -1,6 +1,6 @@
 ---@param renderer Renderer
 return function(renderer)
-	local text = table.concat(renderer.lines, "\n")
+	local text = renderer:get_text()
 	local level = renderer.opts.level or "info"
 
 	renderer.notif = require("notify")(text, level, {
@@ -30,8 +30,8 @@ return function(renderer)
 				opts.height = height
 				vim.api.nvim_win_set_config(win, opts)
 			end
-			renderer:render_buf(buf, { lines = false, offset = 2 })
-			-- vim.cmd([[redraw]])
+			renderer:render_buf(buf, { highlights_only = false, offset = 2 })
+			vim.cmd([[redraw]])
 		end,
 	})
 end
