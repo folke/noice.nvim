@@ -27,13 +27,17 @@ end
 
 M.cache = {}
 
+function M.get_hl_group(attr_id)
+  return "NoiceAttr" .. tostring(attr_id)
+end
+
 function M.get_hl(attr_id)
   if type(attr_id) == "string" then
     return attr_id
   end
   if not M.cache[attr_id] then
     local attrs = M.attr2entry(attr_id)
-    local hl_group = "MessagesAttr" .. tostring(attr_id)
+    local hl_group = M.get_hl_group(attr_id)
     vim.api.nvim_set_hl(0, hl_group, {
       fg = attrs.rgb_fg_color,
       bg = attrs.rgb_bg_color,

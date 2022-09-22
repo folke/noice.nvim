@@ -1,3 +1,5 @@
+local Config = require("noice.config")
+
 local function setup(opts)
   local Popup = require("nui.popup")
   local event = require("nui.utils.autocmd").event
@@ -60,5 +62,5 @@ end
 
 ---@param renderer Renderer
 return function(renderer)
-  renderer:render_buf(get_popup(renderer).bufnr)
+  renderer.message:render(get_popup(renderer).bufnr, Config.ns)
 end

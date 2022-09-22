@@ -113,9 +113,6 @@ local function process(event)
     if event.opts then
       renderer.opts = vim.tbl_deep_extend("force", renderer.opts, event.opts)
     end
-    if event.highlights then
-      renderer.highlights = event.highlights
-    end
     if event.clear then
       renderer:clear()
     end

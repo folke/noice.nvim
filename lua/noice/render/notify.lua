@@ -1,3 +1,4 @@
+local Config = require("noice.config")
 local Util = require("noice.util")
 
 local M = {}
@@ -38,10 +39,10 @@ function M.render(renderer)
     M.get_render(config)(buf, notif, hl, config)
 
     local buf_lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
-    local offset = #buf_lines - #renderer.lines
+    local offset = #buf_lines - renderer.message:height()
 
     -- do our rendering
-    renderer:render_buf(buf, { highlights_only = true, offset = offset })
+    renderer.message:highlight(buf, Config.ns, offset)
 
     -- resize notification
     local win = vim.fn.bufwinid(buf)
@@ -67,7 +68,7 @@ return function(renderer)
     return M.hide_last()
   end
 
-  local text = renderer:get_text()
+  local text = renderer.message:content()
   local level = renderer.opts.level or "info"
   local render = M.render(renderer)
   render = Util.protect(render)

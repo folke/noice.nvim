@@ -1,3 +1,5 @@
+local Config = require("noice.config")
+
 local function setup(opts)
   local Split = require("nui.split")
   local event = require("nui.utils.autocmd").event
@@ -49,5 +51,5 @@ end
 
 ---@param renderer Renderer
 return function(renderer)
-  renderer:render_buf(get_split(renderer).bufnr)
+  renderer.message:render(get_split(renderer).bufnr, Config.ns)
 end

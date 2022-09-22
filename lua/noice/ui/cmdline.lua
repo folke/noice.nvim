@@ -71,8 +71,6 @@ end
 
 function M.update()
   local chunks = {}
-  ---@type Highlight[]
-  local cursors = {}
   local line = 1
   for _, cmdline in ipairs(M.cmdlines) do
     if cmdline then
@@ -80,11 +78,11 @@ function M.update()
         table.insert(chunks, { 0, "\n" })
       end
       vim.list_extend(chunks, cmdline:chunks())
-      table.insert(cursors, {
-        hl = "Cursor",
+      table.insert(chunks, {
+        hl_group = "Cursor",
         line = line - 1,
-        from = cmdline.pos + 1,
-        to = cmdline.pos + 2,
+        col = cmdline.pos + 1,
+        end_col = cmdline.pos + 2,
       })
       line = line + 1
     end
@@ -95,7 +93,6 @@ function M.update()
     Handlers.handle({
       event = "cmdline",
       chunks = chunks,
-      highlights = cursors,
       opts = opts,
       clear = true,
       nowait = true,

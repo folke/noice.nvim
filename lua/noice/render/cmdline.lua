@@ -1,3 +1,5 @@
+local Config = require("noice.config")
+
 local function setup(opts)
   local Popup = require("nui.popup")
 
@@ -46,14 +48,14 @@ return function(renderer)
     if renderer.opts.filetype then
       vim.api.nvim_buf_set_option(popup.bufnr, "filetype", renderer.opts.filetype)
     end
-    renderer:render_buf(popup.bufnr)
+    renderer.message:render(popup.bufnr, Config.ns)
     popup:update_layout({
       position = {
         row = vim.o.lines - 1,
         col = 0,
       },
       size = {
-        height = #renderer.lines,
+        height = renderer.message:height(),
         width = vim.o.columns,
       },
     })
