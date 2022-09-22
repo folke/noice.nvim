@@ -1,11 +1,11 @@
 local Config = require("noice.config")
-local Render = require("noice.render")
+local View = require("noice.view")
 
 local M = {}
 
----@type table<string, Renderer>
+---@type table<string, View>
 M.handlers = {
-  default = Render.new(function() end),
+  default = View(function() end),
 }
 
 ---@param opts? {event: string, kind?:string}
@@ -44,11 +44,11 @@ function M.add(handler)
         opts.title = opts.title .. " (" .. hid .. ")"
       end
 
-      local renderer = handler.renderer
-      if type(renderer) == "string" then
-        renderer = Render.new(renderer, opts)
+      local view = handler.view
+      if type(view) == "string" then
+        view = View(view, opts)
       end
-      M.handlers[hid] = renderer
+      M.handlers[hid] = view
     end
   end
 end
@@ -56,31 +56,31 @@ end
 ---@class MessageHandler
 ---@field event string|string[]
 ---@field kind? string|string[]
----@field renderer string|Renderer
+---@field view string|View
 ---@field opts? table
 
 function M.setup()
-  M.add({ event = "default", renderer = "split" })
-  M.add({ event = "msg_show", renderer = "split" })
-  M.add({ event = "msg_show", kind = { "echo", "echomsg", "", "search_count" }, renderer = "notify" })
-  M.add({ event = "msg_show", kind = "confirm", renderer = "cmdline" })
-  M.add({ event = "cmdline", renderer = "cmdline" })
-  M.add({ event = "msg_history_show", renderer = "split" })
+  M.add({ event = "default", view = "split" })
+  M.add({ event = "msg_show", view = "split" })
+  M.add({ event = "msg_show", kind = { "echo", "echomsg", "", "search_count" }, view = "notify" })
+  M.add({ event = "msg_show", kind = "confirm", view = "cmdline" })
+  M.add({ event = "cmdline", view = "cmdline" })
+  M.add({ event = "msg_history_show", view = "split" })
   M.add({
     event = { "msg_showmode", "msg_showcmd", "msg_ruler" },
-    renderer = "notify",
+    view = "notify",
     opts = { level = vim.log.levels.WARN },
   })
   M.add({
     event = "msg_show",
     kind = { "echoerr", "lua_error", "rpc_error", "emsg" },
-    renderer = "notify",
+    view = "notify",
     opts = { level = vim.log.levels.ERROR, replace = false },
   })
   M.add({
     event = "msg_show",
     kind = "wmsg",
-    renderer = "notify",
+    view = "notify",
     opts = { level = vim.log.levels.WARN, replace = false },
   })
   vim.schedule(M.run)
@@ -109,23 +109,23 @@ local function process(event)
   if event.event == "msg_clear" then
     msg_clear()
   else
-    local renderer = M.get(event)
+    local view = M.get(event)
     if event.opts then
-      renderer.opts = vim.tbl_deep_extend("force", renderer.opts, event.opts)
+      view.opts = vim.tbl_deep_extend("force", view.opts, event.opts)
     end
     if event.clear then
-      renderer:clear()
+      view:clear()
     end
     if event.hide then
-      renderer:hide()
+      view:hide()
     end
     if event.show then
-      renderer:show()
+      view:show()
     end
     if event.chunks then
-      renderer:add(event.chunks)
+      view:add(event.chunks)
     end
-    return renderer
+    return view
   end
 end
 

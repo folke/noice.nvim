@@ -28,34 +28,34 @@ local function setup(opts)
   return popup
 end
 
----@param renderer Renderer
-local function get_popup(renderer)
+---@param view View
+local function get_popup(view)
   ---@type NuiPopup
-  local popup = renderer.popup
+  local popup = view.popup
   if popup and popup.bufnr and vim.api.nvim_buf_is_valid(popup.bufnr) then
     return popup
   end
 
-  renderer.popup = setup({})
-  return renderer.popup
+  view.popup = setup({})
+  return view.popup
 end
 
----@param renderer Renderer
-return function(renderer)
-  local popup = get_popup(renderer)
-  if renderer.visible then
+---@param view View
+return function(view)
+  local popup = get_popup(view)
+  if view.visible then
     popup:show()
-    if renderer.opts.filetype then
-      vim.api.nvim_buf_set_option(popup.bufnr, "filetype", renderer.opts.filetype)
+    if view.opts.filetype then
+      vim.api.nvim_buf_set_option(popup.bufnr, "filetype", view.opts.filetype)
     end
-    renderer.message:render(popup.bufnr, Config.ns)
+    view.message:render(popup.bufnr, Config.ns)
     popup:update_layout({
       position = {
         row = vim.o.lines - 1,
         col = 0,
       },
       size = {
-        height = renderer.message:height(),
+        height = view.message:height(),
         width = vim.o.columns,
       },
     })

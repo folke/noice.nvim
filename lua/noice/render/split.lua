@@ -37,19 +37,19 @@ local function setup(opts)
   return split
 end
 
----@param renderer Renderer
-local function get_split(renderer)
+---@param view View
+local function get_split(view)
   ---@type NuiSplit
-  local split = renderer.split
+  local split = view.split
   if split and split.bufnr and vim.api.nvim_buf_is_valid(split.bufnr) then
     return split
   end
 
-  renderer.split = setup({})
-  return renderer.split
+  view.split = setup({})
+  return view.split
 end
 
----@param renderer Renderer
-return function(renderer)
-  renderer.message:render(get_split(renderer).bufnr, Config.ns)
+---@param view View
+return function(view)
+  view.message:render(get_split(view).bufnr, Config.ns)
 end

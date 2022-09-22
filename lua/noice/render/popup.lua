@@ -44,23 +44,23 @@ local function setup(opts)
   return popup
 end
 
----@param renderer Renderer
-local function get_popup(renderer)
+---@param view View
+local function get_popup(view)
   ---@type NuiPopup
-  local popup = renderer.popup
+  local popup = view.popup
   if popup and popup.bufnr and vim.api.nvim_buf_is_valid(popup.bufnr) then
     return popup
   end
 
-  renderer.popup = setup({
+  view.popup = setup({
     border = {
       text = { top = " Messages " },
     },
   })
-  return renderer.popup
+  return view.popup
 end
 
----@param renderer Renderer
-return function(renderer)
-  renderer.message:render(get_popup(renderer).bufnr, Config.ns)
+---@param view View
+return function(view)
+  view.message:render(get_popup(view).bufnr, Config.ns)
 end
