@@ -77,16 +77,13 @@ function Renderer:render_buf(buf, opts)
     if hl.from >= line_width then
       -- end of line, so use a virtual text
       vim.api.nvim_buf_set_extmark(buf, Config.ns, hl.line + offset, hl.from, {
-        virt_text = { { " ", "Cursor" } },
+        virt_text = { { " ", hl.hl } },
         virt_text_win_col = hl.from,
-        strict = false,
-        hl_group = hl.hl,
       })
     else
       -- use a regular extmark
       vim.api.nvim_buf_set_extmark(buf, Config.ns, hl.line + offset, hl.from, {
         end_col = hl.to,
-        strict = false,
         hl_group = hl.hl,
       })
     end
