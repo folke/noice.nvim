@@ -62,7 +62,7 @@ end
 function M.setup()
 	M.add({ event = "default", renderer = "split" })
 	M.add({ event = "msg_show", renderer = "split" })
-	M.add({ event = "msg_show", kind = { "echo", "echomsg", "" }, renderer = "notify" })
+	M.add({ event = "msg_show", kind = { "echo", "echomsg", "", "search_count" }, renderer = "notify" })
 	M.add({ event = "msg_show", kind = "confirm", renderer = "cmdline" })
 	M.add({ event = "cmdline", renderer = "cmdline" })
 	M.add({ event = "msg_history_show", renderer = "split" })
