@@ -138,6 +138,7 @@ function Message:append(contents, highlight)
       ---@cast content noice.Chunk
       -- Handle newlines
       local attr_id, text = unpack(content)
+      text = text:gsub("\r", "")
       self._attr_ids[attr_id] = attr_id
       local hl_group = Highlight.get_hl_group(attr_id)
       while text ~= "" do
