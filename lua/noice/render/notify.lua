@@ -61,11 +61,11 @@ end
 ---@param view noice.View
 return function(view)
   if not view.visible then
-    if M.view.win and vim.api.nvim_win_is_valid(M.view.win) then
-      vim.api.nvim_win_close(M.view.win, true)
-      M.view.win = nil
+    if view.win and vim.api.nvim_win_is_valid(view.win) then
+      vim.api.nvim_win_close(view.win, true)
+      view.win = nil
     end
-    return M.hide_last()
+    return
   end
 
   local text = view.message:content()
