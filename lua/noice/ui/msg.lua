@@ -37,13 +37,8 @@ function M.on_show(event, kind, content, replace_last)
 end
 
 function M.on_confirm(event, kind, content)
-  -- detach and reattach on the next schedule, so the user can do the confirmation
-  -- local ui = require("noice.ui")
-  -- ui.detach()
-  -- vim.schedule(function()
-  -- 	ui.attach()
-  -- end)
-  table.insert(content, { "Cursor", " " })
+  local NuiText = require("nui.text")
+  table.insert(content, NuiText(" ", "Cursor"))
 
   Handlers.handle({
     event = event,
