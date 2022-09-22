@@ -5,7 +5,7 @@ local function setup(opts)
   local event = require("nui.utils.autocmd").event
 
   opts = vim.tbl_deep_extend("force", {}, {
-    enter = false,
+    enter = true,
     relative = "editor",
     position = "bottom",
     size = "20%",
