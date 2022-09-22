@@ -28,7 +28,7 @@ local function setup(opts)
   return popup
 end
 
----@param view View
+---@param view noice.View
 local function get_popup(view)
   ---@type NuiPopup
   local popup = view.popup
@@ -40,7 +40,7 @@ local function get_popup(view)
   return view.popup
 end
 
----@param view View
+---@param view noice.View
 return function(view)
   local popup = get_popup(view)
   if view.visible then

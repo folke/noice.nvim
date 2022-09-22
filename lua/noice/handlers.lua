@@ -3,7 +3,7 @@ local View = require("noice.view")
 
 local M = {}
 
----@type table<string, View>
+---@type table<string, noice.View>
 M.handlers = {
   default = View(function() end),
 }
@@ -20,7 +20,7 @@ function M.get(opts)
   return M.handlers[id(opts)] or M.handlers[opts.event] or M.handlers.default
 end
 
----@param handler MessageHandler
+---@param handler noice.MessageHandler
 function M.add(handler)
   local events = handler.event
   if type(events) ~= "table" then
@@ -53,10 +53,10 @@ function M.add(handler)
   end
 end
 
----@class MessageHandler
+---@class noice.MessageHandler
 ---@field event string|string[]
 ---@field kind? string|string[]
----@field view string|View
+---@field view string|noice.View
 ---@field opts? table
 
 function M.setup()
@@ -86,7 +86,7 @@ function M.setup()
   vim.schedule(M.run)
 end
 
----@class RenderEvent
+---@class noice.RenderEvent
 ---@field event string
 ---@field chunks? table
 ---@field opts? table
@@ -104,7 +104,7 @@ local function msg_clear()
   end
 end
 
----@param event RenderEvent
+---@param event noice.RenderEvent
 local function process(event)
   if event.event == "msg_clear" then
     msg_clear()
@@ -129,7 +129,7 @@ local function process(event)
   end
 end
 
----@param event RenderEvent
+---@param event noice.RenderEvent
 function M.handle(event)
   if event.nowait then
     if process(event):render() then

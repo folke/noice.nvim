@@ -1,9 +1,9 @@
 local Message = require("noice.message")
 
----@alias Render fun(view: View)
+---@alias noice.Renderer fun(view: noice.View)
 
----@class View
----@field _render Render
+---@class noice.View
+---@field _render noice.Renderer
 ---@field message noice.Message
 ---@field opts? table
 ---@field dirty boolean
@@ -50,7 +50,7 @@ function View:add(chunks)
   self.message:append(chunks)
 end
 
----@param render string|Render
+---@param render string|noice.Renderer
 ---@param opts? table
 return function(render, opts)
   return setmetatable({

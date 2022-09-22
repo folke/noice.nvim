@@ -37,7 +37,7 @@ local function setup(opts)
   return split
 end
 
----@param view View
+---@param view noice.View
 local function get_split(view)
   ---@type NuiSplit
   local split = view.split
@@ -49,7 +49,7 @@ local function get_split(view)
   return view.split
 end
 
----@param view View
+---@param view noice.View
 return function(view)
   view.message:render(get_split(view).bufnr, Config.ns)
 end

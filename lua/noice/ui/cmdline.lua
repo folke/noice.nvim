@@ -3,7 +3,7 @@ local Handlers = require("noice.handlers")
 
 local M = {}
 
----@class Cmdline
+---@class noice.Cmdline
 ---@field content table
 ---@field pos number
 ---@field firstc string
@@ -31,7 +31,7 @@ function Cmdline:chunks()
   return chunks
 end
 
----@type Cmdline[]
+---@type noice.Cmdline[]
 M.cmdlines = {}
 
 ---@param opts table

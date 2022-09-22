@@ -31,7 +31,7 @@ function M.get_render(config)
   return ret
 end
 
----@param view View
+---@param view noice.View
 ---@return notify.RenderFun
 function M.render(view)
   return function(buf, notif, hl, config)
@@ -58,7 +58,7 @@ function M.render(view)
   end
 end
 
----@param view View
+---@param view noice.View
 return function(view)
   if not view.visible then
     if M.view.win and vim.api.nvim_win_is_valid(M.view.win) then

@@ -2,7 +2,7 @@ local M = {}
 
 M.ns = vim.api.nvim_create_namespace("messages_highlights")
 
----@class Config
+---@class noice.Config
 M.defaults = {
   debug = true,
   throttle = 1000 / 30,
@@ -13,7 +13,7 @@ M.defaults = {
   },
 }
 
---- @type Config
+--- @type noice.Config
 M.options = {}
 
 function M.setup(options)
