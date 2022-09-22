@@ -1,27 +1,36 @@
 local M = {}
 
+---@generic T: fun()
+---@param fn T
+---@param msg? string
+---@return T
 function M.protect(fn, msg)
-	return function(...)
-		local args = { ... }
+  return function(...)
+    local args = { ... }
 
-		return xpcall(function()
-			return fn(unpack(args))
-		end, function(err)
-			local lines = {}
-			if msg then
-				table.insert(lines, msg)
-			end
-			table.insert(lines, err)
-			table.insert(lines, debug.traceback("", 3))
+    local ok, result = xpcall(function()
+      return fn(unpack(args))
+    end, function(err)
+      local lines = {}
+      if msg then
+        table.insert(lines, msg)
+      end
+      table.insert(lines, err)
+      table.insert(lines, debug.traceback("", 3))
 
-			M.error(table.concat(lines, "\n"))
-			return err
-		end)
-	end
+      M.error(table.concat(lines, "\n"))
+    end)
+    return ok and result or nil
+  end
 end
 
-function M.try(fn, msg, ...)
-	return M.protect(fn, msg)(...)
+function M.try(fn, ...)
+  return M.protect(fn)(...)
+end
+
+function M.win_apply_config(win, opts)
+  opts = vim.tbl_deep_extend("force", vim.api.nvim_win_get_config(win), opts or {})
+  vim.api.nvim_win_set_config(win, opts)
 end
 
 function M.notify(msg, level)
