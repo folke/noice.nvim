@@ -144,6 +144,10 @@ function M.on_history_show(event, entries)
   })
 end
 
-function M.on_history_clear() end
+function M.on_history_clear()
+  Handlers.handle({
+    remove = { event = "msg_history_show" },
+  })
+end
 
 return M

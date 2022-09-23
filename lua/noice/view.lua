@@ -98,6 +98,7 @@ end
 ---@param bufnr number buffer number
 ---@param linenr_start? number line number (1-indexed)
 function View:render(bufnr, linenr_start)
+  vim.api.nvim_buf_set_lines(bufnr, (linenr_start or 1) - 1, -1, false, {})
   linenr_start = linenr_start or 1
   for _, m in ipairs(self.messages) do
     m:render(bufnr, Config.ns, linenr_start)
