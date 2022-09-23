@@ -12,6 +12,7 @@ local M = {}
 ---@field any? NoiceFilter[]
 ---@field not? NoiceFilter
 ---@field min_height? integer
+---@field find? string
 
 -----@type table<string, NoiceFilterFun>
 M.filters = {
@@ -32,6 +33,10 @@ M.filters = {
   keep = function(message, keep)
     ---@cast message NoiceMessage
     return message.keep == keep
+  end,
+  find = function(message, find)
+    ---@cast message NoiceMessage
+    return message:content():find(find)
   end,
   min_height = function(message, min_height)
     ---@cast message NoiceMessage
@@ -61,7 +66,7 @@ function M.is(message, filter)
         return false
       end
     else
-      Util.error("Unknown filter key " .. k .. " for " .. vim.input(filter))
+      Util.error("Unknown filter key " .. k .. " for " .. vim.inspect(filter))
       return false
     end
   end
