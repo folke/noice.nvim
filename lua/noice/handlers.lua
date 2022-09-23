@@ -56,6 +56,13 @@ function M.setup()
     },
   })
   M.add({
+    view = "virtualtext",
+    filter = {
+      event = "msg_show",
+      kind = "search_count",
+    },
+  })
+  M.add({
     view = "notify",
     filter = {
       any = {
