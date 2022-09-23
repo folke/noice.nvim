@@ -4,86 +4,88 @@ local View = require("noice.view")
 
 local M = {}
 
----@type table<string, NoiceView>
+---@type {filter: NoiceFilter, view: NoiceView, opts: table}[]
 M.handlers = {
   default = View(function() end),
 }
 
----@param opts? {event: string, kind?:string}
-local function id(opts)
-  opts = opts or { event = "default" }
-  return opts.event .. (opts.kind and ("." .. opts.kind) or "")
-end
-
----@param opts? {event: string, kind?:string}
-function M.get(opts)
-  opts = opts or { event = "default" }
-  return M.handlers[id(opts)] or M.handlers[opts.event] or M.handlers.default
-end
-
----@param handler NoiceMessageHandler
+---@param handler NoiceHandler
 function M.add(handler)
-  local events = handler.event
-  if type(events) ~= "table" then
-    events = { events }
+  handler.opts = handler.opts or {}
+  handler.opts.title = handler.opts.title or "Noice"
+
+  local view = handler.view
+  if type(view) == "string" then
+    handler.view = View(view, handler.opts)
   end
+  table.insert(M.handlers, handler)
+end
 
-  local kinds = handler.kind
-  if type(kinds) ~= "table" then
-    kinds = { kinds }
-  end
-
-  for _, event in ipairs(events) do
-    -- handle special case where kind = nil
-    for k = 1, math.max(#kinds, 1) do
-      local kind = kinds[k]
-      local hid = id({ event = event, kind = kind })
-
-      local opts = vim.deepcopy(handler.opts or {})
-      opts.title = opts.title or "Noice"
-      if Config.options.debug then
-        opts.title = opts.title .. " (" .. hid .. ")"
-      end
-
-      local view = handler.view
-      if type(view) == "string" then
-        view = View(view, opts)
-      end
-      M.handlers[hid] = view
+---@param message NoiceMessage
+function M.get(message)
+  for _, handler in ipairs(M.handlers) do
+    if message:is(handler.filter) then
+      return handler.view
     end
   end
+  return nil
 end
 
----@class NoiceMessageHandler
----@field event string|string[]
----@field kind? string|string[]
+---@class NoiceHandler
+---@field filter NoiceFilter
 ---@field view string|NoiceView
 ---@field opts? table
 
 function M.setup()
-  M.add({ event = "default", view = "notify" })
-  -- M.add({ event = "msg_show", view = "split" })
-  -- M.add({ event = "msg_show", kind = { "echo", "echomsg", "", "search_count" }, view = "notify" })
-  -- M.add({ event = "msg_show", kind = "confirm", view = "cmdline" })
-  M.add({ event = "cmdline", view = "cmdline", opts = { filetype = "vim" } })
-  M.add({ event = "msg_history_show", view = "split" })
-  -- M.add({
-  --   event = { "msg_showmode", "msg_showcmd", "msg_ruler" },
-  --   view = "notify",
-  --   opts = { level = vim.log.levels.WARN },
-  -- })
-  -- M.add({
-  --   event = "msg_show",
-  --   kind = { "echoerr", "lua_error", "rpc_error", "emsg" },
-  --   view = "notify",
-  --   opts = { level = vim.log.levels.ERROR, replace = false },
-  -- })
-  -- M.add({
-  --   event = "msg_show",
-  --   kind = "wmsg",
-  --   view = "notify",
-  --   opts = { level = vim.log.levels.WARN, replace = false },
-  -- })
+  M.add({
+    view = "cmdline",
+    filter = { event = "cmdline" },
+    opts = { filetype = "vim" },
+  })
+  M.add({
+    view = "cmdline",
+    filter = { event = "msg_show", kind = "confirm" },
+  })
+  M.add({
+    view = "split",
+    filter = {
+      any = {
+        { event = "msg_history_show" },
+        { min_height = 20 },
+      },
+    },
+  })
+  M.add({
+    view = "notify",
+    filter = {
+      any = {
+        { event = { "msg_showmode", "msg_showcmd", "msg_ruler" } },
+        { event = "msg_show", kind = "search_count" },
+      },
+    },
+    opts = { level = vim.log.levels.WARN },
+  })
+  M.add({
+    view = "notify",
+    filter = {
+      event = "msg_show",
+      kind = { "echoerr", "lua_error", "rpc_error", "emsg" },
+    },
+    opts = { level = vim.log.levels.ERROR, replace = false },
+  })
+  M.add({
+    view = "notify",
+    filter = {
+      event = "msg_show",
+      kind = "wmsg",
+    },
+    opts = { level = vim.log.levels.WARN, replace = false },
+  })
+  M.add({
+    view = "notify",
+    filter = {},
+  })
+
   vim.schedule(M.run)
 end
 
@@ -95,8 +97,8 @@ end
 M.event_keys = { "message", "remove", "clear", "nowait" }
 
 local function do_action(action, ...)
-  for _, view in pairs(M.handlers) do
-    view[action](view, ...)
+  for _, handler in ipairs(M.handlers) do
+    handler.view[action](handler.view, ...)
   end
 end
 
@@ -119,7 +121,9 @@ local function process(event)
 
   if event.message then
     local view = M.get(event.message)
-    view:add(event.message)
+    if view then
+      view:add(event.message)
+    end
     return view
   end
 end
@@ -150,8 +154,8 @@ function M.run()
         process(table.remove(M._queue, 1))
       end
       local rendered = 0
-      for _, r in pairs(M.handlers) do
-        rendered = rendered + (r:update() and 1 or 0)
+      for _, r in ipairs(M.handlers) do
+        rendered = rendered + (r.view:update() and 1 or 0)
       end
       if rendered > 0 then
         require("noice.ui").redraw()
