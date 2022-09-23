@@ -53,7 +53,6 @@ end
 function View:remove(filter)
   for _, message in ipairs(self:get(filter)) do
     message.keep = false
-    self.dirty = true
   end
 end
 
