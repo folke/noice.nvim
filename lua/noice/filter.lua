@@ -5,10 +5,13 @@ local M = {}
 ---@alias NoiceFilterFun fun(message: NoiceMessage, ...): boolean
 
 ---@class NoiceFilter
----@field event? string|string[]
----@field kind? string|string[]
+---@field event? NoiceEvent|NoiceEvent[]
+---@field kind? NoiceKind|NoiceKind[]
 ---@field message? NoiceMessage
 ---@field keep? boolean
+---@field any? NoiceFilter[]
+---@field not? NoiceFilter
+---@field min_height? integer
 
 -----@type table<string, NoiceFilterFun>
 M.filters = {
@@ -29,6 +32,23 @@ M.filters = {
   keep = function(message, keep)
     ---@cast message NoiceMessage
     return message.keep == keep
+  end,
+  min_height = function(message, min_height)
+    ---@cast message NoiceMessage
+    return message:height() >= min_height
+  end,
+  any = function(message, any)
+    ---@cast message NoiceMessage
+    for _, f in ipairs(any) do
+      if message:is(f) then
+        return true
+      end
+    end
+    return false
+  end,
+  ["not"] = function(message, filter)
+    ---@cast message NoiceMessage
+    return not message:is(filter)
   end,
 }
 
