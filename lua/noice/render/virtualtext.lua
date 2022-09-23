@@ -7,6 +7,6 @@ return function(view)
   -- dump({ line = line, col = col })
   vim.api.nvim_buf_clear_namespace(0, Config.ns, 0, -1)
   vim.api.nvim_buf_set_extmark(0, Config.ns, line, col, {
-    virt_text = { { view.messages[1]:content(), "IncSearch" } },
+    virt_text = { { view.messages[1]:content(), "DiagnosticVirtualTextInfo" } },
   })
 end

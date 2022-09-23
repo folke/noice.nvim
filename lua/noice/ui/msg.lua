@@ -1,5 +1,6 @@
 local Handlers = require("noice.handlers")
 local Message = require("noice.message")
+local Status = require("noice.status")
 
 local M = {}
 
@@ -68,6 +69,10 @@ function M.on_show(event, kind, content, replace_last)
 
   message:append(content)
 
+  if kind == "search_count" then
+    Status.search.set(message)
+  end
+
   M.last = message
 
   Handlers.handle({
@@ -77,6 +82,7 @@ end
 
 function M.on_clear()
   M.last = nil
+  Status.search.clear()
   Handlers.handle({
     remove = { event = "msg_show" },
   })
@@ -84,14 +90,18 @@ end
 
 -- mode like recording...
 function M.on_showmode(event, content)
+  local status = Status.mode
   if vim.tbl_isempty(content) then
+    status.clear()
     Handlers.handle({
       remove = { event = event },
       clear = { event = event },
     })
   else
+    local message = Message(event, nil, content)
+    status.set(message)
     Handlers.handle({
-      message = Message(event, nil, content),
+      message = message,
       remove = { event = event },
     })
   end
@@ -99,13 +109,17 @@ end
 
 -- key presses etc
 function M.on_showcmd(event, content)
+  local status = event == "msg_showcmd" and Status.command or Status.ruler
   if vim.tbl_isempty(content) then
+    -- status.clear()
     Handlers.handle({
       remove = { event = event },
     })
   else
+    local message = Message(event, nil, content)
+    status.set(message)
     Handlers.handle({
-      message = Message(event, nil, content),
+      message = message,
       remove = { event = event },
     })
   end
