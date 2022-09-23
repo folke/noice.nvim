@@ -19,12 +19,11 @@ local function NoiceStatus()
       end
     end,
     get_hl = function()
-      if message then
+      if message and message._lines[1] then
         local ret = ""
-        for _, line in ipairs(message._lines) do
-          for _, text in ipairs(line._texts) do
-            ret = ret .. "%#" .. text.extmark.hl_group .. "#" .. text:content()
-          end
+        local line = message._lines[#message._lines]
+        for _, text in ipairs(line._texts) do
+          ret = ret .. "%#" .. text.extmark.hl_group .. "#" .. text:content()
         end
         return ret
       end
@@ -33,6 +32,7 @@ local function NoiceStatus()
 end
 
 M.ruler = NoiceStatus()
+M.message = NoiceStatus()
 M.command = NoiceStatus()
 M.mode = NoiceStatus()
 M.search = NoiceStatus()

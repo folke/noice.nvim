@@ -51,7 +51,7 @@ function M.setup()
     filter = {
       any = {
         { event = "msg_history_show" },
-        { min_height = 20 },
+        -- { min_height = 20 },
       },
     },
   })
@@ -63,7 +63,7 @@ function M.setup()
     },
   })
   M.add({
-    view = "notify",
+    view = "nop", -- use statusline components instead
     filter = {
       any = {
         { event = { "msg_showmode", "msg_showcmd", "msg_ruler" } },

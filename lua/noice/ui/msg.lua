@@ -69,6 +69,8 @@ function M.on_show(event, kind, content, replace_last)
 
   message:append(content)
 
+  Status.message.set(message)
+
   if kind == "search_count" then
     Status.search.set(message)
   end
@@ -83,6 +85,7 @@ end
 function M.on_clear()
   M.last = nil
   Status.search.clear()
+  Status.message.clear()
   Handlers.handle({
     remove = { event = "msg_show" },
   })
