@@ -1,25 +1,52 @@
+local Config = require("noice.config")
+
 local M = {}
 
 ---@generic T: fun()
 ---@param fn T
----@param msg? string
+---@param opts? { retry_on_vim_errors: boolean, msg: string}
 ---@return T
-function M.protect(fn, msg)
+function M.protect(fn, opts)
+  opts = vim.tbl_deep_extend("force", {
+    retry_on_vim_errors = true,
+  }, opts or {})
+
   return function(...)
     local args = { ... }
 
-    local ok, result = xpcall(function()
+    -- wrap the function and call with args
+    local wrapped = function()
       return fn(unpack(args))
-    end, function(err)
-      local lines = {}
-      if msg then
-        table.insert(lines, msg)
+    end
+
+    local retry = false
+
+    -- error handler
+    local error_handler = function(err)
+      -- catch any Vim Errors and retry once
+      if not retry and err:find("Vim:E") and opts.retry_on_vim_errors then
+        retry = true
+        return
       end
-      table.insert(lines, err)
-      table.insert(lines, debug.traceback("", 3))
+
+      local lines = {}
+      table.insert(lines, opts.msg or err)
+
+      if Config.options.debug then
+        if opts.msg then
+          table.insert(lines, err)
+        end
+        table.insert(lines, debug.traceback("", 3))
+      end
 
       M.error(table.concat(lines, "\n"))
-    end)
+      return err
+    end
+
+    local ok, result = xpcall(wrapped, error_handler)
+    if retry then
+      ok, result = xpcall(wrapped, error_handler)
+    end
     return ok and result or nil
   end
 end

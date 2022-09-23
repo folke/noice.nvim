@@ -19,7 +19,7 @@ end
 M.attached = false
 
 function M.attach()
-  local safe_handle = Util.protect(M.handle, "An error happened while handling a ui event")
+  local safe_handle = Util.protect(M.handle, { msg = "An error happened while handling a ui event" })
   M.attached = true
   vim.ui_attach(Config.ns, {
     ext_messages = true,
