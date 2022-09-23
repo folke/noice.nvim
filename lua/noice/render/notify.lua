@@ -18,6 +18,20 @@ function M.notify(message, level, opts)
   return require("notify").notify(message, level, opts)
 end
 
+---@param message string | string[]: Notification message
+---@param level string | number: Log level. See vim.log.levels
+---@param opts notify.Options: Notification options
+---@return notify.Record
+function M.fast_notify(message, level, opts)
+  if not M.fast then
+    M.fast = require("notify").instance({
+      stages = "static",
+    }, true)
+  end
+  ---@diagnostic disable-next-line: return-type-mismatch
+  return M.fast.notify(message, level, opts)
+end
+
 ---@alias notify.RenderFun fun(buf:buffer, notif: Notification, hl: NotifyBufHighlights, config: notify.Config)
 
 ---@param config notify.Config
@@ -72,7 +86,9 @@ return function(view)
   local render = M.render(view)
   render = Util.protect(render)
 
-  view.notif = M.notify(text, level, {
+  local notify = require("noice.handlers").in_nowait and M.fast_notify or M.notify
+
+  view.notif = notify(text, level, {
     title = view.opts.title or "Noice",
     replace = view.opts.replace ~= false and view.notif or nil,
     on_open = function(win)
