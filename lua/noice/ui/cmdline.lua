@@ -85,8 +85,10 @@ end
 function M.update()
   local message = Message("cmdline", nil)
 
+  local count = 0
   for _, cmdline in ipairs(M.cmdlines) do
     if cmdline then
+      count = count + 1
       if message:height() > 0 then
         message:newline()
       end
@@ -100,7 +102,7 @@ function M.update()
     end
   end
 
-  if message:height() > 0 then
+  if count > 0 then
     -- local opts = Config.options.cmdline.syntax_highlighting and { filetype = "vim" } or {}
     Handlers.handle({
       message = message,

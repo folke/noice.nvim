@@ -1,5 +1,6 @@
 local Block = require("noice.block")
 local Filter = require("noice.filter")
+local Config = require("noice.config")
 
 ---@class NoiceMessage: NoiceBlock
 ---@field event NoiceEvent
@@ -16,7 +17,17 @@ function Message:init(event, kind, content)
   self.kind = kind
   self.keep = true
   ---@diagnostic disable-next-line: undefined-field
-  Message.super.init(self, content)
+  Message.super.init(self)
+
+  if Config.options.debug then
+    local NuiText = require("nui.text")
+    self:append(NuiText(event .. "." .. (kind or ""), "DiagnosticVirtualTextInfo"))
+    self:append(NuiText(" ", "Normal"))
+  end
+
+  if content then
+    self:append(content)
+  end
 end
 
 Message.is = Filter.is
