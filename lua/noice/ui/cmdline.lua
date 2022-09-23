@@ -14,7 +14,7 @@ M.events = {
   block_hide = "cmdline_block_hide",
 }
 
----@class noice.Cmdline
+---@class NoiceCmdline
 ---@field content table
 ---@field pos number
 ---@field firstc string
@@ -42,7 +42,7 @@ function Cmdline:chunks()
   return chunks
 end
 
----@type noice.Cmdline[]
+---@type NoiceCmdline[]
 M.cmdlines = {}
 
 ---@param opts table

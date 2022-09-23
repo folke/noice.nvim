@@ -89,7 +89,7 @@ function M.setup()
   vim.schedule(M.run)
 end
 
----@class noice.RenderEvent
+---@class MessageEvent
 ---@field message? NoiceMessage
 ---@field remove? NoiceFilter
 ---@field clear? NoiceFilter
@@ -102,7 +102,7 @@ local function do_action(action, ...)
   end
 end
 
----@param event noice.RenderEvent
+---@param event MessageEvent
 local function process(event)
   for k, _ in pairs(event) do
     if not vim.tbl_contains(M.event_keys, k) then
@@ -128,7 +128,7 @@ local function process(event)
   end
 end
 
----@param event noice.RenderEvent
+---@param event MessageEvent
 function M.handle(event)
   if event.nowait then
     local view = process(event)
