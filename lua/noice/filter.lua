@@ -5,8 +5,8 @@ local M = {}
 ---@alias NoiceFilterFun fun(message: NoiceMessage, ...): boolean
 
 ---@class NoiceFilter
----@field event? string
----@field kind? string
+---@field event? string|string[]
+---@field kind? string|string[]
 ---@field message? NoiceMessage
 ---@field keep? boolean
 
@@ -14,11 +14,13 @@ local M = {}
 M.filters = {
   event = function(message, event)
     ---@cast message NoiceMessage
-    return event == message.event
+    event = type(event) == "table" and event or { event }
+    return vim.tbl_contains(event, message.event)
   end,
   kind = function(message, kind)
     ---@cast message NoiceMessage
-    return kind == message.kind
+    kind = type(kind) == "table" and kind or { kind }
+    return vim.tbl_contains(kind, message.kind)
   end,
   message = function(message, other)
     ---@cast message NoiceMessage
