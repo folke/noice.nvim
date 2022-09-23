@@ -1,7 +1,19 @@
 local Config = require("noice.config")
+local Message = require("noice.message")
 local Handlers = require("noice.handlers")
 
 local M = {}
+
+---@enum CmdlineEvent
+M.events = {
+  show = "cmdline_show",
+  hide = "cmdline_hide",
+  pos = "cmdline_pos",
+  special_char = "cmdline_special_char",
+  block_show = "cmdline_block_show",
+  block_append = "cmdline_block_append",
+  block_hide = "cmdline_block_hide",
+}
 
 ---@class noice.Cmdline
 ---@field content table
@@ -65,42 +77,41 @@ function M.on_hide(_, level)
 end
 
 function M.on_pos(_, pos, level)
-  M.cmdlines[level].pos = pos
-  M.update()
+  if M.cmdlines[level] then
+    M.cmdlines[level].pos = pos
+    M.update()
+  end
 end
 
 function M.update()
-  local chunks = {}
-  local line = 1
+  local message = Message("cmdline", nil)
+
   for _, cmdline in ipairs(M.cmdlines) do
     if cmdline then
-      if line > 1 then
-        table.insert(chunks, { 0, "\n" })
+      if message:height() > 0 then
+        message:newline()
       end
-      vim.list_extend(chunks, cmdline:chunks())
-      table.insert(chunks, {
+      message:append(cmdline:chunks())
+      message:append({
         hl_group = "Cursor",
-        line = line - 1,
+        line = message:height(),
         col = cmdline.pos + 1,
         end_col = cmdline.pos + 2,
       })
-      line = line + 1
     end
   end
 
-  if #chunks > 0 then
-    local opts = Config.options.cmdline.syntax_highlighting and { filetype = "vim" } or {}
+  if message:height() > 0 then
+    -- local opts = Config.options.cmdline.syntax_highlighting and { filetype = "vim" } or {}
     Handlers.handle({
-      event = "cmdline",
-      chunks = chunks,
-      opts = opts,
-      clear = true,
+      message = message,
+      remove = { event = "cmdline" },
       nowait = true,
     })
   else
     Handlers.handle({
-      event = "cmdline",
-      hide = true,
+      remove = { event = "cmdline" },
+      clear = { event = "cmdline" },
     })
   end
 end

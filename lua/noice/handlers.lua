@@ -1,5 +1,7 @@
 local Config = require("noice.config")
+local Util = require("noice.util")
 local View = require("noice.view")
+local Message = require("noice.message")
 
 local M = {}
 
@@ -20,7 +22,7 @@ function M.get(opts)
   return M.handlers[id(opts)] or M.handlers[opts.event] or M.handlers.default
 end
 
----@param handler noice.MessageHandler
+---@param handler NoiceMessageHandler
 function M.add(handler)
   local events = handler.event
   if type(events) ~= "table" then
@@ -53,78 +55,72 @@ function M.add(handler)
   end
 end
 
----@class noice.MessageHandler
+---@class NoiceMessageHandler
 ---@field event string|string[]
 ---@field kind? string|string[]
 ---@field view string|noice.View
 ---@field opts? table
 
 function M.setup()
-  M.add({ event = "default", view = "split" })
-  M.add({ event = "msg_show", view = "split" })
-  M.add({ event = "msg_show", kind = { "echo", "echomsg", "", "search_count" }, view = "notify" })
-  M.add({ event = "msg_show", kind = "confirm", view = "cmdline" })
-  M.add({ event = "cmdline", view = "cmdline" })
+  M.add({ event = "default", view = "notify" })
+  -- M.add({ event = "msg_show", view = "split" })
+  -- M.add({ event = "msg_show", kind = { "echo", "echomsg", "", "search_count" }, view = "notify" })
+  -- M.add({ event = "msg_show", kind = "confirm", view = "cmdline" })
+  M.add({ event = "cmdline", view = "cmdline", opts = { filetype = "vim" } })
   M.add({ event = "msg_history_show", view = "split" })
-  M.add({
-    event = { "msg_showmode", "msg_showcmd", "msg_ruler" },
-    view = "notify",
-    opts = { level = vim.log.levels.WARN },
-  })
-  M.add({
-    event = "msg_show",
-    kind = { "echoerr", "lua_error", "rpc_error", "emsg" },
-    view = "notify",
-    opts = { level = vim.log.levels.ERROR, replace = false },
-  })
-  M.add({
-    event = "msg_show",
-    kind = "wmsg",
-    view = "notify",
-    opts = { level = vim.log.levels.WARN, replace = false },
-  })
+  -- M.add({
+  --   event = { "msg_showmode", "msg_showcmd", "msg_ruler" },
+  --   view = "notify",
+  --   opts = { level = vim.log.levels.WARN },
+  -- })
+  -- M.add({
+  --   event = "msg_show",
+  --   kind = { "echoerr", "lua_error", "rpc_error", "emsg" },
+  --   view = "notify",
+  --   opts = { level = vim.log.levels.ERROR, replace = false },
+  -- })
+  -- M.add({
+  --   event = "msg_show",
+  --   kind = "wmsg",
+  --   view = "notify",
+  --   opts = { level = vim.log.levels.WARN, replace = false },
+  -- })
   vim.schedule(M.run)
 end
 
 ---@class noice.RenderEvent
----@field event string
----@field chunks? table
----@field opts? table
----@field highlights? table
----@field clear? boolean
----@field hide? boolean
----@field show? boolean
+---@field message? NoiceMessage
+---@field remove? NoiceMessage|NoiceFilter
+---@field clear? NoiceMessage|NoiceFilter
 ---@field nowait? boolean
+M.event_keys = { "message", "remove", "clear", "nowait" }
 
-local function msg_clear()
-  for k, r in pairs(M.handlers) do
-    if k:find("msg_show") == 1 then
-      r:clear()
-    end
+local function do_action(action, ...)
+  for _, view in pairs(M.handlers) do
+    view[action](view, ...)
   end
 end
 
 ---@param event noice.RenderEvent
 local function process(event)
-  if event.event == "msg_clear" then
-    msg_clear()
-  else
-    local view = M.get(event)
-    if event.opts then
-      view.opts = vim.tbl_deep_extend("force", view.opts, event.opts)
+  for k, _ in pairs(event) do
+    if not vim.tbl_contains(M.event_keys, k) then
+      Util.error("Invalid event " .. vim.inspect(event))
+      return
     end
-    if event.clear then
-      view:clear()
-    end
-    if event.hide then
-      view:hide()
-    end
-    if event.show then
-      view:show()
-    end
-    if event.chunks then
-      view:add(event.chunks)
-    end
+  end
+
+  if event.remove then
+    do_action("remove", event.remove)
+  end
+
+  if event.clear then
+    do_action("clear", event.clear)
+  end
+
+  if event.message then
+    local view = M.get(event.message)
+    view:add(event.message)
     return view
   end
 end
@@ -132,7 +128,8 @@ end
 ---@param event noice.RenderEvent
 function M.handle(event)
   if event.nowait then
-    if process(event):render() then
+    local view = process(event)
+    if view and view:update() then
       require("noice.ui").redraw()
     end
   else
@@ -155,7 +152,7 @@ function M.run()
       end
       local rendered = 0
       for _, r in pairs(M.handlers) do
-        rendered = rendered + (r:render() and 1 or 0)
+        rendered = rendered + (r:update() and 1 or 0)
       end
       if rendered > 0 then
         require("noice.ui").redraw()

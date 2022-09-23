@@ -39,10 +39,10 @@ function M.render(view)
     M.get_render(config)(buf, notif, hl, config)
 
     local buf_lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
-    local offset = #buf_lines - view.message:height()
+    local offset = #buf_lines - view:height() + 1
 
     -- do our rendering
-    view.message:highlight(buf, Config.ns, offset)
+    view:highlight(buf, offset)
 
     -- resize notification
     local win = vim.fn.bufwinid(buf)
@@ -68,7 +68,7 @@ return function(view)
     return
   end
 
-  local text = view.message:content()
+  local text = view:content()
   local level = view.opts.level or "info"
   local render = M.render(view)
   render = Util.protect(render)

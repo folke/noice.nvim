@@ -62,5 +62,5 @@ end
 
 ---@param view noice.View
 return function(view)
-  view.message:render(get_popup(view).bufnr, Config.ns)
+  view:render(get_popup(view).bufnr)
 end

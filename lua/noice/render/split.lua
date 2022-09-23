@@ -5,7 +5,7 @@ local function setup(opts)
   local event = require("nui.utils.autocmd").event
 
   opts = vim.tbl_deep_extend("force", {}, {
-    enter = true,
+    enter = false,
     relative = "editor",
     position = "bottom",
     size = "20%",
@@ -51,5 +51,5 @@ end
 
 ---@param view noice.View
 return function(view)
-  view.message:render(get_split(view).bufnr, Config.ns)
+  view:render(get_split(view).bufnr)
 end

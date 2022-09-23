@@ -48,14 +48,14 @@ return function(view)
     if view.opts.filetype then
       vim.api.nvim_buf_set_option(popup.bufnr, "filetype", view.opts.filetype)
     end
-    view.message:render(popup.bufnr, Config.ns)
+    view:render(popup.bufnr)
     popup:update_layout({
       position = {
         row = vim.o.lines - 1,
         col = 0,
       },
       size = {
-        height = view.message:height(),
+        height = view:height(),
         width = vim.o.columns,
       },
     })
