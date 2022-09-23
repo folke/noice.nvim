@@ -5,8 +5,14 @@ local View = require("noice.view")
 local M = {}
 
 ---@type {filter: NoiceFilter, view: NoiceView, opts: table}[]
-M.handlers = {
-  default = View(function() end),
+M.handlers = {}
+
+---@type NoiceFilter
+M.nowait = {
+  any = {
+    { event = "msg_show", find = "E325" },
+    { event = "msg_show", find = "Found a swap file" },
+  },
 }
 
 ---@param handler NoiceHandler
@@ -44,7 +50,15 @@ function M.setup()
   })
   M.add({
     view = "cmdline",
-    filter = { event = "msg_show", kind = "confirm" },
+    filter = {
+      any = {
+        { event = "msg_show", kind = "confirm" },
+        { event = "msg_show", kind = "confirm_sub" },
+        { event = "msg_show", find = "E325" },
+        { event = "msg_show", find = "Found a swap file" },
+      },
+    },
+    opts = { clear_on_remove = true },
   })
   M.add({
     view = "split",
@@ -137,7 +151,8 @@ end
 
 ---@param event MessageEvent
 function M.handle(event)
-  if event.nowait then
+  local nowait = event.nowait or (event.message and event.message:is(M.nowait))
+  if nowait and not vim.in_fast_event() then
     local view = process(event)
     if view and view:update() then
       require("noice.ui").redraw()
