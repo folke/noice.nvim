@@ -31,11 +31,8 @@ M.filters = {
 }
 
 ---@param message NoiceMessage
----@param filter NoiceFilter|NoiceMessage
+---@param filter NoiceFilter
 function M.is(message, filter)
-  if filter._lines then
-    return message == filter
-  end
   for k, v in pairs(filter) do
     if M.filters[k] then
       if not M.filters[k](message, v) then
@@ -50,7 +47,7 @@ function M.is(message, filter)
 end
 
 ---@param messages NoiceMessage[]
----@param filter NoiceFilter|NoiceMessage
+---@param filter NoiceFilter
 ---@param invert? boolean
 ---@return NoiceMessage[]
 function M.filter(messages, filter, invert)
@@ -65,7 +62,7 @@ function M.filter(messages, filter, invert)
 end
 
 ---@param messages NoiceMessage[]
----@param filter NoiceFilter|NoiceMessage
+---@param filter NoiceFilter
 ---@param invert? boolean
 function M.has(messages, filter, invert)
   return #M.filter(messages, filter, invert) > 0

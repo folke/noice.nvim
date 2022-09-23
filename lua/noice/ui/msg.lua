@@ -51,13 +51,13 @@ function M.on_show(event, kind, content, replace_last)
   if M.last then
     if replace_last then
       Handlers.handle({
-        remove = M.last,
+        remove = { message = M.last },
       })
       M.last = nil
     elseif kind == "" and M.last:is({ event = event, kind = "" }) then
       message = M.last
       Handlers.handle({
-        remove = M.last,
+        remove = { message = M.last },
       })
     end
   end

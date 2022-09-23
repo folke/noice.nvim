@@ -89,8 +89,8 @@ end
 
 ---@class noice.RenderEvent
 ---@field message? NoiceMessage
----@field remove? NoiceMessage|NoiceFilter
----@field clear? NoiceMessage|NoiceFilter
+---@field remove? NoiceFilter
+---@field clear? NoiceFilter
 ---@field nowait? boolean
 M.event_keys = { "message", "remove", "clear", "nowait" }
 

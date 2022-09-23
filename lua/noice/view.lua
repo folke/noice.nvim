@@ -35,13 +35,13 @@ function View:update()
   return false
 end
 
----@param filter NoiceFilter|NoiceMessage
+---@param filter NoiceFilter
 ---@param invert? boolean
 function View:has(filter, invert)
   return Filter.has(self.messages, filter, invert)
 end
 
----@param filter NoiceFilter|NoiceMessage
+---@param filter NoiceFilter
 ---@param invert? boolean
 function View:get(filter, invert)
   return Filter.filter(self.messages, filter, invert)
@@ -49,7 +49,7 @@ end
 
 -- Marks any messages for expiration (keep = false)
 ---@return NoiceMessage?
----@param filter NoiceFilter|NoiceMessage
+---@param filter NoiceFilter
 function View:remove(filter)
   for _, message in ipairs(self:get(filter)) do
     message.keep = false
