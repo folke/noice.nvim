@@ -127,6 +127,7 @@ function M.on_confirm(event, kind, content)
     nowait = true,
   })
   Handlers.handle({
+    remove = { event = event, kind = kind },
     clear = { event = event, kind = kind },
   })
 end
