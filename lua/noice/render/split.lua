@@ -1,5 +1,3 @@
-local Config = require("noice.config")
-
 local function setup(opts)
   local Split = require("nui.split")
   local event = require("nui.utils.autocmd").event
@@ -37,7 +35,7 @@ local function setup(opts)
   return split
 end
 
----@param view noice.View
+---@param view NoiceView
 local function get_split(view)
   ---@type NuiSplit
   local split = view.split
@@ -49,7 +47,7 @@ local function get_split(view)
   return view.split
 end
 
----@param view noice.View
+---@param view NoiceView
 return function(view)
   view:render(get_split(view).bufnr)
 end

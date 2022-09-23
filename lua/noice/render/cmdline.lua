@@ -1,5 +1,3 @@
-local Config = require("noice.config")
-
 local function setup(opts)
   local Popup = require("nui.popup")
 
@@ -28,7 +26,7 @@ local function setup(opts)
   return popup
 end
 
----@param view noice.View
+---@param view NoiceView
 local function get_popup(view)
   ---@type NuiPopup
   local popup = view.popup
@@ -40,7 +38,7 @@ local function get_popup(view)
   return view.popup
 end
 
----@param view noice.View
+---@param view NoiceView
 return function(view)
   local popup = get_popup(view)
   if view.visible then

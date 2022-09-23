@@ -1,4 +1,3 @@
-local Config = require("noice.config")
 local Message = require("noice.message")
 local Handlers = require("noice.handlers")
 

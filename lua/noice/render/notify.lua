@@ -1,4 +1,3 @@
-local Config = require("noice.config")
 local Util = require("noice.util")
 
 local M = {}
@@ -31,7 +30,7 @@ function M.get_render(config)
   return ret
 end
 
----@param view noice.View
+---@param view NoiceView
 ---@return notify.RenderFun
 function M.render(view)
   return function(buf, notif, hl, config)
@@ -58,7 +57,7 @@ function M.render(view)
   end
 end
 
----@param view noice.View
+---@param view NoiceView
 return function(view)
   if not view.visible then
     if view.win and vim.api.nvim_win_is_valid(view.win) then

@@ -1,5 +1,3 @@
-local Config = require("noice.config")
-
 local function setup(opts)
   local Popup = require("nui.popup")
   local event = require("nui.utils.autocmd").event
@@ -44,7 +42,7 @@ local function setup(opts)
   return popup
 end
 
----@param view noice.View
+---@param view NoiceView
 local function get_popup(view)
   ---@type NuiPopup
   local popup = view.popup
@@ -60,7 +58,7 @@ local function get_popup(view)
   return view.popup
 end
 
----@param view noice.View
+---@param view NoiceView
 return function(view)
   view:render(get_popup(view).bufnr)
 end

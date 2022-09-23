@@ -1,17 +1,27 @@
 local Config = require("noice.config")
 local Util = require("noice.util")
 local Filter = require("noice.filter")
+local Object = require("nui.object")
 
----@alias noice.Renderer fun(view: noice.View)
+---@alias NoiceRender fun(view: NoiceView)
 
----@class noice.View
----@field _render noice.Renderer
+---@class NoiceView
+---@field _render NoiceRender
 ---@field messages NoiceMessage[]
 ---@field opts? table
 ---@field dirty boolean
 ---@field visible boolean
-local View = {}
-View.__index = View
+local View = Object("View")
+
+---@param render string|NoiceRender
+---@param opts? table
+function View:init(render, opts)
+  self._render = type(render) == "function" and render or require("noice.render")[render]
+  self.messages = {}
+  self.opts = opts or {}
+  self.dirty = false
+  self.visible = true
+end
 
 function View:update()
   if self.dirty then
@@ -126,14 +136,7 @@ function View:add(message)
   table.insert(self.messages, message)
 end
 
----@param render string|noice.Renderer
----@param opts? table
-return function(render, opts)
-  return setmetatable({
-    _render = type(render) == "function" and render or require("noice.render")[render],
-    messages = {},
-    opts = opts or {},
-    dirty = false,
-    visible = true,
-  }, View)
-end
+---@alias NoiceView.constructor fun(render: string|NoiceRender, opts?: table): NoiceView
+---@type NoiceView|NoiceView.constructor
+local NoiceView = View
+return NoiceView

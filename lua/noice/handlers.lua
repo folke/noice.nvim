@@ -1,11 +1,10 @@
 local Config = require("noice.config")
 local Util = require("noice.util")
 local View = require("noice.view")
-local Message = require("noice.message")
 
 local M = {}
 
----@type table<string, noice.View>
+---@type table<string, NoiceView>
 M.handlers = {
   default = View(function() end),
 }
@@ -58,7 +57,7 @@ end
 ---@class NoiceMessageHandler
 ---@field event string|string[]
 ---@field kind? string|string[]
----@field view string|noice.View
+---@field view string|NoiceView
 ---@field opts? table
 
 function M.setup()
