@@ -54,6 +54,9 @@ function View:remove(filter)
   for _, message in ipairs(self:get(filter)) do
     message.keep = false
   end
+  if self.opts.clear_on_remove then
+    self:clear(filter)
+  end
 end
 
 function View:height()
