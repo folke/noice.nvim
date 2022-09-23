@@ -54,8 +54,8 @@ function M.setup()
       any = {
         { event = "msg_show", kind = "confirm" },
         { event = "msg_show", kind = "confirm_sub" },
-        { event = "msg_show", find = "E325" },
-        { event = "msg_show", find = "Found a swap file" },
+        -- { event = "msg_show", find = "E325" },
+        -- { event = "msg_show", find = "Found a swap file" },
       },
     },
     opts = { clear_on_remove = true },
@@ -149,14 +149,22 @@ local function process(event)
   end
 end
 
+M.in_nowait = false
+
 ---@param event MessageEvent
 function M.handle(event)
   local nowait = event.nowait or (event.message and event.message:is(M.nowait))
+  -- nowait = true
+  -- nowait = event.nowait
   if nowait and not vim.in_fast_event() then
-    local view = process(event)
-    if view and view:update() then
-      require("noice.ui").redraw()
-    end
+    table.insert(M._queue, event)
+    M.in_nowait = true
+    Util.try(M.process_queue)
+    M.in_nowait = false
+    -- local view = process(event)
+    -- if view and view:update() then
+    --   require("noice.ui").redraw()
+    -- end
   else
     table.insert(M._queue, event)
   end
@@ -165,25 +173,23 @@ end
 M.running = false
 M._queue = {}
 
+function M.process_queue()
+  while #M._queue > 0 do
+    process(table.remove(M._queue, 1))
+  end
+  local rendered = 0
+  for _, r in ipairs(M.handlers) do
+    rendered = rendered + (r.view:update() and 1 or 0)
+  end
+  if rendered > 0 then
+    require("noice.ui").redraw()
+  end
+end
+
 function M.run()
   M.running = true
 
-  vim.loop.new_timer():start(
-    Config.options.throttle,
-    Config.options.throttle,
-    vim.schedule_wrap(function()
-      while #M._queue > 0 do
-        process(table.remove(M._queue, 1))
-      end
-      local rendered = 0
-      for _, r in ipairs(M.handlers) do
-        rendered = rendered + (r.view:update() and 1 or 0)
-      end
-      if rendered > 0 then
-        require("noice.ui").redraw()
-      end
-    end)
-  )
+  vim.loop.new_timer():start(Config.options.throttle, Config.options.throttle, vim.schedule_wrap(M.process_queue))
 end
 
 return M
