@@ -145,8 +145,8 @@ function M.on_confirm(event, kind, content)
     instant = true,
   })
   Scheduler.schedule({
-    remove = { event = event, kind = kind },
-    clear = { event = event, kind = kind },
+    remove = { event = event },
+    clear = { event = event },
   })
 end
 
