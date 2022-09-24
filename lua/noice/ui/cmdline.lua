@@ -26,7 +26,6 @@ local Cmdline = {}
 Cmdline.__index = Cmdline
 
 function Cmdline:chunks()
-  -- FIXME: pos during input() is wrong
   local chunks = {}
 
   -- indent content
@@ -90,11 +89,12 @@ function M.update()
         message:newline()
       end
       message:append(cmdline:chunks())
+      local pos = cmdline.pos + #cmdline.prompt + #cmdline.firstc
       message:append({
         hl_group = "Cursor",
         line = message:height(),
-        col = cmdline.pos + 1,
-        end_col = cmdline.pos + 2,
+        col = pos,
+        end_col = pos + 1,
       })
     end
   end
