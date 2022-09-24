@@ -2,6 +2,7 @@ local M = {}
 
 function M.setup()
   M.fix_incsearch()
+  M.fix_getchar()
 end
 
 ---@see https://github.com/neovim/neovim/issues/17810
@@ -30,6 +31,32 @@ function M.fix_incsearch()
       end
     end,
   })
+end
+
+function M.fix_getchar()
+  local Scheduler = require("noice.scheduler")
+  local Cmdline = require("noice.ui.cmdline")
+
+  local function wrap(fn)
+    return function(...)
+      local args = { ... }
+      return Scheduler.run_instant(function()
+        Cmdline.on_show("cmdline_show", {}, 1, ">", "", 0, 1)
+        local ret = fn(unpack(args))
+        Cmdline.on_hide(nil, 1)
+        return ret
+      end)
+    end
+  end
+
+  local function test()
+    return 123
+  end
+
+  assert(wrap(test)() == 123)
+
+  vim.fn.getchar = wrap(vim.fn.getchar)
+  vim.fn.getcharstr = wrap(vim.fn.getcharstr)
 end
 
 return M
