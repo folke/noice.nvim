@@ -9,6 +9,7 @@ local M = {}
 ---@field kind? NoiceKind|NoiceKind[]
 ---@field message? NoiceMessage
 ---@field keep? boolean
+---@field instant? boolean
 ---@field any? NoiceFilter[]
 ---@field not? NoiceFilter
 ---@field min_height? integer
@@ -41,6 +42,9 @@ M.filters = {
   min_height = function(message, min_height)
     ---@cast message NoiceMessage
     return message:height() >= min_height
+  end,
+  instant = function(_, instant)
+    return require("noice.scheduler").in_instant_event() == instant
   end,
   any = function(message, any)
     ---@cast message NoiceMessage
