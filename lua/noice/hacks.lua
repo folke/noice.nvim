@@ -49,12 +49,6 @@ function M.fix_getchar()
     end
   end
 
-  local function test()
-    return 123
-  end
-
-  assert(wrap(test)() == 123)
-
   vim.fn.getchar = wrap(vim.fn.getchar)
   vim.fn.getcharstr = wrap(vim.fn.getcharstr)
 end
