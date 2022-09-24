@@ -134,6 +134,7 @@ function M.on_return_prompt()
   return vim.api.nvim_input("<cr>")
 end
 
+---@param content NoiceChunk[]
 function M.on_confirm(event, kind, content)
   local NuiText = require("nui.text")
   table.insert(content, NuiText(" ", "Cursor"))
@@ -149,6 +150,7 @@ function M.on_confirm(event, kind, content)
   })
 end
 
+---@param entries { [1]: string, [2]: NoiceChunk[]}[]
 function M.on_history_show(event, entries)
   local contents = {}
   for _, e in pairs(entries) do
