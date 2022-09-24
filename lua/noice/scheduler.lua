@@ -34,7 +34,7 @@ end
 
 -- Check wether we are in an instant event, and not in a vim fast event
 function M.in_instant_event()
-  return M._instant and not vim.in_fast_event()
+  return M._instant
 end
 
 -- Runs fn if supplied and processes all events during this tick
@@ -42,9 +42,7 @@ end
 function M.run_instant(fn, ...)
   local instant = M._instant
   M._instant = true
-  if M.in_instant_event() then
-    Util.try(M.process_queue)
-  end
+  Util.try(M.process_queue)
   local ret = fn and Util.try(fn, ...)
   M._instant = instant
   return ret

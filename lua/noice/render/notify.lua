@@ -51,6 +51,7 @@ function M.render(view)
     -- run notify view
     M.get_render(config)(buf, notif, hl, config)
 
+    ---@type string[]
     local buf_lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
     local offset = #buf_lines - view:height() + 1
 
@@ -60,6 +61,7 @@ function M.render(view)
     -- resize notification
     local win = vim.fn.bufwinid(buf)
     if win ~= -1 then
+      ---@type number
       local width = config.minimum_width()
       for _, line in pairs(buf_lines) do
         width = math.max(width, vim.str_utfindex(line))
@@ -85,10 +87,10 @@ return function(view)
   local level = view.opts.level or "info"
   local render = M.render(view)
   render = Util.protect(render)
+  local instant = require("noice.scheduler").in_instant_event()
+  local notify = instant and M.instant_notify or M.notify
 
-  local notify = require("noice.scheduler").in_instant_event() and M.instant_notify or M.notify
-
-  view.notif = notify(text, level, {
+  local opts = {
     title = view.opts.title or "Noice",
     replace = view.opts.replace ~= false and view.notif or nil,
     keep = function()
@@ -102,5 +104,13 @@ return function(view)
       view.win = nil
     end,
     render = render,
-  })
+  }
+
+  view.notif = notify(text, level, opts)
+
+  -- HACK: this is needed to render the notification instantly
+  if instant then
+    opts.replace = view.notif
+    view.notif = notify(text, level, opts)
+  end
 end
