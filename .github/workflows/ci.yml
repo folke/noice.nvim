@@ -1,10 +1,6 @@
 name: CI
 on:
-  workflow_dispatch:
   push:
-  schedule:
-    # Run this every day
-    - cron: '0 * * * *'
 
 jobs:
   update-docs:
