@@ -4,6 +4,7 @@ function M.setup()
   require("noice.config").setup()
   require("noice.hacks").setup()
   require("noice.handlers").setup()
+  require("noice.scheduler").setup()
   require("noice.ui").setup()
 end
 

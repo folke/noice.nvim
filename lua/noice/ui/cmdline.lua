@@ -1,5 +1,5 @@
 local Message = require("noice.message")
-local Handlers = require("noice.handlers")
+local Scheduler = require("noice.scheduler")
 
 local M = {}
 
@@ -15,7 +15,7 @@ M.events = {
 }
 
 ---@class NoiceCmdline
----@field content table
+---@field content {[1]: integer, [2]: string}[]
 ---@field pos number
 ---@field firstc string
 ---@field prompt string
@@ -26,6 +26,7 @@ local Cmdline = {}
 Cmdline.__index = Cmdline
 
 function Cmdline:chunks()
+  -- FIXME: pos during input() is wrong
   local chunks = {}
 
   -- indent content
@@ -100,13 +101,13 @@ function M.update()
 
   if count > 0 then
     -- local opts = Config.options.cmdline.syntax_highlighting and { filetype = "vim" } or {}
-    Handlers.handle({
+    Scheduler.schedule({
       message = message,
       remove = { event = "cmdline" },
-      nowait = true,
+      instant = true,
     })
   else
-    Handlers.handle({
+    Scheduler.schedule({
       remove = { event = "cmdline" },
       clear = { event = "cmdline" },
     })

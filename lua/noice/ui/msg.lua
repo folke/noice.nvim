@@ -1,4 +1,4 @@
-local Handlers = require("noice.handlers")
+local Scheduler = require("noice.scheduler")
 local Message = require("noice.message")
 local Status = require("noice.status")
 
@@ -51,13 +51,13 @@ function M.on_show(event, kind, content, replace_last)
 
   if M.last then
     if replace_last then
-      Handlers.handle({
+      Scheduler.schedule({
         remove = { message = M.last },
       })
       M.last = nil
     elseif kind == "" and M.last:is({ event = event, kind = "" }) then
       message = M.last
-      Handlers.handle({
+      Scheduler.schedule({
         remove = { message = M.last },
       })
     end
@@ -77,7 +77,7 @@ function M.on_show(event, kind, content, replace_last)
 
   M.last = message
 
-  Handlers.handle({
+  Scheduler.schedule({
     message = message,
   })
 end
@@ -86,7 +86,7 @@ function M.on_clear()
   M.last = nil
   Status.search.clear()
   Status.message.clear()
-  Handlers.handle({
+  Scheduler.schedule({
     remove = { event = "msg_show" },
   })
 end
@@ -96,14 +96,14 @@ function M.on_showmode(event, content)
   local status = Status.mode
   if vim.tbl_isempty(content) then
     status.clear()
-    Handlers.handle({
+    Scheduler.schedule({
       remove = { event = event },
       clear = { event = event },
     })
   else
     local message = Message(event, nil, content)
     status.set(message)
-    Handlers.handle({
+    Scheduler.schedule({
       message = message,
       remove = { event = event },
     })
@@ -115,13 +115,13 @@ function M.on_showcmd(event, content)
   local status = event == "msg_showcmd" and Status.command or Status.ruler
   if vim.tbl_isempty(content) then
     -- status.clear()
-    Handlers.handle({
+    Scheduler.schedule({
       remove = { event = event },
     })
   else
     local message = Message(event, nil, content)
     status.set(message)
-    Handlers.handle({
+    Scheduler.schedule({
       message = message,
       remove = { event = event },
     })
@@ -138,12 +138,12 @@ function M.on_confirm(event, kind, content)
   local NuiText = require("nui.text")
   table.insert(content, NuiText(" ", "Cursor"))
 
-  Handlers.handle({
+  Scheduler.schedule({
     message = Message(event, kind, content),
     remove = { event = event, kind = kind },
-    nowait = true,
+    instant = true,
   })
-  Handlers.handle({
+  Scheduler.schedule({
     remove = { event = event, kind = kind },
     clear = { event = event, kind = kind },
   })
@@ -156,14 +156,14 @@ function M.on_history_show(event, entries)
     table.insert(contents, { 0, "\n" })
     vim.list_extend(contents, content)
   end
-  Handlers.handle({
+  Scheduler.schedule({
     message = Message(event, nil, contents),
     remove = { event = event },
   })
 end
 
 function M.on_history_clear()
-  Handlers.handle({
+  Scheduler.schedule({
     remove = { event = "msg_history_show" },
   })
 end

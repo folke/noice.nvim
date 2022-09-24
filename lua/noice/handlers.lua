@@ -1,19 +1,12 @@
 local Config = require("noice.config")
 local Util = require("noice.util")
 local View = require("noice.view")
+local Message = require("noice.message")
 
 local M = {}
 
 ---@type {filter: NoiceFilter, view: NoiceView, opts: table}[]
 M.handlers = {}
-
----@type NoiceFilter
-M.nowait = {
-  any = {
-    { event = "msg_show", find = "E325" },
-    { event = "msg_show", find = "Found a swap file" },
-  },
-}
 
 ---@param handler NoiceHandler
 function M.add(handler)
@@ -106,16 +99,14 @@ function M.setup()
     view = "notify",
     filter = {},
   })
-
-  vim.schedule(M.run)
 end
 
 ---@class MessageEvent
 ---@field message? NoiceMessage
 ---@field remove? NoiceFilter
 ---@field clear? NoiceFilter
----@field nowait? boolean
-M.event_keys = { "message", "remove", "clear", "nowait" }
+---@field instant? boolean
+M.event_keys = { "message", "remove", "clear", "instant" }
 
 local function do_action(action, ...)
   for _, handler in ipairs(M.handlers) do
@@ -124,7 +115,7 @@ local function do_action(action, ...)
 end
 
 ---@param event MessageEvent
-local function process(event)
+function M.process(event)
   for k, _ in pairs(event) do
     if not vim.tbl_contains(M.event_keys, k) then
       Util.error("Invalid event " .. vim.inspect(event))
@@ -147,49 +138,6 @@ local function process(event)
     end
     return view
   end
-end
-
-M.in_nowait = false
-
----@param event MessageEvent
-function M.handle(event)
-  local nowait = event.nowait or (event.message and event.message:is(M.nowait))
-  -- nowait = true
-  -- nowait = event.nowait
-  if nowait and not vim.in_fast_event() then
-    table.insert(M._queue, event)
-    M.in_nowait = true
-    Util.try(M.process_queue)
-    M.in_nowait = false
-    -- local view = process(event)
-    -- if view and view:update() then
-    --   require("noice.ui").redraw()
-    -- end
-  else
-    table.insert(M._queue, event)
-  end
-end
-
-M.running = false
-M._queue = {}
-
-function M.process_queue()
-  while #M._queue > 0 do
-    process(table.remove(M._queue, 1))
-  end
-  local rendered = 0
-  for _, r in ipairs(M.handlers) do
-    rendered = rendered + (r.view:update() and 1 or 0)
-  end
-  if rendered > 0 then
-    require("noice.ui").redraw()
-  end
-end
-
-function M.run()
-  M.running = true
-
-  vim.loop.new_timer():start(Config.options.throttle, Config.options.throttle, vim.schedule_wrap(M.process_queue))
 end
 
 return M
