@@ -49,9 +49,6 @@ function M.run_instant(fn, ...)
 end
 
 function M.setup()
-  -- TODO: PR for notify static on message
-  -- TODO: echo and echom for input
-
   vim.schedule(M.start)
 end
 

@@ -36,6 +36,12 @@ end
 ---@field opts? table
 
 function M.setup()
+  -- TODO: add something like the below
+  -- M.add({
+  --   view = "split",
+  --   filter = { event = "msg_show" },
+  --   opts = { propagate = true, auto_open = false },
+  -- })
   M.add({
     view = "cmdline",
     filter = { event = "cmdline" },
@@ -45,7 +51,7 @@ function M.setup()
     view = "cmdline",
     filter = {
       any = {
-        { event = "msg_show", kind = "confirm" },
+        -- { event = "msg_show", kind = "confirm" },
         { event = "msg_show", kind = "confirm_sub" },
         { event = "msg_show", kind = { "echo", "echomsg" }, instant = true },
         -- { event = "msg_show", find = "E325" },
