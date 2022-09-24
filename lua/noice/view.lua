@@ -47,12 +47,12 @@ function View:get(filter, invert)
   return Filter.filter(self.messages, filter, invert)
 end
 
--- Marks any messages for expiration (keep = false)
+-- Marks any messages for expiration
 ---@return NoiceMessage?
 ---@param filter NoiceFilter
 function View:remove(filter)
   for _, message in ipairs(self:get(filter)) do
-    message.keep = false
+    message.expired = true
   end
   if self.opts.clear_on_remove then
     self:clear(filter)
@@ -119,10 +119,10 @@ function View:hide()
   self.visible = false
 end
 
--- Clears any expired messages (where keep = false)
+-- Clears any expired messages
 ---@param filter? NoiceFilter
 function View:clear(filter)
-  local clear = vim.tbl_deep_extend("keep", { keep = false }, filter or {})
+  local clear = vim.tbl_deep_extend("keep", { expired = true }, filter or {})
   local count = #self.messages
   self.messages = self:get(clear, true)
   if count ~= #self.messages then
@@ -135,7 +135,7 @@ function View:add(message)
   self:clear()
   self.dirty = true
   self.visible = true
-  message.keep = true
+  message.expired = false
   -- don't add empty messages
   if not message:is_empty() then
     table.insert(self.messages, message)

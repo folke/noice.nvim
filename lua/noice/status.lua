@@ -8,7 +8,7 @@ local function NoiceStatus(empty_when_cleared)
       message = nil
     end,
     has = function()
-      if message and empty_when_cleared and not message.keep then
+      if message and empty_when_cleared and message.expired then
         return false
       end
       return message ~= nil

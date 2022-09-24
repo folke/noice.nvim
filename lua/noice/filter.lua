@@ -8,7 +8,7 @@ local M = {}
 ---@field event? NoiceEvent|NoiceEvent[]
 ---@field kind? NoiceKind|NoiceKind[]
 ---@field message? NoiceMessage
----@field keep? boolean
+---@field expired? boolean
 ---@field instant? boolean
 ---@field any? NoiceFilter[]
 ---@field not? NoiceFilter
@@ -31,9 +31,9 @@ M.filters = {
     ---@cast message NoiceMessage
     return other == message
   end,
-  keep = function(message, keep)
+  expired = function(message, expired)
     ---@cast message NoiceMessage
-    return message.keep == keep
+    return message.expired == expired
   end,
   find = function(message, find)
     ---@cast message NoiceMessage
