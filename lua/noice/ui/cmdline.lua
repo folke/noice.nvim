@@ -61,9 +61,6 @@ function M.on_show(event, content, pos, firstc, prompt, indent, level)
     level = level,
   })
   if not vim.deep_equal(c, M.cmdlines[level]) then
-    if firstc == "/" or firstc == "?" then
-      require("noice.hacks").fix_incsearch(true)
-    end
     M.cmdlines[level] = c
     M.update()
   end
@@ -71,7 +68,6 @@ end
 
 function M.on_hide(_, level)
   M.cmdlines[level] = nil
-  require("noice.hacks").fix_incsearch(false)
   M.update()
 end
 
