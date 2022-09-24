@@ -1,6 +1,6 @@
 local M = {}
 
-local function NoiceStatus()
+local function NoiceStatus(empty_when_cleared)
   ---@type NoiceMessage?
   local message
   return {
@@ -8,6 +8,9 @@ local function NoiceStatus()
       message = nil
     end,
     has = function()
+      if message and empty_when_cleared and not message.keep then
+        return false
+      end
       return message ~= nil
     end,
     set = function(m)
@@ -32,7 +35,7 @@ local function NoiceStatus()
 end
 
 M.ruler = NoiceStatus()
-M.message = NoiceStatus()
+M.message = NoiceStatus(true)
 M.command = NoiceStatus()
 M.mode = NoiceStatus()
 M.search = NoiceStatus()
