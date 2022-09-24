@@ -10,26 +10,17 @@ function M.max_width()
   return math.floor(vim.o.columns * 0.75)
 end
 
----@param message string | string[]: Notification message
----@param level string | number: Log level. See vim.log.levels
----@param opts notify.Options: Notification options
----@return notify.Record
-function M.notify(message, level, opts)
-  return require("notify").notify(message, level, opts)
+function M.notify()
+  return require("notify")
 end
 
----@param message string | string[]: Notification message
----@param level string | number: Log level. See vim.log.levels
----@param opts notify.Options: Notification options
----@return notify.Record
-function M.instant_notify(message, level, opts)
+function M.instant_notify()
   if not M._instant_notify then
     M._instant_notify = require("notify").instance({
       stages = "static",
     }, true)
   end
-  ---@diagnostic disable-next-line: return-type-mismatch
-  return M._instant_notify.notify(message, level, opts)
+  return M._instant_notify
 end
 
 ---@alias notify.RenderFun fun(buf:buffer, notif: Notification, hl: NotifyBufHighlights, config: notify.Config)
@@ -85,14 +76,24 @@ return function(view)
 
   local text = view:content()
   local level = view.opts.level or "info"
-  local render = M.render(view)
-  render = Util.protect(render)
+  local render = Util.protect(M.render(view))
   local instant = require("noice.scheduler").in_instant_event()
-  local notify = instant and M.instant_notify or M.notify
+  local notify = instant and M.instant_notify() or M.notify()
+
+  ---@type notify.Record | {instant: boolean} | nil
+  local replace = view.opts.replace ~= false and view.notif or nil
+  if replace and replace.instant ~= instant then
+    replace = nil
+  end
+
+  if instant then
+    text = "[instant] " .. text
+  end
 
   local opts = {
+    instant = instant,
     title = view.opts.title or "Noice",
-    replace = view.opts.replace ~= false and view.notif or nil,
+    replace = replace,
     keep = function()
       return require("noice.scheduler").in_instant_event()
     end,
@@ -106,11 +107,6 @@ return function(view)
     render = render,
   }
 
-  view.notif = notify(text, level, opts)
-
-  -- HACK: this is needed to render the notification instantly
-  if instant then
-    opts.replace = view.notif
-    view.notif = notify(text, level, opts)
-  end
+  view.notif = notify.notify(text, level, opts)
+  view.notif.instant = instant
 end
