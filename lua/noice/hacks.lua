@@ -43,13 +43,19 @@ function M.fix_getchar()
   local Cmdline = require("noice.ui.cmdline")
 
   local function wrap(fn)
-    return function(...)
-      local args = { ... }
+    return function(expr)
+      if expr ~= nil then
+        return fn(expr)
+      end
       return Scheduler.run_instant(function()
         Cmdline.on_show("cmdline_show", {}, 1, ">", "", 0, 1)
         ---@type any
-        local ret = fn(unpack(args))
+        local ret = fn()
         Cmdline.on_hide(nil, 1)
+        require("noice.scheduler").schedule({
+          remove = { event = "msg_show" },
+          -- clear = { event = "msg_show" },
+        })
         return ret
       end)
     end
