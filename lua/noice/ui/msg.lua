@@ -40,6 +40,7 @@ M.kinds = {
 M.last = nil
 
 ---@param kind MsgKind
+---@param content NoiceContent[]
 function M.on_show(event, kind, content, replace_last)
   if kind == M.kinds.return_prompt then
     return M.on_return_prompt()
@@ -55,11 +56,6 @@ function M.on_show(event, kind, content, replace_last)
         remove = { message = M.last },
       })
       M.last = nil
-    elseif kind == "" and M.last:is({ event = event, kind = "" }) then
-      message = M.last
-      Scheduler.schedule({
-        remove = { message = M.last },
-      })
     end
   end
 
@@ -68,6 +64,7 @@ function M.on_show(event, kind, content, replace_last)
   end
 
   message:append(content)
+  message:trim_empty_lines()
 
   Status.message.set(message)
 

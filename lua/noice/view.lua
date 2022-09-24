@@ -101,8 +101,8 @@ end
 ---@param bufnr number buffer number
 ---@param linenr_start? number line number (1-indexed)
 function View:render(bufnr, linenr_start)
-  vim.api.nvim_buf_set_lines(bufnr, (linenr_start or 1) - 1, -1, false, {})
   linenr_start = linenr_start or 1
+  vim.api.nvim_buf_set_lines(bufnr, linenr_start - 1, -1, false, {})
   for _, m in ipairs(self.messages) do
     m:render(bufnr, Config.ns, linenr_start)
     linenr_start = linenr_start + m:height()
@@ -136,7 +136,10 @@ function View:add(message)
   self.dirty = true
   self.visible = true
   message.keep = true
-  table.insert(self.messages, message)
+  -- don't add empty messages
+  if not message:is_empty() then
+    table.insert(self.messages, message)
+  end
 end
 
 ---@alias NoiceView.constructor fun(render: string|NoiceRender, opts?: table): NoiceView

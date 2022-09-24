@@ -57,6 +57,10 @@ function Block:height()
   return #self._lines
 end
 
+function Block:is_empty()
+  return #self._lines == 0
+end
+
 ---@param bufnr number buffer number
 ---@param ns_id number namespace id
 ---@param linenr_start? number line number (1-indexed)
@@ -179,6 +183,16 @@ function Block:append(contents, highlight)
         end
       end
     end
+  end
+end
+
+-- trim empty lines at the beginning and the end of the block
+function Block:trim_empty_lines()
+  while #self._lines > 0 and vim.trim(self._lines[1]:content()) == "" do
+    table.remove(self._lines, 1)
+  end
+  while #self._lines > 0 and vim.trim(self._lines[#self._lines]:content()) == "" do
+    table.remove(self._lines)
   end
 end
 
