@@ -1,27 +1,29 @@
+local Manager = require("noice.manager")
+local Msg = require("noice.ui.msg")
+
 local M = {}
 
-local function NoiceStatus(empty_when_cleared)
+---@param filter NoiceFilter
+local function NoiceStatus(filter)
+  local function _get()
+    return Manager.get(filter, {
+      count = 1,
+      sort = true,
+    })[1]
+  end
   ---@type NoiceMessage?
-  local message
   return {
-    clear = function()
-      message = nil
-    end,
     has = function()
-      if message and empty_when_cleared and message.expired then
-        return false
-      end
-      return message ~= nil
-    end,
-    set = function(m)
-      message = m
+      return _get() ~= nil
     end,
     get = function()
+      local message = _get()
       if message then
         return vim.trim(message:content())
       end
     end,
     get_hl = function()
+      local message = _get()
       if message and message._lines[1] then
         local ret = ""
         local line = message._lines[#message._lines]
@@ -34,10 +36,10 @@ local function NoiceStatus(empty_when_cleared)
   }
 end
 
-M.ruler = NoiceStatus()
-M.message = NoiceStatus(true)
-M.command = NoiceStatus()
-M.mode = NoiceStatus()
-M.search = NoiceStatus()
+M.ruler = NoiceStatus({ event = Msg.events.ruler })
+M.message = NoiceStatus({ event = Msg.events.show })
+M.command = NoiceStatus({ event = Msg.events.showcmd })
+M.mode = NoiceStatus({ event = Msg.events.showmode })
+M.search = NoiceStatus({ event = Msg.events.show, kind = Msg.kinds.search_count })
 
 return M
