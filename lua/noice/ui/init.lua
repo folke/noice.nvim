@@ -1,10 +1,12 @@
 local Config = require("noice.config")
 local Util = require("noice.util")
+local Instant = require("noice.instant")
 
 ---@alias NoiceEvent MsgEvent|CmdlineEvent
 ---@alias NoiceKind MsgKind
 
 local M = {}
+M._attached = false
 
 local inside_redraw = false
 function M.redraw()
@@ -16,15 +18,13 @@ function M.redraw()
   inside_redraw = false
 end
 
-M.attached = false
-
 function M.attach()
   local safe_handle = Util.protect(M.handle, { msg = "An error happened while handling a ui event" })
-  M.attached = true
+  M._attached = true
   vim.ui_attach(Config.ns, {
     ext_messages = true,
-    ext_cmdline = Config.options.cmdline.enabled, -- cmdline is implicitely enabled by enabling messages, but this might change in the future
-    ext_popupmenu = Config.options.cmdline.enabled, -- when cmdline is enabled, also enable popupmenu
+    ext_cmdline = true,
+    ext_popupmenu = true,
   }, function(event, ...)
     if event:find("cmdline") == 1 and not Config.options.cmdline.enabled then
       return
@@ -36,36 +36,17 @@ function M.attach()
 end
 
 function M.detach()
-  if M.attached then
+  if M._attached then
     vim.ui_detach(Config.ns)
-    M.attached = false
+    M._attached = false
   end
 end
 
 function M.setup()
-  local group = vim.api.nvim_create_augroup("messages_ui", {})
-
-  if not Config.options.cmdline.enabled then
-    vim.api.nvim_create_autocmd("CmdlineEnter", {
-      group = group,
-      callback = function()
-        M.detach()
-        -- vim.opt.cmdheight = 1
-        vim.cmd([[redraw]])
-      end,
-    })
-
-    vim.api.nvim_create_autocmd("CmdlineLeave", {
-      group = group,
-      callback = function()
-        M.attach()
-      end,
-    })
-  end
-
   M.attach()
 end
 
+---@param event string
 function M.handle(event, ...)
   local event_group, event_type = event:match("([a-z]+)_(.*)")
   local on = "on_" .. event_type
@@ -79,6 +60,10 @@ function M.handle(event, ...)
   end
 
   handler[on](event, ...)
+
+  if Instant.in_instant() then
+    require("noice.handlers").update({ instant = true })
+  end
 end
 
 return M
