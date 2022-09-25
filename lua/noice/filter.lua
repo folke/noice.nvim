@@ -13,6 +13,8 @@ local M = {}
 ---@field not? NoiceFilter
 ---@field min_height? integer
 ---@field find? string
+---@field error? boolean
+---@field warning? boolean
 
 -----@type table<string, NoiceFilterFun>
 M.filters = {
@@ -29,6 +31,23 @@ M.filters = {
   message = function(message, other)
     ---@cast message NoiceMessage
     return other == message
+  end,
+  error = function(message, error)
+    local Msg = require("noice.ui.msg")
+    ---@cast message NoiceMessage
+    return error
+      == (
+        message.event == Msg.events.show
+        and vim.tbl_contains(
+          { Msg.kinds.echoerr, Msg.kinds.lua_error, Msg.kinds.rpc_error, Msg.kinds.emsg },
+          message.kind
+        )
+      )
+  end,
+  warning = function(message, warning)
+    local Msg = require("noice.ui.msg")
+    ---@cast message NoiceMessage
+    return warning == (message.event == Msg.events.show and vim.tbl_contains({ Msg.kinds.wmsg }, message.kind))
   end,
   find = function(message, find)
     ---@cast message NoiceMessage
