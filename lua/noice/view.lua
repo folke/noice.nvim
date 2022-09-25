@@ -1,15 +1,14 @@
 local Config = require("noice.config")
 local Util = require("noice.util")
-local Filter = require("noice.filter")
 local Object = require("nui.object")
 
 ---@alias NoiceRender fun(view: NoiceView)
 
 ---@class NoiceView
 ---@field _render NoiceRender
+---@field _tick number
 ---@field messages NoiceMessage[]
 ---@field opts? table
----@field dirty boolean
 ---@field visible boolean
 local View = Object("View")
 
@@ -17,46 +16,34 @@ local View = Object("View")
 ---@param opts? table
 function View:init(render, opts)
   self._render = type(render) == "function" and render or require("noice.render")[render]
+  self._tick = 0
   self.messages = {}
   self.opts = opts or {}
-  self.dirty = false
   self.visible = true
 end
 
-function View:update()
-  if self.dirty then
-    if #self.messages == 0 then
-      self.visible = false
+---@param messages NoiceMessage[]
+function View:display(messages)
+  local dirty = #messages ~= #self.messages
+  for _, m in ipairs(messages) do
+    if m.tick > self._tick then
+      self._tick = m.tick
+      dirty = true
     end
+  end
+
+  if not dirty and not self.visible and #self.messages > 0 then
+    -- FIXME:
+    dirty = true
+  end
+
+  if dirty then
+    self.messages = messages
+    self.visible = #self.messages > 0
     Util.try(self._render, self)
-    self.dirty = false
     return true
   end
   return false
-end
-
----@param filter NoiceFilter
----@param invert? boolean
-function View:has(filter, invert)
-  return Filter.has(self.messages, filter, invert)
-end
-
----@param filter NoiceFilter
----@param invert? boolean
-function View:get(filter, invert)
-  return Filter.filter(self.messages, filter, invert)
-end
-
--- Marks any messages for expiration
----@return NoiceMessage?
----@param filter NoiceFilter
-function View:remove(filter)
-  for _, message in ipairs(self:get(filter)) do
-    message.expired = true
-  end
-  if self.opts.clear_on_remove then
-    self:clear(filter)
-  end
 end
 
 function View:height()
@@ -106,39 +93,6 @@ function View:render(bufnr, linenr_start)
   for _, m in ipairs(self.messages) do
     m:render(bufnr, Config.ns, linenr_start)
     linenr_start = linenr_start + m:height()
-  end
-end
-
-function View:show()
-  self.dirty = self.visible == false
-  self.visible = true
-end
-
-function View:hide()
-  self.dirty = self.visible == true
-  self.visible = false
-end
-
--- Clears any expired messages
----@param filter? NoiceFilter
-function View:clear(filter)
-  local clear = vim.tbl_deep_extend("keep", { expired = true }, filter or {})
-  local count = #self.messages
-  self.messages = self:get(clear, true)
-  if count ~= #self.messages then
-    self.dirty = true
-  end
-end
-
----@param message NoiceMessage
-function View:add(message)
-  self:clear()
-  self.dirty = true
-  self.visible = true
-  message.expired = false
-  -- don't add empty messages
-  if not message:is_empty() then
-    table.insert(self.messages, message)
   end
 end
 

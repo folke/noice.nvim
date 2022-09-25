@@ -1,6 +1,6 @@
-local Scheduler = require("noice.scheduler")
+local Handlers = require("noice.handlers")
+local Manager = require("noice.manager")
 local Message = require("noice.message")
-local Status = require("noice.status")
 
 local M = {}
 
@@ -38,94 +38,64 @@ M.kinds = {
 
 ---@type NoiceMessage
 M.last = nil
+M.clear = false
+---@type NoiceMessage[]
+M._messages = {}
+
+function M.get(event, kind)
+  local id = event .. "." .. (kind or "")
+  if not M._messages[id] then
+    M._messages[id] = Message(event, kind)
+  end
+  return M._messages[id]
+end
 
 ---@param kind MsgKind
 ---@param content NoiceContent[]
 function M.on_show(event, kind, content, replace_last)
+  if M.clear then
+    Manager.clear({ event = "msg_show" })
+    M.clear = false
+  end
+
   if kind == M.kinds.return_prompt then
     return M.on_return_prompt()
   elseif kind == M.kinds.confirm or kind == M.kinds.confirm_sub then
     return M.on_confirm(event, kind, content)
   end
 
-  local message
-
-  if M.last then
-    if replace_last then
-      Scheduler.schedule({
-        remove = { message = M.last },
-      })
-      M.last = nil
-    end
+  if M.last and replace_last then
+    Manager.remove(M.last)
+    M.last = nil
   end
 
-  if not message then
-    message = Message(event, kind)
-  end
-
-  message:append(content)
+  local message = Message(event, kind, content)
   message:trim_empty_lines()
-
-  Status.message.set(message)
-
-  if kind == "search_count" then
-    Status.search.set(message)
-  end
 
   M.last = message
 
-  Scheduler.schedule({
-    message = message,
-  })
+  Manager.add(message)
 end
 
 function M.on_clear()
   M.last = nil
-  Status.search.clear()
-  Status.message.clear()
-  Scheduler.schedule({
-    remove = { event = "msg_show" },
-  })
+  M.clear = true
 end
 
 -- mode like recording...
 function M.on_showmode(event, content)
-  local status = Status.mode
+  local message = M.get(event)
   if vim.tbl_isempty(content) then
-    status.clear()
-    Scheduler.schedule({
-      remove = { event = event },
-      clear = { event = event },
-    })
+    if event == "msg_showmode" then
+      Manager.remove(message)
+    end
   else
-    local message = Message(event, nil, content)
-    status.set(message)
-    Scheduler.schedule({
-      message = message,
-      remove = { event = event },
-    })
+    message:set(content)
   end
+  Manager.add(message)
 end
-
--- key presses etc
-function M.on_showcmd(event, content)
-  local status = event == "msg_showcmd" and Status.command or Status.ruler
-  if vim.tbl_isempty(content) then
-    -- status.clear()
-    Scheduler.schedule({
-      remove = { event = event },
-    })
-  else
-    local message = Message(event, nil, content)
-    status.set(message)
-    Scheduler.schedule({
-      message = message,
-      remove = { event = event },
-    })
-  end
-end
-
-M.on_ruler = M.on_showcmd
+M.on_showcmd = M.on_showmode
+M.on_ruler = M.on_showmode
 
 function M.on_return_prompt()
   return vim.api.nvim_input("<cr>")
@@ -136,35 +106,25 @@ function M.on_confirm(event, kind, content)
   local NuiText = require("nui.text")
   table.insert(content, NuiText(" ", "Cursor"))
 
-  Scheduler.schedule({
-    message = Message(event, kind, content),
-    remove = { event = event, kind = kind },
-    instant = true,
-  })
-  Scheduler.schedule({
-    remove = { event = event },
-    clear = { event = event },
-  })
+  local message = Message(event, kind, content)
+  Manager.add(message)
+  Handlers.update({ instant = true })
+  Manager.remove(message)
 end
 
 ---@param entries { [1]: string, [2]: NoiceChunk[]}[]
 function M.on_history_show(event, entries)
   local contents = {}
   for _, e in pairs(entries) do
-    local _, content = unpack(e)
+    local content = e[2]
     table.insert(contents, { 0, "\n" })
     vim.list_extend(contents, content)
   end
-  Scheduler.schedule({
-    message = Message(event, nil, contents),
-    remove = { event = event },
-  })
+  local message = M.get(event)
+  message:set(contents)
+  Manager.add(message)
 end
 
-function M.on_history_clear()
-  Scheduler.schedule({
-    remove = { event = "msg_history_show" },
-  })
-end
+function M.on_history_clear() end
 
 return M

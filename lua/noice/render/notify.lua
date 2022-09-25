@@ -77,7 +77,7 @@ return function(view)
   local text = view:content()
   local level = view.opts.level or "info"
   local render = Util.protect(M.render(view))
-  local instant = require("noice.scheduler").in_instant_event()
+  local instant = require("noice.instant").in_instant()
   local notify = instant and M.instant_notify() or M.notify()
 
   ---@type notify.Record | {instant: boolean} | nil
@@ -95,7 +95,7 @@ return function(view)
     title = view.opts.title or "Noice",
     replace = replace,
     keep = function()
-      return require("noice.scheduler").in_instant_event()
+      return require("noice.instant").in_instant()
     end,
     on_open = function(win)
       view.win = win

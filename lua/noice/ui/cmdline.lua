@@ -1,7 +1,9 @@
 local Message = require("noice.message")
-local Scheduler = require("noice.scheduler")
+local Manager = require("noice.manager")
+local Handlers = require("noice.handlers")
 
 local M = {}
+M.message = Message("cmdline", nil)
 
 ---@enum CmdlineEvent
 M.events = {
@@ -79,20 +81,19 @@ function M.on_pos(_, pos, level)
 end
 
 function M.update()
-  local message = Message("cmdline", nil)
-
+  M.message:clear()
   local count = 0
   for _, cmdline in ipairs(M.cmdlines) do
     if cmdline then
       count = count + 1
-      if message:height() > 0 then
-        message:newline()
+      if M.message:height() > 0 then
+        M.message:newline()
       end
-      message:append(cmdline:chunks())
+      M.message:append(cmdline:chunks())
       local pos = cmdline.pos + #cmdline.prompt + #cmdline.firstc
-      message:append({
+      M.message:append({
         hl_group = "Cursor",
-        line = message:height(),
+        line = M.message:height(),
         col = pos,
         end_col = pos + 1,
       })
@@ -100,17 +101,10 @@ function M.update()
   end
 
   if count > 0 then
-    -- local opts = Config.options.cmdline.syntax_highlighting and { filetype = "vim" } or {}
-    Scheduler.schedule({
-      message = message,
-      remove = { event = "cmdline" },
-      instant = true,
-    })
+    Manager.add(M.message)
+    Handlers.update({ instant = true })
   else
-    Scheduler.schedule({
-      remove = { event = "cmdline" },
-      clear = { event = "cmdline" },
-    })
+    Manager.remove(M.message)
   end
 end
 

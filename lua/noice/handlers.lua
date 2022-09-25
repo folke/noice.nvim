@@ -1,12 +1,31 @@
 local Config = require("noice.config")
 local Util = require("noice.util")
 local View = require("noice.view")
-local Message = require("noice.message")
+local Manager = require("noice.manager")
+local Instant = require("noice.instant")
 
 local M = {}
-
+M._running = false
 ---@type {filter: NoiceFilter, view: NoiceView, opts: table}[]
-M.handlers = {}
+M._handlers = {}
+M._tick = 0
+
+local function run()
+  if not M._running then
+    return
+  end
+  Util.try(M.update)
+  vim.defer_fn(run, Config.options.throttle)
+end
+
+function M.start()
+  M._running = true
+  vim.schedule(run)
+end
+
+function M.stop()
+  M._running = false
+end
 
 ---@param handler NoiceHandler
 function M.add(handler)
@@ -17,17 +36,7 @@ function M.add(handler)
   if type(view) == "string" then
     handler.view = View(view, handler.opts)
   end
-  table.insert(M.handlers, handler)
-end
-
----@param message NoiceMessage
-function M.get(message)
-  for _, handler in ipairs(M.handlers) do
-    if message:is(handler.filter) then
-      return handler.view
-    end
-  end
-  return nil
+  table.insert(M._handlers, handler)
 end
 
 ---@class NoiceHandler
@@ -36,115 +45,41 @@ end
 ---@field opts? table
 
 function M.setup()
-  -- TODO: add something like the below
-  -- M.add({
-  --   view = "split",
-  --   filter = { event = "msg_show" },
-  --   opts = { propagate = true, auto_open = false },
-  -- })
-  M.add({
-    view = "cmdline",
-    filter = { event = "cmdline" },
-    opts = { filetype = "vim" },
-  })
-  M.add({
-    view = "cmdline",
-    filter = {
-      any = {
-        -- { event = "msg_show", kind = "confirm" },
-        { event = "msg_show", kind = "confirm_sub" },
-        { event = "msg_show", kind = { "echo", "echomsg" }, instant = true },
-        -- { event = "msg_show", find = "E325" },
-        -- { event = "msg_show", find = "Found a swap file" },
-      },
-    },
-    opts = { clear_on_remove = true },
-  })
-  M.add({
-    view = "split",
-    filter = {
-      any = {
-        { event = "msg_history_show" },
-        -- { min_height = 20 },
-      },
-    },
-  })
-  M.add({
-    view = "virtualtext",
-    filter = {
-      event = "msg_show",
-      kind = "search_count",
-    },
-  })
-  M.add({
-    view = "nop", -- use statusline components instead
-    filter = {
-      any = {
-        { event = { "msg_showmode", "msg_showcmd", "msg_ruler" } },
-        { event = "msg_show", kind = "search_count" },
-      },
-    },
-    opts = { level = vim.log.levels.WARN },
-  })
-  M.add({
-    view = "notify",
-    filter = {
-      event = "msg_show",
-      kind = { "echoerr", "lua_error", "rpc_error", "emsg" },
-    },
-    opts = { level = vim.log.levels.ERROR, replace = false },
-  })
-  M.add({
-    view = "notify",
-    filter = {
-      event = "msg_show",
-      kind = "wmsg",
-    },
-    opts = { level = vim.log.levels.WARN, replace = false },
-  })
-  M.add({
-    view = "notify",
-    filter = {},
-  })
-end
-
----@class MessageEvent
----@field message? NoiceMessage
----@field remove? NoiceFilter
----@field clear? NoiceFilter
----@field instant? boolean
-M.event_keys = { "message", "remove", "clear", "instant" }
-
-local function do_action(action, ...)
-  for _, handler in ipairs(M.handlers) do
-    handler.view[action](handler.view, ...)
+  for _, handler in ipairs(Config.options.handlers) do
+    M.add(handler)
   end
+  vim.schedule(M.start)
 end
 
----@param event MessageEvent
-function M.process(event)
-  for k, _ in pairs(event) do
-    if not vim.tbl_contains(M.event_keys, k) then
-      Util.error("Invalid event " .. vim.inspect(event))
-      return
+---@param opts? { instant: boolean }
+function M.update(opts)
+  -- only update on changes
+  if M._tick == Manager.tick() then
+    return
+  end
+
+  opts = opts or {}
+  local instant = (opts.instant or Instant.in_instant()) and Instant:start()
+  local updated = 0
+  local messages = Manager.get(nil, { sort = true })
+  for _, handler in ipairs(M._handlers) do
+    local messages_view = Manager.get(handler.filter, { messages = messages })
+    updated = updated + (handler.view:display(messages_view) and 1 or 0)
+    if handler.opts.stop ~= false then
+      messages = vim.tbl_filter(function(me)
+        return not vim.tbl_contains(messages_view, me)
+      end, messages)
     end
   end
 
-  if event.remove then
-    do_action("remove", event.remove)
-  end
-
-  if event.clear then
-    do_action("clear", event.clear)
-  end
-
-  if event.message then
-    local view = M.get(event.message)
-    if view then
-      view:add(event.message)
+  if instant then
+    if updated > 0 then
+      require("noice.ui").redraw()
     end
-    return view
+    instant.stop()
   end
+  M._tick = Manager.tick()
+  return updated
 end
 
 return M

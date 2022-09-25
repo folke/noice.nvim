@@ -39,7 +39,7 @@ end
 
 ---@see https://github.com/neovim/neovim/issues/20311
 function M.fix_getchar()
-  local Scheduler = require("noice.scheduler")
+  local Manager = require("noice.manager")
   local Cmdline = require("noice.ui.cmdline")
 
   local function wrap(fn)
@@ -47,17 +47,18 @@ function M.fix_getchar()
       if expr ~= nil then
         return fn(expr)
       end
-      return Scheduler.run_instant(function()
-        Cmdline.on_show("cmdline_show", {}, 1, ">", "", 0, 1)
-        ---@type any
-        local ret = fn()
-        -- Cmdline.on_hide(nil, 1)
-        Scheduler.schedule({
-          remove = Cmdline.message,
-          clear = { event = "msg_show", kind = { "echo", "echomsg" } },
-        })
-        return ret
-      end)
+
+      local instant = require("noice.instant").start()
+
+      Cmdline.on_show("cmdline_show", {}, 1, ">", "", 0, 1)
+      ---@type any
+      local ret = fn()
+
+      instant.stop()
+
+      Manager.remove(Cmdline.message)
+      Manager.clear({ event = "msg_show", kind = { "echo", "echomsg" } })
+      return ret
     end
   end
 
@@ -77,7 +78,7 @@ function M.fix_notify()
       local buf = push(self, notif)
 
       -- run animator and re-render instantly when inside instant events
-      if require("noice.scheduler").in_instant_event() then
+      if require("noice.instant").in_instant() then
         pcall(self._animator.render, self._animator, self._pending, 1 / self._fps)
         self._buffers[notif.id]:render()
       end
