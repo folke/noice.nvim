@@ -103,10 +103,9 @@ end
 
 ---@param content NoiceChunk[]
 function M.on_confirm(event, kind, content)
-  local NuiText = require("nui.text")
-  table.insert(content, NuiText(" ", "Cursor"))
-
   local message = Message(event, kind, content)
+  message:append(" ")
+  message.cursor = { line = message:height(), col = message:last_line():width() - 1 }
   Manager.add(message)
   Handlers.update({ instant = true })
   Manager.remove(message)

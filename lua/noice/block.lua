@@ -3,26 +3,18 @@ local NuiLine = require("nui.line")
 local Object = require("nui.object")
 local NuiText = require("nui.text")
 
----@class NoiceHighlight
----@field line integer 1-indexed
----@field hl_group string
----@field col integer
----@field end_col integer
-
 ---@alias NoiceChunk { [0]: integer, [1]: string}
----@alias NoiceContent string|NoiceChunk|NuiLine|NuiText|NoiceHighlight
+---@alias NoiceContent string|NoiceChunk|NuiLine|NuiText
 
 ---@class NoiceBlock
 ---@field private _lines NuiLine[]
 ---@field private _attr_ids table<number, number>
----@field private _highlights NoiceHighlight[]
 local Block = Object("Block")
 
----@param content NoiceContent|NoiceContent[]
+---@param content? NoiceContent|NoiceContent[]
 ---@param highlight? string|table data for highlight
 function Block:init(content, highlight)
   self._lines = {}
-  self._highlights = {}
   self._attr_ids = {}
   if content then
     self:append(content, highlight)
@@ -31,7 +23,6 @@ end
 
 function Block:clear()
   self._lines = {}
-  self._highlights = {}
   self._attr_ids = {}
 end
 
@@ -66,13 +57,11 @@ end
 ---@param linenr_start? number line number (1-indexed)
 function Block:highlight(bufnr, ns_id, linenr_start)
   linenr_start = linenr_start or 1
-  local start = linenr_start
   self:_create_attr_hl_groups()
   for _, line in ipairs(self._lines) do
     line:highlight(bufnr, ns_id, linenr_start)
     linenr_start = linenr_start + 1
   end
-  self:_apply_highlights(bufnr, ns_id, start)
 end
 
 ---@param bufnr number buffer number
@@ -81,7 +70,6 @@ end
 ---@param linenr_end? number end line number (1-indexed)
 function Block:render(bufnr, ns_id, linenr_start, linenr_end)
   linenr_start = linenr_start or 1
-  local start = linenr_start
   self:_create_attr_hl_groups()
   for _, line in ipairs(self._lines) do
     line:render(bufnr, ns_id, linenr_start, linenr_end)
@@ -90,7 +78,6 @@ function Block:render(bufnr, ns_id, linenr_start, linenr_end)
       linenr_end = linenr_end + 1
     end
   end
-  self:_apply_highlights(bufnr, ns_id, start)
 end
 
 function Block:_create_attr_hl_groups()
@@ -98,30 +85,6 @@ function Block:_create_attr_hl_groups()
     Highlight.get_hl(attr_id)
   end
   self._attr_ids = {}
-end
-
----@param bufnr number buffer number
----@param ns_id number namespace id
----@param linenr_start number start line number (1-indexed)
-function Block:_apply_highlights(bufnr, ns_id, linenr_start)
-  for _, hl in ipairs(self._highlights) do
-    local line_width = self._lines[hl.line]:width()
-    if hl.col >= line_width then
-      -- end of line, so use a virtual text
-      vim.api.nvim_buf_set_extmark(bufnr, ns_id, hl.line + linenr_start - 2, 0, {
-        virt_text = { { " ", hl.hl_group } },
-        virt_text_win_col = hl.col,
-        -- strict = false,
-      })
-    else
-      -- use a regular extmark
-      vim.api.nvim_buf_set_extmark(bufnr, ns_id, hl.line + linenr_start - 2, hl.col, {
-        end_col = hl.end_col,
-        hl_group = hl.hl_group,
-        -- strict = false,
-      })
-    end
-  end
 end
 
 ---@param content string|NuiText|NuiLine
@@ -148,7 +111,7 @@ function Block:append(contents, highlight)
     contents = NuiText(contents, highlight)
   end
 
-  if contents._texts or contents._content or type(contents[1]) == "number" or contents.hl_group then
+  if contents._texts or contents._content or type(contents[1]) == "number" then
     contents = { contents }
   end
 
@@ -160,12 +123,10 @@ function Block:append(contents, highlight)
     elseif content._content then
       ---@cast content NuiText
       self:_append(content)
-    elseif content.hl_group then
-      ---@cast content NoiceHighlight
-      table.insert(self._highlights, content)
     else
       ---@cast content NoiceChunk
       -- Handle newlines
+      ---@type number, string
       local attr_id, text = unpack(content)
       text = text:gsub("\r", "")
       self._attr_ids[attr_id] = attr_id
@@ -184,6 +145,10 @@ function Block:append(contents, highlight)
       end
     end
   end
+end
+
+function Block:last_line()
+  return self._lines[#self._lines]
 end
 
 -- trim empty lines at the beginning and the end of the block

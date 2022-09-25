@@ -81,6 +81,7 @@ function View:highlight(bufnr, linenr_start)
   linenr_start = linenr_start or 1
   for _, m in ipairs(self.messages) do
     m:highlight(bufnr, Config.ns, linenr_start)
+    m:highlight_cursor(bufnr, Config.ns, linenr_start)
     linenr_start = linenr_start + m:height()
   end
 end
@@ -92,6 +93,7 @@ function View:render(bufnr, linenr_start)
   vim.api.nvim_buf_set_lines(bufnr, linenr_start - 1, -1, false, {})
   for _, m in ipairs(self.messages) do
     m:render(bufnr, Config.ns, linenr_start)
+    m:highlight_cursor(bufnr, Config.ns, linenr_start)
     linenr_start = linenr_start + m:height()
   end
 end

@@ -5,12 +5,14 @@ local Config = require("noice.config")
 local _id = 0
 
 ---@class NoiceMessage: NoiceBlock
+---@field super NoiceBlock
 ---@field id number
 ---@field event NoiceEvent
 ---@field ctime number
 ---@field mtime number
 ---@field tick number
 ---@field kind? NoiceKind
+---@field cursor? { line: integer, col: integer }
 ---@diagnostic disable-next-line: undefined-field
 local Message = Block:extend("NoiceBlock")
 
@@ -25,7 +27,6 @@ function Message:init(event, kind, content)
   self.mtime = vim.fn.localtime()
   self.event = event
   self.kind = kind
-  ---@diagnostic disable-next-line: undefined-field
   Message.super.init(self)
 
   if Config.options.debug then
@@ -37,6 +38,33 @@ function Message:init(event, kind, content)
   if content then
     self:append(content)
   end
+end
+
+---@param bufnr number buffer number
+---@param ns_id number namespace id
+---@param linenr_start number line number (1-indexed)
+function Message:highlight_cursor(bufnr, ns_id, linenr_start)
+  if self.cursor then
+    local line_width = self._lines[self.cursor.line]:width()
+    if self.cursor.col >= line_width then
+      -- end of line, so use a virtual text
+      vim.api.nvim_buf_set_extmark(bufnr, ns_id, self.cursor.line + linenr_start - 2, 0, {
+        virt_text = { { " ", "Cursor" } },
+        virt_text_win_col = self.cursor.col,
+      })
+    else
+      -- use a regular extmark
+      vim.api.nvim_buf_set_extmark(bufnr, ns_id, self.cursor.line + linenr_start - 2, self.cursor.col, {
+        end_col = self.cursor.col + 1,
+        hl_group = "Cursor",
+      })
+    end
+  end
+end
+
+function Message:clear()
+  Message.super.clear(self)
+  self.cursor = nil
 end
 
 Message.is = Filter.is

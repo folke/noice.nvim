@@ -90,13 +90,9 @@ function M.update()
         M.message:newline()
       end
       M.message:append(cmdline:chunks())
+      M.message:append(" ")
       local pos = cmdline.pos + #cmdline.prompt + #cmdline.firstc
-      M.message:append({
-        hl_group = "Cursor",
-        line = M.message:height(),
-        col = pos,
-        end_col = pos + 1,
-      })
+      M.message.cursor = { line = M.message:height(), col = pos }
     end
   end
 
