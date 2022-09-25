@@ -8,7 +8,6 @@ local M = {}
 ---@field event? NoiceEvent|NoiceEvent[]
 ---@field kind? NoiceKind|NoiceKind[]
 ---@field message? NoiceMessage
----@field expired? boolean
 ---@field instant? boolean
 ---@field any? NoiceFilter[]
 ---@field not? NoiceFilter
@@ -31,10 +30,6 @@ M.filters = {
     ---@cast message NoiceMessage
     return other == message
   end,
-  expired = function(message, expired)
-    ---@cast message NoiceMessage
-    return message.expired == expired
-  end,
   find = function(message, find)
     ---@cast message NoiceMessage
     return message:content():find(find)
@@ -44,10 +39,11 @@ M.filters = {
     return message:height() >= min_height
   end,
   instant = function(_, instant)
-    return require("noice.scheduler").in_instant_event() == instant
+    return require("noice.instant").in_instant() == instant
   end,
   any = function(message, any)
     ---@cast message NoiceMessage
+    ---@cast any NoiceFilter[]
     for _, f in ipairs(any) do
       if message:is(f) then
         return true
