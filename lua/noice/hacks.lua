@@ -50,10 +50,11 @@ function M.fix_getchar()
       return Scheduler.run_instant(function()
         Cmdline.on_show("cmdline_show", {}, 1, ">", "", 0, 1)
         ---@type any
-        local ret = fn(expr)
-        require("noice.scheduler").schedule({
-          remove = { event = { "msg_show", "cmdline" } },
-          clear = { event = "cmdline" },
+        local ret = fn()
+        -- Cmdline.on_hide(nil, 1)
+        Scheduler.schedule({
+          remove = Cmdline.message,
+          clear = { event = "msg_show", kind = { "echo", "echomsg" } },
         })
         return ret
       end)
