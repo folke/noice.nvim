@@ -91,7 +91,6 @@ return function(view)
   end
 
   local opts = {
-    instant = instant,
     title = view.opts.title or "Noice",
     replace = replace,
     keep = function()

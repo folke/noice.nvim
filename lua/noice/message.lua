@@ -29,14 +29,17 @@ function Message:init(event, kind, content)
   self.kind = kind
   Message.super.init(self)
 
-  if Config.options.debug then
-    local NuiText = require("nui.text")
-    self:append(NuiText("[" .. self.id .. "] " .. event .. "." .. (kind or ""), "DiagnosticVirtualTextInfo"))
-    self:append(NuiText(" ", "Normal"))
-  end
+  self:_debug()
 
   if content then
     self:append(content)
+  end
+end
+
+function Message:_debug()
+  if Config.options.debug then
+    self:append("[" .. self.id .. "] " .. self.event .. "." .. (self.kind or ""), "DiagnosticVirtualTextInfo")
+    self:append(" ")
   end
 end
 
@@ -64,6 +67,7 @@ end
 
 function Message:clear()
   Message.super.clear(self)
+  self:_debug()
   self.cursor = nil
 end
 
