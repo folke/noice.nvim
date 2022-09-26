@@ -55,9 +55,10 @@ function M.on_show(_, items, selected)
     local win = vim.fn.bufwinid(cursor.buf)
     if win ~= -1 then
       M.no_cmdline_mode = true
+      vim.api.nvim_win_set_cursor(win, { cursor.buf_line, cursor.col })
       vim.api.nvim_win_call(win, function()
-        M.view:open(cursor.col + 1, entries)
-        vim.cmd([[redraw]])
+        M.view:open(2, entries)
+        vim.cmd.redraw()
       end)
       M.no_cmdline_mode = false
     end
