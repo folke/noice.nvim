@@ -1,6 +1,5 @@
+local Util = require("noice.util")
 local Object = require("nui.object")
-
-local M = {}
 
 ---@class NuiRelative
 ---@field type "'cursor'"|"'editor'"|"'win'"
@@ -58,12 +57,12 @@ function NuiView:create()
     vim.schedule(function()
       self:hide()
     end)
-  end, { once = true })
+  end, { once = false })
 
   if self._opts.close and self._opts.close.events then
     self._nui:on(self._opts.close.events, function()
       self:hide()
-    end, { once = true })
+    end, { once = false })
   end
 
   if self._opts.close and self._opts.close.keys then
@@ -75,16 +74,17 @@ end
 
 function NuiView:hide()
   if self._nui then
-    self._nui:unmount()
-    self._nui = nil
+    self._nui:hide()
+    -- self._nui = nil
   end
 end
 
 function NuiView:show()
   if not self._nui then
     self:create()
+    self._nui:mount()
   end
-  self._nui:mount()
+  self._nui:show()
 end
 
 function NuiView:get_layout()
@@ -96,19 +96,19 @@ function NuiView:get_layout()
       size = { height = "auto", width = "auto" }
     end
     if size.width == "auto" then
-      size.width = self._view:width()
+      size.width = math.max(1, self._view:width())
     end
     if size.height == "auto" then
-      size.height = self._view:height()
+      size.height = math.max(1, self._view:height())
     end
   end
 
   if size and self._opts.type == "split" then
     if size == "auto" then
       if position == "top" or position == "bottom" then
-        size = self._view:height()
+        size = math.max(1, self._view:height())
       else
-        size = self._view:width()
+        size = math.max(1, self._view:width())
       end
     end
   end
@@ -126,13 +126,14 @@ end
 
 ---@param view NoiceView
 return function(view)
-  if view.visible then
-    if not view.nui then
-      ---@type NuiView
-      view.nui = NuiView(view)
+  ---@type NuiView
+  local nui = NuiView(view)
+
+  return function()
+    if view.visible then
+      nui:render()
+    else
+      nui:hide()
     end
-    view.nui:render()
-  else
-    view.nui:hide()
   end
 end

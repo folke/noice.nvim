@@ -70,46 +70,48 @@ end
 
 ---@param view NoiceView
 return function(view)
-  if not view.visible then
-    if view.win and vim.api.nvim_win_is_valid(view.win) then
-      vim.api.nvim_win_close(view.win, true)
-      view.win = nil
+  return function()
+    if not view.visible then
+      if view.win and vim.api.nvim_win_is_valid(view.win) then
+        vim.api.nvim_win_close(view.win, true)
+        view.win = nil
+      end
+      return
     end
-    return
+
+    local text = view:content()
+    local level = view.opts.level or "info"
+    local render = Util.protect(M.render(view))
+    local instant = require("noice.instant").in_instant()
+    local notify = instant and M.instant_notify() or M.notify()
+
+    ---@type notify.Record | {instant: boolean} | nil
+    local replace = view.opts.replace ~= false and view.notif or nil
+    if replace and replace.instant ~= instant then
+      replace = nil
+    end
+
+    if instant then
+      text = "[instant] " .. text
+    end
+
+    local opts = {
+      title = view.opts.title or "Noice",
+      replace = replace,
+      keep = function()
+        return require("noice.instant").in_instant()
+      end,
+      on_open = function(win)
+        view.win = win
+      end,
+      on_close = function()
+        view.notif = nil
+        view.win = nil
+      end,
+      render = render,
+    }
+
+    view.notif = notify.notify(text, level, opts)
+    view.notif.instant = instant
   end
-
-  local text = view:content()
-  local level = view.opts.level or "info"
-  local render = Util.protect(M.render(view))
-  local instant = require("noice.instant").in_instant()
-  local notify = instant and M.instant_notify() or M.notify()
-
-  ---@type notify.Record | {instant: boolean} | nil
-  local replace = view.opts.replace ~= false and view.notif or nil
-  if replace and replace.instant ~= instant then
-    replace = nil
-  end
-
-  if instant then
-    text = "[instant] " .. text
-  end
-
-  local opts = {
-    title = view.opts.title or "Noice",
-    replace = replace,
-    keep = function()
-      return require("noice.instant").in_instant()
-    end,
-    on_open = function(win)
-      view.win = win
-    end,
-    on_close = function()
-      view.notif = nil
-      view.win = nil
-    end,
-    render = render,
-  }
-
-  view.notif = notify.notify(text, level, opts)
-  view.notif.instant = instant
 end

@@ -26,11 +26,15 @@ end
 function View:init(render, opts)
   opts = opts or {}
 
-  self._render = type(render) == "function" and render or require("noice.render")[render]
   self._tick = 0
   self.messages = {}
   self.opts = opts or {}
   self.visible = true
+  self._render = type(render) == "function" and render or require("noice.render")[render]
+  self._render = self._render(self)
+  if type(self._render) ~= "function" then
+    Util.error("Invalid view config " .. vim.inspect({ render = render, opts = opts }))
+  end
 end
 
 ---@param messages NoiceMessage[]
