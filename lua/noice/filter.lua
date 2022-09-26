@@ -51,7 +51,7 @@ M.filters = {
   end,
   find = function(message, find)
     ---@cast message NoiceMessage
-    return message:content():find(find)
+    return message:content(true):find(find)
   end,
   min_height = function(message, min_height)
     ---@cast message NoiceMessage

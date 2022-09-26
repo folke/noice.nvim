@@ -1,6 +1,7 @@
 local Block = require("noice.block")
 local Filter = require("noice.filter")
 local Config = require("noice.config")
+local NuiLine = require("nui.line")
 
 local _id = 0
 
@@ -41,6 +42,15 @@ function Message:_debug()
     self:append("[" .. self.id .. "] " .. self.event .. "." .. (self.kind or ""), "DiagnosticVirtualTextInfo")
     self:append(" ")
   end
+end
+
+function Message:content(hide_debug)
+  local ret = Message.super.content(self)
+  if hide_debug and Config.options.debug and self:height() > 0 then
+    local debug_width = self._lines[1]._texts[1]:width() + 1
+    ret = ret:sub(debug_width + 1):gsub("^\n", "")
+  end
+  return ret
 end
 
 ---@param bufnr number buffer number
