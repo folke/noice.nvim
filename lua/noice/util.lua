@@ -60,8 +60,11 @@ function M.win_apply_config(win, opts)
   vim.api.nvim_win_set_config(win, opts)
 end
 
-function M.notify(msg, level)
-  vim.notify(msg, level, {
+---@param msg string
+---@param level number|string
+---@param ... any
+function M.notify(msg, level, ...)
+  vim.notify(msg:format(...), level, {
     title = "noice.nvim",
     on_open = function(win)
       vim.api.nvim_win_set_option(win, "conceallevel", 3)
@@ -72,16 +75,16 @@ function M.notify(msg, level)
   })
 end
 
-function M.warn(msg)
-  M.notify(msg, vim.log.levels.WARN)
+function M.warn(msg, ...)
+  M.notify(msg, vim.log.levels.WARN, ...)
 end
 
-function M.error(msg)
-  M.notify(msg, vim.log.levels.ERROR)
+function M.error(msg, ...)
+  M.notify(msg, vim.log.levels.ERROR, ...)
 end
 
-function M.info(msg)
-  M.notify(msg, vim.log.levels.INFO)
+function M.info(msg, ...)
+  M.notify(msg, vim.log.levels.INFO, ...)
 end
 
 return M
