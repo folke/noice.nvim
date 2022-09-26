@@ -91,8 +91,8 @@ function M.on_showmode(event, content)
     end
   else
     message:set(content)
+    Manager.add(message)
   end
-  Manager.add(message)
 end
 M.on_showcmd = M.on_showmode
 M.on_ruler = M.on_showmode
