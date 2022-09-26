@@ -49,10 +49,6 @@ function M.render(view)
     -- do our rendering
     view:render(buf, { offset = offset, highlight = true })
 
-    if view.opts.filetype then
-      vim.api.nvim_buf_set_option(buf, "filetype", view.opts.filetype)
-    end
-
     -- resize notification
     local win = vim.fn.bufwinid(buf)
     if win ~= -1 then
@@ -71,7 +67,7 @@ end
 ---@param view NoiceView
 return function(view)
   return function()
-    if not view.visible then
+    if not view._visible then
       if view.win and vim.api.nvim_win_is_valid(view.win) then
         vim.api.nvim_win_close(view.win, true)
         view.win = nil
@@ -80,13 +76,13 @@ return function(view)
     end
 
     local text = view:content()
-    local level = view.opts.level or "info"
+    local level = view._opts.level or "info"
     local render = Util.protect(M.render(view))
     local instant = require("noice.instant").in_instant()
     local notify = instant and M.instant_notify() or M.notify()
 
     ---@type notify.Record | {instant: boolean} | nil
-    local replace = view.opts.replace ~= false and view.notif or nil
+    local replace = view._opts.replace ~= false and view.notif or nil
     if replace and replace.instant ~= instant then
       replace = nil
     end
@@ -96,7 +92,7 @@ return function(view)
     end
 
     local opts = {
-      title = view.opts.title or "Noice",
+      title = view._opts.title or "Noice",
       replace = replace,
       keep = function()
         return require("noice.instant").in_instant()

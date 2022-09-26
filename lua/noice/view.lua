@@ -9,10 +9,9 @@ local Object = require("nui.object")
 ---@class NoiceView
 ---@field _render NoiceRender
 ---@field _tick number
----@field filter NoiceFilter
----@field messages NoiceMessage[]
----@field opts? table
----@field visible boolean
+---@field _messages NoiceMessage[]
+---@field _opts? table
+---@field _visible boolean
 local View = Object("View")
 
 function View.get_view(view, opts)
@@ -27,9 +26,9 @@ function View:init(render, opts)
   opts = opts or {}
 
   self._tick = 0
-  self.messages = {}
-  self.opts = opts or {}
-  self.visible = true
+  self._messages = {}
+  self._opts = opts or {}
+  self._visible = true
   self._render = type(render) == "function" and render or require("noice.render")[render]
   self._render = self._render(self)
   if type(self._render) ~= "function" then
@@ -39,7 +38,7 @@ end
 
 ---@param messages NoiceMessage[]
 function View:display(messages)
-  local dirty = #messages ~= #self.messages
+  local dirty = #messages ~= #self._messages
   for _, m in ipairs(messages) do
     if m.tick > self._tick then
       self._tick = m.tick
@@ -47,14 +46,14 @@ function View:display(messages)
     end
   end
 
-  if not dirty and not self.visible and #self.messages > 0 then
+  if not dirty and not self._visible and #self._messages > 0 then
     -- FIXME:
     dirty = true
   end
 
   if dirty then
-    self.messages = messages
-    self.visible = #self.messages > 0
+    self._messages = messages
+    self._visible = #self._messages > 0
     Util.try(self._render, self)
     return true
   end
@@ -63,7 +62,7 @@ end
 
 function View:height()
   local ret = 0
-  for _, m in ipairs(self.messages) do
+  for _, m in ipairs(self._messages) do
     ret = ret + m:height()
   end
   return ret
@@ -71,7 +70,7 @@ end
 
 function View:width()
   local ret = 0
-  for _, m in ipairs(self.messages) do
+  for _, m in ipairs(self._messages) do
     ret = math.max(ret, m:width())
   end
   return ret
@@ -84,7 +83,7 @@ function View:content()
       function(m)
         return m:content()
       end,
-      self.messages
+      self._messages
     ),
     "\n"
   )
@@ -96,11 +95,15 @@ function View:render(buf, opts)
   opts = opts or {}
   opts.offset = opts.offset or 1
 
+  if self._opts.buf_options then
+    require("nui.utils")._.set_buf_options(buf, self._opts.buf_options)
+  end
+
   if not opts.highlight then
     vim.api.nvim_buf_set_lines(buf, opts.offset - 1, -1, false, {})
   end
 
-  for _, m in ipairs(self.messages) do
+  for _, m in ipairs(self._messages) do
     if opts.highlight then
       m:highlight(buf, Config.ns, opts.offset)
     else

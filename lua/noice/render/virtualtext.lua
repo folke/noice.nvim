@@ -7,9 +7,9 @@ return function(view)
     line = line - 1
     -- dump({ line = line, col = col })
     vim.api.nvim_buf_clear_namespace(0, Config.ns, 0, -1)
-    if view.messages[1] then
+    if view._messages[1] then
       vim.api.nvim_buf_set_extmark(0, Config.ns, line, col, {
-        virt_text = { { view.messages[1]:content(), "DiagnosticVirtualTextInfo" } },
+        virt_text = { { view._messages[1]:content(), "DiagnosticVirtualTextInfo" } },
       })
     end
   end

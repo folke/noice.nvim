@@ -1,5 +1,5 @@
 ---@param view NoiceView
 return function(view)
-  view.opts.type = "split"
+  view._opts.type = "split"
   return require("noice.render.nui")(view)
 end

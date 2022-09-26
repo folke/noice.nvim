@@ -1,4 +1,3 @@
-local Util = require("noice.util")
 local Object = require("nui.object")
 
 ---@class NuiRelative
@@ -44,7 +43,7 @@ local NuiView = Object("NuiView")
 ---@param view NoiceView
 function NuiView:init(view)
   self._view = view
-  self._opts = view.opts
+  self._opts = view._opts
 end
 
 function NuiView:create()
@@ -130,7 +129,7 @@ return function(view)
   local nui = NuiView(view)
 
   return function()
-    if view.visible then
+    if view._visible then
       nui:render()
     else
       nui:hide()
