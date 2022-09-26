@@ -135,7 +135,15 @@ M.defaults = {
           -- { event = "msg_show", find = "Found a swap file" },
         },
       },
-      opts = {},
+      opts = {
+        filter_options = {
+          {
+            -- Set filetype=vim only for cmdline events
+            filter = { event = "cmdline" },
+            opts = { buf_options = { filetype = "vim" } },
+          },
+        },
+      },
     },
     {
       view = "split",
