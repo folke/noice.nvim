@@ -7,7 +7,6 @@ local Object = require("nui.object")
 ---@alias NoiceViewOptions NoiceNuiOptions|{buf_options?: table<string,any>}
 
 ---@class NoiceView
----@field _render NoiceRender
 ---@field _tick number
 ---@field _messages NoiceMessage[]
 ---@field _opts? table
@@ -20,7 +19,6 @@ function View.get_view(view, opts)
   return View(opts.render, opts)
 end
 
----@param render string|NoiceRender
 ---@param opts? table
 function View:init(render, opts)
   opts = opts or {}
@@ -29,7 +27,7 @@ function View:init(render, opts)
   self._messages = {}
   self._opts = opts or {}
   self._visible = true
-  self._render = type(render) == "function" and render or require("noice.render")[render]
+  self._render = type(render) == "function" and render or require("noice.view." .. render)
   self._render = self._render(self)
   if type(self._render) ~= "function" then
     Util.error("Invalid view config " .. vim.inspect({ render = render, opts = opts }))
