@@ -65,7 +65,7 @@ function M.on_show(event, kind, content, replace_last)
   end
 
   if M.last and replace_last then
-    Manager.remove(M.last)
+    Manager.clear({ message = M.last })
     M.last = nil
   end
 
