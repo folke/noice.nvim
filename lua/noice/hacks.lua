@@ -42,17 +42,18 @@ function M.fix_getchar()
   local Manager = require("noice.manager")
   local Cmdline = require("noice.ui.cmdline")
 
-  local function wrap(fn)
-    return function(expr)
-      if expr ~= nil then
-        return fn(expr)
+  local function wrap(fn, skip)
+    return function(...)
+      local args = { ... }
+      if skip and skip(unpack(args)) then
+        return fn(unpack(args))
       end
 
       local instant = require("noice.instant").start()
 
       Cmdline.on_show("cmdline_show", {}, 1, ">", "", 0, 1)
       ---@type any
-      local ret = fn()
+      local ret = fn(unpack(args))
 
       instant.stop()
 
@@ -62,8 +63,12 @@ function M.fix_getchar()
     end
   end
 
-  vim.fn.getchar = wrap(vim.fn.getchar)
-  vim.fn.getcharstr = wrap(vim.fn.getcharstr)
+  local function skip(expr)
+    return expr ~= nil
+  end
+  vim.fn.getchar = wrap(vim.fn.getchar, skip)
+  vim.fn.getcharstr = wrap(vim.fn.getcharstr, skip)
+  vim.fn.inputlist = wrap(vim.fn.inputlist)
 end
 
 -- Allow nvim-notify to behave inside instant events
