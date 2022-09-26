@@ -1,6 +1,13 @@
 ---@diagnostic disable: undefined-global
 local M = {}
 
+---@class HLAttrs
+---@field rgb_ae_attr number
+---@field rgb_fg_color number
+---@field rgb_bg_color number
+---@field rgb_sp_color number
+---@field hl_blend number
+
 function M.setup()
   local ffi = require("ffi")
   local ok, err = pcall(
@@ -14,17 +21,20 @@ function M.setup()
       } HlAttrs;
       HlAttrs syn_attr2entry(int attr);]]
   )
+  ---@diagnostic disable-next-line: need-check-nil
   if not ok and not err:find("redefine") then
     error(err)
   end
-  M.attr2entry = ffi.C.syn_attr2entry
+  M.attr2entry = ffi.C.syn_attr2entry --[[@as fun(attr: number): HLAttrs]]
 end
 
+---@param attr_id number
 function M.attr2entry(attr_id)
   M.setup()
   return M.attr2entry(attr_id)
 end
 
+---@type table<number, string>
 M.cache = {}
 
 function M.get_hl_group(attr_id)
