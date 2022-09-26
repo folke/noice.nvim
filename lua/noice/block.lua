@@ -8,14 +8,12 @@ local NuiText = require("nui.text")
 
 ---@class NoiceBlock
 ---@field private _lines NuiLine[]
----@field private _attr_ids table<number, number>
 local Block = Object("Block")
 
 ---@param content? NoiceContent|NoiceContent[]
 ---@param highlight? string|table data for highlight
 function Block:init(content, highlight)
   self._lines = {}
-  self._attr_ids = {}
   if content then
     self:append(content, highlight)
   end
@@ -23,7 +21,6 @@ end
 
 function Block:clear()
   self._lines = {}
-  self._attr_ids = {}
 end
 
 function Block:content()
@@ -58,7 +55,7 @@ end
 function Block:highlight(bufnr, ns_id, linenr_start)
   self:_fix_extmarks()
   linenr_start = linenr_start or 1
-  self:_create_attr_hl_groups()
+  Highlight.update()
   for _, line in ipairs(self._lines) do
     line:highlight(bufnr, ns_id, linenr_start)
     linenr_start = linenr_start + 1
@@ -82,7 +79,7 @@ end
 function Block:render(bufnr, ns_id, linenr_start, linenr_end)
   self:_fix_extmarks()
   linenr_start = linenr_start or 1
-  self:_create_attr_hl_groups()
+  Highlight.update()
   for _, line in ipairs(self._lines) do
     for _, t in ipairs(line._texts) do
       if t.extmark then
@@ -95,13 +92,6 @@ function Block:render(bufnr, ns_id, linenr_start, linenr_end)
       linenr_end = linenr_end + 1
     end
   end
-end
-
-function Block:_create_attr_hl_groups()
-  for _, attr_id in pairs(self._attr_ids) do
-    Highlight.get_hl(attr_id)
-  end
-  self._attr_ids = {}
 end
 
 ---@param content string|NuiText|NuiLine
@@ -146,7 +136,6 @@ function Block:append(contents, highlight)
       ---@type number, string
       local attr_id, text = unpack(content)
       text = text:gsub("\r", "")
-      self._attr_ids[attr_id] = attr_id
       local hl_group = Highlight.get_hl_group(attr_id)
       while text ~= "" do
         local nl = text:find("\n")
