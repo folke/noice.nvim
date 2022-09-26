@@ -160,15 +160,16 @@ M.defaults = {
         event = "msg_show",
         kind = "search_count",
       },
+      opts = { hl_group = "DiagnosticVirtualTextInfo" },
     },
     {
-      view = "nop", -- use statusline components instead
       filter = {
         any = {
           { event = { "msg_showmode", "msg_showcmd", "msg_ruler" } },
           { event = "msg_show", kind = "search_count" },
         },
       },
+      opts = { skip = true },
     },
     {
       view = "notify",
