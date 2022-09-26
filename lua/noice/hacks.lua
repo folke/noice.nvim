@@ -7,18 +7,27 @@ function M.setup()
   M.fix_incsearch()
   M.fix_getchar()
   M.fix_notify()
+  M.fix_nohlsearch()
   M.fix_redraw()
+end
+
+function M.fix_nohlsearch()
+  vim.api.nvim_create_autocmd("CmdlineLeave", {
+    callback = function()
+      local cmd = vim.fn.getcmdline()
+      if cmd:find("noh") == 1 then
+        require("noice.manager").clear({ kind = "search_count" })
+      end
+    end,
+  })
 end
 
 ---@see https://github.com/neovim/neovim/issues/17810
 function M.fix_incsearch()
-  local group = vim.api.nvim_create_augroup("noice.incsearch", { clear = true })
-
   ---@type integer|string|nil
   local conceallevel
 
   vim.api.nvim_create_autocmd("CmdlineEnter", {
-    group = group,
     callback = function(event)
       if event.match == "/" or event.match == "?" then
         conceallevel = vim.wo.conceallevel
@@ -28,7 +37,6 @@ function M.fix_incsearch()
   })
 
   vim.api.nvim_create_autocmd("CmdlineLeave", {
-    group = group,
     callback = function(event)
       if conceallevel and (event.match == "/" or event.match == "?") then
         vim.wo.conceallevel = conceallevel
