@@ -54,7 +54,7 @@ function M.handle(event, ...)
   local ok, handler = pcall(require, "noice.ui." .. event_group)
   if not (ok and type(handler[on]) == "function") then
     if Config.options.debug then
-      Util.error("No ui handlers for **" .. event .. "** events\n```lua\n" .. vim.inspect({ ... }) .. "\n```")
+      Util.error("No ui router for **" .. event .. "** events\n```lua\n" .. vim.inspect({ ... }) .. "\n```")
     end
     return
   end
@@ -62,7 +62,7 @@ function M.handle(event, ...)
   handler[on](event, ...)
 
   if Instant.in_instant() then
-    require("noice.handlers").update({ instant = true })
+    require("noice.router").update({ instant = true })
   end
 end
 

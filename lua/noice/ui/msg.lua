@@ -1,4 +1,4 @@
-local Handlers = require("noice.handlers")
+local Router = require("noice.router")
 local Manager = require("noice.manager")
 local Message = require("noice.message")
 
@@ -107,7 +107,7 @@ function M.on_confirm(event, kind, content)
   message:append(" ")
   message.cursor = { line = message:height(), col = message:last_line():width() - 1 }
   Manager.add(message)
-  Handlers.update({ instant = true })
+  Router.update({ instant = true })
   Manager.remove(message)
 end
 

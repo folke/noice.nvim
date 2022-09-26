@@ -1,6 +1,6 @@
 local Message = require("noice.message")
 local Manager = require("noice.manager")
-local Handlers = require("noice.handlers")
+local Router = require("noice.router")
 
 local M = {}
 M.message = Message("cmdline", nil)
@@ -98,7 +98,7 @@ function M.update()
 
   if count > 0 then
     Manager.add(M.message)
-    Handlers.update({ instant = true })
+    Router.update({ instant = true })
   else
     Manager.remove(M.message)
   end

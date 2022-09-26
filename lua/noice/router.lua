@@ -7,7 +7,7 @@ local Instant = require("noice.instant")
 local M = {}
 M._running = false
 ---@type {filter: NoiceFilter, view: NoiceView, opts: table}[]
-M._handlers = {}
+M._router = {}
 M._tick = 0
 
 local function run()
@@ -36,16 +36,16 @@ function M.add(handler)
   if type(view) == "string" then
     handler.view = View(view, handler.opts)
   end
-  table.insert(M._handlers, handler)
+  table.insert(M._router, handler)
 end
 
 ---@class NoiceHandler
 ---@field filter NoiceFilter
----@field view string|NoiceView
+---@field view string
 ---@field opts? table
 
 function M.setup()
-  for _, handler in ipairs(Config.options.handlers) do
+  for _, handler in ipairs(Config.options.router) do
     M.add(handler)
   end
   vim.schedule(M.start)
@@ -62,8 +62,9 @@ function M.update(opts)
   local instant = (opts.instant or Instant.in_instant()) and Instant:start()
   local updated = 0
   local messages = Manager.get(nil, { sort = true })
-  for _, handler in ipairs(M._handlers) do
-    local messages_view = Manager.get(handler.filter, { messages = messages })
+  for _, handler in ipairs(M._router) do
+    local filter_opts = handler.opts.history and { history = true, sort = true } or { messages = messages }
+    local messages_view = Manager.get(handler.filter, filter_opts)
     updated = updated + (handler.view:display(messages_view) and 1 or 0)
     if handler.opts.stop ~= false then
       messages = vim.tbl_filter(function(me)
