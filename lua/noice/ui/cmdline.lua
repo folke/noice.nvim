@@ -1,6 +1,8 @@
 local Message = require("noice.message")
 local Manager = require("noice.manager")
 local Router = require("noice.router")
+local Config = require("noice.config")
+local NuiText = require("nui.text")
 
 local M = {}
 M.message = Message("cmdline", nil)
@@ -27,7 +29,7 @@ M.events = {
 local Cmdline = {}
 Cmdline.__index = Cmdline
 
-function Cmdline:chunks()
+function Cmdline:chunks(firstc)
   local chunks = {}
 
   -- indent content
@@ -36,7 +38,7 @@ function Cmdline:chunks()
   end
 
   -- prefix with first character and optional prompt
-  table.insert(chunks, { 0, self.firstc .. self.prompt })
+  table.insert(chunks, { 0, (firstc and self.firstc or "") .. self.prompt })
 
   -- add content
   vim.list_extend(chunks, self.content)
@@ -89,10 +91,24 @@ function M.update()
       if M.message:height() > 0 then
         M.message:newline()
       end
-      M.message:append(cmdline:chunks())
+
+      local icon = Config.options.cmdline.icons[cmdline.firstc]
+      local icon_width = 0
+      local firstc = true
+      if icon then
+        firstc = icon.firstc ~= false
+        icon_width = vim.api.nvim_strwidth(icon.icon) + 1
+        M.message:append(NuiText("", {
+          virt_text = { { icon.icon, icon.hl_group } },
+          virt_text_win_col = 0,
+        }))
+        M.message:append((" "):rep(icon_width))
+      end
+
+      M.message:append(cmdline:chunks(firstc))
       M.message:append(" ")
-      local pos = cmdline.pos + #cmdline.prompt + #cmdline.firstc
-      M.message.cursor = { line = M.message:height(), col = pos }
+      local pos = cmdline.pos + #cmdline.prompt + (firstc and #cmdline.firstc or 0)
+      M.message.cursor = { line = M.message:height(), col = pos + icon_width }
     end
   end
 
