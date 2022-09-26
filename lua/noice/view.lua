@@ -4,17 +4,28 @@ local Object = require("nui.object")
 
 ---@alias NoiceRender fun(view: NoiceView)
 
+---@alias NoiceViewOptions NoiceNuiOptions|{buf_options?: table<string,any>}
+
 ---@class NoiceView
 ---@field _render NoiceRender
 ---@field _tick number
+---@field filter NoiceFilter
 ---@field messages NoiceMessage[]
 ---@field opts? table
 ---@field visible boolean
 local View = Object("View")
 
+function View.get_view(view, opts)
+  opts = vim.tbl_deep_extend("force", Config.options.views[view] or {}, opts or {})
+  opts.render = opts.render or view
+  return View(opts.render, opts)
+end
+
 ---@param render string|NoiceRender
 ---@param opts? table
 function View:init(render, opts)
+  opts = opts or {}
+
   self._render = type(render) == "function" and render or require("noice.render")[render]
   self._tick = 0
   self.messages = {}
@@ -75,26 +86,24 @@ function View:content()
   )
 end
 
----@param bufnr number buffer number
----@param linenr_start? number line number (1-indexed)
-function View:highlight(bufnr, linenr_start)
-  linenr_start = linenr_start or 1
-  for _, m in ipairs(self.messages) do
-    m:highlight(bufnr, Config.ns, linenr_start)
-    m:highlight_cursor(bufnr, Config.ns, linenr_start)
-    linenr_start = linenr_start + m:height()
-  end
-end
+---@param buf number buffer number
+---@param opts? {offset: number, highlight: boolean} line number (1-indexed), if `highlight`, then only highlight
+function View:render(buf, opts)
+  opts = opts or {}
+  opts.offset = opts.offset or 1
 
----@param bufnr number buffer number
----@param linenr_start? number line number (1-indexed)
-function View:render(bufnr, linenr_start)
-  linenr_start = linenr_start or 1
-  vim.api.nvim_buf_set_lines(bufnr, linenr_start - 1, -1, false, {})
+  if not opts.highlight then
+    vim.api.nvim_buf_set_lines(buf, opts.offset - 1, -1, false, {})
+  end
+
   for _, m in ipairs(self.messages) do
-    m:render(bufnr, Config.ns, linenr_start)
-    m:highlight_cursor(bufnr, Config.ns, linenr_start)
-    linenr_start = linenr_start + m:height()
+    if opts.highlight then
+      m:highlight(buf, Config.ns, opts.offset)
+    else
+      m:render(buf, Config.ns, opts.offset)
+    end
+    m:highlight_cursor(buf, Config.ns, opts.offset)
+    opts.offset = opts.offset + m:height()
   end
 end
 

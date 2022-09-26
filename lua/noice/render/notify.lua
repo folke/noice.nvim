@@ -47,7 +47,11 @@ function M.render(view)
     local offset = #buf_lines - view:height() + 1
 
     -- do our rendering
-    view:highlight(buf, offset)
+    view:render(buf, { offset = offset, highlight = true })
+
+    if view.opts.filetype then
+      vim.api.nvim_buf_set_option(buf, "filetype", view.opts.filetype)
+    end
 
     -- resize notification
     local win = vim.fn.bufwinid(buf)
