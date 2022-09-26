@@ -56,6 +56,7 @@ end
 ---@param ns_id number namespace id
 ---@param linenr_start? number line number (1-indexed)
 function Block:highlight(bufnr, ns_id, linenr_start)
+  self:_fix_extmarks()
   linenr_start = linenr_start or 1
   self:_create_attr_hl_groups()
   for _, line in ipairs(self._lines) do
@@ -64,14 +65,30 @@ function Block:highlight(bufnr, ns_id, linenr_start)
   end
 end
 
+function Block:_fix_extmarks()
+  for _, line in ipairs(self._lines) do
+    for _, t in ipairs(line._texts) do
+      if t.extmark then
+        t.extmark.id = nil
+      end
+    end
+  end
+end
+
 ---@param bufnr number buffer number
 ---@param ns_id number namespace id
 ---@param linenr_start? number start line number (1-indexed)
 ---@param linenr_end? number end line number (1-indexed)
 function Block:render(bufnr, ns_id, linenr_start, linenr_end)
+  self:_fix_extmarks()
   linenr_start = linenr_start or 1
   self:_create_attr_hl_groups()
   for _, line in ipairs(self._lines) do
+    for _, t in ipairs(line._texts) do
+      if t.extmark then
+        t.extmark.id = nil
+      end
+    end
     line:render(bufnr, ns_id, linenr_start, linenr_end)
     linenr_start = linenr_start + 1
     if linenr_end then
