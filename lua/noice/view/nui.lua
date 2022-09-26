@@ -66,6 +66,14 @@ function NuiView:create()
   self._nui:mount()
 end
 
+function NuiView:reset()
+  if self._nui then
+    self._nui:unmount()
+    self._nui = nil
+    self._visible = false
+  end
+end
+
 function NuiView:hide()
   if self._nui then
     self._nui:hide()
