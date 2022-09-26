@@ -1,18 +1,28 @@
 local Config = require("noice.config")
 local Util = require("noice.util")
 local Object = require("nui.object")
+local Filter = require("noice.filter")
 
----@alias NoiceViewOptions NoiceNuiOptions|{buf_options?: table<string,any>}
+---@class NoiceViewBaseOptions
+---@field buf_options? table<string,any>
+---@field filter_options? { filter: NoiceFilter, opts: NoiceNuiOptions }[]
+--
+---@alias NoiceViewOptions NoiceViewBaseOptions|NoiceNuiOptions
 
 ---@class NoiceView
 ---@field _tick number
 ---@field _messages NoiceMessage[]
----@field _opts? table
+---@field _opts? NoiceViewOptions
+---@field _view_opts? NoiceViewOptions
 ---@field _visible boolean
 local View = Object("NoiceView")
 
 function View.get_view(view, opts)
-  opts = vim.tbl_deep_extend("force", Config.options.views[view] or {}, opts or {})
+  local view_options = Config.options.views[view] or {}
+  opts = vim.tbl_deep_extend("force", view_options, opts or {})
+  if view_options.filter_options then
+    vim.list_extend(opts.filter_options, view_options.filter_options)
+  end
   ---@type NoiceView
   local class = Util.try(require, "noice.view." .. (opts.render or view))
   return class(opts)
@@ -23,7 +33,23 @@ function View:init(opts)
   self._tick = 0
   self._messages = {}
   self._opts = opts or {}
+  self._view_opts = vim.tbl_deep_extend("force", {}, self._opts)
   self._visible = true
+end
+
+function View:_calc_opts()
+  local orig_opts = vim.tbl_deep_extend("force", {}, self._opts)
+  self._opts = vim.tbl_deep_extend("force", {}, self._view_opts)
+  if self._opts.filter_options then
+    for _, fo in ipairs(self._opts.filter_options) do
+      if Filter.has(self._messages, fo.filter) then
+        self._opts = vim.tbl_deep_extend("force", self._opts, fo.opts or {})
+      end
+    end
+  end
+  if not vim.deep_equal(orig_opts, self._opts) then
+    self:reset()
+  end
 end
 
 ---@param messages NoiceMessage[]
@@ -39,6 +65,7 @@ function View:display(messages)
   if dirty then
     self._messages = messages
     if #self._messages > 0 then
+      self:_calc_opts()
       Util.try(self.show, self)
       self._visible = true
     else
@@ -49,6 +76,8 @@ function View:display(messages)
   end
   return false
 end
+
+function View:reset() end
 
 function View:show()
   Util.error("Missing implementation `View:show()` for %s", self)
