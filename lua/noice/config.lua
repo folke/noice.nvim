@@ -11,7 +11,12 @@ M.defaults = {
   throttle = 1000 / 30,
   cmdline = {
     enabled = true,
-    menu = "popup", -- @type "popup" | "wild"
+    menu = "popup", -- @type "popup" | "wild",
+    icons = {
+      ["/"] = { icon = " ", hl_group = "DiagnosticWarn" },
+      ["?"] = { icon = " ", hl_group = "DiagnosticWarn" },
+      [":"] = { icon = " ", hl_group = "DiagnosticInfo", firstc = false },
+    },
   },
   history = {
     view = "split",
