@@ -12,7 +12,7 @@ local _id = 0
 ---@field mtime number
 ---@field tick number
 ---@field kind? NoiceKind
----@field cursor? { line: integer, col: integer }
+---@field cursor? { line: integer, col: integer, buf?: number, buf_line?: number }
 ---@diagnostic disable-next-line: undefined-field
 local Message = Block:extend("NoiceBlock")
 
@@ -48,16 +48,18 @@ end
 ---@param linenr_start number line number (1-indexed)
 function Message:highlight_cursor(bufnr, ns_id, linenr_start)
   if self.cursor then
+    self.cursor.buf = bufnr
+    self.cursor.buf_line = self.cursor.line + linenr_start - 1
     local line_width = self._lines[self.cursor.line]:width()
     if self.cursor.col >= line_width then
       -- end of line, so use a virtual text
-      vim.api.nvim_buf_set_extmark(bufnr, ns_id, self.cursor.line + linenr_start - 2, 0, {
+      vim.api.nvim_buf_set_extmark(bufnr, ns_id, self.cursor.buf_line - 1, 0, {
         virt_text = { { " ", "Cursor" } },
         virt_text_win_col = self.cursor.col,
       })
     else
       -- use a regular extmark
-      vim.api.nvim_buf_set_extmark(bufnr, ns_id, self.cursor.line + linenr_start - 2, self.cursor.col, {
+      vim.api.nvim_buf_set_extmark(bufnr, ns_id, self.cursor.buf_line - 1, self.cursor.col, {
         end_col = self.cursor.col + 1,
         hl_group = "Cursor",
       })
