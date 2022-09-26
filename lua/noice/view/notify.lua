@@ -1,4 +1,5 @@
 local Util = require("noice.util")
+local View = require("noice.view")
 
 local M = {}
 
@@ -35,19 +36,24 @@ function M.get_render(config)
   return ret
 end
 
----@param view NoiceView
----@return notify.RenderFun
-function M.render(view)
+---@class NotifyView: NoiceView
+---@field win? number
+---@field buf? number
+---@field notif? notify.Record|{instant: boolean}
+---@diagnostic disable-next-line: undefined-field
+local NotifyView = View:extend("NotifyView")
+
+function NotifyView:notify_render()
   return function(buf, notif, hl, config)
     -- run notify view
     M.get_render(config)(buf, notif, hl, config)
 
     ---@type string[]
     local buf_lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
-    local offset = #buf_lines - view:height() + 1
+    local offset = #buf_lines - self:height() + 1
 
     -- do our rendering
-    view:render(buf, { offset = offset, highlight = true })
+    self:render(buf, { offset = offset, highlight = true })
 
     -- resize notification
     local win = vim.fn.bufwinid(buf)
@@ -64,50 +70,46 @@ function M.render(view)
   end
 end
 
----@param view NoiceView
-return function(view)
-  return function()
-    if not view._visible then
-      if view.win and vim.api.nvim_win_is_valid(view.win) then
-        vim.api.nvim_win_close(view.win, true)
-        view.win = nil
-      end
-      return
-    end
+function NotifyView:show()
+  local text = self:content()
+  local level = self._opts.level or "info"
+  local instant = require("noice.instant").in_instant()
+  local notify = instant and M.instant_notify() or M.notify()
 
-    local text = view:content()
-    local level = view._opts.level or "info"
-    local render = Util.protect(M.render(view))
-    local instant = require("noice.instant").in_instant()
-    local notify = instant and M.instant_notify() or M.notify()
+  local replace = self._opts.replace ~= false and self.notif or nil
+  if replace and replace.instant ~= instant then
+    replace = nil
+  end
 
-    ---@type notify.Record | {instant: boolean} | nil
-    local replace = view._opts.replace ~= false and view.notif or nil
-    if replace and replace.instant ~= instant then
-      replace = nil
-    end
+  if instant then
+    text = "[instant] " .. text
+  end
 
-    if instant then
-      text = "[instant] " .. text
-    end
+  local opts = {
+    title = self._opts.title or "Noice",
+    replace = replace,
+    keep = function()
+      return require("noice.instant").in_instant()
+    end,
+    on_open = function(win)
+      self.win = win
+    end,
+    on_close = function()
+      self.notif = nil
+      self.win = nil
+    end,
+    render = Util.protect(self:notify_render()),
+  }
 
-    local opts = {
-      title = view._opts.title or "Noice",
-      replace = replace,
-      keep = function()
-        return require("noice.instant").in_instant()
-      end,
-      on_open = function(win)
-        view.win = win
-      end,
-      on_close = function()
-        view.notif = nil
-        view.win = nil
-      end,
-      render = render,
-    }
+  self.notif = notify.notify(text, level, opts)
+  self.notif.instant = instant
+end
 
-    view.notif = notify.notify(text, level, opts)
-    view.notif.instant = instant
+function NotifyView:hide()
+  if self.win and vim.api.nvim_win_is_valid(self.win) then
+    vim.api.nvim_win_close(self.win, true)
+    self.win = nil
   end
 end
+
+return NotifyView

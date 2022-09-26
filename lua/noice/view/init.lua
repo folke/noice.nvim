@@ -2,8 +2,6 @@ local Config = require("noice.config")
 local Util = require("noice.util")
 local Object = require("nui.object")
 
----@alias NoiceRender fun(view: NoiceView)
-
 ---@alias NoiceViewOptions NoiceNuiOptions|{buf_options?: table<string,any>}
 
 ---@class NoiceView
@@ -11,27 +9,21 @@ local Object = require("nui.object")
 ---@field _messages NoiceMessage[]
 ---@field _opts? table
 ---@field _visible boolean
-local View = Object("View")
+local View = Object("NoiceView")
 
 function View.get_view(view, opts)
   opts = vim.tbl_deep_extend("force", Config.options.views[view] or {}, opts or {})
-  opts.render = opts.render or view
-  return View(opts.render, opts)
+  ---@type NoiceView
+  local class = Util.try(require, "noice.view." .. (opts.render or view))
+  return class(opts)
 end
 
----@param opts? table
-function View:init(render, opts)
-  opts = opts or {}
-
+---@param opts? NoiceViewOptions
+function View:init(opts)
   self._tick = 0
   self._messages = {}
   self._opts = opts or {}
   self._visible = true
-  self._render = type(render) == "function" and render or require("noice.view." .. render)
-  self._render = self._render(self)
-  if type(self._render) ~= "function" then
-    Util.error("Invalid view config " .. vim.inspect({ render = render, opts = opts }))
-  end
 end
 
 ---@param messages NoiceMessage[]
@@ -45,17 +37,29 @@ function View:display(messages)
   end
 
   if not dirty and not self._visible and #self._messages > 0 then
-    -- FIXME:
     dirty = true
   end
 
   if dirty then
     self._messages = messages
-    self._visible = #self._messages > 0
-    Util.try(self._render, self)
+    if #self._messages > 0 then
+      Util.try(self.show, self)
+      self._visible = true
+    else
+      self._visible = false
+      self:hide()
+    end
     return true
   end
   return false
+end
+
+function View:show()
+  Util.error("Missing implementation `View:show()` for %s", self)
+end
+
+function View:hide()
+  Util.error("Missing implementation `View:hide()` for %s", self)
 end
 
 function View:height()
@@ -112,7 +116,7 @@ function View:render(buf, opts)
   end
 end
 
----@alias NoiceView.constructor fun(render: string|NoiceRender, opts?: table): NoiceView
+---@alias NoiceView.constructor fun(opts?: NoiceViewOptions): NoiceView
 ---@type NoiceView|NoiceView.constructor
 local NoiceView = View
 return NoiceView

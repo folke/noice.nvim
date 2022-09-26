@@ -1,4 +1,4 @@
-local Object = require("nui.object")
+local View = require("noice.view")
 
 ---@class NuiRelative
 ---@field type "'cursor'"|"'editor'"|"'win'"
@@ -33,18 +33,11 @@ local Object = require("nui.object")
 
 ---@alias NoiceNuiOptions NuiSplitOptions|NuiPopupOptions
 
----@class NuiView
----@field _opts NoiceNuiOptions
+---@class NuiView: NoiceView
 ---@field _nui? NuiPopup|NuiSplit
----@field _view NoiceView
 ---@field _layout {position: any, size: any}
-local NuiView = Object("NuiView")
-
----@param view NoiceView
-function NuiView:init(view)
-  self._view = view
-  self._opts = view._opts
-end
+---@diagnostic disable-next-line: undefined-field
+local NuiView = View:extend("NuiView")
 
 function NuiView:create()
   self._layout = self:get_layout()
@@ -69,21 +62,15 @@ function NuiView:create()
       self:hide()
     end, { remap = false, nowait = true })
   end
+
+  self._nui:mount()
 end
 
 function NuiView:hide()
   if self._nui then
     self._nui:hide()
-    -- self._nui = nil
+    self._visible = false
   end
-end
-
-function NuiView:show()
-  if not self._nui then
-    self:create()
-    self._nui:mount()
-  end
-  self._nui:show()
 end
 
 function NuiView:get_layout()
@@ -95,44 +82,38 @@ function NuiView:get_layout()
       size = { height = "auto", width = "auto" }
     end
     if size.width == "auto" then
-      size.width = math.max(1, self._view:width())
+      size.width = math.max(1, self:width())
     end
     if size.height == "auto" then
-      size.height = math.max(1, self._view:height())
+      size.height = math.max(1, self:height())
     end
   end
 
   if size and self._opts.type == "split" then
     if size == "auto" then
       if position == "top" or position == "bottom" then
-        size = math.max(1, self._view:height())
+        size = math.max(1, self:height())
       else
-        size = math.max(1, self._view:width())
+        size = math.max(1, self:width())
       end
     end
   end
   return { size = size, position = position }
 end
 
-function NuiView:render()
-  self:show()
-  self._view:render(self._nui.bufnr)
+function NuiView:show()
+  if not self._nui then
+    self:create()
+  end
+
+  self._nui:show()
+
+  self:render(self._nui.bufnr)
+
   local layout = self:get_layout()
   if not vim.deep_equal(layout, self._layout) then
     self._nui:update_layout(self:get_layout())
   end
 end
 
----@param view NoiceView
-return function(view)
-  ---@type NuiView
-  local nui = NuiView(view)
-
-  return function()
-    if view._visible then
-      nui:render()
-    else
-      nui:hide()
-    end
-  end
-end
+return NuiView
