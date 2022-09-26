@@ -7,7 +7,7 @@ M.ns = vim.api.nvim_create_namespace("messages_highlights")
 ---@field views table<string, NoiceViewOptions>
 ---@field routes NoiceRouteConfig[]
 M.defaults = {
-  debug = true,
+  debug = false,
   throttle = 1000 / 30,
   cmdline = {
     enabled = true,
@@ -93,7 +93,7 @@ M.defaults = {
         style = "rounded",
         padding = { 0, 1, 0, 1 },
         text = {
-          top = " cmdline ",
+          top = " Cmdline ",
         },
       },
       win_options = {
@@ -105,7 +105,7 @@ M.defaults = {
           opts = {
             border = {
               text = {
-                top = " search ",
+                top = " Search ",
               },
             },
             win_options = {
