@@ -81,6 +81,40 @@ M.defaults = {
         winhighlight = "Normal:MsgArea",
       },
     },
+    fancy_cmdline = {
+      render = "popup",
+      relative = "editor",
+      position = "50%",
+      size = {
+        width = "80",
+        height = "auto",
+      },
+      border = {
+        style = "rounded",
+        padding = { 0, 1, 0, 1 },
+        text = {
+          top = " cmdline ",
+        },
+      },
+      win_options = {
+        winhighlight = "Normal:Normal,FloatBorder:DiagnosticInfo",
+      },
+      filter_options = {
+        {
+          filter = { event = "cmdline", find = "^%s*[/?]" },
+          opts = {
+            border = {
+              text = {
+                top = " search ",
+              },
+            },
+            win_options = {
+              winhighlight = "Normal:Normal,FloatBorder:DiagnosticWarn",
+            },
+          },
+        },
+      },
+    },
   },
   routes = {
     -- TODO: add something like the below
@@ -89,24 +123,11 @@ M.defaults = {
     --   filter = { event = "msg_show" },
     --   opts = { propagate = true, auto_open = false },
     -- }
-    -- {
-    --   view = "split",
-    --   filter = { event = "msg_show" },
-    --   opts = { stop = false, history = true },
-    -- },
     {
-      view = "cmdline",
-      filter = { event = "cmdline" },
-      opts = {
-        buf_options = {
-          filetype = "vim",
-        },
-      },
-    },
-    {
-      view = "cmdline",
+      view = "fancy_cmdline",
       filter = {
         any = {
+          { event = "cmdline" },
           { event = "msg_show", kind = "confirm" },
           { event = "msg_show", kind = "confirm_sub" },
           { event = "msg_show", kind = { "echo", "echomsg" }, instant = true },
