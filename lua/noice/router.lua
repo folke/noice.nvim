@@ -12,6 +12,7 @@ local Instant = require("noice.instant")
 ---@class NoiceRouteOptions
 ---@field history boolean
 ---@field stop boolean
+---@field skip boolean
 
 ---@class NoiceRouteConfig
 ---@field view string
@@ -68,6 +69,7 @@ function M.update(opts)
   end
 
   opts = opts or {}
+  -- FIXME: dont restart instant when in an instant
   local instant = (opts.instant or Instant.in_instant()) and Instant:start()
   local updated = 0
   local messages = Manager.get(nil, { sort = true })
@@ -75,7 +77,10 @@ function M.update(opts)
     local filter_opts = route.opts.history and { history = true, sort = true } or { messages = messages }
     local messages_view = Manager.get(route.filter, filter_opts)
 
-    updated = updated + (route.view:display(messages_view) and 1 or 0)
+    if not route.opts.skip then
+      updated = updated + (route.view:display(messages_view) and 1 or 0)
+    end
+
     if route.opts.stop ~= false and route.opts.history ~= true then
       messages = vim.tbl_filter(function(me)
         return not vim.tbl_contains(messages_view, me)
