@@ -7,6 +7,7 @@ function M.setup()
   M.fix_incsearch()
   M.fix_getchar()
   M.fix_notify()
+  M.fix_redraw()
 end
 
 ---@see https://github.com/neovim/neovim/issues/17810
@@ -35,6 +36,59 @@ function M.fix_incsearch()
       end
     end,
   })
+end
+
+-- we need to intercept redraw so we can safely ignore message triggered by redraw
+-- This wraps vim.cmd, nvim_cmd, nvim_command and nvim_exec
+M.inside_redraw = false
+function M.fix_redraw()
+  local nvim_cmd = vim.api.nvim_cmd
+
+  local function wrap(fn, ...)
+    local inside_redraw = M.inside_redraw
+    M.inside_redraw = true
+
+    ---@type boolean, any
+    local ok, ret = pcall(fn, ...)
+
+    if not inside_redraw then
+      M.inside_redraw = false
+    end
+
+    if ok then
+      return ret
+    end
+    error(ret)
+  end
+
+  vim.api.nvim_cmd = function(cmd, ...)
+    if type(cmd) == "table" and cmd.cmd and cmd.cmd == "redraw" then
+      return wrap(nvim_cmd, cmd, ...)
+    else
+      return nvim_cmd(cmd, ...)
+    end
+  end
+
+  local nvim_command = vim.api.nvim_command
+  vim.api.nvim_command = function(cmd, ...)
+    if cmd == "redraw" then
+      return wrap(nvim_command, cmd, ...)
+    else
+      return nvim_command(cmd, ...)
+    end
+  end
+
+  local nvim_exec = vim.api.nvim_exec
+  vim.api.nvim_exec = function(cmd, ...)
+    if type(cmd) == "string" and cmd:find("redraw") then
+      -- WARN: this will potetnally lose messages before or after the redraw ex command
+      -- example: echo "foo" | redraw | echo "bar"
+      -- the 'foo' message will be lost
+      return wrap(nvim_exec, cmd, ...)
+    else
+      return nvim_exec(cmd, ...)
+    end
+  end
 end
 
 ---@see https://github.com/neovim/neovim/issues/20311

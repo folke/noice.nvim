@@ -85,7 +85,7 @@ function M.update(opts)
 
   if instant then
     if updated > 0 then
-      require("noice.ui").redraw()
+      vim.cmd.redraw()
     end
     instant.stop()
   end

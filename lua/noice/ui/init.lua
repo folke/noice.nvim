@@ -1,22 +1,13 @@
 local Config = require("noice.config")
 local Util = require("noice.util")
 local Instant = require("noice.instant")
+local Hacks = require("noice.hacks")
 
 ---@alias NoiceEvent MsgEvent|CmdlineEvent
 ---@alias NoiceKind MsgKind
 
 local M = {}
 M._attached = false
-
-local inside_redraw = false
-function M.redraw()
-  if inside_redraw then
-    return
-  end
-  inside_redraw = true
-  vim.cmd.redraw()
-  inside_redraw = false
-end
 
 function M.attach()
   local safe_handle = Util.protect(M.handle, { msg = "An error happened while handling a ui event" })
@@ -29,7 +20,7 @@ function M.attach()
     if event:find("cmdline") == 1 and not Config.options.cmdline.enabled then
       return
     end
-    if not inside_redraw then
+    if not Hacks.inside_redraw then
       safe_handle(event, ...)
     end
   end)
