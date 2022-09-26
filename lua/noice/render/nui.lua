@@ -39,6 +39,7 @@ local M = {}
 ---@field _opts NoiceNuiOptions
 ---@field _nui? NuiPopup|NuiSplit
 ---@field _view NoiceView
+---@field _layout {position: any, size: any}
 local NuiView = Object("NuiView")
 
 ---@param view NoiceView
@@ -48,7 +49,8 @@ function NuiView:init(view)
 end
 
 function NuiView:create()
-  local opts = vim.tbl_deep_extend("force", self._opts, self:get_layout())
+  self._layout = self:get_layout()
+  local opts = vim.tbl_deep_extend("force", self._opts, self._layout)
 
   self._nui = self._opts.type == "split" and require("nui.split")(opts) or require("nui.popup")(opts)
   -- TODO: on_resize
@@ -116,7 +118,10 @@ end
 function NuiView:render()
   self:show()
   self._view:render(self._nui.bufnr)
-  self._nui:update_layout(self:get_layout())
+  local layout = self:get_layout()
+  if not vim.deep_equal(layout, self._layout) then
+    self._nui:update_layout(self:get_layout())
+  end
 end
 
 ---@param view NoiceView
