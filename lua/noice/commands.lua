@@ -16,6 +16,7 @@ function M.setup()
       history = true,
       sort = true,
     }))
+    M._history_view:show()
   end, {
     desc = "Open Noice Message History",
   })

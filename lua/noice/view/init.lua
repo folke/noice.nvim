@@ -36,10 +36,6 @@ function View:display(messages)
     end
   end
 
-  if not dirty and not self._visible and #self._messages > 0 then
-    dirty = true
-  end
-
   if dirty then
     self._messages = messages
     if #self._messages > 0 then
