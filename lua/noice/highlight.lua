@@ -54,6 +54,9 @@ M.hl_attrs = {}
 M.queue = {}
 
 function M.get_hl_group(attr_id)
+  if attr_id == 0 then
+    return "Normal"
+  end
   M.queue[attr_id] = attr_id
   return "NoiceAttr" .. tostring(attr_id)
 end
@@ -66,6 +69,9 @@ function M.update()
 end
 
 function M._create_hl(attr_id)
+  if attr_id == 0 then
+    return
+  end
   if not M.hl_attrs[attr_id] then
     local attrs = M.attr2entry(attr_id)
     M.hl_attrs[attr_id] = {

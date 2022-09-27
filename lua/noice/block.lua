@@ -136,7 +136,7 @@ function Block:append(contents, highlight)
       ---@type number, string
       local attr_id, text = unpack(content)
       text = text:gsub("\r", "")
-      local hl_group = Highlight.get_hl_group(attr_id)
+      local hl_group = attr_id ~= 0 and Highlight.get_hl_group(attr_id) or nil
       while text ~= "" do
         local nl = text:find("\n")
         if nl then
