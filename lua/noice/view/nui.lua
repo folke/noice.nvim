@@ -47,7 +47,6 @@ function NuiView:create()
   self._nui = self._opts.type == "split" and require("nui.split")(opts) or require("nui.popup")(opts)
 
   self._nui:on(Event.VimResized, function()
-    dumpp("resized")
     self:layout({ force = true })
   end)
 

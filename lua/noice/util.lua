@@ -61,7 +61,7 @@ function M.win_apply_config(win, opts)
 end
 
 ---@param msg string
----@param level number|string
+---@param level number
 ---@param ... any
 function M.notify(msg, level, ...)
   vim.notify(msg:format(...), level, {

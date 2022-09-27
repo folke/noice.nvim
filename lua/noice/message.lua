@@ -1,7 +1,6 @@
 local Block = require("noice.block")
 local Filter = require("noice.filter")
 local Config = require("noice.config")
-local NuiLine = require("nui.line")
 
 local _id = 0
 

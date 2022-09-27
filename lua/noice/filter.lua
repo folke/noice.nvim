@@ -97,14 +97,17 @@ end
 ---@param invert? boolean
 ---@return NoiceMessage[]
 function M.filter(messages, filter, invert)
-  return vim.tbl_filter(function(message)
-    ---@cast message NoiceMessage
-    local is = M.is(message, filter)
-    if invert then
-      is = not is
-    end
-    return is
-  end, messages)
+  return vim.tbl_filter(
+    ---@param message NoiceMessage
+    function(message)
+      local is = M.is(message, filter)
+      if invert then
+        is = not is
+      end
+      return is
+    end,
+    messages
+  )
 end
 
 ---@param messages NoiceMessage[]

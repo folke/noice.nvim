@@ -25,10 +25,13 @@ end
 
 function Block:content()
   return table.concat(
-    vim.tbl_map(function(line)
-      ---@cast line NuiLine
-      return line:content()
-    end, self._lines),
+    vim.tbl_map(
+      ---@param line NuiLine
+      function(line)
+        return line:content()
+      end,
+      self._lines
+    ),
     "\n"
   )
 end
