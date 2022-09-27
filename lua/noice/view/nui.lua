@@ -1,4 +1,5 @@
 local View = require("noice.view")
+local Event = require("nui.utils.autocmd").event
 
 ---@class NuiRelative
 ---@field type "'cursor'"|"'editor'"|"'win'"
@@ -45,7 +46,7 @@ function NuiView:create()
 
   self._nui = self._opts.type == "split" and require("nui.split")(opts) or require("nui.popup")(opts)
   -- TODO: on_resize
-  self._nui:on({ "BufWinLeave" }, function()
+  self._nui:on({ Event.BufWinLeave }, function()
     vim.schedule(function()
       self:hide()
     end)
