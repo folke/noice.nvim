@@ -45,7 +45,12 @@ function NuiView:create()
   local opts = vim.tbl_deep_extend("force", self._opts, self._layout)
 
   self._nui = self._opts.type == "split" and require("nui.split")(opts) or require("nui.popup")(opts)
-  -- TODO: on_resize
+
+  self._nui:on(Event.VimResized, function()
+    dumpp("resized")
+    self:layout({ force = true })
+  end)
+
   self._nui:on({ Event.BufWinLeave }, function()
     vim.schedule(function()
       self:hide()
@@ -82,6 +87,15 @@ function NuiView:hide()
   end
 end
 
+---@param opts? { force: boolean }
+function NuiView:layout(opts)
+  opts = opts or {}
+  local layout = self:get_layout()
+  if opts.force or not vim.deep_equal(layout, self._layout) then
+    self._nui:update_layout(self:get_layout())
+  end
+end
+
 function NuiView:get_layout()
   local position = vim.deepcopy(self._opts.position)
   local size = vim.deepcopy(self._opts.size)
@@ -107,7 +121,7 @@ function NuiView:get_layout()
       end
     end
   end
-  return { size = size, position = position }
+  return { size = size, position = position, relative = self._opts.relative }
 end
 
 function NuiView:show()
@@ -118,11 +132,7 @@ function NuiView:show()
   self._nui:show()
 
   self:render(self._nui.bufnr)
-
-  local layout = self:get_layout()
-  if not vim.deep_equal(layout, self._layout) then
-    self._nui:update_layout(self:get_layout())
-  end
+  self:layout({ force = not self._visible })
 end
 
 return NuiView
