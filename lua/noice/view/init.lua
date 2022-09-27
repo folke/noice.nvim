@@ -6,17 +6,20 @@ local Filter = require("noice.filter")
 ---@class NoiceViewBaseOptions
 ---@field buf_options? table<string,any>
 ---@field filter_options? { filter: NoiceFilter, opts: NoiceNuiOptions }[]
+---@field render string
 --
 ---@alias NoiceViewOptions NoiceViewBaseOptions|NoiceNuiOptions
 
 ---@class NoiceView
 ---@field _tick number
 ---@field _messages NoiceMessage[]
----@field _opts? NoiceViewOptions
----@field _view_opts? NoiceViewOptions
+---@field _opts NoiceViewOptions
+---@field _view_opts NoiceViewOptions
 ---@field _visible boolean
 local View = Object("NoiceView")
 
+---@param view string
+---@param opts NoiceViewOptions
 function View.get_view(view, opts)
   local view_options = Config.options.views[view] or {}
   opts = vim.tbl_deep_extend("force", view_options, opts or {})
