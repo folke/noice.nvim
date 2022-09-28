@@ -15,10 +15,14 @@ local M = {}
 ---@field find? string
 ---@field error? boolean
 ---@field warning? boolean
+---@field mode? string
 ---@field blocking? boolean
 
 -----@type table<string, NoiceFilterFun>
 M.filters = {
+  mode = function(_, mode)
+    return vim.api.nvim_get_mode().mode:find(mode)
+  end,
   blocking = function(_, blocking)
     return blocking == Util.is_blocking()
   end,
