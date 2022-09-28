@@ -11,6 +11,7 @@ function M.setup()
   M.fix_redraw()
 end
 
+-- clear search_count on :nohlsearch
 function M.fix_nohlsearch()
   vim.api.nvim_create_autocmd("CmdlineLeave", {
     callback = function()
@@ -89,7 +90,7 @@ function M.fix_redraw()
   local nvim_exec = vim.api.nvim_exec
   vim.api.nvim_exec = function(cmd, ...)
     if type(cmd) == "string" and cmd:find("redraw") then
-      -- WARN: this will potetnally lose messages before or after the redraw ex command
+      -- WARN: this will potentially lose messages before or after the redraw ex command
       -- example: echo "foo" | redraw | echo "bar"
       -- the 'foo' message will be lost
       return wrap(nvim_exec, cmd, ...)
