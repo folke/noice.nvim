@@ -17,6 +17,7 @@ local M = {}
 ---@field warning? boolean
 ---@field mode? string
 ---@field blocking? boolean
+---@field before_input? boolean
 
 -----@type table<string, NoiceFilterFun>
 M.filters = {
@@ -25,6 +26,9 @@ M.filters = {
   end,
   blocking = function(_, blocking)
     return blocking == Util.is_blocking()
+  end,
+  before_input = function(_, before_input)
+    return before_input == require("noice.hacks").before_input
   end,
   event = function(message, event)
     ---@cast message NoiceMessage
