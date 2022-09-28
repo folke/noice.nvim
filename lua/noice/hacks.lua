@@ -100,10 +100,8 @@ function M.fix_redraw()
 end
 
 ---@see https://github.com/neovim/neovim/issues/20311
+M.before_input = false
 function M.fix_getchar()
-  local Manager = require("noice.manager")
-  local Cmdline = require("noice.ui.cmdline")
-
   local function wrap(fn, skip)
     return function(...)
       local args = { ... }
@@ -111,17 +109,23 @@ function M.fix_getchar()
         return fn(unpack(args))
       end
 
-      local instant = require("noice.instant").start()
+      local Manager = require("noice.manager")
 
-      Cmdline.on_show("cmdline_show", {}, 1, ">", "", 0, 1)
-      ---@type any
-      local ret = fn(unpack(args))
+      -- do any updates now before blocking
+      M.before_input = true
+      require("noice.router").update({})
+      M.before_input = false
 
-      instant.stop()
+      ---@type boolean, any
+      local ok, ret = pcall(fn, unpack(args))
 
-      Manager.remove(Cmdline.message)
-      Manager.clear({ event = "msg_show", kind = { "echo", "echomsg" } })
-      return ret
+      -- clear any message right after input
+      Manager.clear({ event = "msg_show", kind = { "echo", "echomsg", "" } })
+
+      if ok then
+        return ret
+      end
+      error(ret)
     end
   end
 
