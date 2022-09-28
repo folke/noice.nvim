@@ -29,9 +29,11 @@ local function NoiceStatus(filter)
         local line = message._lines[#message._lines]
         for _, text in ipairs(line._texts) do
           if text.extmark and text.extmark.hl_group then
+            -- use hl_group
             ret = ret .. "%#" .. text.extmark.hl_group .. "#" .. text:content()
           else
-            ret = ret .. text:content()
+            -- or reset to StatusLine
+            ret = ret .. "%#StatusLine#" .. text:content()
           end
         end
         return ret
