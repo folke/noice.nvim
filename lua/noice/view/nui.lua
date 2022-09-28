@@ -32,7 +32,7 @@ local Event = require("nui.utils.autocmd").event
 ---@field position "top"|"right"|"bottom"|"left"
 ---@field size number|string
 ---@field min_size number
----@field min_size number
+---@field max_size number
 
 ---@alias NoiceNuiOptions NuiSplitOptions|NuiPopupOptions
 
@@ -102,6 +102,7 @@ function NuiView:get_layout()
   local position = vim.deepcopy(self._opts.position)
   local size = vim.deepcopy(self._opts.size)
 
+  ---@return number
   local function minmax(min, max, value)
     return math.max(min or 1, math.min(value, max or 1000))
   end
