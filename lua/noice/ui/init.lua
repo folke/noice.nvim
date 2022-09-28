@@ -1,6 +1,5 @@
 local Config = require("noice.config")
 local Util = require("noice.util")
-local Instant = require("noice.instant")
 local Hacks = require("noice.hacks")
 
 ---@alias NoiceEvent MsgEvent|CmdlineEvent
@@ -20,8 +19,13 @@ function M.attach()
     if event:find("cmdline") == 1 and not Config.options.cmdline.enabled then
       return
     end
+
     if not Hacks.inside_redraw then
       safe_handle(event, ...)
+    end
+
+    if Util.is_blocking() then
+      Util.try(require("noice.router").update)
     end
   end)
 end
@@ -51,10 +55,6 @@ function M.handle(event, ...)
   end
 
   handler[on](event, ...)
-
-  if Instant.in_instant() then
-    require("noice.router").update({ instant = true })
-  end
 end
 
 return M

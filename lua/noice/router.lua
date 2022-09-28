@@ -2,7 +2,6 @@ local Config = require("noice.config")
 local Util = require("noice.util")
 local View = require("noice.view")
 local Manager = require("noice.manager")
-local Instant = require("noice.instant")
 
 ---@class NoiceRoute
 ---@field view NoiceView
@@ -24,6 +23,7 @@ M._running = false
 ---@type NoiceRoute[]
 M._routes = {}
 M._tick = 0
+M._need_redraw = false
 
 local function run()
   if not M._running then
@@ -61,16 +61,24 @@ function M.setup()
   vim.schedule(M.start)
 end
 
----@param opts? { instant: boolean }
+function M.check_redraw()
+  if Util.is_blocking() and M._need_redraw then
+    -- NOTE: set to false before actually calling redraw to prevent a loop with ui
+    M._need_redraw = false
+    vim.cmd.redraw()
+  end
+end
+
+---@param opts? { redraw: boolean }
 function M.update(opts)
+  opts = opts or {}
+
   -- only update on changes
   if M._tick == Manager.tick() then
+    M.check_redraw()
     return
   end
 
-  opts = opts or {}
-  -- FIXME: dont restart instant when in an instant
-  local instant = (opts.instant or Instant.in_instant()) and Instant:start()
   local updated = 0
   local messages = Manager.get(nil, { sort = true })
   for _, route in ipairs(M._routes) do
@@ -82,19 +90,24 @@ function M.update(opts)
     end
 
     if route.opts.stop ~= false and route.opts.history ~= true then
-      messages = vim.tbl_filter(function(me)
-        return not vim.tbl_contains(messages_view, me)
-      end, messages)
+      messages = vim.tbl_filter(
+        ---@param me NoiceMessage
+        function(me)
+          return not vim.tbl_contains(messages_view, me)
+        end,
+        messages
+      )
     end
   end
 
-  if instant then
-    if updated > 0 then
-      vim.cmd.redraw()
-    end
-    instant.stop()
-  end
   M._tick = Manager.tick()
+
+  if updated > 0 then
+    M._need_redraw = true
+  end
+
+  M.check_redraw()
+
   return updated
 end
 

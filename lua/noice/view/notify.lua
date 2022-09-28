@@ -73,7 +73,7 @@ end
 function NotifyView:show()
   local text = self:content()
   local level = self._opts.level or "info"
-  local instant = require("noice.instant").in_instant()
+  local instant = Util.is_blocking()
   local notify = instant and M.instant_notify() or M.notify()
 
   local replace = self._opts.replace ~= false and self.notif or nil
@@ -89,7 +89,7 @@ function NotifyView:show()
     title = self._opts.title or "Noice",
     replace = replace,
     keep = function()
-      return require("noice.instant").in_instant()
+      return Util.is_blocking()
     end,
     on_open = function(win)
       self.win = win

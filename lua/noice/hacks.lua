@@ -150,7 +150,7 @@ function M.fix_notify()
       local buf = push(self, notif)
 
       -- run animator and re-render instantly when inside instant events
-      if require("noice.instant").in_instant() then
+      if Util.is_blocking() then
         pcall(self._animator.render, self._animator, self._pending, 1 / self._fps)
         self._buffers[notif.id]:render()
       end

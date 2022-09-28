@@ -114,7 +114,6 @@ function M.update()
 
   if count > 0 then
     Manager.add(M.message)
-    Router.update({ instant = true })
   else
     Manager.remove(M.message)
   end

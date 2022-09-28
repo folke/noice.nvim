@@ -8,16 +8,19 @@ local M = {}
 ---@field event? NoiceEvent|NoiceEvent[]
 ---@field kind? NoiceKind|NoiceKind[]
 ---@field message? NoiceMessage
----@field instant? boolean
 ---@field any? NoiceFilter[]
 ---@field not? NoiceFilter
 ---@field min_height? integer
 ---@field find? string
 ---@field error? boolean
 ---@field warning? boolean
+---@field blocking? boolean
 
 -----@type table<string, NoiceFilterFun>
 M.filters = {
+  blocking = function(_, blocking)
+    return blocking == Util.is_blocking()
+  end,
   event = function(message, event)
     ---@cast message NoiceMessage
     event = type(event) == "table" and event or { event }
@@ -57,8 +60,6 @@ M.filters = {
     ---@cast message NoiceMessage
     return message:height() >= min_height
   end,
-  instant = function(_, instant)
-    return require("noice.instant").in_instant() == instant
   end,
   any = function(message, any)
     ---@cast message NoiceMessage

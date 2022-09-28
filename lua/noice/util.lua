@@ -2,6 +2,12 @@ local Config = require("noice.config")
 
 local M = {}
 
+function M.is_blocking()
+  local Hacks = require("noice.hacks")
+  local mode = vim.api.nvim_get_mode()
+  return mode.blocking or mode.mode:find("[cro]") or Hacks.inside_redraw or Hacks.before_input
+end
+
 ---@generic T: fun()
 ---@param fn T
 ---@param opts? { retry_on_vim_errors: boolean, msg: string}

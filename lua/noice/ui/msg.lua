@@ -107,8 +107,9 @@ function M.on_confirm(event, kind, content)
   message:append(" ")
   message.cursor = { line = message:height(), col = message:last_line():width() - 1 }
   Manager.add(message)
-  Router.update({ instant = true })
-  Manager.remove(message)
+  vim.schedule(function()
+    Manager.remove(message)
+  end)
 end
 
 ---@param entries { [1]: string, [2]: NoiceChunk[]}[]
