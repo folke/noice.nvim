@@ -7,7 +7,7 @@ M.ns = vim.api.nvim_create_namespace("messages_highlights")
 ---@field views table<string, NoiceViewOptions>
 ---@field routes NoiceRouteConfig[]
 M.defaults = {
-  debug = false,
+  debug = true,
   throttle = 1000 / 30,
   cmdline = {
     enabled = true,
@@ -84,9 +84,14 @@ M.defaults = {
     fancy_cmdline = {
       render = "popup",
       relative = "editor",
-      position = "50%",
+      focusable = true,
+      position = {
+        row = "50%",
+        col = "50%",
+      },
       size = {
-        width = "80",
+        min_width = 60,
+        width = "auto",
         height = "auto",
       },
       border = {
@@ -117,12 +122,10 @@ M.defaults = {
     },
   },
   routes = {
-    -- TODO: add something like the below
-    -- ,{
-    --   view = "split",
-    --   filter = { event = "msg_show" },
-    --   opts = { propagate = true, auto_open = false },
-    -- }
+    {
+      view = "cmdline",
+      filter = { event = "msg_show", kind = { "echo", "echomsg", "" }, blocking = true, max_height = 1 },
+    },
     {
       view = "fancy_cmdline",
       filter = {
@@ -130,7 +133,8 @@ M.defaults = {
           { event = "cmdline" },
           { event = "msg_show", kind = "confirm" },
           { event = "msg_show", kind = "confirm_sub" },
-          { event = "msg_show", kind = { "echo", "echomsg" }, instant = true },
+          { event = "msg_show", kind = { "echo", "echomsg", "" }, before_input = true },
+          -- { event = "msg_show", kind = { "echo", "echomsg" }, instant = true },
           -- { event = "msg_show", find = "E325" },
           -- { event = "msg_show", find = "Found a swap file" },
         },
