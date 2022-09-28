@@ -11,6 +11,7 @@ local M = {}
 ---@field any? NoiceFilter[]
 ---@field not? NoiceFilter
 ---@field min_height? integer
+---@field max_height? integer
 ---@field find? string
 ---@field error? boolean
 ---@field warning? boolean
@@ -60,6 +61,9 @@ M.filters = {
     ---@cast message NoiceMessage
     return message:height() >= min_height
   end,
+  max_height = function(message, max_height)
+    ---@cast message NoiceMessage
+    return message:height() <= max_height
   end,
   any = function(message, any)
     ---@cast message NoiceMessage
