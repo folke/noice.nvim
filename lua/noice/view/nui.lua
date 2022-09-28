@@ -31,6 +31,8 @@ local Event = require("nui.utils.autocmd").event
 ---@class NuiSplitOptions: NuiBaseOptions
 ---@field position "top"|"right"|"bottom"|"left"
 ---@field size number|string
+---@field min_size number
+---@field min_size number
 
 ---@alias NoiceNuiOptions NuiSplitOptions|NuiPopupOptions
 
@@ -69,6 +71,7 @@ function NuiView:create()
   end
 
   self._nui:mount()
+  self:layout({ force = true })
 end
 
 function NuiView:reset()
@@ -99,24 +102,28 @@ function NuiView:get_layout()
   local position = vim.deepcopy(self._opts.position)
   local size = vim.deepcopy(self._opts.size)
 
+  local function minmax(min, max, value)
+    return math.max(min or 1, math.min(value, max or 1000))
+  end
+
   if size and self._opts.type == "popup" then
     if size == "auto" then
       size = { height = "auto", width = "auto" }
     end
     if size.width == "auto" then
-      size.width = math.max(1, self:width())
+      size.width = minmax(size.min_width, size.max_width, self:width())
     end
     if size.height == "auto" then
-      size.height = math.max(1, self:height())
+      size.height = minmax(size.min_height, size.max_height, self:height())
     end
   end
 
   if size and self._opts.type == "split" then
     if size == "auto" then
       if position == "top" or position == "bottom" then
-        size = math.max(1, self:height())
+        size = minmax(self._opts.min_size, self._opts.max_size, self:height())
       else
-        size = math.max(1, self:width())
+        size = minmax(self._opts.min_size, self._opts.max_size, self:width())
       end
     end
   end
