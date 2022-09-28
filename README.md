@@ -5,20 +5,16 @@ settings.
 
 ## ✅ Todo
 
-- [x] new name since people seem to use settings as a module in their config (nvim-settings??)
-- [ ] split off lsp-config as separate plugin?
-- [x] naming for generated emmylua
-- [x] generate list of supported lsp servers
-- [x] name of plugin??
-- [x] importers?
-- [x] keymaps
-- [x] json => jsonc for settings files
-- [x] commands to edit json settings files
-- [x] less magic for patterns (use {name = .., key = .., ...})
-- [x] rename to settings.nvim??
-- [x] check vscode config api
-- [x] support lazy-loading of workspace.nvim and register plugins
-- [x] path.join (workspace.has_file)
+- [x] issue with substitute. Partially fixed. Still an issue with the cursor rendering.
+- [ ] formatting by `map` seems off -> bug in Neovim. Send a report.
+- [x] how to fix Bdelete weirdness?
+- [x] same with swap files. Maybe filter system to force nowait?
+- [ ] handle duplicate messages
+- [ ] test with real cursors instead of the fake ones
+- [x] cmp gives issues once in a while (maybe the popupmenu?)
+- [x] statuslines
+- [x] virtualtext (search_count)
+- [x] hl groups seems to get lost in Noice history view
 
 ## ✨ Features
 
