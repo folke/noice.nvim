@@ -23,7 +23,7 @@ M.defaults = {
     opts = {
       enter = true,
     },
-    filter = { event = "msg_show", ["not"] = { kind = "search_count" } },
+    filter = { event = "msg_show", ["not"] = { kind = { "search_count", "echo" } } },
   },
   views = {
     notify = {
