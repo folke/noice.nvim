@@ -118,7 +118,7 @@ end
 ---@param highlight? string|table data for highlight
 function Block:append(contents, highlight)
   if type(contents) == "string" then
-    contents = NuiText(contents, highlight)
+    contents = { { highlight or 0, contents } }
   end
 
   if contents._texts or contents._content or type(contents[1]) == "number" then
@@ -136,10 +136,17 @@ function Block:append(contents, highlight)
     else
       ---@cast content NoiceChunk
       -- Handle newlines
-      ---@type number, string
+      ---@type number|string|table, string
       local attr_id, text = unpack(content)
       text = text:gsub("\r", "")
-      local hl_group = attr_id ~= 0 and Highlight.get_hl_group(attr_id) or nil
+      ---@type string|table|nil
+      local hl_group
+      if type(attr_id) == "number" then
+        hl_group = attr_id ~= 0 and Highlight.get_hl_group(attr_id) or nil
+      else
+        hl_group = attr_id
+      end
+
       while text ~= "" do
         local nl = text:find("\n")
         if nl then
