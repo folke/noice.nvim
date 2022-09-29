@@ -1,3 +1,5 @@
+local require = require("noice.util.lazy")
+
 local Manager = require("noice.manager")
 local Msg = require("noice.ui.msg")
 

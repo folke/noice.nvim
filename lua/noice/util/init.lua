@@ -1,11 +1,13 @@
+local require = require("noice.util.lazy")
+
 local Config = require("noice.config")
+local Hacks = require("noice.hacks")
 
 local M = {}
 
 M.stats = require("noice.stats")
 
 function M.is_blocking()
-  local Hacks = require("noice.hacks")
   local mode = vim.api.nvim_get_mode()
   return mode.blocking or mode.mode:find("[cro]") or Hacks.inside_redraw or Hacks.before_input
 end

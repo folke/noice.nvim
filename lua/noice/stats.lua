@@ -1,3 +1,7 @@
+local require = require("noice.util.lazy")
+
+local Message = require("noice.message")
+
 local M = {}
 
 ---@class NoiceStat
@@ -25,7 +29,7 @@ end
 M._message = nil
 function M.message()
   if not M._message then
-    M._message = require("noice.message")("noice", "stats")
+    M._message = Message("noice", "stats")
   end
   M._message:set(vim.inspect(M._stats))
   return M._message

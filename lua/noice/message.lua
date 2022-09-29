@@ -1,3 +1,5 @@
+local require = require("noice.util.lazy")
+
 local Block = require("noice.block")
 local Filter = require("noice.filter")
 local Config = require("noice.config")

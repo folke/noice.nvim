@@ -1,7 +1,8 @@
+local require = require("noice.util.lazy")
+
 local Highlight = require("noice.highlight")
 local NuiLine = require("nui.line")
 local Object = require("nui.object")
-local NuiText = require("nui.text")
 
 ---@alias NoiceChunk { [0]: integer, [1]: string}
 ---@alias NoiceContent string|NoiceChunk|NuiLine|NuiText

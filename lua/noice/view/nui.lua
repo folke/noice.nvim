@@ -1,3 +1,5 @@
+local require = require("noice.util.lazy")
+
 local View = require("noice.view")
 local Event = require("nui.utils.autocmd").event
 

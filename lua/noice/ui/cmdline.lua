@@ -1,6 +1,7 @@
+local require = require("noice.util.lazy")
+
 local Message = require("noice.message")
 local Manager = require("noice.manager")
-local Router = require("noice.router")
 local Config = require("noice.config")
 local NuiText = require("nui.text")
 

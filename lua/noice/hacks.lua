@@ -1,3 +1,5 @@
+local require = require("noice.util.lazy")
+
 local Util = require("noice.util")
 
 -- HACK: a bunch of hacks to make Noice behave

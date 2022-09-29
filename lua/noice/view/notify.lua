@@ -1,3 +1,5 @@
+local require = require("noice.util.lazy")
+
 local Util = require("noice.util")
 local View = require("noice.view")
 
@@ -71,6 +73,8 @@ function NotifyView:notify_render()
 end
 
 function NotifyView:show()
+  -- TODO: add options
+  -- TODO: add option to enable/disable highlights of the message
   local text = self:content()
   local level = self._opts.level or "info"
   local instant = Util.is_blocking()

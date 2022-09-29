@@ -1,5 +1,9 @@
+local require = require("noice.util.lazy")
+
 local Util = require("noice.util")
 local Manager = require("noice.manager")
+local Hacks = require("noice.hacks")
+local Msg = require("noice.ui.msg")
 
 local M = {}
 
@@ -34,7 +38,7 @@ M.filters = {
     return blocking == Util.is_blocking()
   end,
   before_input = function(_, before_input)
-    return before_input == require("noice.hacks").before_input
+    return before_input == Hacks.before_input
   end,
   event = function(message, event)
     ---@cast message NoiceMessage
@@ -51,7 +55,6 @@ M.filters = {
     return other == message
   end,
   error = function(message, error)
-    local Msg = require("noice.ui.msg")
     ---@cast message NoiceMessage
     return error
       == (

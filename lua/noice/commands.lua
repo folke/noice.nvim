@@ -1,6 +1,9 @@
+local require = require("noice.util.lazy")
+
 local View = require("noice.view")
 local Manager = require("noice.manager")
 local Config = require("noice.config")
+local Stats = require("noice.stats")
 
 local M = {}
 
@@ -10,7 +13,7 @@ M._history_view = nil
 function M.setup()
   local commands = {
     stats = function()
-      require("noice.manager").add(require("noice.stats").message())
+      Manager.add(Stats.message())
     end,
     history = function()
       if not M._history_view then

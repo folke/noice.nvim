@@ -1,6 +1,10 @@
-local Config = require("noice.config")
+local require = require("noice.util.lazy")
+
 local Util = require("noice.util")
+local Config = require("noice.config")
 local Cmdline = require("noice.ui.cmdline")
+
+-- local foo = require("noice.highlight")
 
 local M = {}
 

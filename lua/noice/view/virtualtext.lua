@@ -1,3 +1,5 @@
+local require = require("noice.util.lazy")
+
 local Config = require("noice.config")
 local View = require("noice.view")
 
