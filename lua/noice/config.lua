@@ -178,6 +178,14 @@ M.defaults = {
     {
       view = "notify",
       filter = {
+        event = "noice",
+        kind = { "stats", "debug" },
+      },
+      opts = { buf_options = { filetype = "lua" }, replace = true },
+    },
+    {
+      view = "notify",
+      filter = {
         error = true,
       },
       opts = { level = vim.log.levels.ERROR, replace = false },
