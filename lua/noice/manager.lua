@@ -36,9 +36,14 @@ end
 
 ---@param message NoiceMessage
 function M.remove(message)
-  M._history[message.id] = nil
-  M._messages[message.id] = nil
-  next_tick()
+  if M._history[message.id] then
+    M._history[message.id] = nil
+    next_tick()
+  end
+  if M._messages[message.id] then
+    M._messages[message.id] = nil
+    next_tick()
+  end
 end
 
 ---@param filter? NoiceFilter
