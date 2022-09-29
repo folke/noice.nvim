@@ -10,6 +10,11 @@ function M.is_blocking()
   return mode.blocking or mode.mode:find("[cro]") or Hacks.inside_redraw or Hacks.before_input
 end
 
+function M.redraw()
+  vim.cmd.redraw()
+  M.stats.track("redraw")
+end
+
 ---@generic T: fun()
 ---@param fn T
 ---@param opts? { retry_on_vim_errors: boolean, msg: string}

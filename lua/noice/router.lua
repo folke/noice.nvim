@@ -65,7 +65,7 @@ function M.check_redraw()
   if Util.is_blocking() and M._need_redraw then
     -- NOTE: set to false before actually calling redraw to prevent a loop with ui
     M._need_redraw = false
-    vim.cmd.redraw()
+    Util.redraw()
   end
 end
 

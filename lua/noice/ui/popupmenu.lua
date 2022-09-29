@@ -1,4 +1,5 @@
 local Config = require("noice.config")
+local Util = require("noice.util")
 local Cmdline = require("noice.ui.cmdline")
 
 local M = {}
@@ -58,7 +59,7 @@ function M.on_show(_, items, selected)
       vim.api.nvim_win_set_cursor(win, { cursor.buf_line, cursor.col })
       vim.api.nvim_win_call(win, function()
         M.view:open(2, entries)
-        vim.cmd.redraw()
+        Util.redraw()
       end)
       M.no_cmdline_mode = false
     end
