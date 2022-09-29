@@ -2,6 +2,8 @@ local Config = require("noice.config")
 
 local M = {}
 
+M.stats = require("noice.stats")
+
 function M.is_blocking()
   local Hacks = require("noice.hacks")
   local mode = vim.api.nvim_get_mode()
