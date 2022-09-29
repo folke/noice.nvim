@@ -14,6 +14,7 @@ local Block = Object("Block")
 ---@param highlight? string|table data for highlight
 function Block:init(content, highlight)
   self._lines = {}
+  self:_update()
   if content then
     self:append(content, highlight)
   end
@@ -21,9 +22,13 @@ end
 
 function Block:clear()
   self._lines = {}
+  self:_update()
 end
 
+function Block:_update() end
+
 function Block:content()
+  self:_update()
   return table.concat(
     vim.tbl_map(
       ---@param line NuiLine
@@ -37,6 +42,7 @@ function Block:content()
 end
 
 function Block:width()
+  self:_update()
   local ret = 0
   for _, line in ipairs(self._lines) do
     ret = math.max(ret, line:width())
@@ -45,6 +51,7 @@ function Block:width()
 end
 
 function Block:height()
+  self:_update()
   return #self._lines
 end
 
@@ -56,6 +63,7 @@ end
 ---@param ns_id number namespace id
 ---@param linenr_start? number line number (1-indexed)
 function Block:highlight(bufnr, ns_id, linenr_start)
+  self:_update()
   self:_fix_extmarks()
   linenr_start = linenr_start or 1
   Highlight.update()
@@ -80,6 +88,7 @@ end
 ---@param linenr_start? number start line number (1-indexed)
 ---@param linenr_end? number end line number (1-indexed)
 function Block:render(bufnr, ns_id, linenr_start, linenr_end)
+  self:_update()
   self:_fix_extmarks()
   linenr_start = linenr_start or 1
   Highlight.update()

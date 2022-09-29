@@ -1,6 +1,7 @@
 local Block = require("noice.block")
 local Filter = require("noice.filter")
 local Config = require("noice.config")
+local Util = require("noice.util")
 
 local _id = 0
 
@@ -27,19 +28,35 @@ function Message:init(event, kind, content)
   self.mtime = vim.fn.localtime()
   self.event = event
   self.kind = kind
-  Message.super.init(self)
-
-  self:_debug()
-
-  if content then
-    self:append(content)
-  end
+  Message.super.init(self, content)
 end
 
-function Message:_debug()
+function Message:_update()
   if Config.options.debug then
-    self:append("[" .. self.id .. "] " .. self.event .. "." .. (self.kind or ""), "DiagnosticVirtualTextInfo")
-    self:append(" ")
+    if self:is_empty() then
+      self:append(" ")
+      self:append(" ")
+    end
+    local debug = {
+      self:is({ cleared = true }) and "" or "",
+      "#" .. self.id,
+      self.event .. (self.kind and self.kind ~= "" and ("." .. self.kind) or ""),
+      Util.is_blocking() and "⚡",
+    }
+    local NuiText = require("nui.text")
+    self._lines[1]._texts[1] = NuiText(
+      table.concat(
+        vim.tbl_filter(
+          ---@param t string
+          function(t)
+            return t
+          end,
+          debug
+        ),
+        " "
+      ),
+      "DiagnosticVirtualTextInfo"
+    )
   end
 end
 
@@ -79,7 +96,6 @@ end
 
 function Message:clear()
   Message.super.clear(self)
-  self:_debug()
   self.cursor = nil
 end
 
