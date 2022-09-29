@@ -114,7 +114,7 @@ function M.fix_getchar()
 
       -- do any updates now before blocking
       M.before_input = true
-      require("noice.router").update({})
+      require("noice.router").update()
       M.before_input = false
 
       ---@type boolean, any

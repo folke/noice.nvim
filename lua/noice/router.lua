@@ -69,15 +69,14 @@ function M.check_redraw()
   end
 end
 
----@param opts? { redraw: boolean }
-function M.update(opts)
-  opts = opts or {}
-
+function M.update()
   -- only update on changes
   if M._tick == Manager.tick() then
     M.check_redraw()
     return
   end
+
+  Util.stats.track("router.update")
 
   local updated = 0
   local messages = Manager.get(nil, { sort = true })
@@ -103,6 +102,7 @@ function M.update(opts)
   M._tick = Manager.tick()
 
   if updated > 0 then
+    Util.stats.track("router.update.updated")
     M._need_redraw = true
   end
 
