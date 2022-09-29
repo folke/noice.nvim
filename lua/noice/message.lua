@@ -65,7 +65,7 @@ end
 function Message:content(hide_debug)
   local ret = Message.super.content(self)
   if hide_debug and Config.options.debug and self:height() > 0 then
-    local debug_width = self._lines[1]._texts[1]:width() + 1
+    local debug_width = self._lines[1]._texts[1]:length() + 1
     ---@type string
     ret = ret:sub(debug_width + 1):gsub("^\n", "")
   end
