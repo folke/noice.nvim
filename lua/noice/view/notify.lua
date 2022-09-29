@@ -85,10 +85,6 @@ function NotifyView:show()
     replace = nil
   end
 
-  if instant then
-    text = "[instant] " .. text
-  end
-
   local opts = {
     title = self._opts.title or "Noice",
     replace = replace,
