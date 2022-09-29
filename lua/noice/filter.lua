@@ -1,4 +1,5 @@
 local Util = require("noice.util")
+local Manager = require("noice.manager")
 
 local M = {}
 
@@ -18,9 +19,14 @@ local M = {}
 ---@field mode? string
 ---@field blocking? boolean
 ---@field before_input? boolean
+---@field cleared? boolean
 
 -----@type table<string, NoiceFilterFun>
 M.filters = {
+  cleared = function(message, cleared)
+    ---@cast message NoiceMessage
+    return cleared == not Manager.has(message)
+  end,
   mode = function(_, mode)
     return vim.api.nvim_get_mode().mode:find(mode)
   end,
