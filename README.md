@@ -2,7 +2,7 @@
 
 Highly experimental plugin that completely replaces the UI for `messages`, `cmdline` and the `popupmenu`.
 
-<!-- TODO: add screen cast here -->
+![image](https://user-images.githubusercontent.com/292349/193263220-791847b2-516c-4f23-9802-31dd6bec5f6a.png)
 
 ## ✨ Features
 
