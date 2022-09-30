@@ -7,7 +7,7 @@ M.ns = vim.api.nvim_create_namespace("messages_highlights")
 ---@field views table<string, NoiceViewOptions>
 ---@field routes NoiceRouteConfig[]
 M.defaults = {
-  debug = true,
+  debug = false,
   throttle = 1000 / 30,
   cmdline = {
     enabled = true,
