@@ -14,6 +14,7 @@ Highly experimental plugin that completely replaces the UI for `messages`, `cmdl
 - 🚦 no more [:h more-prompt](https://neovim.io/doc/user/message.html#more-prompt)
 - 💻 fully customizable **cmdline** with icons
 - 💅 **syntax highlighting** for `vim` and `lua` on the **cmdline** 
+- ❓ **statusline** components
 
 ## ✅ Status
 
@@ -46,6 +47,8 @@ use({
 **noice.nvim** comes with the following defaults:
 
 > TODO: add proper documentation for config, views, routes, options
+
+> TIP: If you prefer a regular `cmdline` at the bottom of the screen, instead of the popup, change the views under routes from `cmdline_fancy` to `cmdline`.
 
 ```lua
 {
