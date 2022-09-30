@@ -3,6 +3,7 @@ local require = require("noice.util.lazy")
 local Config = require("noice.config")
 local Util = require("noice.util")
 local Hacks = require("noice.hacks")
+local Router = require("noice.router")
 
 ---@alias NoiceEvent MsgEvent|CmdlineEvent
 ---@alias NoiceKind MsgKind
@@ -27,7 +28,7 @@ function M.attach()
     end
 
     if Util.is_blocking() then
-      Util.try(require("noice.router").update)
+      Util.try(Router.update)
     end
   end)
 end
