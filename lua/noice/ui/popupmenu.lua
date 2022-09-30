@@ -56,7 +56,7 @@ function M.on_show(_, items, selected)
     )
   end
   local cursor = Cmdline.message.cursor
-  if cursor then
+  if cursor and cursor.buf_line then
     local win = vim.fn.bufwinid(cursor.buf)
     if win ~= -1 then
       M.no_cmdline_mode = true
