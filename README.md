@@ -47,14 +47,13 @@ use({
 **noice.nvim** comes with the following defaults:
 
 > TODO: add proper documentation for config, views, routes, options
+> For now, please refer to [config.lua](https://github.com/folke/noice.nvim/blob/main/lua/noice/config.lua#L9)
 
 > TIP: If you prefer a regular `cmdline` at the bottom of the screen, instead of the popup, change the views under routes from `cmdline_fancy` to `cmdline`.
 
 ```lua
 {
-  -- For now, please refer to https://github.com/folke/noice.nvim/blob/main/lua/noice/config.lua#L9
 }
----
 ```
 
 ## 🔥 Known Issues
