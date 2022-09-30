@@ -17,6 +17,11 @@ Table of Contents                               *noice.nvim-table-of-contents*
 Highly experimental plugin that completely replaces the UI for `messages`,
 `cmdline` and the `popupmenu`.
 
+<div class="figure">
+<img src="https://user-images.githubusercontent.com/292349/193263220-791847b2-516c-4f23-9802-31dd6bec5f6a.png" title="fig:"/>
+<p class="caption">image</p>
+</div>
+
 FEATURES                                                 *noice.nvim-features*
 
 
