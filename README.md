@@ -1,192 +1,263 @@
-# 💼 settings.nvim
+# 💥 Noice _(Nice, Noise, Notice)_
 
-**Settings.nvim** is a lua plugin to manage global and workspace-local Neovim
-settings.
+Highly experimental plugin that completely replaces the UI for `messages`, `cmdline` and the `popupmenu`.
 
-## ✅ Todo
-
-- [x] issue with substitute. Partially fixed. Still an issue with the cursor rendering.
-- [ ] formatting by `map` seems off -> bug in Neovim. Send a report.
-- [ ] restructure modules in subfolders
-- [x] how to fix Bdelete weirdness?
-- [x] same with swap files. Maybe filter system to force nowait?
-- [ ] handle duplicate messages
-- [ ] test with real cursors instead of the fake ones
-- [x] cmp gives issues once in a while (maybe the popupmenu?)
-- [x] statuslines
-- [x] virtualtext (search_count)
-- [x] hl groups seems to get lost in Noice history view
+<!-- TODO: add screen cast here -->
 
 ## ✨ Features
 
-- configure Neovim using **JSON** files
-  - global settings: `~/.config/nvim/settings.json`
-  - local settings: `~/projects/foobar/.nvim.settings.json`
-- live reload of your settings
-- extensible plugin architecture
-- built-in plugins:
-  - **options:** configure global (`vim.opt`) and local (`vim.opt_local`)
-    options.
-  - **lsp**: configure the LSP clients using workspace settings.
-- some workspace plugins support existing vscode settings read from
-  `.vscode/settings.json`. For LSP for example, this means that existing
-  configuration for LSP servers work out of the box.
-- live-reload of your settings: whenever you change a local or global JSON
-  settings file, the changes are applied immediately
+- 🌅 fully **configurable views** like [nvim-notify](https://github.com/rcarriga/nvim-notify), splits, popups, virtual text, ..
+- 🔍 use **filters** to **route messages** to different views
+- 🌈 message **highlights** are preserved in the views (like the colors of `:hi`)
+- ✏️ [:messages](https://neovim.io/doc/user/message.html#:messages) are shown in normal buffers, which makes them much easier to work with
+- 📚 `:Noice` command to show a full message history
+- 🚦 no more [:h more-prompt](https://neovim.io/doc/user/message.html#more-prompt)
+- 💻 fully customizable **cmdline** with icons
+- 💅 **syntax highlighting** for `vim` and `lua` on the **cmdline** 
+
+## ✅ Status
+
+**WIP**
 
 ## ⚡️ Requirements
 
-- Neovim >= 0.7.2
+- Neovim >= 0.9.0 or nightly
+- [nui.nvim](https://github.com/MunifTanjim/nui.nvim): used for proper rendering and multiple views
+- [nvim-notify](https://github.com/rcarriga/nvim-notify): notification view
+- [nvim-cmp](https://github.com/hrsh7th/nvim-cmp): we use some internal views for rendering the cmdline completion popup. 
 
 ## 📦 Installation
 
 Install the plugin with your preferred package manager:
 
-### [packer](https://github.com/wbthomason/packer.nvim)
-
 ```lua
--- Lua
+-- Packer
 use({
-  "folke/settings.nvim",
-  module = "settings",
+  "folke/noice.nvim",
+  event = "VimEnter",
   config = function()
-    require("settings").setup()
+    require("noice").setup()
   end,
 })
 ```
 
-## 🚀 Setup
-
-It's important that you set up `settings.nvim` **BEFORE** `nvim-lspconfig`.
-
-```lua
-require("settings").setup({
-  -- override any of the default settings here
-})
-require("lspconfig").sumneko_lua.setup(...)
-```
-
 ## ⚙️ Configuration
 
-**settings.nvim** comes with the following defaults:
+**noice.nvim** comes with the following defaults:
+
+> TODO: add proper documentation for config, views, routes, options
 
 ```lua
 {
-  -- name of the local settings files
-  local_settings = ".nvim.settings.json",
-  -- name of the global settings file in your Neovim config directory
-  global_settings = "settings.json",
-  -- import existing settinsg from other plugins
-  import = {
-    vscode = true, -- local .vscode/settings.json
-    coc = true, -- global/local coc-settings.json
-    nlsp = true, -- nlsp-settings.nvim json settings
+  debug = false,
+  throttle = 1000 / 30,
+  cmdline = {
+    enabled = true,
+    menu = "popup", -- @type "popup" | "wild",
+    icons = {
+      ["/"] = { icon = " ", hl_group = "DiagnosticWarn" },
+      ["?"] = { icon = " ", hl_group = "DiagnosticWarn" },
+      [":"] = { icon = " ", hl_group = "DiagnosticInfo", firstc = false },
+    },
   },
-  -- send new configuration to lsp clients when changing json settings
-  live_reload = true,
-  -- set the filetype to jsonc for settings files, so you can use comments
-  -- make sure you have the jsonc treesitter parser installed!
-  filetype_jsonc = true,
-  plugins = {
-    -- configures lsp clients with settings in the following order:
-    -- - lua settings passed in lspconfig setup
-    -- - global json settings
-    -- - local json settings
-    lspconfig = {
-      enabled = true,
+  history = {
+    view = "split",
+    opts = {
+      enter = true,
     },
-    -- configures jsonls to get completion in .nvim.settings.json files
-    jsonls = {
-      enabled = true,
-      -- only show completion in json settings for configured lsp servers
-      configured_servers_only = true,
+    filter = { event = "msg_show", ["not"] = { kind = { "search_count", "echo" } } },
+  },
+  views = {
+    notify = {
+      render = "notify",
+      level = vim.log.levels.INFO,
+      replace = true,
     },
-    -- configures sumneko_lua to get completion of lspconfig server settings
-    sumneko_lua = {
-      -- by default, sumneko_lua annotations are only enabled in your neovim config directory
-      enabled_for_neovim_config = true,
-      -- explicitely enable adding annotations. Mostly relevant to put in your local .nvim.settings.json file
-      enabled = false,
+    split = {
+      render = "split",
+      enter = false,
+      relative = "editor",
+      position = "bottom",
+      size = "20%",
+      close = {
+        keys = { "q", "<esc>" },
+      },
+      win_options = {
+        winhighlight = "Normal:NormalFloat,FloatBorder:FloatBorder",
+      },
+    },
+    popup = {
+      render = "popup",
+      close = {
+        events = { "BufLeave" },
+        keys = { "q", "<esc>" },
+      },
+      enter = true,
+      border = {
+        style = "single",
+      },
+      position = "50%",
+      size = {
+        width = "80%",
+        height = "60%",
+      },
+      win_options = {
+        winhighlight = "Normal:Float,FloatBorder:FloatBorder",
+      },
+    },
+    cmdline = {
+      render = "popup",
+      relative = "editor",
+      position = {
+        row = "100%",
+        col = 0,
+      },
+      size = {
+        height = "auto",
+        width = "100%",
+      },
+      border = {
+        style = "none",
+      },
+      win_options = {
+        winhighlight = "Normal:MsgArea",
+      },
+    },
+    fancy_cmdline = {
+      render = "popup",
+      relative = "editor",
+      focusable = true,
+      position = {
+        row = "50%",
+        col = "50%",
+      },
+      size = {
+        min_width = 60,
+        width = "auto",
+        height = "auto",
+      },
+      border = {
+        style = "rounded",
+        padding = { 0, 1, 0, 1 },
+        text = {
+          top = " Cmdline ",
+        },
+      },
+      win_options = {
+        winhighlight = "Normal:Normal,FloatBorder:DiagnosticInfo",
+      },
+      filter_options = {
+        {
+          filter = { event = "cmdline", find = "^%s*[/?]" },
+          opts = {
+            border = {
+              text = {
+                top = " Search ",
+              },
+            },
+            win_options = {
+              winhighlight = "Normal:Normal,FloatBorder:DiagnosticWarn",
+            },
+          },
+        },
+      },
+    },
+  },
+  routes = {
+    {
+      view = "cmdline",
+      filter = { event = "msg_show", kind = { "echo", "echomsg", "" }, blocking = true, max_height = 1 },
+    },
+    {
+      view = "fancy_cmdline",
+      filter = {
+        any = {
+          { event = "cmdline" },
+          { event = "msg_show", kind = "confirm" },
+          { event = "msg_show", kind = "confirm_sub" },
+          { event = "msg_show", kind = { "echo", "echomsg", "" }, before_input = true },
+          -- { event = "msg_show", kind = { "echo", "echomsg" }, instant = true },
+          -- { event = "msg_show", find = "E325" },
+          -- { event = "msg_show", find = "Found a swap file" },
+        },
+      },
+      opts = {
+        filter_options = {
+          {
+            -- Set filetype=vim only for cmdline events
+            filter = { event = "cmdline" },
+            opts = { buf_options = { filetype = "vim" } },
+          },
+        },
+      },
+    },
+    {
+      view = "split",
+      filter = {
+        any = {
+          { event = "msg_history_show" },
+          -- { min_height = 20 },
+        },
+      },
+    },
+    {
+      view = "virtualtext",
+      filter = {
+        event = "msg_show",
+        kind = "search_count",
+      },
+      opts = { hl_group = "DiagnosticVirtualTextInfo" },
+    },
+    {
+      filter = {
+        any = {
+          { event = { "msg_showmode", "msg_showcmd", "msg_ruler" } },
+          { event = "msg_show", kind = "search_count" },
+        },
+      },
+      opts = { skip = true },
+    },
+    {
+      view = "notify",
+      filter = {
+        event = "noice",
+        kind = { "stats", "debug" },
+      },
+      opts = { buf_options = { filetype = "lua" }, replace = true },
+    },
+    {
+      view = "notify",
+      filter = {
+        error = true,
+      },
+      opts = { level = vim.log.levels.ERROR, replace = false },
+    },
+    {
+      view = "notify",
+      filter = {
+        event = "msg_show",
+        kind = "wmsg",
+      },
+      opts = { level = vim.log.levels.WARN, replace = false },
+    },
+    {
+      view = "notify",
+      filter = {},
     },
   },
 }
+---
 ```
 
-## 🚀 Usage
+## 🔥 Known Issues
 
-### The `:Settings` Command
+**Noice** is using the new experimental `vim.ui_attach` API.
 
-### Completion and Validation for your `Json` Settings Files
+During setup, we apply a bunch of [Hacks](https://github.com/folke/noice.nvim/blob/main/lua/noice/hacks.lua)
+to work around some of the current issues.
 
-### Completion and Validation for your `Lua` Settings Files
+- during a **Search**, we temporarily set `conceallevel=0`, to make sure *IncSearch* is rendering correctly
+- `vim.fn.getchar`, `vim.fn.getcharstr`, `vim.fn.inputlist` are wrapped, so we know **blocking input** is coming
+- any **redraw** command is intercepted, to make sure we stop processing any messages during redraw
+- when in `blocking` mode, we use a slightly fix for `nvim-notify` to make realtime notifications possible
 
-### Importing Your Existing Settings
-
-## 📦 API
-
-## ⭐ Acknowledgment
-
-- [json.lua](https://github.com/actboy168/json.lua) a pure-lua JSON library for parsing `jsonc` files
-
-## 💻 Supported Language Servers
-
-<!-- GENERATED -->
-- [x] [als](https://github.com/AdaCore/ada_language_server/tree/master/integration/vscode/ada/package.json)
-- [x] [astro](https://github.com/withastro/language-tools/tree/main/packages/vscode/package.json)
-- [x] [awkls](https://github.com/Beaglefoot/awk-language-server/tree/master/client/package.json)
-- [x] [bashls](https://github.com/bash-lsp/bash-language-server/tree/master/vscode-client/package.json)
-- [x] [clangd](https://github.com/clangd/vscode-clangd/tree/master/package.json)
-- [x] [cssls](https://github.com/microsoft/vscode/tree/main/extensions/css-language-features/package.json)
-- [x] [dartls](https://github.com/Dart-Code/Dart-Code/tree/master/package.json)
-- [x] [denols](https://github.com/denoland/vscode_deno/tree/main/package.json)
-- [x] [elixirls](https://github.com/elixir-lsp/vscode-elixir-ls/tree/master/package.json)
-- [x] [elmls](https://github.com/elm-tooling/elm-language-client-vscode/tree/master/package.json)
-- [x] [eslint](https://github.com/microsoft/vscode-eslint/tree/main/package.json)
-- [x] [flow](https://github.com/flowtype/flow-for-vscode/tree/master/package.json)
-- [x] [fsautocomplete](https://github.com/ionide/ionide-vscode-fsharp/tree/main/release/package.json)
-- [x] [grammarly](https://github.com/znck/grammarly/tree/main/extension/package.json)
-- [x] [haxe_language_server](https://github.com/vshaxe/vshaxe/tree/master/package.json)
-- [x] [hhvm](https://github.com/slackhq/vscode-hack/tree/master/package.json)
-- [x] [hie](https://github.com/alanz/vscode-hie-server/tree/master/package.json)
-- [x] [html](https://github.com/microsoft/vscode/tree/main/extensions/html-language-features/package.json)
-- [x] [intelephense](https://github.com/bmewburn/vscode-intelephense/tree/master/package.json)
-- [x] [java_language_server](https://github.com/georgewfraser/java-language-server/tree/master/package.json)
-- [x] [jdtls](https://github.com/redhat-developer/vscode-java/tree/master/package.json)
-- [x] [jsonls](https://github.com/microsoft/vscode/tree/master/extensions/json-language-features/package.json)
-- [x] [julials](https://github.com/julia-vscode/julia-vscode/tree/master/package.json)
-- [x] [kotlin_language_server](https://github.com/fwcd/vscode-kotlin/tree/master/package.json)
-- [x] [ltex](https://github.com/valentjn/vscode-ltex/develop/package.json)
-- [x] [nickel_ls](https://github.com/tweag/nickel/tree/master/lsp/client-extension/package.json)
-- [x] [omnisharp](https://github.com/OmniSharp/omnisharp-vscode/tree/master/package.json)
-- [x] [perlls](https://github.com/richterger/Perl-LanguageServer/tree/master/clients/vscode/perl/package.json)
-- [x] [perlnavigator](https://github.com/bscan/PerlNavigator/tree/main/package.json)
-- [x] [perlpls](https://github.com/FractalBoy/perl-language-server/tree/master/client/package.json)
-- [x] [powershell_es](https://github.com/PowerShell/vscode-powershell/tree/main/package.json)
-- [x] [psalm](https://github.com/psalm/psalm-vscode-plugin/tree/master/package.json)
-- [x] [puppet](https://github.com/puppetlabs/puppet-vscode/tree/main/package.json)
-- [x] [purescriptls](https://github.com/nwolverson/vscode-ide-purescript/tree/master/package.json)
-- [x] [pylsp](https://github.com/python-lsp/python-lsp-server/develop/pylsp/config/schema.json)
-- [x] [pyright](https://github.com/microsoft/pyright/tree/master/packages/vscode-pyright/package.json)
-- [x] [r_language_server](https://github.com/REditorSupport/vscode-r-lsp/tree/master/package.json)
-- [x] [rescriptls](https://github.com/rescript-lang/rescript-vscode/tree/master/package.json)
-- [x] [rls](https://github.com/rust-lang/vscode-rust/tree/master/package.json)
-- [x] [rome](https://github.com/rome/tools/tree/main/editors/vscode/package.json)
-- [x] [rust_analyzer](https://github.com/rust-analyzer/rust-analyzer/tree/master/editors/code/package.json)
-- [x] [solargraph](https://github.com/castwide/vscode-solargraph/tree/master/package.json)
-- [x] [solidity_ls](https://github.com/juanfranblanco/vscode-solidity/tree/master/package.json)
-- [x] [sorbet](https://github.com/sorbet/sorbet/tree/master/vscode_extension/package.json)
-- [x] [sourcekit](https://github.com/swift-server/vscode-swift/tree/main/package.json)
-- [x] [spectral](https://github.com/stoplightio/vscode-spectral/tree/master/package.json)
-- [x] [stylelint_lsp](https://github.com/bmatcuk/coc-stylelintplus/tree/master/package.json)
-- [x] [sumneko_lua](https://github.com/sumneko/vscode-lua/tree/master/package.json)
-- [x] [svelte](https://github.com/sveltejs/language-tools/tree/master/packages/svelte-vscode/package.json)
-- [x] [svlangserver](https://github.com/eirikpre/VSCode-SystemVerilog/tree/master/package.json)
-- [x] [tailwindcss](https://github.com/tailwindlabs/tailwindcss-intellisense/tree/master/packages/vscode-tailwindcss/package.json)
-- [x] [terraformls](https://github.com/hashicorp/vscode-terraform/tree/master/package.json)
-- [x] [tsserver](https://github.com/microsoft/vscode/tree/main/extensions/typescript-language-features/package.json)
-- [x] [volar](https://github.com/johnsoncodehk/volar/tree/master/extensions/vscode-vue-language-features/package.json)
-- [x] [vuels](https://github.com/vuejs/vetur/tree/master/package.json)
-- [x] [wgls_analyzer](https://github.com/wgsl-analyzer/wgsl-analyzer/tree/main/editors/code/package.json)
-- [x] [yamlls](https://github.com/redhat-developer/vscode-yaml/tree/master/package.json)
-- [x] [zeta_note](https://github.com/artempyanykh/zeta-note-vscode/tree/main/package.json)
-- [x] [zls](https://github.com/zigtools/zls-vscode/tree/master/package.json)
