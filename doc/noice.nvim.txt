@@ -1,4 +1,4 @@
-*noice.nvim.txt*         For NVIM v0.5.0        Last change: 2022 September 28
+*noice.nvim.txt*         For NVIM v0.5.0        Last change: 2022 September 30
 
 ==============================================================================
 Table of Contents                               *noice.nvim-table-of-contents*
@@ -26,6 +26,7 @@ TODO                                                         *noice.nvim-todo*
 
 - issue with substitute. Partially fixed. Still an issue with the cursor rendering.
 - formatting by `map` seems off -> bug in Neovim. Send a report.
+- restructure modules in subfolders
 - how to fix Bdelete weirdness?
 - same with swap files. Maybe filter system to force nowait?
 - handle duplicate messages
