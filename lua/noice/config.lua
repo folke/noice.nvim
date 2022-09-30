@@ -188,7 +188,7 @@ M.defaults = {
       filter = {
         error = true,
       },
-      opts = { level = vim.log.levels.ERROR, replace = false },
+      opts = { level = vim.log.levels.ERROR, replace = false, title = "Error" },
     },
     {
       view = "notify",
@@ -196,7 +196,7 @@ M.defaults = {
         event = "msg_show",
         kind = "wmsg",
       },
-      opts = { level = vim.log.levels.WARN, replace = false },
+      opts = { level = vim.log.levels.WARN, replace = false, title = "Warning" },
     },
     {
       view = "notify",
