@@ -9,7 +9,7 @@ Highly experimental plugin that completely replaces the UI for `messages`, `cmdl
 - 🌅 fully **configurable views** like [nvim-notify](https://github.com/rcarriga/nvim-notify), splits, popups, virtual text, ..
 - 🔍 use **filters** to **route messages** to different views
 - 🌈 message **highlights** are preserved in the views (like the colors of `:hi`)
-- ✏️ [:messages](https://neovim.io/doc/user/message.html#:messages) are shown in normal buffers, which makes them much easier to work with
+- 📝 [:messages](https://neovim.io/doc/user/message.html#:messages) are shown in normal buffers, which makes them much easier to work with
 - 📚 `:Noice` command to show a full message history
 - 🚦 no more [:h more-prompt](https://neovim.io/doc/user/message.html#more-prompt)
 - 💻 fully customizable **cmdline** with icons
