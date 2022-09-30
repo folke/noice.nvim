@@ -7,6 +7,7 @@ settings.
 
 - [x] issue with substitute. Partially fixed. Still an issue with the cursor rendering.
 - [ ] formatting by `map` seems off -> bug in Neovim. Send a report.
+- [ ] restructure modules in subfolders
 - [x] how to fix Bdelete weirdness?
 - [x] same with swap files. Maybe filter system to force nowait?
 - [ ] handle duplicate messages
