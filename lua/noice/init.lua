@@ -1,6 +1,7 @@
 local M = {}
 
-function M.setup()
+---@param opts? NoiceConfig
+function M.setup(opts)
   if vim.fn.has("nvim-0.9.0") ~= 1 then
     require("noice.util").error("Noice needs Neovim >= 0.9.0 (nightly)")
     return
@@ -9,7 +10,7 @@ function M.setup()
     require("noice.util").error("Noice needs nvim-notify to work properly")
     return
   end
-  require("noice.config").setup()
+  require("noice.config").setup(opts)
   require("noice.hacks").setup()
   require("noice.commands").setup()
   require("noice.router").setup()
