@@ -12,6 +12,9 @@ M._history_view = nil
 
 function M.setup()
   local commands = {
+    debug = function()
+      Config.options.debug = not Config.options.debug
+    end,
     enable = function()
       require("noice").enable()
     end,
