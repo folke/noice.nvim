@@ -12,6 +12,12 @@ M._history_view = nil
 
 function M.setup()
   local commands = {
+    enable = function()
+      require("noice").enable()
+    end,
+    disable = function()
+      require("noice").disable()
+    end,
     stats = function()
       Manager.add(Stats.message())
     end,

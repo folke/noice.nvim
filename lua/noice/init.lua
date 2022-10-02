@@ -17,4 +17,14 @@ function M.setup(opts)
   require("noice.ui").setup()
 end
 
+function M.disable()
+  require("noice.router").stop()
+  require("noice.ui").detach()
+end
+
+function M.enable()
+  require("noice.ui").attach()
+  require("noice.router").start()
+end
+
 return M

@@ -78,6 +78,13 @@ use({
 
 ### 🚗 Routes
 
+## 🚀 Usage
+
+* `:Noice` shows the message history
+* `:Noice disable` disables **Noice**
+* `:Noice enable` enables **Noice**
+* `:Noice stats` shows debugging stats
+
 ## 🔥 Known Issues
 
 **Noice** is using the new experimental `vim.ui_attach` API.

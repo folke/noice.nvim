@@ -42,6 +42,8 @@ end
 
 function M.stop()
   M._running = false
+  Manager.clear()
+  M.update()
 end
 
 ---@param route NoiceRouteConfig
