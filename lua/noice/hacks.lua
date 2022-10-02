@@ -60,10 +60,6 @@ function M.fix_redraw()
   local function wrap(fn, ...)
     local inside_redraw = M.inside_redraw
 
-    if M.block_redraw then
-      return
-    end
-
     M.inside_redraw = true
 
     ---@type boolean, any

@@ -23,7 +23,7 @@ function M.attach()
       safe_handle(event, ...)
     end
 
-    if Util.is_blocking() then
+    if Util.is_blocking() and not Hacks.block_redraw then
       Util.try(Router.update)
     end
   end)
