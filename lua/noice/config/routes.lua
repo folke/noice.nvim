@@ -25,10 +25,10 @@ function M.defaults()
       opts = Config.options.cmdline.opts,
       filter = { event = "cmdline" },
     },
-    {
-      view = "cmdline",
-      filter = { event = "msg_show", kind = { "echo", "echomsg", "" }, blocking = true, max_height = 1 },
-    },
+    -- {
+    --   view = "cmdline",
+    --   filter = { event = "msg_show", kind = { "echo", "echomsg", "" }, blocking = true, max_height = 1 },
+    -- },
     {
       view = "cmdline_popup",
       filter = {
