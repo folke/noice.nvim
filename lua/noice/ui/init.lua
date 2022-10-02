@@ -19,10 +19,6 @@ function M.attach()
     ext_cmdline = true,
     ext_popupmenu = true,
   }, function(event, ...)
-    if event:find("cmdline") == 1 and not Config.options.cmdline.enabled then
-      return
-    end
-
     if not Hacks.inside_redraw then
       safe_handle(event, ...)
     end
