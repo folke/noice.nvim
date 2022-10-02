@@ -48,8 +48,6 @@ use({
 
 > TODO: add proper documentation for views, routes, options
 
-> For now, please refer to [config.lua](https://github.com/folke/noice.nvim/blob/main/lua/noice/config.lua#L9)
-
 ```lua
 {
   cmdline = {
@@ -69,16 +67,16 @@ use({
     filter = { event = "msg_show", ["not"] = { kind = { "search_count", "echo" } } },
   },
   throttle = 1000 / 30, -- how frequently does Noice need to check for ui updates? This has no effect when in blocking mode.
-  views = {}, -- @see [views](#-views)
-  routes = {}, -- @see [routes](#-routes)
+  views = {}, -- @see the section on views below
+  routes = {}, -- @see the section on routes below
 }
 ```
 
-### Filters
+### 🔍 Filters
 
-### Views
+### 🌅 Views
 
-### Routes
+### 🚗 Routes
 
 ## 🔥 Known Issues
 
