@@ -7,9 +7,21 @@ local M = {}
 
 M.stats = require("noice.stats")
 
-function M.is_blocking()
+---@param opts? {blocking:boolean, mode:boolean, input:boolean, redraw:boolean}
+function M.is_blocking(opts)
+  opts = vim.tbl_deep_extend("force", {
+    blocking = true,
+    mode = true,
+    input = true,
+    redraw = true,
+  }, opts or {})
   local mode = vim.api.nvim_get_mode()
-  return mode.blocking or mode.mode:find("[cro]") or Hacks.inside_redraw or Hacks.before_input
+  local reason = opts.blocking and mode.blocking and "blocking"
+    or opts.mode and mode.mode:find("[cro]") and "mode"
+    or opts.input and Hacks.before_input and "input"
+    or opts.redraw and Hacks.inside_redraw and "redraw"
+    or nil
+  return reason ~= nil, reason
 end
 
 function M.redraw()

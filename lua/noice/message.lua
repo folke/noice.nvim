@@ -39,11 +39,12 @@ function Message:_update()
       self:append(" ")
       self:append(" ")
     end
+    local blocking, reason = Util.is_blocking()
     local debug = {
       self:is({ cleared = true }) and "" or "",
       "#" .. self.id,
       self.event .. (self.kind and self.kind ~= "" and ("." .. self.kind) or ""),
-      Util.is_blocking() and "⚡",
+      blocking and "⚡ " .. reason,
     }
     local NuiText = require("nui.text")
     self._lines[1]._texts[1] = NuiText(
