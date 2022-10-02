@@ -11,12 +11,10 @@ M.ns = vim.api.nvim_create_namespace("messages_highlights")
 ---@field views table<string, NoiceViewOptions>
 ---@field routes NoiceRouteConfig[]
 M.defaults = {
-  debug = false,
-  throttle = 1000 / 30,
   cmdline = {
-    view = "cmdline_popup",
-    opts = { buf_options = { filetype = "vim" } },
-    menu = "popup", -- @type "popup" | "wild",
+    view = "cmdline_popup", -- view for rendering the cmdline. Change to `cmdline` to get a classic cmdline at the bottom
+    opts = { buf_options = { filetype = "vim" } }, -- enable syntax highlighting in the cmdline
+    menu = "popup", -- @type "popup" | "wild", -- what style of popupmenu do you want to use?
     icons = {
       ["/"] = { icon = " ", hl_group = "DiagnosticWarn" },
       ["?"] = { icon = " ", hl_group = "DiagnosticWarn" },
@@ -24,12 +22,15 @@ M.defaults = {
     },
   },
   history = {
+    -- options for the message history that you get with `:Noice`
     view = "split",
     opts = { enter = true },
     filter = { event = "msg_show", ["not"] = { kind = { "search_count", "echo" } } },
   },
-  views = {},
-  routes = {},
+  throttle = 1000 / 30, -- how frequently does Noice need to check for ui updates? This has no effect when in blocking mode.
+  views = {}, -- @see [views](#-views)
+  routes = {}, -- @see [routes](#-routes)
+  debug = false,
 }
 
 --- @type NoiceConfig

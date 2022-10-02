@@ -46,16 +46,39 @@ use({
 
 **noice.nvim** comes with the following defaults:
 
-> TODO: add proper documentation for config, views, routes, options
+> TODO: add proper documentation for views, routes, options
 
 > For now, please refer to [config.lua](https://github.com/folke/noice.nvim/blob/main/lua/noice/config.lua#L9)
 
-> TIP: If you prefer a regular `cmdline` at the bottom of the screen, instead of the popup, change the views under routes from `cmdline_fancy` to `cmdline`.
-
 ```lua
 {
+  cmdline = {
+    view = "cmdline_popup", -- view for rendering the cmdline. Change to `cmdline` to get a classic cmdline at the bottom
+    opts = { buf_options = { filetype = "vim" } }, -- enable syntax highlighting in the cmdline
+    menu = "popup", -- @type "popup" | "wild", -- what style of popupmenu do you want to use?
+    icons = {
+      ["/"] = { icon = " ", hl_group = "DiagnosticWarn" },
+      ["?"] = { icon = " ", hl_group = "DiagnosticWarn" },
+      [":"] = { icon = " ", hl_group = "DiagnosticInfo", firstc = false },
+    },
+  },
+  history = {
+    -- options for the message history that you get with `:Noice`
+    view = "split",
+    opts = { enter = true },
+    filter = { event = "msg_show", ["not"] = { kind = { "search_count", "echo" } } },
+  },
+  throttle = 1000 / 30, -- how frequently does Noice need to check for ui updates? This has no effect when in blocking mode.
+  views = {}, -- @see [views](#-views)
+  routes = {}, -- @see [routes](#-routes)
 }
 ```
+
+### Filters
+
+### Views
+
+### Routes
 
 ## 🔥 Known Issues
 
