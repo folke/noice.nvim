@@ -46,7 +46,9 @@ local NuiView = View:extend("NuiView")
 
 function NuiView:create()
   self._layout = self:get_layout()
-  local opts = vim.tbl_deep_extend("force", { buf_options = { buftype = "nofile" } }, self._opts, self._layout)
+  local opts = vim.tbl_deep_extend("force", {
+    buf_options = { buftype = "nofile" },
+  }, self._opts, self._layout)
 
   self._nui = self._opts.type == "split" and require("nui.split")(opts) or require("nui.popup")(opts)
 
