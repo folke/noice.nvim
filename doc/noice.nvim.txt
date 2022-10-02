@@ -9,6 +9,7 @@ Table of Contents                               *noice.nvim-table-of-contents*
   - Requirements                                     |noice.nvim-requirements|
   - Installation                                     |noice.nvim-installation|
   - Configuration                                   |noice.nvim-configuration|
+  - Usage                                                   |noice.nvim-usage|
   - Known Issues                                     |noice.nvim-known-issues|
 
 ==============================================================================
@@ -103,6 +104,15 @@ FILTERS ~
 VIEWS ~
 
 ROUTES ~
+
+USAGE                                                       *noice.nvim-usage*
+
+
+- `:Noice` shows the message history
+- `:Noice disable` disables **Noice**
+- `:Noice enable` enables **Noice**
+- `:Noice stats` shows debugging stats
+
 
 KNOWN ISSUES                                         *noice.nvim-known-issues*
 
