@@ -53,11 +53,17 @@ end
 -- This wraps vim.cmd, nvim_cmd, nvim_command and nvim_exec
 ---@see https://github.com/neovim/neovim/issues/20416
 M.inside_redraw = false
+M.block_redraw = false
 function M.fix_redraw()
   local nvim_cmd = vim.api.nvim_cmd
 
   local function wrap(fn, ...)
     local inside_redraw = M.inside_redraw
+
+    if M.block_redraw then
+      return
+    end
+
     M.inside_redraw = true
 
     ---@type boolean, any
@@ -118,7 +124,6 @@ function M.fix_getchar()
       -- do any updates now before blocking
       M.before_input = true
       require("noice.router").update()
-      M.before_input = false
 
       ---@type boolean, any
       local ok, ret = pcall(fn, unpack(args))
@@ -126,6 +131,7 @@ function M.fix_getchar()
       -- clear any message right after input
       Manager.clear({ event = "msg_show", kind = { "echo", "echomsg", "" } })
 
+      M.before_input = false
       if ok then
         return ret
       end

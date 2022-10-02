@@ -4,6 +4,7 @@ local Config = require("noice.config")
 local Util = require("noice.util")
 local Object = require("nui.object")
 local Filter = require("noice.filter")
+local Hacks = require("noice.hacks")
 
 ---@class NoiceViewBaseOptions
 ---@field buf_options? table<string,any>
@@ -71,7 +72,11 @@ function View:display(messages)
     self._messages = messages
     if #self._messages > 0 then
       self:_calc_opts()
+
+      Hacks.block_redraw = true
       Util.try(self.show, self)
+      Hacks.block_redraw = false
+
       self._visible = true
     else
       self._visible = false
