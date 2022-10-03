@@ -173,23 +173,16 @@ function M.fix_cmp()
     local cursor = Cmdline.message.cursor
     if cursor and cursor.buf then
       local win = vim.fn.bufwinid(cursor.buf)
+      local offset = cursor.col - vim.fn.getcmdpos() + 1
       if win ~= -1 then
-        local win_cursor = { cursor.buf_line, cursor.col }
-        local pos = vim.fn.screenpos(win, win_cursor[1], win_cursor[2] + 1)
+        local win_cursor = { cursor.buf_line, vim.fn.getcmdpos() - 1 }
+        local pos = vim.fn.screenpos(win, win_cursor[1], win_cursor[2] + 1 + offset)
         return { win_cursor = win_cursor, screen_cursor = { pos.row, pos.col - 1 } }
       end
     end
   end
 
   local api = require("cmp.utils.api")
-
-  local get_current_line = api.get_current_line
-  api.get_current_line = function()
-    if api.is_cmdline_mode() then
-      return Cmdline.message:last_line():content()
-    end
-    return get_current_line()
-  end
 
   local get_cursor = api.get_cursor
   api.get_cursor = function()
