@@ -194,6 +194,47 @@ virtual text.
 
 ROUTES ~
 
+A **route** has a `filter`, `view` and optional `opts` attribute. - **view**:
+one of the views (built-in or custom) - **filter** a filter for messages
+matching this route - **opts**: options for the view and the route
+
+Route options can be any of the view options above, or one of: - **skip**:
+messages matching this filter will be skipped and not shown in any views -
+**stop** (`boolean`) defaults to `true`. When `false` and a route matches the
+filter, then other routes can still process the message too. Useful if you want
+certain messages to be shown in multiple views.
+
+Please refer to noice.config.routes
+<https://github.com/folke/noice.nvim/blob/main/lua/noice/config/routes.lua> for
+an overview of the default routes.
+
+**Routes** passed to `setup()` will be prepended to the default routes.
+
+Example:
+
+>
+    -- skip search_count messages instead of showing them as virtual text
+    require("noice").setup({
+      routes = {
+        {
+          filter = { event = "msg_show", kind = "search_count" },
+          opts = { skip = true },
+        },
+      },
+    })
+    
+    -- always route any messages with more than 20 lines to the split view
+    require("noice").setup({
+      routes = {
+        {
+          view = "split",
+          filter = { event = "msg_show", min_height = 20 },
+        },
+      },
+    })
+<
+
+
 USAGE                                                       *noice.nvim-usage*
 
 
