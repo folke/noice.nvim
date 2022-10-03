@@ -61,7 +61,6 @@ M.filters = {
       )
   end,
   warning = function(message, warning)
-    local Msg = require("noice.ui.msg")
     ---@cast message NoiceMessage
     return warning == (message.event == Msg.events.show and vim.tbl_contains({ Msg.kinds.wmsg }, message.kind))
   end,
