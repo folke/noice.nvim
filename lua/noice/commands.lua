@@ -3,7 +3,7 @@ local require = require("noice.util.lazy")
 local View = require("noice.view")
 local Manager = require("noice.manager")
 local Config = require("noice.config")
-local Stats = require("noice.stats")
+local Util = require("noice.util")
 
 local M = {}
 
@@ -22,7 +22,7 @@ function M.setup()
       require("noice").disable()
     end,
     stats = function()
-      Manager.add(Stats.message())
+      Manager.add(Util.stats.message())
     end,
     history = function()
       if not M._history_view then
