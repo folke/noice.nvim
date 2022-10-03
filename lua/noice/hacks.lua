@@ -6,7 +6,15 @@ local Cmdline = require("noice.ui.cmdline")
 -- HACK: a bunch of hacks to make Noice behave
 local M = {}
 
-function M.setup()
+---@type fun()[]
+M._disable = {}
+
+function M.reset_augroup()
+  M.group = vim.api.nvim_create_augroup("noice.hacks", { clear = true })
+end
+
+function M.enable()
+  M.reset_augroup()
   M.fix_incsearch()
   M.fix_getchar()
   M.fix_notify()
@@ -15,9 +23,18 @@ function M.setup()
   M.fix_cmp()
 end
 
+function M.disable()
+  M.reset_augroup()
+  for _, fn in ipairs(M._disable) do
+    fn()
+  end
+  M._disable = {}
+end
+
 -- clear search_count on :nohlsearch
 function M.fix_nohlsearch()
   vim.api.nvim_create_autocmd("CmdlineLeave", {
+    group = M.group,
     callback = function()
       local cmd = vim.fn.getcmdline()
       if cmd:find("noh") == 1 then
@@ -33,6 +50,7 @@ function M.fix_incsearch()
   local conceallevel
 
   vim.api.nvim_create_autocmd("CmdlineEnter", {
+    group = M.group,
     callback = function(event)
       if event.match == "/" or event.match == "?" then
         conceallevel = vim.wo.conceallevel
@@ -42,6 +60,7 @@ function M.fix_incsearch()
   })
 
   vim.api.nvim_create_autocmd("CmdlineLeave", {
+    group = M.group,
     callback = function(event)
       if conceallevel and (event.match == "/" or event.match == "?") then
         vim.wo.conceallevel = conceallevel
@@ -105,6 +124,12 @@ function M.fix_redraw()
       return nvim_exec(cmd, ...)
     end
   end
+
+  table.insert(M._disable, function()
+    vim.api.nvim_cmd = nvim_cmd
+    vim.api.nvim_command = nvim_command
+    vim.api.nvim_exec = nvim_exec
+  end)
 end
 
 ---@see https://github.com/neovim/neovim/issues/20311
@@ -140,9 +165,19 @@ function M.fix_getchar()
   local function skip(expr)
     return expr ~= nil
   end
+  local getchar = vim.fn.getchar
+  local getcharstr = vim.fn.getcharstr
+  local inputlist = vim.fn.inputlist
+
   vim.fn.getchar = wrap(vim.fn.getchar, skip)
   vim.fn.getcharstr = wrap(vim.fn.getcharstr, skip)
   vim.fn.inputlist = wrap(vim.fn.inputlist)
+
+  table.insert(M._disable, function()
+    vim.fn.getchar = getchar
+    vim.fn.getcharstr = getcharstr
+    vim.fn.inputlist = inputlist
+  end)
 end
 
 -- Allow nvim-notify to behave inside instant events
@@ -163,6 +198,9 @@ function M.fix_notify()
       end
       return buf
     end
+    table.insert(M._disable, function()
+      meta.push = push
+    end)
   end))
 end
 
@@ -201,6 +239,11 @@ function M.fix_cmp()
     end
     return get_screen_cursor()
   end
+
+  table.insert(M._disable, function()
+    api.get_cursor = get_cursor
+    api.get_screen_cursor = get_screen_cursor
+  end)
 end
 
 return M
