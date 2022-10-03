@@ -74,6 +74,35 @@ use({
 
 ### 🔍 Filters
 
+**Noice** uses filters to route messages to specific views.
+
+| Name         | Type                   | Description                                                                                                                            |
+| ------------ | ---------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| *cleared*    | `boolean`              | checks if the message is cleared, meaning it's in the history                                                                          |
+| *mode*       | `string`               | checks if `vim.api.nvim_get_mode()` contains the given mode                                                                            |
+| *blocking*   | `boolean`              | are we in blocking mode?                                                                                                               |
+| *event*      | `string` or `string[]` | any of the events from `ext_messages` or `cmdline`. See [:h ui-messages](https://neovim.io/doc/user2/ui.html#_-message/dialog-events-) |
+| *kind*       | `string` or `string[]` | any of the kinds from `ext_messages`. See [:h ui-messages](https://neovim.io/doc/user2/ui.html#_-message/dialog-events-)               |
+| *error*      | `boolean`              | all error-like kinds from `ext_messages`                                                                                               |
+| *warning*    | `boolean`              | all warning-like kinds from `ext_messages`                                                                                             |
+| *find*       | `string`               | uses lua `string.find` to match the pattern                                                                                            |
+| *min_height* | `number`               | minimum height of the message                                                                                                          |
+| *max_height* | `number`               | maximum height of the message                                                                                                          |
+| *not*        | `filter`               | checks wether the filter matches or not                                                                                                |
+| *any*        | `filter[]`             | checks that at least one of the filters matches                                                                                        |
+
+Example:
+
+```lua
+-- all messages over 10 lines, excluding echo and search_count
+local filter = {
+  event = "msg_show",
+  min_height = 10,
+  ["not"] = { kind = { "search_count", "echo" } },
+}
+
+```
+
 ### 🌅 Views
 
 ### 🚗 Routes
