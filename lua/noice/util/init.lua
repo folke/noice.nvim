@@ -7,6 +7,7 @@ local M = {}
 
 M.stats = require("noice.util.stats")
 M.cursor = require("noice.util.cursor")
+M.call = require("noice.util.call")
 
 ---@generic F: fun()
 ---@param fn F
@@ -43,57 +44,10 @@ function M.redraw()
   M.stats.track("redraw")
 end
 
----@generic T: fun()
----@param fn T
----@param opts? { retry_on_vim_errors: boolean, msg: string}
----@return T
-function M.protect(fn, opts)
-  opts = vim.tbl_deep_extend("force", {
-    retry_on_vim_errors = true,
-  }, opts or {})
-
-  return function(...)
-    local args = { ... }
-
-    -- wrap the function and call with args
-    local wrapped = function()
-      return fn(unpack(args))
-    end
-
-    local retry = false
-
-    -- error handler
-    local error_handler = function(err)
-      -- catch any Vim Errors and retry once
-      if not retry and err:find("Vim:E") and opts.retry_on_vim_errors then
-        retry = true
-        return
-      end
-
-      local lines = {}
-      table.insert(lines, opts.msg or err)
-
-      if Config.options.debug then
-        if opts.msg then
-          table.insert(lines, err)
-        end
-        table.insert(lines, debug.traceback("", 3))
-      end
-
-      M.error(table.concat(lines, "\n"))
-      return err
-    end
-
-    local ok, result = xpcall(wrapped, error_handler)
-    if retry then
-      ok, result = xpcall(wrapped, error_handler)
-    end
-    return ok and result or nil
-  end
-end
+M.protect = M.call.protect
 
 function M.try(fn, ...)
-  return M.protect(fn)(...)
+  return M.call.protect(fn)(...)
 end
 
 function M.win_apply_config(win, opts)
