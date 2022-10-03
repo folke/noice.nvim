@@ -101,6 +101,35 @@ CONFIGURATION                                       *noice.nvim-configuration*
 
 FILTERS ~
 
+**Noice** uses filters to route messages to specific views.
+
+│    Name    │           Type           │                                Description                                 │
+│_cleared_   │boolean                   │checks if the message is cleared, meaning it’s in the history             │
+│_mode_      │string                    │checks if vim.api.nvim_get_mode() contains the given mode                   │
+│_blocking_  │boolean                   │are we in blocking mode?                                                    │
+│_event_     │string or string[]        │any of the events from ext_messages or cmdline. See |:h ui-messages|        │
+│_kind_      │string or string[]        │any of the kinds from ext_messages. See |:h ui-messages|                    │
+│_error_     │boolean                   │all error-like kinds from ext_messages                                      │
+│_warning_   │boolean                   │all warning-like kinds from ext_messages                                    │
+│_find_      │string                    │uses lua string.find to match the pattern                                   │
+│_min_height_│number                    │minimum height of the message                                               │
+│_max_height_│number                    │maximum height of the message                                               │
+│_not_       │filter                    │checks wether the filter matches or not                                     │
+│_any_       │filter[]                  │checks that at least one of the filters matches                             │
+
+
+Example:
+
+>
+    -- all messages over 10 lines, excluding echo and search_count
+    local filter = {
+      event = "msg_show",
+      min_height = 10,
+      ["not"] = { kind = { "search_count", "echo" } },
+    }
+<
+
+
 VIEWS ~
 
 ROUTES ~
