@@ -47,10 +47,10 @@ function M.setup()
     nargs = "?",
     desc = "Noice",
     complete = function(f, line, ...)
-      if line:match("^Noice %w+ ") then
+      if line:match("^%s*Noice %w+ ") then
         return {}
       end
-      local prefix = line:match("^Noice (%w*)")
+      local prefix = line:match("^%s*Noice (%w*)")
       return vim.tbl_filter(function(key)
         return key:find(prefix) == 1
       end, vim.tbl_keys(commands))
