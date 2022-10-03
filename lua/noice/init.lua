@@ -12,20 +12,21 @@ function M.setup(opts)
     return
   end
   require("noice.config").setup(opts)
-  require("noice.hacks").setup()
   require("noice.commands").setup()
   require("noice.router").setup()
-  require("noice.ui").setup()
+  M.enable()
 end
 
 function M.disable()
-  require("noice.router").stop()
-  require("noice.ui").detach()
+  require("noice.router").disable()
+  require("noice.ui").disable()
+  require("noice.hacks").disable()
 end
 
 function M.enable()
-  require("noice.ui").attach()
-  require("noice.router").start()
+  require("noice.hacks").enable()
+  require("noice.ui").enable()
+  require("noice.router").enable()
 end
 
 return M

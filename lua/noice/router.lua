@@ -35,12 +35,12 @@ local function run()
   vim.defer_fn(run, Config.options.throttle)
 end
 
-function M.start()
+function M.enable()
   M._running = true
   vim.schedule(run)
 end
 
-function M.stop()
+function M.disable()
   M._running = false
   Manager.clear()
   M.update()
@@ -62,7 +62,6 @@ function M.setup()
   for _, route in ipairs(Config.options.routes) do
     M.add(route)
   end
-  vim.schedule(M.start)
 end
 
 function M.check_redraw()

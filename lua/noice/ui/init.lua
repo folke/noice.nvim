@@ -11,7 +11,7 @@ local Router = require("noice.router")
 local M = {}
 M._attached = false
 
-function M.attach()
+function M.enable()
   local safe_handle = Util.protect(M.handle, { msg = "An error happened while handling a ui event" })
   M._attached = true
   vim.ui_attach(Config.ns, {
@@ -29,15 +29,11 @@ function M.attach()
   end)
 end
 
-function M.detach()
+function M.disable()
   if M._attached then
     vim.ui_detach(Config.ns)
     M._attached = false
   end
-end
-
-function M.setup()
-  M.attach()
 end
 
 ---@param event string
