@@ -2,6 +2,7 @@ local require = require("noice.util.lazy")
 
 local View = require("noice.view")
 local Event = require("nui.utils.autocmd").event
+local Util = require("noice.util")
 
 ---@class NuiRelative
 ---@field type "'cursor'"|"'editor'"|"'win'"
@@ -88,8 +89,18 @@ end
 
 function NuiView:hide()
   if self._nui then
-    self._nui:hide()
     self._visible = false
+
+    Util.protect(function()
+      if not self._visible then
+        self._nui:hide()
+      end
+    end, {
+      finally = function()
+        self._nui._.loading = false
+      end,
+      retry_on_E11 = true,
+    })()
   end
 end
 
