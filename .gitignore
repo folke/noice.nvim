@@ -1,6 +1,3 @@
 doc/tags
-
-.nlsp-settings
-.vscode
-
 tt.lua
+noice.log
