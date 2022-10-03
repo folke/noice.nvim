@@ -52,7 +52,7 @@ use({
 
 **noice.nvim** comes with the following defaults:
 
-> TODO: add proper documentation for views, routes, options
+Check the [wiki](https://github.com/folke/noice.nvim/wiki/Configuration-Recipes) for configuration recipes.
 
 ```lua
 {
