@@ -2,7 +2,6 @@ local require = require("noice.util.lazy")
 
 local Util = require("noice.util")
 local Manager = require("noice.manager")
-local Hacks = require("noice.hacks")
 local Msg = require("noice.ui.msg")
 
 local M = {}
