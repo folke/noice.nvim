@@ -17,7 +17,7 @@ end
 function M.enable()
   M.reset_augroup()
   M.fix_incsearch()
-  M.fix_getchar()
+  M.fix_input()
   M.fix_notify()
   M.fix_nohlsearch()
   M.fix_redraw()
@@ -138,7 +138,7 @@ end
 
 ---@see https://github.com/neovim/neovim/issues/20311
 M.before_input = false
-function M.fix_getchar()
+function M.fix_input()
   local function wrap(fn, skip)
     return function(...)
       local args = { ... }
@@ -150,7 +150,7 @@ function M.fix_getchar()
 
       -- do any updates now before blocking
       M.before_input = true
-      require("noice.router").update()
+      Router.update()
 
       ---@type boolean, any
       local ok, ret = pcall(fn, unpack(args))
