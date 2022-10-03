@@ -14,17 +14,20 @@ M._attached = false
 function M.enable()
   local safe_handle = Util.protect(M.handle, { msg = "An error happened while handling a ui event" })
   M._attached = true
+
   vim.ui_attach(Config.ns, {
     ext_messages = true,
     ext_cmdline = true,
     ext_popupmenu = true,
   }, function(event, ...)
+    -- dont process any messages during redraw, since redraw triggers last messages
     if not Hacks.inside_redraw then
       safe_handle(event, ...)
-    end
 
-    if Util.is_blocking() and not Hacks.block_redraw then
-      Util.try(Router.update)
+      -- check if we need to update the ui
+      if Util.is_blocking() then
+        Util.try(Router.update)
+      end
     end
   end)
 end

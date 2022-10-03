@@ -2,6 +2,7 @@ local require = require("noice.util.lazy")
 
 local Util = require("noice.util")
 local Cmdline = require("noice.ui.cmdline")
+local Router = require("noice.router")
 
 -- HACK: a bunch of hacks to make Noice behave
 local M = {}
@@ -85,6 +86,9 @@ function M.fix_redraw()
 
     ---@type boolean, any
     local ok, ret = pcall(fn, ...)
+
+    -- check if the ui needs updating
+    Util.try(Router.update)
 
     if not inside_redraw then
       M.inside_redraw = false
