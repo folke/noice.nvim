@@ -91,3 +91,5 @@ use({
 
 During setup, we apply a bunch of [Hacks](https://github.com/folke/noice.nvim/blob/main/lua/noice/hacks.lua)
 to work around some of the current issues.
+
+For more details, see #6
