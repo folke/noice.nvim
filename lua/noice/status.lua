@@ -50,7 +50,6 @@ local status = {}
 
 return setmetatable(status, {
   __index = function(_, key)
-    Util.info("status " .. key)
     status[key] = NoiceStatus(Config.options.status[key])
     return status[key]
   end,
