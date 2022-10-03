@@ -27,10 +27,6 @@ source.new = function()
   }, { __index = source })
 end
 
-function source:get_keyword_pattern()
-  return [=[[^[:blank:]]*]=]
-end
-
 function source:complete(_params, callback)
   if not M.state.visible then
     return callback()
