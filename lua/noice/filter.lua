@@ -94,6 +94,9 @@ M.filters = {
   end,
 }
 
+---@type table<string,boolean>
+M._unknown_notified = {}
+
 ---@param message NoiceMessage
 ---@param filter NoiceFilter
 function M.is(message, filter)
@@ -102,7 +105,8 @@ function M.is(message, filter)
       if not M.filters[k](message, v) then
         return false
       end
-    else
+    elseif not M._unknown_notified[k] then
+      M._unknown_notified[k] = true
       Util.error("Unknown filter key " .. k .. " for " .. vim.inspect(filter))
       return false
     end
