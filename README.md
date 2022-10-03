@@ -72,8 +72,12 @@ use({
     filter = { event = "msg_show", ["not"] = { kind = { "search_count", "echo" } } },
   },
   throttle = 1000 / 30, -- how frequently does Noice need to check for ui updates? This has no effect when in blocking mode.
+  ---@type table<string, NoiceViewOptions>
   views = {}, -- @see the section on views below
+  ---@type NoiceRouteConfig[]
   routes = {}, -- @see the section on routes below
+  ---@type table<string, NoiceFilter>
+  status = {}, --@see the section on statusline components below
 }
 ```
 
@@ -210,6 +214,10 @@ require("noice").setup({
 * **command**: `showcmd`
 * **mode**: `showmode` (@recording messages)
 * **search**: search count messages
+
+See [noice.config.status](https://github.com/folke/noice.nvim/blob/main/lua/noice/config/status.lua) for the default config.
+
+You can add custom statusline components in setup under the `status` key.
 
 Statusline components have the following methods:
 - **get**: gets the content of the message **without** highlights

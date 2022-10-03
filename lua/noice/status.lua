@@ -1,11 +1,11 @@
 local require = require("noice.util.lazy")
 
 local Manager = require("noice.manager")
-local Msg = require("noice.ui.msg")
-
-local M = {}
+local Config = require("noice.config")
+local Util = require("noice.util")
 
 ---@param filter NoiceFilter
+---@return NoiceStatus
 local function NoiceStatus(filter)
   local function _get()
     return Manager.get(filter, {
@@ -13,7 +13,7 @@ local function NoiceStatus(filter)
       sort = true,
     })[1]
   end
-  ---@type NoiceMessage?
+  ---@class NoiceStatus
   return {
     has = function()
       return _get() ~= nil
@@ -45,10 +45,13 @@ local function NoiceStatus(filter)
   }
 end
 
-M.ruler = NoiceStatus({ event = Msg.events.ruler })
-M.message = NoiceStatus({ event = Msg.events.show })
-M.command = NoiceStatus({ event = Msg.events.showcmd })
-M.mode = NoiceStatus({ event = Msg.events.showmode })
-M.search = NoiceStatus({ event = Msg.events.show, kind = Msg.kinds.search_count })
+---@type table<string, NoiceStatus>
+local status = {}
 
-return M
+return setmetatable(status, {
+  __index = function(_, key)
+    Util.info("status " .. key)
+    status[key] = NoiceStatus(Config.options.status[key])
+    return status[key]
+  end,
+})

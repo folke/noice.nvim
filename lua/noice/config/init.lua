@@ -9,6 +9,7 @@ M.ns = vim.api.nvim_create_namespace("messages_highlights")
 ---@class NoiceConfig
 ---@field history NoiceRouteConfig
 ---@field views table<string, NoiceViewOptions>
+---@field status table<string, NoiceFilter>
 ---@field routes NoiceRouteConfig[]
 M.defaults = {
   cmdline = {
@@ -27,8 +28,9 @@ M.defaults = {
     filter = { event = "msg_show", ["not"] = { kind = { "search_count", "echo" } } },
   },
   throttle = 1000 / 30, -- how frequently does Noice need to check for ui updates? This has no effect when in blocking mode.
-  views = {}, -- @see [views](#-views)
-  routes = {}, -- @see [routes](#-routes)
+  views = {}, -- @see section on views
+  routes = {}, -- @see section on routes
+  status = {}, -- @see section on statusline components
   debug = false,
 }
 
@@ -40,6 +42,7 @@ function M.setup(options)
 
   M.options = vim.tbl_deep_extend("force", {}, M.defaults, {
     views = require("noice.config.views").defaults,
+    status = require("noice.config.status").defaults,
   }, options)
 
   M.options.routes = Routes.get(options.routes)
