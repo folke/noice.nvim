@@ -6,6 +6,7 @@ local Hacks = require("noice.hacks")
 local M = {}
 
 M.stats = require("noice.util.stats")
+M.cursor = require("noice.util.cursor")
 
 ---@generic F: fun()
 ---@param fn F

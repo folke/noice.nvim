@@ -80,20 +80,7 @@ function Message:highlight_cursor(bufnr, ns_id, linenr_start)
   if self.cursor then
     self.cursor.buf = bufnr
     self.cursor.buf_line = self.cursor.line + linenr_start - 1
-    local line_width = self._lines[self.cursor.line]:width()
-    if self.cursor.col >= line_width then
-      -- end of line, so use a virtual text
-      vim.api.nvim_buf_set_extmark(bufnr, ns_id, self.cursor.buf_line - 1, 0, {
-        virt_text = { { " ", "Cursor" } },
-        virt_text_win_col = self.cursor.col,
-      })
-    else
-      -- use a regular extmark
-      vim.api.nvim_buf_set_extmark(bufnr, ns_id, self.cursor.buf_line - 1, self.cursor.col, {
-        end_col = self.cursor.col + 1,
-        hl_group = "Cursor",
-      })
-    end
+    Util.cursor.render_cursor(bufnr, self.cursor.buf_line, self.cursor.col)
   end
 end
 
