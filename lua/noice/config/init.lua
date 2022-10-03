@@ -14,7 +14,6 @@ M.defaults = {
   cmdline = {
     view = "cmdline_popup", -- view for rendering the cmdline. Change to `cmdline` to get a classic cmdline at the bottom
     opts = { buf_options = { filetype = "vim" } }, -- enable syntax highlighting in the cmdline
-    menu = "popup", -- @type "popup" | "wild", -- what style of popupmenu do you want to use?
     icons = {
       ["/"] = { icon = " ", hl_group = "DiagnosticWarn" },
       ["?"] = { icon = " ", hl_group = "DiagnosticWarn" },
