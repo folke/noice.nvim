@@ -13,19 +13,6 @@ function M.max_width()
   return math.floor(vim.o.columns * 0.75)
 end
 
-function M.notify()
-  return require("notify")
-end
-
-function M.instant_notify()
-  if not M._instant_notify then
-    M._instant_notify = require("notify").instance({
-      stages = "static",
-    }, true)
-  end
-  return M._instant_notify
-end
-
 ---@alias notify.RenderFun fun(buf:buffer, notif: Notification, hl: NotifyBufHighlights, config: notify.Config)
 
 ---@param config notify.Config
@@ -44,6 +31,18 @@ end
 ---@field notif? notify.Record|{instant: boolean}
 ---@diagnostic disable-next-line: undefined-field
 local NotifyView = View:extend("NotifyView")
+
+function NotifyView.get()
+  if Util.is_blocking() then
+    if not M._instant_notify then
+      M._instant_notify = require("notify").instance({
+        stages = "static",
+      }, true)
+    end
+    return M._instant_notify
+  end
+  return require("notify")
+end
 
 function NotifyView:notify_render()
   return function(buf, notif, hl, config)
@@ -78,7 +77,6 @@ function NotifyView:show()
   local text = self:content()
   local level = self._opts.level or "info"
   local instant = Util.is_blocking()
-  local notify = instant and M.instant_notify() or M.notify()
 
   local replace = self._opts.replace ~= false and self.notif or nil
   if replace and replace.instant ~= instant then
@@ -101,7 +99,7 @@ function NotifyView:show()
     render = Util.protect(self:notify_render()),
   }
 
-  self.notif = notify.notify(text, level, opts)
+  self.notif = NotifyView.get().notify(text, level, opts)
   self.notif.instant = instant
 end
 

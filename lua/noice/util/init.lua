@@ -1,6 +1,5 @@
 local require = require("noice.util.lazy")
 
-local Config = require("noice.config")
 local Hacks = require("noice.hacks")
 
 local M = {}
@@ -59,7 +58,7 @@ end
 ---@param level number
 ---@param ... any
 function M.notify(msg, level, ...)
-  vim.notify(msg:format(...), level, {
+  require("noice.view.notify").get().notify(msg:format(...), level, {
     title = "noice.nvim",
     on_open = function(win)
       vim.api.nvim_win_set_option(win, "conceallevel", 3)
