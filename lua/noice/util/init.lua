@@ -128,4 +128,14 @@ function M.info(msg, ...)
   M.notify(msg, vim.log.levels.INFO, ...)
 end
 
+function M.debug(data)
+  local file = "./noice.log"
+  local fd = io.open(file, "a+")
+  if not fd then
+    error(("Could not open file %s for writing"):format(file))
+  end
+  fd:write("\n" .. data)
+  fd:close()
+end
+
 return M
