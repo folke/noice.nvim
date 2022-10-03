@@ -98,7 +98,7 @@ function NotifyView:show()
       self.notif = nil
       self.win = nil
     end,
-    render = Util.protect(self:notify_render()),
+    render = Util.protect(self:notify_render()):fn(),
   }
 
   self.notif = notify.notify(text, level, opts)
