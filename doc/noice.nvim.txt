@@ -29,7 +29,7 @@ FEATURES                                                 *noice.nvim-features*
 - fully **configurable views** like nvim-notify <https://github.com/rcarriga/nvim-notify>, splits, popups, virtual text, ..
 - use **filters** to **route messages** to different views
 - message **highlights** are preserved in the views (like the colors of `:hi`)
-- |:messages| are shown in normal buffers, which makes them much easier to work with
+- command output like |:messages| is shown in normal buffers, which makes it much easier to work with
 - `:Noice` command to show a full message history
 - no more |:h more-prompt|
 - fully customizable **cmdline** with icons
@@ -44,10 +44,10 @@ STATUS                                                     *noice.nvim-status*
 REQUIREMENTS                                         *noice.nvim-requirements*
 
 
-- Neovim >= 0.9.0 or nightly
+- Neovim >= 0.8.0
 - nui.nvim <https://github.com/MunifTanjim/nui.nvim>: used for proper rendering and multiple views
 - nvim-notify <https://github.com/rcarriga/nvim-notify>: notification view
-- nvim-cmp <https://github.com/hrsh7th/nvim-cmp>: we use some internal views for rendering the cmdline completion popup.
+- nvim-cmp <https://github.com/hrsh7th/nvim-cmp>: used for rendering the regular cmdline completions or if you use cmp-cmdline <https://github.com/hrsh7th/cmp-cmdline/>
 
 
 INSTALLATION                                         *noice.nvim-installation*
@@ -62,6 +62,12 @@ Install the plugin with your preferred package manager:
       config = function()
         require("noice").setup()
       end,
+      requires = {
+        -- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
+        "MunifTanjim/nui.nvim",
+        "rcarriga/nvim-notify",
+        "hrsh7th/nvim-cmp",
+        }
     })
 <
 
@@ -79,7 +85,6 @@ CONFIGURATION                                       *noice.nvim-configuration*
       cmdline = {
         view = "cmdline_popup", -- view for rendering the cmdline. Change to `cmdline` to get a classic cmdline at the bottom
         opts = { buf_options = { filetype = "vim" } }, -- enable syntax highlighting in the cmdline
-        menu = "popup", -- @type "popup" | "wild", -- what style of popupmenu do you want to use?
         icons = {
           ["/"] = { icon = " ", hl_group = "DiagnosticWarn" },
           ["?"] = { icon = " ", hl_group = "DiagnosticWarn" },
