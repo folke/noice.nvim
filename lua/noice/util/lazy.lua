@@ -1,7 +1,7 @@
 return function(module)
   -- if already loaded, return the module
   -- otherwise return a lazy module
-  return package.loaded[module]
+  return type(package.loaded[module]) == "table" and package.loaded[module]
     or setmetatable({}, {
       __index = function(_, key)
         return require(module)[key]
