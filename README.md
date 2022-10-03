@@ -11,10 +11,10 @@ Highly experimental plugin that completely replaces the UI for `messages`, `cmdl
 - 🌈 message **highlights** are preserved in the views (like the colors of `:hi`)
 - 📝 [:messages](https://neovim.io/doc/user/message.html#:messages) are shown in normal buffers, which makes them much easier to work with
 - 📚 `:Noice` command to show a full message history
-- 🚦 no more [:h more-prompt](https://neovim.io/doc/user/message.html#more-prompt)
+- ⌨️  no more [:h more-prompt](https://neovim.io/doc/user/message.html#more-prompt)
 - 💻 fully customizable **cmdline** with icons
 - 💅 **syntax highlighting** for `vim` and `lua` on the **cmdline** 
-- ❓ **statusline** components
+- 🚥 **statusline** components
 
 ## ✅ Status
 
@@ -140,19 +140,19 @@ require("noice").setup({
   })
 ```
 
-#### Nui Options
+**Nui Options**
 
 See the Nui documentation for [Popup](https://github.com/MunifTanjim/nui.nvim/tree/main/lua/nui/popup)
 and [Split](https://github.com/MunifTanjim/nui.nvim/tree/main/lua/nui/split).
 
 Size & position can additionally be specified as `"auto"`, to use the message height and width.
 
-#### Notify Options
+**Notify Options**
 
 - **title** title to be used for the notification
 - **replace** `boolean` when true, messages routing to the same notify instance will replace existing messages instead of pushing a new notification every time
 
-### Virtual Text
+**Virtual Text Options**
 
 Right now there's only an option to set the `hl_group` used to render the virtual text.
 
@@ -195,6 +195,51 @@ require("noice").setup({
     },
   },
 })
+```
+
+### 🚥 Statusline Components
+
+**Noice** comes with the following statusline components:
+* **ruler**
+* **message**: last line of the last message (`event=show_msg`)
+* **command**: `showcmd`
+* **mode**: `showmode` (@recording messages)
+* **search**: search count messages
+
+Statusline components have the following methods:
+- **get**: gets the content of the message **without** highlights
+- **get_hl**: gets the content of the message **with** highlights
+- **has**: checks if the component is available
+
+Example of configuring [lualine.nvim](https://github.com/nvim-lualine/lualine.nvim)
+
+```lua
+require("lualine").setup({
+  sections = {
+    lualine_x = {
+      {
+        require("noice.status").message.get_hl,
+        cond = require("noice.status").message.has,
+      },
+      {
+        require("noice.status").command.get,
+        cond = require("noice.status").command.has,
+        color = { fg = "#ff9e64" },
+      },
+      {
+        require("noice.status").mode.get,
+        cond = require("noice.status").mode.has,
+        color = { fg = "#ff9e64" },
+      },
+      {
+        require("noice.status").search.get,
+        cond = require("noice.status").search.has,
+        color = { fg = "#ff9e64" },
+      },
+    },
+  },
+})
+
 ```
 
 ## 🚀 Usage
