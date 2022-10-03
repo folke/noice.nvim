@@ -7,6 +7,19 @@ local M = {}
 
 M.stats = require("noice.stats")
 
+---@generic F: fun()
+---@param fn F
+---@return F
+function M.once(fn)
+  local done = false
+  return function(...)
+    if not done then
+      fn(...)
+      done = true
+    end
+  end
+end
+
 ---@param opts? {blocking:boolean, mode:boolean, input:boolean, redraw:boolean}
 function M.is_blocking(opts)
   opts = vim.tbl_deep_extend("force", {
