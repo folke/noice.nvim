@@ -25,17 +25,13 @@ function M.defaults()
       opts = Config.options.cmdline.opts,
       filter = { event = "cmdline" },
     },
-    -- {
-    --   view = "cmdline",
-    --   filter = { event = "msg_show", kind = { "echo", "echomsg", "" }, blocking = true, max_height = 1 },
-    -- },
     {
       view = "cmdline_popup",
       filter = {
         any = {
           { event = "msg_show", kind = "confirm" },
           { event = "msg_show", kind = "confirm_sub" },
-          { event = "msg_show", kind = { "echo", "echomsg", "" }, before_input = true },
+          -- { event = "msg_show", kind = { "echo", "echomsg", "" }, before = true },
           -- { event = "msg_show", kind = { "echo", "echomsg" }, instant = true },
           -- { event = "msg_show", find = "E325" },
           -- { event = "msg_show", find = "Found a swap file" },
@@ -86,8 +82,7 @@ function M.defaults()
     {
       view = "notify",
       filter = {
-        event = "msg_show",
-        kind = "wmsg",
+        warning = true,
       },
       opts = { level = vim.log.levels.WARN, replace = false, title = "Warning" },
     },
