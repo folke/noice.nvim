@@ -105,6 +105,58 @@ local filter = {
 
 ### 🌅 Views
 
+**Noice** comes with the following built-in renderers:
+- **popup** powered by [nui.nvim](https://github.com/MunifTanjim/nui.nvim)
+- **split** powered by [nui.nvim](https://github.com/MunifTanjim/nui.nvim)
+- **notify** powered by [nvim-notify](https://github.com/rcarriga/nvim-notify)
+- **virtualtext** shows the message as virtualtext (for example for `search_count`)
+
+**Views** (`config.views`) are combinations of `render` methods and options.
+
+**Noice** comes with the following built-in views with sane defaults:
+- **notify** with default level and replaces existing notification by default
+- **split** horizontal split
+- **vsplit** vertical split
+- **popup**
+- **cmdline** bottom line, similar to the classic cmdline
+- **cmdline_popup** fancy cmdline popup, with different styles according to the cmdline mode
+
+Please refer to [noice.config.views](https://github.com/folke/noice.nvim/blob/main/lua/noice/config/views.lua) to see the options.
+
+Any options passed to existing views in `config.views`, will override those options only.
+
+You can configure completely new views and use them in custom routes.
+
+Example:
+
+```lua
+-- override the default split view to always enter the split when it opens
+require("noice").setup({
+    views = {
+        split = {
+            enter = true
+          }
+      }
+  })
+```
+
+#### Nui Options
+
+See the Nui documentation for [Popup](https://github.com/MunifTanjim/nui.nvim/tree/main/lua/nui/popup)
+and [Split](https://github.com/MunifTanjim/nui.nvim/tree/main/lua/nui/split).
+
+Size & position can additionally be specified as `"auto"`, to use the message height and width.
+
+#### Notify Options
+
+- **title** title to be used for the notification
+- **replace** `boolean` when true, messages routing to the same notify instance will replace existing messages instead of pushing a new notification every time
+
+### Virtual Text
+
+Right now there's only an option to set the `hl_group` used to render the virtual text.
+
+
 ### 🚗 Routes
 
 ## 🚀 Usage
