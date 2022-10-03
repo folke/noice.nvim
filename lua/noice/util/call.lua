@@ -25,42 +25,22 @@ M.__index = M
 ---@generic F: fun()
 ---@param fn F
 ---@param opts? CallOptions
----@return F|Call
+---@return F
 function M.protect(fn, opts)
   local self = setmetatable({}, M)
   self._opts = vim.tbl_deep_extend("force", defaults, opts or {})
   self._fn = fn
   self._retry = false
-  return self
-end
-
-function M:fn()
   return function(...)
     return self(...)
   end
 end
 
-function M:opts(catch)
-  self._opts.catch = catch
-  return self
-end
-
-function M:catch(catch)
-  self._opts.catch = catch
-  return self
-end
-
-function M:finally(finally)
-  self._opts.finally = finally
-  return self
-end
-
--- FIXME: ctrl-c
-
 function M:on_error(err)
   if self._opts.catch then
     pcall(self._opts.catch, err)
   end
+
   -- catch any Vim Errors and retry once
   if not self._retry and err:find("Vim:E%d+") and self._opts.retry_on_vim_errors then
     self._retry = true

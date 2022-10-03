@@ -205,7 +205,7 @@ function M.fix_notify()
     table.insert(M._disable, function()
       meta.push = push
     end)
-  end):fn())
+  end))
 end
 
 -- Fixes cmp cmdline position
