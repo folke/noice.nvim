@@ -47,7 +47,6 @@ function source:complete(_params, callback)
 end
 
 M.setup = function()
-  vim.notify("Registering noice with cmp")
   cmp.register_source("noice_popupmenu", source.new())
   for _, mode in ipairs({ ":" }) do
     if not cmp_config.cmdline[mode] then
