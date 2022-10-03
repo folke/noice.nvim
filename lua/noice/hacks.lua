@@ -1,6 +1,7 @@
 local require = require("noice.util.lazy")
 
 local Util = require("noice.util")
+local Cmdline = require("noice.ui.cmdline")
 
 -- HACK: a bunch of hacks to make Noice behave
 local M = {}
@@ -11,6 +12,7 @@ function M.setup()
   M.fix_notify()
   M.fix_nohlsearch()
   M.fix_redraw()
+  M.fix_cmp()
 end
 
 -- clear search_count on :nohlsearch
@@ -162,6 +164,50 @@ function M.fix_notify()
       return buf
     end
   end))
+end
+
+-- Fixes cmp cmdline position
+function M.fix_cmp()
+  ---@return {win_cursor:number[], screen_cursor:number[]}?
+  local function get()
+    local cursor = Cmdline.message.cursor
+    if cursor and cursor.buf then
+      local win = vim.fn.bufwinid(cursor.buf)
+      if win ~= -1 then
+        local win_cursor = { cursor.buf_line, cursor.col }
+        local pos = vim.fn.screenpos(win, win_cursor[1], win_cursor[2] + 1)
+        return { win_cursor = win_cursor, screen_cursor = { pos.row, pos.col - 1 } }
+      end
+    end
+  end
+
+  local api = require("cmp.utils.api")
+
+  local get_current_line = api.get_current_line
+  api.get_current_line = function()
+    if api.is_cmdline_mode() then
+      return Cmdline.message:last_line():content()
+    end
+    return get_current_line()
+  end
+
+  local get_cursor = api.get_cursor
+  api.get_cursor = function()
+    if api.is_cmdline_mode() then
+      local cursor = get()
+      return cursor and cursor.win_cursor or get_cursor()
+    end
+    return get_cursor()
+  end
+
+  local get_screen_cursor = api.get_screen_cursor
+  api.get_screen_cursor = function()
+    if api.is_cmdline_mode() then
+      local cursor = get()
+      return cursor and cursor.screen_cursor or get_screen_cursor()
+    end
+    return get_screen_cursor()
+  end
 end
 
 return M
