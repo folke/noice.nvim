@@ -20,6 +20,19 @@ M.defaults = {
       winhighlight = "Normal:NormalFloat,FloatBorder:FloatBorder",
     },
   },
+  vsplit = {
+    render = "split",
+    enter = false,
+    relative = "editor",
+    position = "right",
+    size = "20%",
+    close = {
+      keys = { "q", "<esc>" },
+    },
+    win_options = {
+      winhighlight = "Normal:NormalFloat,FloatBorder:FloatBorder",
+    },
+  },
   popup = {
     render = "popup",
     close = {
