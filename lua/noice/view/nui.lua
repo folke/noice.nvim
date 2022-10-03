@@ -51,6 +51,10 @@ function NuiView:create()
     buf_options = { buftype = "nofile" },
   }, self._opts, self._layout)
 
+  if type(opts.border) == "table" and opts.border.style == "none" then
+    opts.border.text = nil
+  end
+
   self._nui = self._opts.type == "split" and require("nui.split")(opts) or require("nui.popup")(opts)
 
   self._nui:on(Event.VimResized, function()
