@@ -1,7 +1,6 @@
 local require = require("noice.util.lazy")
 
 local Config = require("noice.config")
-local Util = require("noice.util")
 
 ---@class CallOptions
 ---@field catch? fun(err:string)
@@ -52,21 +51,37 @@ function M:on_error(err)
     return
   end
 
+  pcall(M.log, self, err)
   self:notify(err)
 end
 
-function M:notify(err)
+function M:log(data)
+  local file = Config.options.log
+  local fd = io.open(file, "a+")
+  if not fd then
+    error(("Could not open file %s for writing"):format(file))
+  end
+  fd:write("\n\n" .. os.date() .. "\n" .. self:format(data, true))
+  fd:close()
+end
+
+function M:format(err, stack)
   local lines = {}
   table.insert(lines, self._opts.msg or err)
 
-  if Config.options.debug then
+  if stack then
     if self._opts.msg then
       table.insert(lines, err)
     end
     table.insert(lines, debug.traceback("", 3))
   end
 
-  Util.error(table.concat(lines, "\n"))
+  return table.concat(lines, "\n")
+end
+
+function M:notify(err)
+  local Util = require("noice.util")
+  Util.error(self:format(err, Config.options.debug))
 end
 
 function M:__call(...)

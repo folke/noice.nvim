@@ -32,6 +32,7 @@ M.defaults = {
   routes = {}, -- @see section on routes
   status = {}, -- @see section on statusline components
   debug = false,
+  log = vim.fn.stdpath("state") .. "/noice.log",
 }
 
 --- @type NoiceConfig

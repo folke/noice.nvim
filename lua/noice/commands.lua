@@ -15,6 +15,9 @@ function M.setup()
     debug = function()
       Config.options.debug = not Config.options.debug
     end,
+    log = function()
+      vim.cmd.edit(Config.options.log)
+    end,
     enable = function()
       require("noice").enable()
     end,
