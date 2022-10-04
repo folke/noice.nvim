@@ -224,8 +224,8 @@ function M.fix_cmp()
     end
   end
 
-  local ok, api = pcall(require, "cmp.utils.api")
-  if not ok then
+  local api = require("cmp.utils.api")
+  if not api.lazy_exists() then
     -- cmp not availablle
     return
   end
