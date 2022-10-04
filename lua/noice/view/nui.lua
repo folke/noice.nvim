@@ -63,16 +63,6 @@ function NuiView:create()
     self:layout({ force = true })
   end)
 
-  self._nui:on({ Event.BufWinLeave }, function()
-    vim.schedule(function()
-      self._visible = false
-      if self._nui then
-        self._nui:unmount()
-        self._nui = nil
-      end
-    end)
-  end, { once = false })
-
   if self._opts.close and self._opts.close.events then
     self._nui:on(self._opts.close.events, function()
       self:hide()
@@ -134,6 +124,9 @@ function NuiView:show()
     self:create()
   end
 
+  if not self._nui._.mounted then
+    self._nui:mount()
+  end
   self._nui:show()
 
   self:render(self._nui.bufnr)
