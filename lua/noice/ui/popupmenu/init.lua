@@ -1,10 +1,15 @@
 local require = require("noice.util.lazy")
 
 local Util = require("noice.util")
-local cmp = require("cmp")
-local cmp_config = require("cmp.config")
+local Config = require("noice.config")
 
 local M = {}
+
+---@class PopupmenuBackend
+---@field setup fun()
+---@field on_show fun(state: Popupmenu)
+---@field on_select fun(state: Popupmenu)
+---@field on_hide fun()
 
 ---@class Popupmenu
 ---@field selected number
@@ -17,54 +22,19 @@ M.state = {
   items = {},
 }
 
----@class NoiceCmpSource: cmp.Source
----@field before_line string
----@field items {label: string}[]
-local source = {}
-source.new = function()
-  return setmetatable({
-    items = {},
-  }, { __index = source })
-end
+---@type PopupmenuBackend
+M.backend = nil
 
-function source:complete(_params, callback)
-  if not M.state.visible then
-    return callback()
+function M.setup()
+  if Config.options.popupmenu.backend == "cmp" then
+    M.backend = require("noice.ui.popupmenu.cmp")
   end
-
-  local items = {}
-
-  for i, item in ipairs(M.state.items) do
-    local word, _, _menu, _info = unpack(item) --[[@as string ]]
-    table.insert(items, {
-      label = word,
-      kind = cmp.lsp.CompletionItemKind.Variable,
-      preselect = i == (M.state.selected + 1),
-    })
-  end
-
-  callback({ items = items, isIncomplete = true })
-end
-
-M.setup = function()
-  cmp.register_source("noice_popupmenu", source.new())
-  for _, mode in ipairs({ ":" }) do
-    if not cmp_config.cmdline[mode] then
-      cmp.setup.cmdline(mode, {
-        mapping = cmp.mapping.preset.cmdline(),
-        sources = cmp.config.sources({
-          { name = "noice_popupmenu" },
-        }),
-      })
-      cmp.core:prepare()
-    end
-  end
+  M.backend.setup()
 end
 M.setup = Util.once(M.setup)
 
 ---@param items string[][]
 function M.on_show(_, items, selected, row, col, grid)
-  M.setup()
   M.state = {
     items = items,
     visible = true,
@@ -73,19 +43,19 @@ function M.on_show(_, items, selected, row, col, grid)
     col = col,
     grid = grid,
   }
-  if not cmp.core.view:visible() then
-    cmp.complete()
-  end
+  M.setup()
+  M.backend.on_show(M.state)
 end
 
 function M.on_select(_, selected)
   M.state.selected = selected
   M.state.visible = true
-  cmp.complete()
+  M.backend.on_select(M.state)
 end
 
 function M.on_hide()
   M.state.visible = false
+  M.backend.on_hide()
 end
 
 return M

@@ -224,7 +224,11 @@ function M.fix_cmp()
     end
   end
 
-  local api = require("cmp.utils.api")
+  local ok, api = pcall(require, "cmp.utils.api")
+  if not ok then
+    -- cmp not availablle
+    return
+  end
 
   local get_cursor = api.get_cursor
   api.get_cursor = function()

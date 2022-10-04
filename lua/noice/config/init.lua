@@ -21,6 +21,10 @@ M.defaults = {
       [":"] = { icon = " ", hl_group = "DiagnosticInfo", firstc = false },
     },
   },
+  popupmenu = {
+    enabled = false, -- disable if you use something like cmp-cmdline
+    backend = "cmp", -- backend to use to show regular cmdline completions. For now only 'cmp'
+  },
   history = {
     -- options for the message history that you get with `:Noice`
     view = "split",
