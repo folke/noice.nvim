@@ -160,6 +160,16 @@ and [Split](https://github.com/MunifTanjim/nui.nvim/tree/main/lua/nui/split).
 
 Size & position can additionally be specified as `"auto"`, to use the message height and width.
 
+`win_options.winhighlight` can also be a table like:
+
+```lua
+{
+  win_options = {
+    winhighlight = { Normal = "NormalFloat", FloatBorder = "FloatBorder" },
+  }
+}
+```
+
 **Notify Options**
 
 - **title** title to be used for the notification

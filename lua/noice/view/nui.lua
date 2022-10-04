@@ -41,6 +41,7 @@ local Util = require("noice.util")
 
 ---@class NuiView: NoiceView
 ---@field _nui? NuiPopup|NuiSplit
+---@field super NoiceView
 ---@field _layout {position: any, size: any}
 ---@diagnostic disable-next-line: undefined-field
 local NuiView = View:extend("NuiView")
@@ -56,6 +57,10 @@ function NuiView:create()
 
   if type(opts.border) == "table" and opts.border.style == "none" then
     opts.border.text = nil
+  end
+
+  if opts.win_options and opts.win_options.winhighlight then
+    opts.win_options.winhighlight = Util.get_win_highlight(opts.win_options.winhighlight)
   end
 
   self._nui = self._opts.type == "split" and require("nui.split")(opts) or require("nui.popup")(opts)

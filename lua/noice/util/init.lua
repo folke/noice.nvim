@@ -25,6 +25,18 @@ function M.module_exists(mod)
   return pcall(_G.require, mod) == true
 end
 
+---@param hl string|table<string,string>
+function M.get_win_highlight(hl)
+  if type(hl) == "string" then
+    return hl
+  end
+  local ret = {}
+  for key, value in pairs(hl) do
+    table.insert(ret, key .. ":" .. value)
+  end
+  return table.concat(ret, ",")
+end
+
 ---@param opts? {blocking:boolean, mode:boolean, input:boolean, redraw:boolean}
 function M.is_blocking(opts)
   opts = vim.tbl_deep_extend("force", {

@@ -17,7 +17,7 @@ M.defaults = {
       keys = { "q", "<esc>" },
     },
     win_options = {
-      winhighlight = "Normal:NormalFloat,FloatBorder:FloatBorder",
+      winhighlight = { Normal = "NormalFloat", FloatBorder = "FloatBorder" },
     },
   },
   vsplit = {
@@ -30,7 +30,7 @@ M.defaults = {
       keys = { "q", "<esc>" },
     },
     win_options = {
-      winhighlight = "Normal:NormalFloat,FloatBorder:FloatBorder",
+      winhighlight = { Normal = "NormalFloat", FloatBorder = "FloatBorder" },
     },
   },
   popup = {
@@ -49,7 +49,7 @@ M.defaults = {
       height = "60%",
     },
     win_options = {
-      winhighlight = "Normal:Float,FloatBorder:FloatBorder",
+      winhighlight = { Normal = "NormalFloat", FloatBorder = "FloatBorder" },
     },
   },
   cmdline = {
@@ -67,7 +67,7 @@ M.defaults = {
       style = "none",
     },
     win_options = {
-      winhighlight = "Normal:MsgArea",
+      winhighlight = { Normal = "MsgArea" },
     },
   },
   cmdline_popup = {
@@ -91,7 +91,7 @@ M.defaults = {
       },
     },
     win_options = {
-      winhighlight = "Normal:Normal,FloatBorder:DiagnosticInfo",
+      winhighlight = { Normal = "Normal", FloatBorder = "DiagnosticInfo" },
     },
     filter_options = {
       {
@@ -103,7 +103,7 @@ M.defaults = {
             },
           },
           win_options = {
-            winhighlight = "Normal:Normal,FloatBorder:DiagnosticWarn",
+            winhighlight = { Normal = "Normal", FloatBorder = "DiagnosticWarn" },
           },
         },
       },
