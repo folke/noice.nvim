@@ -3,6 +3,7 @@ local M = {}
 ---@type table<string, NoiceViewOptions>
 M.defaults = {
   popupmenu = {
+    position = "auto", -- when auto, then it will be positioned to the cmdline or cursor
     win_options = {
       winhighlight = {
         Normal = "Pmenu", -- change to NormalFloat to make it look like other floats

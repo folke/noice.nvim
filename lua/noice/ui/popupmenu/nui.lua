@@ -20,36 +20,52 @@ function M.create(state)
   height = math.min(height, #state.items)
 
   ---@type NuiPopupOptions
-  local opts = vim.tbl_deep_extend("force", Config.options.views.popupmenu or {}, {
-    enter = false,
-    relative = "cursor",
-    position = {
+  local opts = vim.deepcopy(Config.options.views.popupmenu or {})
+
+  opts.enter = false
+
+  local position_auto = opts.position == "auto" or not opts.position
+
+  if position_auto then
+    opts.relative = "cursor"
+    opts.position = {
       row = 1,
       col = 0,
-    },
-    size = {
+    }
+    opts.size = {
       height = height,
-    },
-  })
-  if opts.win_options and opts.win_options.winhighlight then
-    opts.win_options.winhighlight = Util.get_win_highlight(opts.win_options.winhighlight)
+    }
   end
+
+  Util.nui.fix(opts)
 
   ---@type string?
   local prefix = nil
 
   -- check if we need to anchor to the cmdline
   if state.grid == -1 then
-    local cursor = Util.cursor.get_cmdline_cursor()
-    if cursor then
-      prefix = vim.fn.getcmdline():sub(state.col + 1, vim.fn.getcmdpos())
-      opts.relative = "editor"
-      opts.position = {
-        row = cursor.screen_cursor[1],
-        col = cursor.screen_cursor[2] - vim.fn.getcmdpos() + state.col + 1,
-      }
+    prefix = vim.fn.getcmdline():sub(state.col + 1, vim.fn.getcmdpos())
+
+    if position_auto then
+      local cursor = Util.cursor.get_cmdline_cursor()
+      if cursor then
+        opts.relative = "editor"
+        opts.position = {
+          row = cursor.screen_cursor[1],
+          col = cursor.screen_cursor[2] - vim.fn.getcmdpos() + state.col + 1,
+        }
+      end
     end
   end
+
+  opts = vim.tbl_deep_extend(
+    "force",
+    opts,
+    Util.nui.get_layout({
+      width = 50,
+      height = height,
+    }, opts)
+  )
 
   M.menu = Menu(opts, {
     lines = vim.tbl_map(

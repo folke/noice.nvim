@@ -55,13 +55,7 @@ function NuiView:create()
   }, self._opts, self._layout)
   opts = vim.deepcopy(opts)
 
-  if type(opts.border) == "table" and opts.border.style == "none" then
-    opts.border.text = nil
-  end
-
-  if opts.win_options and opts.win_options.winhighlight then
-    opts.win_options.winhighlight = Util.get_win_highlight(opts.win_options.winhighlight)
-  end
+  Util.nui.fix(opts)
 
   self._nui = self._opts.type == "split" and require("nui.split")(opts) or require("nui.popup")(opts)
 
@@ -126,36 +120,7 @@ function NuiView:layout(opts)
 end
 
 function NuiView:get_layout()
-  local position = vim.deepcopy(self._opts.position)
-  local size = vim.deepcopy(self._opts.size)
-
-  ---@return number
-  local function minmax(min, max, value)
-    return math.max(min or 1, math.min(value, max or 1000))
-  end
-
-  if size and self._opts.type == "popup" then
-    if size == "auto" then
-      size = { height = "auto", width = "auto" }
-    end
-    if size.width == "auto" then
-      size.width = minmax(size.min_width, size.max_width, self:width())
-    end
-    if size.height == "auto" then
-      size.height = minmax(size.min_height, size.max_height, self:height())
-    end
-  end
-
-  if size and self._opts.type == "split" then
-    if size == "auto" then
-      if position == "top" or position == "bottom" then
-        size = minmax(self._opts.min_size, self._opts.max_size, self:height())
-      else
-        size = minmax(self._opts.min_size, self._opts.max_size, self:width())
-      end
-    end
-  end
-  return { size = size, position = position, relative = self._opts.relative }
+  return Util.nui.get_layout({ width = self:width(), height = self:height() }, self._opts)
 end
 
 function NuiView:show()
