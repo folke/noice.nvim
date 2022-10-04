@@ -65,7 +65,9 @@ function NuiView:create()
 
   self._nui:on({ Event.BufWinLeave }, function()
     vim.schedule(function()
-      self:hide()
+      self._visible = false
+      self._nui:unmount()
+      self._nui = nil
     end)
   end, { once = false })
 
