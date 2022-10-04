@@ -210,7 +210,7 @@ end
 -- Fixes cmp cmdline position
 function M.fix_cmp()
   local api = require("cmp.utils.api")
-  if not api.lazy_exists() then
+  if api.lazy_exists and not api.lazy_exists() then
     -- cmp not availablle
     return
   end
