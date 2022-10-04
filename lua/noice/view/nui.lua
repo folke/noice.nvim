@@ -85,14 +85,6 @@ function NuiView:create()
     end, { remap = false, nowait = true })
   end
 
-  -- HACK: https://github.com/MunifTanjim/nui.nvim/pull/196
-  local border_open_window = self._nui.border._open_window
-  self._nui.border._open_window = function(border, ...)
-    border.win_config.noautocmd = true
-    border_open_window(border, ...)
-    border.win_config.noautocmd = nil
-  end
-
   self._nui:mount()
   self:layout({ force = true })
 end
