@@ -190,6 +190,17 @@ See the Nui documentation for Popup
 Size & position can additionally be specified as `"auto"`, to use the message
 height and width.
 
+`win_options.winhighlight` can also be a table like:
+
+>
+    {
+      win_options = {
+        winhighlight = { Normal = "NormalFloat", FloatBorder = "FloatBorder" },
+      }
+    }
+<
+
+
 **Notify Options**
 
 
