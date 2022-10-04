@@ -42,25 +42,24 @@ local Util = require("noice.util")
 ---@class NuiView: NoiceView
 ---@field _nui? NuiPopup|NuiSplit
 ---@field super NoiceView
----@field _layout {position: any, size: any}
 ---@diagnostic disable-next-line: undefined-field
 local NuiView = View:extend("NuiView")
 
-function NuiView:create()
-  self._layout = self:get_layout()
-
-  ---@type NoiceNuiOptions
-  local opts = vim.tbl_deep_extend("force", {}, {
+function NuiView:update_options()
+  self._opts = vim.tbl_deep_extend("force", {}, {
     buf_options = { buftype = "nofile" },
-  }, self._opts, self._layout)
-  opts = vim.deepcopy(opts)
+  }, self._opts, self:get_layout())
 
-  Util.nui.fix(opts)
+  Util.nui.fix(self._opts)
+end
 
+function NuiView:create()
+  -- needed, since Nui mutates the options
+  local opts = vim.deepcopy(self._opts)
   self._nui = self._opts.type == "split" and require("nui.split")(opts) or require("nui.popup")(opts)
 
   self._nui:on(Event.VimResized, function()
-    self:layout({ force = true })
+    self:check_options()
   end)
 
   if self._opts.close and self._opts.close.events then
@@ -76,14 +75,28 @@ function NuiView:create()
   end
 
   self._nui:mount()
-  self:layout({ force = true })
 end
 
-function NuiView:reset()
+---@param old NoiceNuiOptions
+---@param new NoiceNuiOptions
+function NuiView:reset(old, new)
   if self._nui then
-    self._nui:unmount()
-    self._nui = nil
-    self._visible = false
+    local layout = false
+    local diff = vim.tbl_filter(function(key)
+      if vim.tbl_contains({ "relative", "size", "position" }, key) then
+        layout = true
+        return false
+      end
+      return true
+    end, Util.diff_keys(old, new))
+
+    if #diff > 0 then
+      self._nui:unmount()
+      self._nui = nil
+      self._visible = false
+    elseif layout then
+      self._nui:update_layout(self:get_layout())
+    end
   end
 end
 
@@ -106,15 +119,6 @@ function NuiView:hide()
   end
 end
 
----@param opts? { force: boolean }
-function NuiView:layout(opts)
-  opts = opts or {}
-  local layout = self:get_layout()
-  if opts.force or not vim.deep_equal(layout, self._layout) then
-    self._nui:update_layout(self:get_layout())
-  end
-end
-
 function NuiView:get_layout()
   return Util.nui.get_layout({ width = self:width(), height = self:height() }, self._opts)
 end
@@ -127,10 +131,10 @@ function NuiView:show()
   if not self._nui._.mounted then
     self._nui:mount()
   end
+
   self._nui:show()
 
   self:render(self._nui.bufnr)
-  self:layout({ force = not self._visible })
 end
 
 return NuiView

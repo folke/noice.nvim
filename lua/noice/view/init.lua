@@ -31,6 +31,7 @@ function View.get_view(view, opts)
   end
   ---@type NoiceView
   local class = Util.try(require, "noice.view." .. (opts.render or view))
+  opts.view = view
   return class(opts)
 end
 
@@ -39,22 +40,25 @@ function View:init(opts)
   self._tick = 0
   self._messages = {}
   self._opts = opts or {}
-  self._view_opts = vim.tbl_deep_extend("force", {}, self._opts)
   self._visible = true
+  self._view_opts = vim.deepcopy(self._opts)
+  self:update_options()
 end
 
-function View:_calc_opts()
-  local orig_opts = vim.tbl_deep_extend("force", {}, self._opts)
-  self._opts = vim.tbl_deep_extend("force", {}, self._view_opts)
-  if self._opts.filter_options then
-    for _, fo in ipairs(self._opts.filter_options) do
-      if Filter.has(self._messages, fo.filter) then
-        self._opts = vim.tbl_deep_extend("force", self._opts, fo.opts or {})
-      end
+function View:update_options() end
+
+function View:check_options()
+  ---@type NoiceViewOptions
+  local old = vim.deepcopy(self._opts)
+  self._opts = vim.deepcopy(self._view_opts)
+  for _, fo in ipairs(self._opts.filter_options or {}) do
+    if Filter.has(self._messages, fo.filter) then
+      self._opts = vim.tbl_deep_extend("force", self._opts, fo.opts or {})
     end
   end
-  if not vim.deep_equal(orig_opts, self._opts) then
-    self:reset()
+  self:update_options()
+  if not vim.deep_equal(old, self._opts) then
+    self:reset(old, self._opts)
   end
 end
 
@@ -71,7 +75,7 @@ function View:display(messages)
   if dirty then
     self._messages = messages
     if #self._messages > 0 then
-      self:_calc_opts()
+      self:check_options()
 
       Hacks.block_redraw = true
       Util.try(self.show, self)
@@ -87,7 +91,9 @@ function View:display(messages)
   return false
 end
 
-function View:reset() end
+---@param old NoiceViewOptions
+---@param new NoiceViewOptions
+function View:reset(old, new) end
 
 function View:show()
   Util.error("Missing implementation `View:show()` for %s", self)
