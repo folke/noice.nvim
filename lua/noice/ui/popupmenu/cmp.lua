@@ -23,9 +23,8 @@ function source:complete(_params, callback)
   local items = {}
 
   for i, item in ipairs(Popupmenu.state.items) do
-    local word, _, _menu, _info = unpack(item) --[[@as string ]]
     table.insert(items, {
-      label = word,
+      label = item.word,
       kind = cmp.lsp.CompletionItemKind.Variable,
       preselect = i == (Popupmenu.state.selected + 1),
     })
