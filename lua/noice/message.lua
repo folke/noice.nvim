@@ -15,7 +15,7 @@ local _id = 0
 ---@field mtime number
 ---@field tick number
 ---@field kind? NoiceKind
----@field cursor? { line: integer, col: integer, buf?: number, buf_line?: number }
+---@field cursor? { line: integer, col: integer, buf?: number, buf_line?: number, offset?: number }
 ---@diagnostic disable-next-line: undefined-field
 local Message = Block:extend("NoiceBlock")
 

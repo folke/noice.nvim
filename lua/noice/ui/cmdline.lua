@@ -108,8 +108,8 @@ function M.update()
 
       M.message:append(cmdline:chunks(firstc))
       M.message:append(" ")
-      local pos = cmdline.pos + #cmdline.prompt + (firstc and #cmdline.firstc or 0)
-      M.message.cursor = { line = M.message:height(), col = pos + icon_width }
+      local pos = cmdline.pos + vim.api.nvim_strwidth(cmdline.prompt) + (firstc and #cmdline.firstc or 0) + icon_width
+      M.message.cursor = { line = M.message:height(), col = pos, offset = pos - cmdline.pos }
     end
   end
 
