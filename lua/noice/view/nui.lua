@@ -100,12 +100,14 @@ function NuiView:hide()
     self._visible = false
 
     Util.protect(function()
-      if not self._visible then
+      if self._nui and not self._visible then
         self._nui:hide()
       end
     end, {
       finally = function()
-        self._nui._.loading = false
+        if self._nui then
+          self._nui._.loading = false
+        end
       end,
       retry_on_E11 = true,
     })()
