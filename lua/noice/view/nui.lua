@@ -47,9 +47,12 @@ local NuiView = View:extend("NuiView")
 
 function NuiView:create()
   self._layout = self:get_layout()
-  local opts = vim.tbl_deep_extend("force", {
+
+  ---@type NoiceNuiOptions
+  local opts = vim.tbl_deep_extend("force", {}, {
     buf_options = { buftype = "nofile" },
   }, self._opts, self._layout)
+  opts = vim.deepcopy(opts)
 
   if type(opts.border) == "table" and opts.border.style == "none" then
     opts.border.text = nil
