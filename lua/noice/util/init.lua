@@ -22,6 +22,24 @@ function M.once(fn)
   end
 end
 
+---@param a table<string, any>
+---@param b table<string, any>
+---@return string[]
+function M.diff_keys(a, b)
+  local diff = {}
+  for k, _ in pairs(a) do
+    if not vim.deep_equal(a[k], b[k]) then
+      diff[k] = true
+    end
+  end
+  for k, _ in pairs(b) do
+    if not vim.deep_equal(a[k], b[k]) then
+      diff[k] = true
+    end
+  end
+  return vim.tbl_keys(diff)
+end
+
 function M.module_exists(mod)
   return pcall(_G.require, mod) == true
 end
