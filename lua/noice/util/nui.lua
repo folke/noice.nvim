@@ -29,9 +29,10 @@ end
 
 ---@param dim {width: number, height:number}
 ---@param opts NoiceViewOptions
+---@return NoiceNuiOptions
 function M.get_layout(dim, opts)
-  local position = opts.position
-  local size = opts.size
+  local position = vim.deepcopy(opts.position)
+  local size = vim.deepcopy(opts.size)
 
   ---@return number
   local function minmax(min, max, value)
