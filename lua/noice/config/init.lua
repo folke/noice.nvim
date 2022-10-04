@@ -38,6 +38,10 @@ M.defaults = {
   status = {}, -- @see section on statusline components
   debug = false,
   log = vim.fn.stdpath("state") .. "/noice.log",
+  experimental = {
+    -- this uses a native cursor instead of the fake one.
+    native_cursor = false,
+  },
 }
 
 --- @type NoiceConfig

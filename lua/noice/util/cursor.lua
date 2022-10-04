@@ -10,12 +10,14 @@ local M = {}
 ---@param col number (0-indexing)
 function M.render_cursor(bufnr, row, col)
   -- disable for now. Doesn't work will due to triggering of autocmds
-  -- local win = vim.fn.bufwinid(bufnr)
-  -- if win ~= -1 then
-  --   vim.api.nvim_win_set_cursor(win, { row, col })
-  --   vim.api.nvim_set_current_win(win)
-  --   return
-  -- end
+  if Config.options.experimental.native_cursor then
+    local win = vim.fn.bufwinid(bufnr)
+    if win ~= -1 then
+      vim.api.nvim_win_set_cursor(win, { row, col })
+      vim.api.nvim_set_current_win(win)
+      return
+    end
+  end
   M.render_fake_cursor(bufnr, row, col)
 end
 
