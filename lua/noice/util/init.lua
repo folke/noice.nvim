@@ -21,6 +21,10 @@ function M.once(fn)
   end
 end
 
+function M.module_exists(mod)
+  return pcall(_G.require, mod) == true
+end
+
 ---@param opts? {blocking:boolean, mode:boolean, input:boolean, redraw:boolean}
 function M.is_blocking(opts)
   opts = vim.tbl_deep_extend("force", {
