@@ -1,6 +1,7 @@
 local require = require("noice.util.lazy")
 
 local Config = require("noice.config")
+local Cmdline = require("noice.ui.cmdline")
 
 local M = {}
 
@@ -37,6 +38,20 @@ function M.render_fake_cursor(bufnr, row, col)
       end_col = col + 1,
       hl_group = "Cursor",
     })
+  end
+end
+
+---@return {win: window, buf: buffer, win_cursor:number[], screen_cursor:number[]}?
+function M.get_cmdline_cursor()
+  local cursor = Cmdline.message.cursor
+  if cursor and cursor.buf then
+    local win = vim.fn.bufwinid(cursor.buf)
+    local offset = cursor.col - vim.fn.getcmdpos() + 1
+    if win ~= -1 then
+      local buf_cursor = { cursor.buf_line, vim.fn.getcmdpos() - 1 }
+      local pos = vim.fn.screenpos(win, buf_cursor[1], buf_cursor[2] + 1 + offset)
+      return { win = win, buf = cursor.buf, win_cursor = buf_cursor, screen_cursor = { pos.row, pos.col - 1 } }
+    end
   end
 end
 

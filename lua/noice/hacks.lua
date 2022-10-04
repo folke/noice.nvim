@@ -210,20 +210,6 @@ end
 
 -- Fixes cmp cmdline position
 function M.fix_cmp()
-  ---@return {win_cursor:number[], screen_cursor:number[]}?
-  local function get()
-    local cursor = Cmdline.message.cursor
-    if cursor and cursor.buf then
-      local win = vim.fn.bufwinid(cursor.buf)
-      local offset = cursor.col - vim.fn.getcmdpos() + 1
-      if win ~= -1 then
-        local win_cursor = { cursor.buf_line, vim.fn.getcmdpos() - 1 }
-        local pos = vim.fn.screenpos(win, win_cursor[1], win_cursor[2] + 1 + offset)
-        return { win_cursor = win_cursor, screen_cursor = { pos.row, pos.col - 1 } }
-      end
-    end
-  end
-
   local api = require("cmp.utils.api")
   if not api.lazy_exists() then
     -- cmp not availablle
@@ -233,7 +219,7 @@ function M.fix_cmp()
   local get_cursor = api.get_cursor
   api.get_cursor = function()
     if api.is_cmdline_mode() then
-      local cursor = get()
+      local cursor = Util.cursor.get_cmdline_cursor()
       return cursor and cursor.win_cursor or get_cursor()
     end
     return get_cursor()
@@ -242,7 +228,7 @@ function M.fix_cmp()
   local get_screen_cursor = api.get_screen_cursor
   api.get_screen_cursor = function()
     if api.is_cmdline_mode() then
-      local cursor = get()
+      local cursor = Util.cursor.get_cmdline_cursor()
       return cursor and cursor.screen_cursor or get_screen_cursor()
     end
     return get_screen_cursor()
