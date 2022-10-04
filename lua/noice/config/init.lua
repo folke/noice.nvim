@@ -23,7 +23,8 @@ M.defaults = {
   },
   popupmenu = {
     enabled = true, -- disable if you use something like cmp-cmdline
-    backend = "cmp", -- backend to use to show regular cmdline completions. For now only 'cmp'
+    ---@type 'nui'|'cmp'
+    backend = "nui", -- backend to use to show regular cmdline completions
   },
   history = {
     -- options for the message history that you get with `:Noice`

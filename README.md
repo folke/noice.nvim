@@ -67,7 +67,9 @@ Check the [wiki](https://github.com/folke/noice.nvim/wiki/Configuration-Recipes)
   },
   popupmenu = {
     enabled = true, -- disable if you use something like cmp-cmdline
-    backend = "cmp", -- backend to use to show regular cmdline completions. For now only 'cmp'
+    ---@type 'nui'|'cmp'
+    backend = "nui", -- backend to use to show regular cmdline completions
+    -- You can specify options for nui under `config.views.popupmenu`
   },
   history = {
     -- options for the message history that you get with `:Noice`
@@ -133,6 +135,8 @@ local filter = {
 - **popup**
 - **cmdline** bottom line, similar to the classic cmdline
 - **cmdline_popup** fancy cmdline popup, with different styles according to the cmdline mode
+
+There's one special view `popupmenu`. Options from that view are used to render the popupmenu if backend is **nui**.
 
 Please refer to [noice.config.views](https://github.com/folke/noice.nvim/blob/main/lua/noice/config/views.lua) to see the options.
 

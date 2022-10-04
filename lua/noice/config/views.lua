@@ -2,6 +2,16 @@ local M = {}
 
 ---@type table<string, NoiceViewOptions>
 M.defaults = {
+  popupmenu = {
+    win_options = {
+      winhighlight = {
+        Normal = "Pmenu", -- change to NormalFloat to make it look like other floats
+        FloatBorder = "FloatBorder", -- border highlight
+        CursorLine = "PmenuSel", -- used for highlighting the selected item
+        PmenuMatch = "Special", -- used to highlight the part of the item that matches the input
+      },
+    },
+  },
   notify = {
     render = "notify",
     level = vim.log.levels.INFO,
