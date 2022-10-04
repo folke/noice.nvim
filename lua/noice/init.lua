@@ -7,7 +7,7 @@ function M.setup(opts)
     -- require("noice.util").error("Noice needs Neovim >= 0.9.0 (nightly)")
     return
   end
-  if not pcall(require, "notify") then
+  if not pcall(_G.require, "notify") then
     require("noice.util").error("Noice needs nvim-notify to work properly")
     return
   end
