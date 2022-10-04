@@ -22,7 +22,7 @@ M.defaults = {
     },
   },
   popupmenu = {
-    enabled = false, -- disable if you use something like cmp-cmdline
+    enabled = true, -- disable if you use something like cmp-cmdline
     backend = "cmp", -- backend to use to show regular cmdline completions. For now only 'cmp'
   },
   history = {
