@@ -2,7 +2,6 @@ local require = require("noice.util.lazy")
 
 local Manager = require("noice.manager")
 local Config = require("noice.config")
-local Util = require("noice.util")
 
 ---@param filter NoiceFilter
 ---@return NoiceStatus
@@ -45,12 +44,19 @@ local function NoiceStatus(filter)
   }
 end
 
+local empty_status = NoiceStatus({ event = "__will_never_match__" })
+
 ---@type table<string, NoiceStatus>
 local status = {}
 
 return setmetatable(status, {
   __index = function(_, key)
-    status[key] = NoiceStatus(Config.options.status[key])
-    return status[key]
+    if Config.options.status and Config.options.status[key] then
+      status[key] = NoiceStatus(Config.options.status[key])
+      return status[key]
+    else
+      -- can happen when Noice is not loaded yet. Return an empty status
+      return empty_status
+    end
   end,
 })
