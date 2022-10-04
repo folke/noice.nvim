@@ -26,6 +26,41 @@ function M.module_exists(mod)
   return pcall(_G.require, mod) == true
 end
 
+function M.diff(a, b)
+  a = vim.deepcopy(a)
+  b = vim.deepcopy(b)
+  M._diff(a, b)
+  return { left = a, right = b }
+end
+
+function M._diff(a, b)
+  if a == b then
+    return true
+  end
+  if type(a) ~= type(b) then
+    return false
+  end
+  if type(a) == "table" then
+    local equal = true
+    for k, v in pairs(a) do
+      if M._diff(v, b[k]) then
+        a[k] = nil
+        b[k] = nil
+      else
+        equal = false
+      end
+    end
+    for k, _ in pairs(b) do
+      if a[k] == nil then
+        equal = false
+        break
+      end
+    end
+    return equal
+  end
+  return false
+end
+
 ---@param opts? {blocking:boolean, mode:boolean, input:boolean, redraw:boolean}
 function M.is_blocking(opts)
   opts = vim.tbl_deep_extend("force", {
