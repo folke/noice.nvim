@@ -105,6 +105,7 @@ M.defaults = {
     },
     win_options = {
       winhighlight = { Normal = "Normal", FloatBorder = "DiagnosticInfo" },
+      cursorline = false,
     },
     filter_options = {
       {
