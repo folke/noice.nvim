@@ -52,9 +52,12 @@ function M.setup()
 end
 
 function M.on_show()
-  if not cmp.core.view:visible() then
-    cmp.complete()
-  end
+  local config = vim.deepcopy(cmp.get_config())
+  config.sources = cmp.config.sources({ { name = "noice_popupmenu" } })
+  cmp.core:prepare()
+  cmp.complete({
+    config = config,
+  })
 end
 
 function M.on_select()
