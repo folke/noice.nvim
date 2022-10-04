@@ -73,7 +73,7 @@ function M:format(err, stack)
     if self._opts.msg then
       table.insert(lines, err)
     end
-    table.insert(lines, debug.traceback("", 3))
+    table.insert(lines, debug.traceback("", 5))
   end
 
   return table.concat(lines, "\n")
