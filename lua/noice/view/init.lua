@@ -74,7 +74,7 @@ function View:display(messages)
   end
 
   if dirty then
-    self._messages = messages
+    self:format(messages)
     if #self._messages > 0 then
       self:check_options()
 
@@ -90,6 +90,17 @@ function View:display(messages)
     return true
   end
   return false
+end
+
+---@param messages NoiceMessage[]
+function View:format(messages)
+  self._messages = vim.tbl_map(
+    ---@param message NoiceMessage
+    function(message)
+      return require("noice.format").format(message)
+    end,
+    messages
+  )
 end
 
 ---@param old NoiceViewOptions
@@ -139,24 +150,23 @@ end
 ---@param opts? {offset: number, highlight: boolean, messages?: NoiceMessage[]} line number (1-indexed), if `highlight`, then only highlight
 function View:render(buf, opts)
   opts = opts or {}
-  opts.offset = opts.offset or 1
+  local linenr = opts.offset or 1
 
   if self._opts.buf_options then
     require("nui.utils")._.set_buf_options(buf, self._opts.buf_options)
   end
 
   if not opts.highlight then
-    vim.api.nvim_buf_set_lines(buf, opts.offset - 1, -1, false, {})
+    vim.api.nvim_buf_set_lines(buf, linenr - 1, -1, false, {})
   end
 
   for _, m in ipairs(opts.messages or self._messages) do
     if opts.highlight then
-      m:highlight(buf, Config.ns, opts.offset)
+      m:highlight(buf, Config.ns, linenr)
     else
-      m:render(buf, Config.ns, opts.offset)
+      m:render(buf, Config.ns, linenr)
     end
-    m:highlight_cursor(buf, Config.ns, opts.offset)
-    opts.offset = opts.offset + m:height()
+    linenr = linenr + m:height()
   end
 end
 
