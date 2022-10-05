@@ -9,6 +9,10 @@ Table of Contents                               *noice.nvim-table-of-contents*
   - Requirements                                     |noice.nvim-requirements|
   - Installation                                     |noice.nvim-installation|
   - Configuration                                   |noice.nvim-configuration|
+  - Filters                                               |noice.nvim-filters|
+  - Views                                                   |noice.nvim-views|
+  - Routes                                                 |noice.nvim-routes|
+  - Statusline Components                   |noice.nvim-statusline-components|
   - Usage                                                   |noice.nvim-usage|
   - Known Issues                                     |noice.nvim-known-issues|
 
@@ -47,7 +51,6 @@ REQUIREMENTS                                         *noice.nvim-requirements*
 - Neovim >= 0.8.0
 - nui.nvim <https://github.com/MunifTanjim/nui.nvim>: used for proper rendering and multiple views
 - nvim-notify <https://github.com/rcarriga/nvim-notify>: notification view
-- nvim-cmp <https://github.com/hrsh7th/nvim-cmp>: used for rendering the regular cmdline completions or if you use cmp-cmdline <https://github.com/hrsh7th/cmp-cmdline/>
 
 
 INSTALLATION                                         *noice.nvim-installation*
@@ -66,7 +69,6 @@ Install the plugin with your preferred package manager:
         -- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
         "MunifTanjim/nui.nvim",
         "rcarriga/nvim-notify",
-        "hrsh7th/nvim-cmp",
         }
     })
 <
@@ -113,7 +115,7 @@ for configuration recipes.
 <
 
 
-FILTERS ~
+FILTERS                                                   *noice.nvim-filters*
 
 **Noice** uses filters to route messages to specific views.
 
@@ -144,7 +146,7 @@ Example:
 <
 
 
-VIEWS ~
+VIEWS                                                       *noice.nvim-views*
 
 **Noice** comes with the following built-in renderers: - **popup** powered by
 nui.nvim <https://github.com/MunifTanjim/nui.nvim> - **split** powered by
@@ -186,39 +188,92 @@ Example:
 <
 
 
-**Nui Options**
+NUI OPTIONS ~
 
 See the Nui documentation for Popup
 <https://github.com/MunifTanjim/nui.nvim/tree/main/lua/nui/popup> and Split
 <https://github.com/MunifTanjim/nui.nvim/tree/main/lua/nui/split>.
 
-Size & position can additionally be specified as `"auto"`, to use the message
-height and width.
+<table>
 
-`win_options.winhighlight` can also be a table like:
+<tr>
+
+<td>
+
+Option
+
+</td>
+
+<td>
+
+Description
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>
+
+size, position ~
+
+</td>
+
+<td>
+
+Size, position and their constituents can additionally be specified as "auto" ~, to use the message height and width.
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>
+
+win_options.winhighlight ~
+
+</td>
+
+<td>
+
+String or can also be a table like:
 
 >
     {
       win_options = {
-        winhighlight = { Normal = "NormalFloat", FloatBorder = "FloatBorder" },
+        winhighlight = {
+          Normal = "NormalFloat",
+          FloatBorder = "FloatBorder"
+        },
       }
     }
 <
 
 
-**Notify Options**
+</td>
+
+</tr>
+
+</table>
+
+NOTIFY OPTIONS ~
+
+│   Option    │       Type       │ Default  │                                                              Description                                                              │
+│**title**    │string            │nil       │title to be used for the notification. Uses Message.title if available.                                                                │
+│**replace**  │boolean           │true      │when true, messages routing to the same notify instance will replace existing messages instead of pushing a new notification every time│
+│**merge**    │boolean           │true      │Merge messages into one Notification or create separate notifications                                                                  │
+│**level**    │number\|string    │"info"    │notification level. Uses Message.level if available.                                                                                   │
+│**highlight**│boolean           │true      │Highlight message or render as plain text                                                                                              │
 
 
-- **title** title to be used for the notification
-- **replace** `boolean` when true, messages routing to the same notify instance will replace existing messages instead of pushing a new notification every time
-
-
-**Virtual Text Options**
+VIRTUAL TEXT OPTIONS ~
 
 Right now there’s only an option to set the `hl_group` used to render the
 virtual text.
 
-ROUTES ~
+ROUTES                                                     *noice.nvim-routes*
 
 A **route** has a `filter`, `view` and optional `opts` attribute. - **view**:
 one of the views (built-in or custom) - **filter** a filter for messages
@@ -236,7 +291,7 @@ an overview of the default routes.
 
 **Routes** passed to `setup()` will be prepended to the default routes.
 
-Example:
+Example
 
 >
     -- skip search_count messages instead of showing them as virtual text
@@ -261,7 +316,7 @@ Example:
 <
 
 
-STATUSLINE COMPONENTS ~
+STATUSLINE COMPONENTS                       *noice.nvim-statusline-components*
 
 **Noice** comes with the following statusline components: **ruler**
 **message**: last line of the last message (`event=show_msg`) **command**:
@@ -278,8 +333,7 @@ Statusline components have the following methods: - **get**: gets the content
 of the message **without** highlights - **get_hl**: gets the content of the
 message **with** highlights - **has**: checks if the component is available
 
-Example of configuring lualine.nvim
-<https://github.com/nvim-lualine/lualine.nvim>
+Example of configuring <a href="https://github.com/nvim-lualine/lualine.nvim">lualine.nvim</a>
 
 >
     require("lualine").setup({
