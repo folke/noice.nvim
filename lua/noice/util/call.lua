@@ -11,6 +11,7 @@ local Config = require("noice.config")
 local defaults = {
   retry_on_vim_errors = true,
   retry_on_E11 = false,
+  ignore_keyboard_interrupt = true,
 }
 
 ---@class Call
@@ -38,6 +39,10 @@ end
 function M:on_error(err)
   if self._opts.catch then
     pcall(self._opts.catch, err)
+  end
+
+  if self._opts.ignore_keyboard_interrupt and err:lower():find("keyboard interrupt") then
+    return
   end
 
   -- catch any Vim Errors and retry once
