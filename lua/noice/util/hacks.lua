@@ -1,7 +1,7 @@
 local require = require("noice.util.lazy")
 
 local Util = require("noice.util")
-local Router = require("noice.router")
+local Router = require("noice.message.router")
 local Api = require("noice.api")
 
 -- HACK: a bunch of hacks to make Noice behave
@@ -39,7 +39,7 @@ function M.fix_nohlsearch()
     callback = function()
       local cmd = vim.fn.getcmdline()
       if cmd:find("noh") == 1 then
-        require("noice.manager").clear({ kind = "search_count" })
+        require("noice.message.manager").clear({ kind = "search_count" })
       end
     end,
   })
@@ -146,7 +146,7 @@ function M.fix_input()
         return fn(unpack(args))
       end
 
-      local Manager = require("noice.manager")
+      local Manager = require("noice.message.manager")
 
       -- do any updates now before blocking
       M.before_input = true

@@ -3,8 +3,8 @@ local require = require("noice.util.lazy")
 local Config = require("noice.config")
 local Util = require("noice.util")
 local Object = require("nui.object")
-local Filter = require("noice.filter")
-local Hacks = require("noice.hacks")
+local Filter = require("noice.message.filter")
+local Hacks = require("noice.util.hacks")
 
 ---@class NoiceViewBaseOptions
 ---@field buf_options? table<string,any>
@@ -97,7 +97,7 @@ function View:format(messages)
   self._messages = vim.tbl_map(
     ---@param message NoiceMessage
     function(message)
-      return require("noice.format").format(message)
+      return require("noice.text.format").format(message)
     end,
     messages
   )

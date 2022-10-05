@@ -1,7 +1,7 @@
 local require = require("noice.util.lazy")
 
 local View = require("noice.view")
-local Manager = require("noice.manager")
+local Manager = require("noice.message.manager")
 local Config = require("noice.config")
 local Util = require("noice.util")
 

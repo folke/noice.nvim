@@ -30,7 +30,7 @@ M.defaults = {
     -- options for the message history that you get with `:Noice`
     view = "split",
     opts = { enter = true },
-    filter = { event = "msg_show", ["not"] = { kind = { "search_count", "echo" } } },
+    filter = { event = { "msg_show", "notify" }, ["not"] = { kind = { "search_count", "echo" } } },
   },
   throttle = 1000 / 30, -- how frequently does Noice need to check for ui updates? This has no effect when in blocking mode.
   views = {}, -- @see section on views

@@ -1,6 +1,6 @@
 local require = require("noice.util.lazy")
 
-local Hacks = require("noice.hacks")
+local Hacks = require("noice.util.hacks")
 
 local M = {}
 

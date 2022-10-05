@@ -1,6 +1,6 @@
 local require = require("noice.util.lazy")
 
-local Highlight = require("noice.highlight")
+local Highlight = require("noice.text.highlight")
 local NuiLine = require("nui.line")
 local Object = require("nui.object")
 

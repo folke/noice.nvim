@@ -1,6 +1,6 @@
 local require = require("noice.util.lazy")
 
-local Manager = require("noice.manager")
+local Manager = require("noice.message.manager")
 local Message = require("noice.message")
 
 local M = {}
