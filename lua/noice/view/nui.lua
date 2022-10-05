@@ -75,6 +75,9 @@ function NuiView:create()
   end
 
   self._nui:mount()
+
+  -- NOTE: this is needed, to make sure the border is rendered properly during blocking events
+  self._nui:update_layout(self:get_layout())
 end
 
 ---@param old NoiceNuiOptions
