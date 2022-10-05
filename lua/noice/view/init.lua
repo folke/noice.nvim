@@ -103,17 +103,19 @@ function View:hide()
   Util.error("Missing implementation `View:hide()` for %s", self)
 end
 
-function View:height()
+---@param messages? NoiceMessage[]
+function View:height(messages)
   local ret = 0
-  for _, m in ipairs(self._messages) do
+  for _, m in ipairs(messages or self._messages) do
     ret = ret + m:height()
   end
   return ret
 end
 
-function View:width()
+---@param messages? NoiceMessage[]
+function View:width(messages)
   local ret = 0
-  for _, m in ipairs(self._messages) do
+  for _, m in ipairs(messages or self._messages) do
     ret = math.max(ret, m:width())
   end
   return ret
@@ -133,7 +135,7 @@ function View:content()
 end
 
 ---@param buf number buffer number
----@param opts? {offset: number, highlight: boolean} line number (1-indexed), if `highlight`, then only highlight
+---@param opts? {offset: number, highlight: boolean, messages?: NoiceMessage[]} line number (1-indexed), if `highlight`, then only highlight
 function View:render(buf, opts)
   opts = opts or {}
   opts.offset = opts.offset or 1
@@ -146,7 +148,7 @@ function View:render(buf, opts)
     vim.api.nvim_buf_set_lines(buf, opts.offset - 1, -1, false, {})
   end
 
-  for _, m in ipairs(self._messages) do
+  for _, m in ipairs(opts.messages or self._messages) do
     if opts.highlight then
       m:highlight(buf, Config.ns, opts.offset)
     else
