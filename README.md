@@ -118,31 +118,31 @@ local filter = {
 
 ## 🌅 Views
 
-**Noice** comes with the following built-in renderers:
-- **popup** powered by [nui.nvim](https://github.com/MunifTanjim/nui.nvim)
-- **split** powered by [nui.nvim](https://github.com/MunifTanjim/nui.nvim)
-- **notify** powered by [nvim-notify](https://github.com/rcarriga/nvim-notify)
-- **virtualtext** shows the message as virtualtext (for example for `search_count`)
+**Noice** comes with the following built-in backends:
+- **popup**: powered by [nui.nvim](https://github.com/MunifTanjim/nui.nvim)
+- **split**: powered by [nui.nvim](https://github.com/MunifTanjim/nui.nvim)
+- **notify**: powered by [nvim-notify](https://github.com/rcarriga/nvim-notify)
+- **virtualtext**: shows the message as virtualtext (for example for `search_count`)
 
-**Views** (`config.views`) are combinations of `render` methods and options.
-
+A **View** (`config.views`) is a combination of a `backend` and options.
 **Noice** comes with the following built-in views with sane defaults:
-- **notify** with default level and replaces existing notification by default
-- **split** horizontal split
-- **vsplit** vertical split
-- **popup**
-- **cmdline** bottom line, similar to the classic cmdline
-- **cmdline_popup** fancy cmdline popup, with different styles according to the cmdline mode
 
-There's one special view `popupmenu`. Options from that view are used to render the popupmenu if backend is **nui**.
+| View | Backend | Description |
+| --- | --- | --- |
+| **notify** | `notify` | *nvim-notify* with `level=true`, `replace=true`, `merge=true` |
+| **split** | `split` | horizontal split |
+| **vsplit** | `split` | vertical split |
+| **popup** | `popup` | simple popup |
+| **cmdline** | `popup` | bottom line, similar to the classic cmdline |
+| **cmdline_popup** | `popup` | fancy cmdline popup, with different styles according to the cmdline mode |
+| **popupmenu** | `nui.menu` | special view with the options used to render the popupmenu when backend is **nui**
 
 Please refer to [noice.config.views](https://github.com/folke/noice.nvim/blob/main/lua/noice/config/views.lua) to see the options.
-
 Any options passed to existing views in `config.views`, will override those options only.
-
 You can configure completely new views and use them in custom routes.
 
-Example:
+<details>
+<summary>Example:</summary>
 
 ```lua
 -- override the default split view to always enter the split when it opens
@@ -154,6 +154,7 @@ require("noice").setup({
       }
   })
 ```
+</details>
 
 ### Nui Options
 
@@ -209,12 +210,13 @@ A **route** has a `filter`, `view` and optional `opts` attribute.
 - **opts**: options for the view and the route
 
 Route options can be any of the view options above, or one of:
-- **skip**: messages matching this filter will be skipped and not shown in any views
-- **stop** (`boolean`) defaults to `true`. When `false` and a route matches the filter,
-then other routes can still process the message too. Useful if you want certain messages to be shown in multiple views.
+
+| Option | Type | Default | Description |
+| --- | --- | --- | --- |
+| **skip** | `boolean` | `false` | messages matching this filter will be skipped and not shown in any views |
+| **stop** | `boolean` | `true` | When `false` and a route matches the filter, then other routes can still process the message too. Useful if you want certain messages to be shown in multiple views. |
 
 Please refer to [noice.config.routes](https://github.com/folke/noice.nvim/blob/main/lua/noice/config/routes.lua) for an overview of the default routes.
-
 **Routes** passed to `setup()` will be prepended to the default routes.
 
 <details>
