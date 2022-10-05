@@ -91,6 +91,7 @@ function NotifyView:show()
     end,
     on_open = function(win)
       self.win = win
+      vim.api.nvim_win_set_option(win, "foldenable", false)
     end,
     on_close = function()
       self.notif = nil

@@ -47,7 +47,12 @@ local NuiView = View:extend("NuiView")
 
 function NuiView:update_options()
   self._opts = vim.tbl_deep_extend("force", {}, {
-    buf_options = { buftype = "nofile" },
+    buf_options = {
+      buftype = "nofile",
+    },
+    win_options = {
+      foldenable = false,
+    },
   }, self._opts, self:get_layout())
 
   Util.nui.fix(self._opts)
