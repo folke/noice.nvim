@@ -5,8 +5,8 @@ local Util = require("noice.util")
 local Hacks = require("noice.hacks")
 local Router = require("noice.router")
 
----@alias NoiceEvent MsgEvent|CmdlineEvent
----@alias NoiceKind MsgKind
+---@alias NoiceEvent MsgEvent|CmdlineEvent|NotifyEvent
+---@alias NoiceKind MsgKind|NotifyLevel
 
 local M = {}
 M._attached = false

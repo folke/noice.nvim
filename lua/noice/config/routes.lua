@@ -75,16 +75,13 @@ function M.defaults()
     {
       view = "notify",
       filter = {
-        error = true,
+        any = {
+          { event = "notify" },
+          { error = true },
+          { warning = true },
+        },
       },
-      opts = { level = vim.log.levels.ERROR, replace = false, title = "Error" },
-    },
-    {
-      view = "notify",
-      filter = {
-        warning = true,
-      },
-      opts = { level = vim.log.levels.WARN, replace = false, title = "Warning" },
+      opts = { title = "Notify", merge = false, replace = false },
     },
     {
       view = "notify",

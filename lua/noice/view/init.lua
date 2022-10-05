@@ -11,7 +11,7 @@ local Hacks = require("noice.hacks")
 ---@field filter_options? { filter: NoiceFilter, opts: NoiceNuiOptions }[]
 ---@field render string
 --
----@alias NoiceViewOptions NoiceViewBaseOptions|NoiceNuiOptions
+---@alias NoiceViewOptions NoiceViewBaseOptions|NoiceNuiOptions|NoiceNotifyOptions
 
 ---@class NoiceView
 ---@field _tick number

@@ -25,7 +25,6 @@ Highly experimental plugin that completely replaces the UI for `messages`, `cmdl
 - Neovim >= 0.8.0
 - [nui.nvim](https://github.com/MunifTanjim/nui.nvim): used for proper rendering and multiple views
 - [nvim-notify](https://github.com/rcarriga/nvim-notify): notification view
-- [nvim-cmp](https://github.com/hrsh7th/nvim-cmp): used for rendering the regular cmdline completions or if you use [cmp-cmdline](https://github.com/hrsh7th/cmp-cmdline/)
 
 ## 📦 Installation
 
@@ -43,7 +42,6 @@ use({
     -- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
     "MunifTanjim/nui.nvim",
     "rcarriga/nvim-notify",
-    "hrsh7th/nvim-cmp",
     }
 })
 ```
@@ -87,7 +85,7 @@ Check the [wiki](https://github.com/folke/noice.nvim/wiki/Configuration-Recipes)
 }
 ```
 
-### 🔍 Filters
+## 🔍 Filters
 
 **Noice** uses filters to route messages to specific views.
 
@@ -118,7 +116,7 @@ local filter = {
 
 ```
 
-### 🌅 Views
+## 🌅 Views
 
 **Noice** comes with the following built-in renderers:
 - **popup** powered by [nui.nvim](https://github.com/MunifTanjim/nui.nvim)
@@ -157,34 +155,53 @@ require("noice").setup({
   })
 ```
 
-**Nui Options**
+### Nui Options
 
 See the Nui documentation for [Popup](https://github.com/MunifTanjim/nui.nvim/tree/main/lua/nui/popup)
 and [Split](https://github.com/MunifTanjim/nui.nvim/tree/main/lua/nui/split).
 
-Size & position can additionally be specified as `"auto"`, to use the message height and width.
-
-`win_options.winhighlight` can also be a table like:
+<table>
+<tr><td>Option</td><td>Description</td></tr>
+<tr>
+<td> <b>size, position</b> </td>
+<td>Size, position and their constituents can additionally be specified as <b>"auto"</b>, to use the message height and width.</td>
+</tr>
+<tr>
+<td><b>win_options.winhighlight</b></td>
+<td>
+String or can also be a table like:
 
 ```lua
 {
   win_options = {
-    winhighlight = { Normal = "NormalFloat", FloatBorder = "FloatBorder" },
+    winhighlight = {
+      Normal = "NormalFloat",
+      FloatBorder = "FloatBorder"
+    },
   }
 }
 ```
 
-**Notify Options**
+</td>
+</tr>
+</table>
 
-- **title** title to be used for the notification
-- **replace** `boolean` when true, messages routing to the same notify instance will replace existing messages instead of pushing a new notification every time
+### Notify Options
 
-**Virtual Text Options**
+| Option | Type | Default | Description |
+| --- | --- | --- | --- |
+| **title** | `string` | `nil` | title to be used for the notification. Uses `Message.title` if available. |
+| **replace** | `boolean` | `true` | when true, messages routing to the same notify instance will replace existing messages instead of pushing a new notification every time |
+| **merge** | `boolean` | `true` | Merge messages into one Notification or create separate notifications |
+| **level** | `number\|string` |  `"info"` | notification level. Uses `Message.level` if available. |
+| **highlight** | `boolean` | `true` | Highlight message or render as plain text |
+
+### Virtual Text Options
 
 Right now there's only an option to set the `hl_group` used to render the virtual text.
 
 
-### 🚗 Routes
+## 🚗 Routes
 
 A **route** has a `filter`, `view` and optional `opts` attribute.
 - **view**: one of the views (built-in or custom)
@@ -200,7 +217,8 @@ Please refer to [noice.config.routes](https://github.com/folke/noice.nvim/blob/m
 
 **Routes** passed to `setup()` will be prepended to the default routes.
 
-Example:
+<details>
+<summary>Example</summary>
 
 ```lua
 -- skip search_count messages instead of showing them as virtual text
@@ -223,8 +241,9 @@ require("noice").setup({
   },
 })
 ```
+</details>
 
-### 🚥 Statusline Components
+## 🚥 Statusline Components
 
 **Noice** comes with the following statusline components:
 * **ruler**
@@ -242,7 +261,8 @@ Statusline components have the following methods:
 - **get_hl**: gets the content of the message **with** highlights
 - **has**: checks if the component is available
 
-Example of configuring [lualine.nvim](https://github.com/nvim-lualine/lualine.nvim)
+<details>
+<summary>Example of configuring <a href="https://github.com/nvim-lualine/lualine.nvim">lualine.nvim</a></summary>
 
 ```lua
 require("lualine").setup({
@@ -272,6 +292,7 @@ require("lualine").setup({
 })
 
 ```
+</details>
 
 ## 🚀 Usage
 
