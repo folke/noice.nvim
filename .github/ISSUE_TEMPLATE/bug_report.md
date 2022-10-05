@@ -10,6 +10,9 @@ assignees: ''
 **Describe the bug**
 A clear and concise description of what the bug is.
 
+**What version of Nevoim are you using?**
+Gui? Nightly? Version?
+
 **To Reproduce**
 Steps to reproduce the behavior:
 
