@@ -35,6 +35,12 @@ function M.enable()
   require("noice.ui").enable()
   require("noice.message.router").enable()
 end
+
+---@param msg string
+---@param level number|string
+---@param opts? table<string, any>
+function M.notify(msg, level, opts)
+  return require("noice.source.notify").notify(msg, level, opts)
 end
 
 return M
