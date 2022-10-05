@@ -2,6 +2,7 @@ local require = require("noice.util.lazy")
 
 local Util = require("noice.util")
 local Router = require("noice.router")
+local Api = require("noice.api")
 
 -- HACK: a bunch of hacks to make Noice behave
 local M = {}
@@ -219,8 +220,10 @@ function M.fix_cmp()
   local get_cursor = api.get_cursor
   api.get_cursor = function()
     if api.is_cmdline_mode() then
-      local cursor = Util.cursor.get_cmdline_cursor()
-      return cursor and cursor.win_cursor or get_cursor()
+      local pos = Api.get_cmdline_position()
+      if pos then
+        return { pos.bufpos.row, vim.fn.getcmdpos() - 1 }
+      end
     end
     return get_cursor()
   end
@@ -228,8 +231,10 @@ function M.fix_cmp()
   local get_screen_cursor = api.get_screen_cursor
   api.get_screen_cursor = function()
     if api.is_cmdline_mode() then
-      local cursor = Util.cursor.get_cmdline_cursor()
-      return cursor and cursor.screen_cursor or get_screen_cursor()
+      local pos = Api.get_cmdline_position()
+      if pos then
+        return { pos.screenpos.row, pos.screenpos.col + vim.fn.getcmdpos() - 1 }
+      end
     end
     return get_screen_cursor()
   end

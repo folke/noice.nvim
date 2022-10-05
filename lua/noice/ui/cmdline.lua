@@ -3,7 +3,7 @@ local require = require("noice.util.lazy")
 local Message = require("noice.message")
 local Manager = require("noice.manager")
 local Config = require("noice.config")
-local NuiText = require("nui.text")
+local NoiceText = require("noice.text")
 
 local M = {}
 M.message = Message("cmdline", nil)
@@ -47,6 +47,23 @@ function Cmdline:chunks(firstc)
   return chunks
 end
 
+function Cmdline:get()
+  return table.concat(
+    vim.tbl_map(function(c)
+      return c[2]
+    end, self.content),
+    ""
+  )
+end
+
+function Cmdline:width()
+  return vim.api.nvim_strwidth(self:get())
+end
+
+function Cmdline:length()
+  return vim.fn.strlen(self:get())
+end
+
 ---@type NoiceCmdline[]
 M.cmdlines = {}
 
@@ -83,6 +100,36 @@ function M.on_pos(_, pos, level)
   end
 end
 
+---@class CmdlinePosition
+---@field win number Window containing the cmdline
+---@field buf number Buffer containing the cmdline
+---@field bufpos {row:number, col:number} (1-0)-indexed position of the cmdline in the buffer
+---@field screenpos {row:number, col:number} (1-0)-indexed screen position of the cmdline
+M.position = nil
+
+---@param buf number
+---@param line number
+---@param byte number
+function M.on_render(_, buf, line, byte)
+  local win = vim.fn.bufwinid(buf)
+  if win ~= -1 then
+    local cmdline_start = byte - M.cmdlines[1]:length()
+    local pos = vim.fn.screenpos(win, line, cmdline_start + 1)
+    M.position = {
+      buf = buf,
+      win = win,
+      bufpos = {
+        row = line,
+        col = cmdline_start,
+      },
+      screenpos = {
+        row = pos.row,
+        col = pos.col - 1,
+      },
+    }
+  end
+end
+
 function M.update()
   M.message:clear()
   local count = 0
@@ -94,22 +141,16 @@ function M.update()
       end
 
       local icon = Config.options.cmdline.icons[cmdline.firstc]
-      local icon_width = 0
-      local firstc = true
+
       if icon then
-        firstc = icon.firstc ~= false
-        icon_width = vim.api.nvim_strwidth(icon.icon) + 1
-        M.message:append(NuiText("", {
-          virt_text = { { icon.icon, icon.hl_group } },
-          virt_text_win_col = 0,
-        }))
-        M.message:append((" "):rep(icon_width))
+        M.message:append(NoiceText.virtual_text(icon.icon, icon.hl_group))
+        M.message:append(" ")
       end
 
-      M.message:append(cmdline:chunks(firstc))
-      M.message:append(" ")
-      local pos = cmdline.pos + vim.api.nvim_strwidth(cmdline.prompt) + (firstc and #cmdline.firstc or 0) + icon_width
-      M.message.cursor = { line = M.message:height(), col = pos, offset = pos - cmdline.pos }
+      M.message:append(cmdline:chunks(icon and icon.firstc ~= false))
+      local cursor = NoiceText.cursor(-cmdline:length() + cmdline.pos)
+      cursor.on_render = M.on_render
+      M.message:append(cursor)
     end
   end
 

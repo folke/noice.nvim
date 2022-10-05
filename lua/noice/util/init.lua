@@ -5,7 +5,6 @@ local Hacks = require("noice.hacks")
 local M = {}
 
 M.stats = require("noice.util.stats")
-M.cursor = require("noice.util.cursor")
 M.call = require("noice.util.call")
 M.nui = require("noice.util.nui")
 

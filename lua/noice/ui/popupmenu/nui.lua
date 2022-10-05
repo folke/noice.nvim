@@ -3,6 +3,7 @@ local require = require("noice.util.lazy")
 local Util = require("noice.util")
 local Config = require("noice.config")
 local Menu = require("nui.menu")
+local Api = require("noice.api")
 local NuiLine = require("nui.line")
 
 local M = {}
@@ -45,16 +46,13 @@ function M.create(state)
   -- check if we need to anchor to the cmdline
   if state.grid == -1 then
     prefix = vim.fn.getcmdline():sub(state.col + 1, vim.fn.getcmdpos())
-
-    if position_auto then
-      local cursor = Util.cursor.get_cmdline_cursor()
-      if cursor then
-        opts.relative = "editor"
-        opts.position = {
-          row = cursor.screen_cursor[1],
-          col = cursor.screen_cursor[2] - vim.fn.getcmdpos() + state.col + 1,
-        }
-      end
+    local pos = Api.get_cmdline_position()
+    if position_auto and pos then
+      opts.relative = "editor"
+      opts.position = {
+        row = pos.screenpos.row,
+        col = pos.screenpos.col + state.col,
+      }
     end
   end
 
