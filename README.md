@@ -6,14 +6,16 @@ Highly experimental plugin that completely replaces the UI for `messages`, `cmdl
 
 ## ✨ Features
 
-- 🌅 fully **configurable views** like [nvim-notify](https://github.com/rcarriga/nvim-notify), splits, popups, virtual text, ..
+- 🌅 fully **configurable views** like [nvim-notify](https://github.com/rcarriga/nvim-notify),
+  splits, popups, virtual text, ..
 - 🔍 use **filters** to **route messages** to different views
 - 🌈 message **highlights** are preserved in the views (like the colors of `:hi`)
-- 📝 command output like [:messages](https://neovim.io/doc/user/message.html#:messages) is shown in normal buffers, which makes it much easier to work with
+- 📝 command output like [:messages](https://neovim.io/doc/user/message.html#:messages)
+  is shown in normal buffers, which makes it much easier to work with
 - 📚 `:Noice` command to show a full message history
 - ⌨️  no more [:h more-prompt](https://neovim.io/doc/user/message.html#more-prompt)
 - 💻 fully customizable **cmdline** with icons
-- 💅 **syntax highlighting** for `vim` and `lua` on the **cmdline** 
+- 💅 **syntax highlighting** for `vim` and `lua` on the **cmdline**
 - 🚥 **statusline** components
 
 ## ✅ Status
@@ -89,22 +91,23 @@ Check the [wiki](https://github.com/folke/noice.nvim/wiki/Configuration-Recipes)
 
 **Noice** uses filters to route messages to specific views.
 
-| Name         | Type                   | Description                                                                                                                            |
-| ------------ | ---------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
-| *cleared*    | `boolean`              | checks if the message is cleared, meaning it's in the history                                                                          |
-| *mode*       | `string`               | checks if `vim.api.nvim_get_mode()` contains the given mode                                                                            |
-| *blocking*   | `boolean`              | are we in blocking mode?                                                                                                               |
-| *event*      | `string` or `string[]` | any of the events from `ext_messages` or `cmdline`. See [:h ui-messages](https://neovim.io/doc/user2/ui.html#_-message/dialog-events-) |
-| *kind*       | `string` or `string[]` | any of the kinds from `ext_messages`. See [:h ui-messages](https://neovim.io/doc/user2/ui.html#_-message/dialog-events-)               |
-| *error*      | `boolean`              | all error-like kinds from `ext_messages`                                                                                               |
-| *warning*    | `boolean`              | all warning-like kinds from `ext_messages`                                                                                             |
-| *find*       | `string`               | uses lua `string.find` to match the pattern                                                                                            |
-| *min_height* | `number`               | minimum height of the message                                                                                                          |
-| *max_height* | `number`               | maximum height of the message                                                                                                          |
-| *not*        | `filter`               | checks wether the filter matches or not                                                                                                |
-| *any*        | `filter[]`             | checks that at least one of the filters matches                                                                                        |
+| Name           | Type                   | Description                                                                                                                            |
+| -------------- | ---------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| **cleared**    | `boolean`              | checks if the message is cleared, meaning it's in the history                                                                          |
+| **mode**       | `string`               | checks if `vim.api.nvim_get_mode()` contains the given mode                                                                            |
+| **blocking**   | `boolean`              | are we in blocking mode?                                                                                                               |
+| **event**      | `string` or `string[]` | any of the events from `ext_messages` or `cmdline`. See [:h ui-messages](https://neovim.io/doc/user2/ui.html#_-message/dialog-events-) |
+| **kind**       | `string` or `string[]` | any of the kinds from `ext_messages`. See [:h ui-messages](https://neovim.io/doc/user2/ui.html#_-message/dialog-events-)               |
+| **error**      | `boolean`              | all error-like kinds from `ext_messages`                                                                                               |
+| **warning**    | `boolean`              | all warning-like kinds from `ext_messages`                                                                                             |
+| **find**       | `string`               | uses lua `string.find` to match the pattern                                                                                            |
+| **min_height** | `number`               | minimum height of the message                                                                                                          |
+| **max_height** | `number`               | maximum height of the message                                                                                                          |
+| **not**        | `filter`               | checks wether the filter matches or not                                                                                                |
+| **any**        | `filter[]`             | checks that at least one of the filters matches                                                                                        |
 
-Example:
+<details>
+<summary>Example:</summary>
 
 ```lua
 -- all messages over 10 lines, excluding echo and search_count
@@ -116,9 +119,12 @@ local filter = {
 
 ```
 
+</details>
+
 ## 🌅 Views
 
 **Noice** comes with the following built-in backends:
+
 - **popup**: powered by [nui.nvim](https://github.com/MunifTanjim/nui.nvim)
 - **split**: powered by [nui.nvim](https://github.com/MunifTanjim/nui.nvim)
 - **notify**: powered by [nvim-notify](https://github.com/rcarriga/nvim-notify)
@@ -127,17 +133,18 @@ local filter = {
 A **View** (`config.views`) is a combination of a `backend` and options.
 **Noice** comes with the following built-in views with sane defaults:
 
-| View | Backend | Description |
-| --- | --- | --- |
-| **notify** | `notify` | *nvim-notify* with `level=true`, `replace=true`, `merge=true` |
-| **split** | `split` | horizontal split |
-| **vsplit** | `split` | vertical split |
-| **popup** | `popup` | simple popup |
-| **cmdline** | `popup` | bottom line, similar to the classic cmdline |
-| **cmdline_popup** | `popup` | fancy cmdline popup, with different styles according to the cmdline mode |
-| **popupmenu** | `nui.menu` | special view with the options used to render the popupmenu when backend is **nui**
+| View              | Backend    | Description                                                                        |
+| ----------------- | ---------- | ---------------------------------------------------------------------------------- |
+| **notify**        | `notify`   | _nvim-notify_ with `level=true`, `replace=true`, `merge=true`                      |
+| **split**         | `split`    | horizontal split                                                                   |
+| **vsplit**        | `split`    | vertical split                                                                     |
+| **popup**         | `popup`    | simple popup                                                                       |
+| **cmdline**       | `popup`    | bottom line, similar to the classic cmdline                                        |
+| **cmdline_popup** | `popup`    | fancy cmdline popup, with different styles according to the cmdline mode           |
+| **popupmenu**     | `nui.menu` | special view with the options used to render the popupmenu when backend is **nui** |
 
-Please refer to [noice.config.views](https://github.com/folke/noice.nvim/blob/main/lua/noice/config/views.lua) to see the options.
+Please refer to [noice.config.views](https://github.com/folke/noice.nvim/blob/main/lua/noice/config/views.lua)
+to see the options.
 Any options passed to existing views in `config.views`, will override those options only.
 You can configure completely new views and use them in custom routes.
 
@@ -154,6 +161,7 @@ require("noice").setup({
       }
   })
 ```
+
 </details>
 
 ### Nui Options
@@ -189,34 +197,35 @@ String or can also be a table like:
 
 ### Notify Options
 
-| Option | Type | Default | Description |
-| --- | --- | --- | --- |
-| **title** | `string` | `nil` | title to be used for the notification. Uses `Message.title` if available. |
-| **replace** | `boolean` | `true` | when true, messages routing to the same notify instance will replace existing messages instead of pushing a new notification every time |
-| **merge** | `boolean` | `true` | Merge messages into one Notification or create separate notifications |
-| **level** | `number\|string` |  `"info"` | notification level. Uses `Message.level` if available. |
-| **highlight** | `boolean` | `true` | Highlight message or render as plain text |
+| Option        | Type      | Default | Description                                                                                                                             |                                                        
+| ------------- | --------- | ------- | --------------------------------------------------------------------------------------------------------------------------------------- |                                                        
+| **title**     | `string`  | `nil`   | title to be used for the notification. Uses `Message.title` if available.                                                               |                                                        
+| **replace**   | `boolean` | `true`  | when true, messages routing to the same notify instance will replace existing messages instead of pushing a new notification every time |                                                        
+| **merge**     | `boolean` | `true`  | Merge messages into one Notification or create separate notifications                                                                   |                                                        
+| **level**     | `number\  |string`  |  `"info"`                                                                                                                               | notification level. Uses `Message.level` if available. |
+| **highlight** | `boolean` | `true`  | Highlight message or render as plain text                                                                                               |                                                        
 
 ### Virtual Text Options
 
 Right now there's only an option to set the `hl_group` used to render the virtual text.
 
-
 ## 🚗 Routes
 
 A **route** has a `filter`, `view` and optional `opts` attribute.
+
 - **view**: one of the views (built-in or custom)
 - **filter** a filter for messages matching this route
 - **opts**: options for the view and the route
 
 Route options can be any of the view options above, or one of:
 
-| Option | Type | Default | Description |
-| --- | --- | --- | --- |
-| **skip** | `boolean` | `false` | messages matching this filter will be skipped and not shown in any views |
-| **stop** | `boolean` | `true` | When `false` and a route matches the filter, then other routes can still process the message too. Useful if you want certain messages to be shown in multiple views. |
+| Option   | Type      | Default | Description                                                                                                                                                          |
+| -------- | --------- | ------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **skip** | `boolean` | `false` | messages matching this filter will be skipped and not shown in any views                                                                                             |
+| **stop** | `boolean` | `true`  | When `false` and a route matches the filter, then other routes can still process the message too. Useful if you want certain messages to be shown in multiple views. |
 
-Please refer to [noice.config.routes](https://github.com/folke/noice.nvim/blob/main/lua/noice/config/routes.lua) for an overview of the default routes.
+Please refer to [noice.config.routes](https://github.com/folke/noice.nvim/blob/main/lua/noice/config/routes.lua)
+for an overview of the default routes.
 **Routes** passed to `setup()` will be prepended to the default routes.
 
 <details>
@@ -243,22 +252,25 @@ require("noice").setup({
   },
 })
 ```
+
 </details>
 
 ## 🚥 Statusline Components
 
 **Noice** comes with the following statusline components:
-* **ruler**
-* **message**: last line of the last message (`event=show_msg`)
-* **command**: `showcmd`
-* **mode**: `showmode` (@recording messages)
-* **search**: search count messages
+
+- **ruler**
+- **message**: last line of the last message (`event=show_msg`)
+- **command**: `showcmd`
+- **mode**: `showmode` (@recording messages)
+- **search**: search count messages
 
 See [noice.config.status](https://github.com/folke/noice.nvim/blob/main/lua/noice/config/status.lua) for the default config.
 
 You can add custom statusline components in setup under the `status` key.
 
 Statusline components have the following methods:
+
 - **get**: gets the content of the message **without** highlights
 - **get_hl**: gets the content of the message **with** highlights
 - **has**: checks if the component is available
@@ -294,20 +306,19 @@ require("lualine").setup({
 })
 
 ```
+
 </details>
 
 ## 🚀 Usage
 
-* `:Noice` shows the message history
-* `:Noice disable` disables **Noice**
-* `:Noice enable` enables **Noice**
-* `:Noice stats` shows debugging stats
+- `:Noice` shows the message history  
+- `:Noice disable` disables **Noice** 
+- `:Noice enable` enables **Noice**   
+- `:Noice stats` shows debugging stats
 
 ## 🔥 Known Issues
 
-**Noice** is using the new experimental `vim.ui_attach` API.
-
+**Noice** is using the new experimental `vim.ui_attach` API, so issues are to be expected.
 During setup, we apply a bunch of [Hacks](https://github.com/folke/noice.nvim/blob/main/lua/noice/hacks.lua)
 to work around some of the current issues.
-
-For more details, see https://github.com/folke/noice.nvim/issues/6
+For more details, see this [tracking issue](https://github.com/folke/noice.nvim/issues/6)
