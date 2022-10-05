@@ -30,10 +30,12 @@ Highly experimental plugin that completely replaces the UI for `messages`,
 FEATURES                                                 *noice.nvim-features*
 
 
-- fully **configurable views** like nvim-notify <https://github.com/rcarriga/nvim-notify>, splits, popups, virtual text, ..
+- fully **configurable views** like nvim-notify <https://github.com/rcarriga/nvim-notify>,
+    splits, popups, virtual text, ..
 - use **filters** to **route messages** to different views
 - message **highlights** are preserved in the views (like the colors of `:hi`)
-- command output like |:messages| is shown in normal buffers, which makes it much easier to work with
+- command output like |:messages|
+    is shown in normal buffers, which makes it much easier to work with
 - `:Noice` command to show a full message history
 - no more |:h more-prompt|
 - fully customizable **cmdline** with icons
@@ -119,19 +121,19 @@ FILTERS                                                   *noice.nvim-filters*
 
 **Noice** uses filters to route messages to specific views.
 
-│    Name    │           Type           │                                Description                                 │
-│_cleared_   │boolean                   │checks if the message is cleared, meaning it’s in the history             │
-│_mode_      │string                    │checks if vim.api.nvim_get_mode() contains the given mode                   │
-│_blocking_  │boolean                   │are we in blocking mode?                                                    │
-│_event_     │string or string[]        │any of the events from ext_messages or cmdline. See |:h ui-messages|        │
-│_kind_      │string or string[]        │any of the kinds from ext_messages. See |:h ui-messages|                    │
-│_error_     │boolean                   │all error-like kinds from ext_messages                                      │
-│_warning_   │boolean                   │all warning-like kinds from ext_messages                                    │
-│_find_      │string                    │uses lua string.find to match the pattern                                   │
-│_min_height_│number                    │minimum height of the message                                               │
-│_max_height_│number                    │maximum height of the message                                               │
-│_not_       │filter                    │checks wether the filter matches or not                                     │
-│_any_       │filter[]                  │checks that at least one of the filters matches                             │
+│     Name     │           Type           │                                Description                                 │
+│**cleared**   │boolean                   │checks if the message is cleared, meaning it’s in the history             │
+│**mode**      │string                    │checks if vim.api.nvim_get_mode() contains the given mode                   │
+│**blocking**  │boolean                   │are we in blocking mode?                                                    │
+│**event**     │string or string[]        │any of the events from ext_messages or cmdline. See |:h ui-messages|        │
+│**kind**      │string or string[]        │any of the kinds from ext_messages. See |:h ui-messages|                    │
+│**error**     │boolean                   │all error-like kinds from ext_messages                                      │
+│**warning**   │boolean                   │all warning-like kinds from ext_messages                                    │
+│**find**      │string                    │uses lua string.find to match the pattern                                   │
+│**min_height**│number                    │minimum height of the message                                               │
+│**max_height**│number                    │maximum height of the message                                               │
+│**not**       │filter                    │checks wether the filter matches or not                                     │
+│**any**       │filter[]                  │checks that at least one of the filters matches                             │
 
 
 Example:
@@ -148,11 +150,14 @@ Example:
 
 VIEWS                                                       *noice.nvim-views*
 
-**Noice** comes with the following built-in backends: - **popup**: powered by
-nui.nvim <https://github.com/MunifTanjim/nui.nvim> - **split**: powered by
-nui.nvim <https://github.com/MunifTanjim/nui.nvim> - **notify**: powered by
-nvim-notify <https://github.com/rcarriga/nvim-notify> - **virtualtext**: shows
-the message as virtualtext (for example for `search_count`)
+**Noice** comes with the following built-in backends:
+
+
+- **popup**: powered by nui.nvim <https://github.com/MunifTanjim/nui.nvim>
+- **split**: powered by nui.nvim <https://github.com/MunifTanjim/nui.nvim>
+- **notify**: powered by nvim-notify <https://github.com/rcarriga/nvim-notify>
+- **virtualtext**: shows the message as virtualtext (for example for `search_count`)
+
 
 A **View** (`config.views`) is a combination of a `backend` and options.
 **Noice** comes with the following built-in views with sane defaults:
@@ -259,12 +264,12 @@ String or can also be a table like:
 
 NOTIFY OPTIONS ~
 
-│   Option    │       Type       │ Default  │                                                              Description                                                              │
-│**title**    │string            │nil       │title to be used for the notification. Uses Message.title if available.                                                                │
-│**replace**  │boolean           │true      │when true, messages routing to the same notify instance will replace existing messages instead of pushing a new notification every time│
-│**merge**    │boolean           │true      │Merge messages into one Notification or create separate notifications                                                                  │
-│**level**    │number\|string    │"info"    │notification level. Uses Message.level if available.                                                                                   │
-│**highlight**│boolean           │true      │Highlight message or render as plain text                                                                                              │
+│   Option    │        Type        │ Default  │                                                              Description                                                              │
+│**title**    │string              │nil       │title to be used for the notification. Uses Message.title if available.                                                                │
+│**replace**  │boolean             │true      │when true, messages routing to the same notify instance will replace existing messages instead of pushing a new notification every time│
+│**merge**    │boolean             │true      │Merge messages into one Notification or create separate notifications                                                                  │
+│**level**    │number\  |string    │"info"    │notification level. Uses Message.level if available.                                                                                   │
+│**highlight**│boolean             │true      │Highlight message or render as plain text                                                                                              │
 
 
 VIRTUAL TEXT OPTIONS ~
@@ -274,9 +279,13 @@ virtual text.
 
 ROUTES                                                     *noice.nvim-routes*
 
-A **route** has a `filter`, `view` and optional `opts` attribute. - **view**:
-one of the views (built-in or custom) - **filter** a filter for messages
-matching this route - **opts**: options for the view and the route
+A **route** has a `filter`, `view` and optional `opts` attribute.
+
+
+- **view**: one of the views (built-in or custom)
+- **filter** a filter for messages matching this route
+- **opts**: options for the view and the route
+
 
 Route options can be any of the view options above, or one of:
 
@@ -317,10 +326,15 @@ Example
 
 STATUSLINE COMPONENTS                       *noice.nvim-statusline-components*
 
-**Noice** comes with the following statusline components: **ruler**
-**message**: last line of the last message (`event=show_msg`) **command**:
-`showcmd` **mode**: `showmode` (recordin messages) **search**: search count
-messages
+**Noice** comes with the following statusline components:
+
+
+- **ruler**
+- **message**: last line of the last message (`event=show_msg`)
+- **command**: `showcmd`
+- **mode**: `showmode` (recordin messages)
+- **search**: search count messages
+
 
 See noice.config.status
 <https://github.com/folke/noice.nvim/blob/main/lua/noice/config/status.lua> for
@@ -328,9 +342,13 @@ the default config.
 
 You can add custom statusline components in setup under the `status` key.
 
-Statusline components have the following methods: - **get**: gets the content
-of the message **without** highlights - **get_hl**: gets the content of the
-message **with** highlights - **has**: checks if the component is available
+Statusline components have the following methods:
+
+
+- **get**: gets the content of the message **without** highlights
+- **get_hl**: gets the content of the message **with** highlights
+- **has**: checks if the component is available
+
 
 Example of configuring <a href="https://github.com/nvim-lualine/lualine.nvim">lualine.nvim</a>
 
@@ -374,13 +392,11 @@ USAGE                                                       *noice.nvim-usage*
 
 KNOWN ISSUES                                         *noice.nvim-known-issues*
 
-**Noice** is using the new experimental `vim.ui_attach` API.
-
-During setup, we apply a bunch of Hacks
+**Noice** is using the new experimental `vim.ui_attach` API, so issues are to
+be expected. During setup, we apply a bunch of Hacks
 <https://github.com/folke/noice.nvim/blob/main/lua/noice/hacks.lua> to work
-around some of the current issues.
-
-For more details, see https://github.com/folke/noice.nvim/issues/6
+around some of the current issues. For more details, see this tracking issue
+<https://github.com/folke/noice.nvim/issues/6>
 
 Generated by panvimdoc <https://github.com/kdheepak/panvimdoc>
 
