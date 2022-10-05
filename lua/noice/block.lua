@@ -5,7 +5,7 @@ local NuiLine = require("nui.line")
 local Object = require("nui.object")
 
 ---@alias NoiceChunk { [0]: integer, [1]: string}
----@alias NoiceContent string|NoiceChunk|NuiLine|NuiText
+---@alias NoiceContent string|NoiceChunk|NuiLine|NuiText|NoiceBlock
 
 ---@class NoiceBlock
 ---@field private _lines NuiLine[]
@@ -15,7 +15,6 @@ local Block = Object("Block")
 ---@param highlight? string|table data for highlight
 function Block:init(content, highlight)
   self._lines = {}
-  self:_update()
   if content then
     self:append(content, highlight)
   end
@@ -23,13 +22,9 @@ end
 
 function Block:clear()
   self._lines = {}
-  self:_update()
 end
 
-function Block:_update() end
-
 function Block:content()
-  self:_update()
   return table.concat(
     vim.tbl_map(
       ---@param line NuiLine
@@ -43,7 +38,6 @@ function Block:content()
 end
 
 function Block:width()
-  self:_update()
   local ret = 0
   for _, line in ipairs(self._lines) do
     ret = math.max(ret, line:width())
@@ -52,7 +46,6 @@ function Block:width()
 end
 
 function Block:height()
-  self:_update()
   return #self._lines
 end
 
@@ -64,7 +57,6 @@ end
 ---@param ns_id number namespace id
 ---@param linenr_start? number line number (1-indexed)
 function Block:highlight(bufnr, ns_id, linenr_start)
-  self:_update()
   self:_fix_extmarks()
   linenr_start = linenr_start or 1
   Highlight.update()
@@ -76,9 +68,9 @@ end
 
 function Block:_fix_extmarks()
   for _, line in ipairs(self._lines) do
-    for _, t in ipairs(line._texts) do
-      if t.extmark then
-        t.extmark.id = nil
+    for _, text in ipairs(line._texts) do
+      if text.extmark then
+        text.extmark.id = nil
       end
     end
   end
@@ -89,16 +81,10 @@ end
 ---@param linenr_start? number start line number (1-indexed)
 ---@param linenr_end? number end line number (1-indexed)
 function Block:render(bufnr, ns_id, linenr_start, linenr_end)
-  self:_update()
   self:_fix_extmarks()
   linenr_start = linenr_start or 1
   Highlight.update()
   for _, line in ipairs(self._lines) do
-    for _, t in ipairs(line._texts) do
-      if t.extmark then
-        t.extmark.id = nil
-      end
-    end
     line:render(bufnr, ns_id, linenr_start, linenr_end)
     linenr_start = linenr_start + 1
     if linenr_end then
@@ -131,7 +117,7 @@ function Block:append(contents, highlight)
     contents = { { highlight or 0, contents } }
   end
 
-  if contents._texts or contents._content or type(contents[1]) == "number" then
+  if contents._texts or contents._content or contents._lines or type(contents[1]) == "number" then
     contents = { contents }
   end
 
@@ -139,10 +125,23 @@ function Block:append(contents, highlight)
   for _, content in ipairs(contents) do
     if content._texts then
       ---@cast content NuiLine
-      table.insert(self._lines, content)
+      for _, t in ipairs(content._texts) do
+        self:_append(t)
+      end
     elseif content._content then
       ---@cast content NuiText
       self:_append(content)
+    elseif content._lines then
+      ---@cast content NoiceBlock
+      for l, line in ipairs(content._lines) do
+        if l == 1 then
+          -- first line should be appended to the existing line
+          self:append(line)
+        else
+          -- other lines are appened as new lines
+          table.insert(self._lines, line)
+        end
+      end
     else
       ---@cast content NoiceChunk
       -- Handle newlines
@@ -191,7 +190,7 @@ function Block:newline()
   table.insert(self._lines, NuiLine())
 end
 
----@alias NoiceBlock.constructor fun(content: NoiceContent|NoiceContent[], highlight?: string|table): NoiceBlock
+---@alias NoiceBlock.constructor fun(content?: NoiceContent|NoiceContent[], highlight?: string|table): NoiceBlock
 ---@type NoiceBlock|NoiceBlock.constructor
 local NoiceBlock = Block
 

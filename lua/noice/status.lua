@@ -25,7 +25,6 @@ local function NoiceStatus(filter)
     end,
     get_hl = function()
       local message = _get()
-      message:_update()
       if message and message._lines[1] then
         local ret = ""
         local line = message._lines[#message._lines]
