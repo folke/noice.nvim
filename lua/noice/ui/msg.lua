@@ -123,8 +123,7 @@ end
 ---@param content NoiceChunk[]
 function M.on_confirm(event, kind, content)
   local message = Message(event, kind, content)
-  message:append(" ")
-  message.cursor = { line = message:height(), col = message:last_line():width() - 1 }
+  message:append(" ", "Cursor")
   Manager.add(message)
   vim.schedule(function()
     Manager.remove(message)
