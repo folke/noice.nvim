@@ -26,10 +26,13 @@ function M.defaults()
       filter = { event = "cmdline" },
     },
     {
+      view = "confirm_popup",
+      filter = { event = "msg_show", kind = "confirm" }
+    },
+    {
       view = "cmdline_popup",
       filter = {
         any = {
-          { event = "msg_show", kind = "confirm" },
           { event = "msg_show", kind = "confirm_sub" },
           -- { event = "msg_show", kind = { "echo", "echomsg", "" }, before = true },
           -- { event = "msg_show", kind = { "echo", "echomsg" }, instant = true },

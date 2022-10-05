@@ -124,6 +124,30 @@ M.defaults = {
       },
     },
   },
+  confirm_popup = {
+    render = "confirm_popup",
+    relative = "editor",
+    focusable = true,
+    position = {
+      row = "50%",
+      col = "50%",
+    },
+    size = {
+      min_width = 60,
+      width = "auto",
+      height = "auto",
+    },
+    border = {
+      style = "rounded",
+    },
+    win_options = {
+      winhighlight = { Normal = "NormalFloat", Cursor = "" },
+    },
+    ui_highlights = {
+      default_button = "Visual",
+      button = "CursorLine",
+    }
+  },
 }
 
 return M
