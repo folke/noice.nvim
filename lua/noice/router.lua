@@ -89,6 +89,11 @@ function M.update()
 
     if not route.opts.skip then
       updated = updated + (route.view:display(messages_view) and 1 or 0)
+      for _, m in ipairs(messages_view) do
+        if m.once then
+          Manager.clear({ message = m })
+        end
+      end
     end
 
     if route.opts.stop ~= false and route.opts.history ~= true then
