@@ -24,3 +24,10 @@ If applicable, add screenshots to help explain your problem.
 
 **Noice log**
 Please include any related errors from the Noice log file. (open with `:Noice log`)
+
+<details>
+<summary>Noice log</summary>
+<pre>
+Log comes here
+</pre>
+</details>
