@@ -9,7 +9,7 @@ local Hacks = require("noice.hacks")
 ---@class NoiceViewBaseOptions
 ---@field buf_options? table<string,any>
 ---@field filter_options? { filter: NoiceFilter, opts: NoiceNuiOptions }[]
----@field render string
+---@field backend string
 --
 ---@alias NoiceViewOptions NoiceViewBaseOptions|NoiceNuiOptions|NoiceNotifyOptions
 
@@ -30,7 +30,8 @@ function View.get_view(view, opts)
     vim.list_extend(opts.filter_options, view_options.filter_options)
   end
   ---@type NoiceView
-  local class = Util.try(require, "noice.view." .. (opts.render or view))
+  ---@diagnostic disable-next-line: undefined-field
+  local class = Util.try(require, "noice.view." .. (opts.backend or opts.render or view))
   opts.view = view
   return class(opts)
 end

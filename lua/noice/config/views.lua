@@ -15,12 +15,12 @@ M.defaults = {
     },
   },
   notify = {
-    render = "notify",
+    backend = "notify",
     level = vim.log.levels.INFO,
     replace = true,
   },
   split = {
-    render = "split",
+    backend = "split",
     enter = false,
     relative = "editor",
     position = "bottom",
@@ -33,7 +33,7 @@ M.defaults = {
     },
   },
   vsplit = {
-    render = "split",
+    backend = "split",
     enter = false,
     relative = "editor",
     position = "right",
@@ -46,7 +46,7 @@ M.defaults = {
     },
   },
   popup = {
-    render = "popup",
+    backend = "popup",
     close = {
       events = { "BufLeave" },
       keys = { "q", "<esc>" },
@@ -65,7 +65,7 @@ M.defaults = {
     },
   },
   cmdline = {
-    render = "popup",
+    backend = "popup",
     relative = "editor",
     position = {
       row = "100%",
@@ -83,7 +83,7 @@ M.defaults = {
     },
   },
   cmdline_popup = {
-    render = "popup",
+    backend = "popup",
     relative = "editor",
     focusable = false,
     enter = false,
