@@ -15,6 +15,7 @@ local _id = 0
 ---@field mtime number
 ---@field once? boolean
 ---@field tick number
+---@field level? NotifyLevel
 ---@field kind? NoiceKind
 ---@field cursor? { line: integer, col: integer, buf?: number, buf_line?: number, offset?: number }
 ---@diagnostic disable-next-line: undefined-field

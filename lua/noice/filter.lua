@@ -51,18 +51,11 @@ M.filters = {
   end,
   error = function(message, error)
     ---@cast message NoiceMessage
-    return error
-      == (
-        message.event == Msg.events.show
-        and vim.tbl_contains(
-          { Msg.kinds.echoerr, Msg.kinds.lua_error, Msg.kinds.rpc_error, Msg.kinds.emsg },
-          message.kind
-        )
-      )
+    return error == (message.level == "error")
   end,
   warning = function(message, warning)
     ---@cast message NoiceMessage
-    return warning == (message.event == Msg.events.show and vim.tbl_contains({ Msg.kinds.wmsg }, message.kind))
+    return warning == (message.level == "warn")
   end,
   find = function(message, find)
     ---@cast message NoiceMessage

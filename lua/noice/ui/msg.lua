@@ -43,6 +43,14 @@ M.clear = false
 ---@type NoiceMessage[]
 M._messages = {}
 
+function M.is_error(kind)
+  return vim.tbl_contains({ M.kinds.echoerr, M.kinds.lua_error, M.kinds.rpc_error, M.kinds.emsg }, kind)
+end
+
+function M.is_warning(kind)
+  return kind == M.kinds.wmsg
+end
+
 function M.get(event, kind)
   local id = event .. "." .. (kind or "")
   if not M._messages[id] then
@@ -54,11 +62,7 @@ end
 ---@param kind MsgKind
 ---@param content NoiceContent[]
 function M.on_show(event, kind, content, replace_last)
-  if M.clear then
-    Manager.clear({ event = "msg_show" })
-    M.clear = false
-  end
-
+  M.check_clear()
   if kind == M.kinds.return_prompt then
     return M.on_return_prompt()
   elseif kind == M.kinds.confirm or kind == M.kinds.confirm_sub then
@@ -72,10 +76,24 @@ function M.on_show(event, kind, content, replace_last)
 
   local message = Message(event, kind, content)
   message:trim_empty_lines()
+  if M.is_error(kind) then
+    message.level = "error"
+  elseif M.is_warning(kind) then
+    message.level = "warn"
+  else
+    message.level = "info"
+  end
 
   M.last = message
 
   Manager.add(message)
+end
+
+function M.check_clear()
+  if M.clear then
+    Manager.clear({ event = "msg_show" })
+    M.clear = false
+  end
 end
 
 function M.on_clear()
