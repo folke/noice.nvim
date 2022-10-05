@@ -204,13 +204,13 @@ String or can also be a table like:
 
 ### Notify Options
 
-| Option        | Type      | Default | Description                                                                                                                             |                                                        
-| ------------- | --------- | ------- | --------------------------------------------------------------------------------------------------------------------------------------- |                                                        
-| **title**     | `string`  | `nil`   | title to be used for the notification. Uses `Message.title` if available.                                                               |                                                        
-| **replace**   | `boolean` | `true`  | when true, messages routing to the same notify instance will replace existing messages instead of pushing a new notification every time |                                                        
-| **merge**     | `boolean` | `true`  | Merge messages into one Notification or create separate notifications                                                                   |                                                        
-| **level**     | `number\  |string`  |  `"info"`                                                                                                                               | notification level. Uses `Message.level` if available. |
-| **highlight** | `boolean` | `true`  | Highlight message or render as plain text                                                                                               |                                                        
+| Option        | Type      | Default | Description                                                                                                                             |
+| ------------- | --------- | ------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| **title**     | `string`  | `nil`   | title to be used for the notification. Uses `Message.title` if available.                                                               |
+| **replace**   | `boolean` | `true`  | when true, messages routing to the same notify instance will replace existing messages instead of pushing a new notification every time |
+| **merge**     | `boolean` | `true`  | Merge messages into one Notification or create separate notifications                                                                   |
+| **level**     | `number\|string`    |  `"info"` notification level. Uses `Message.level` if available.                                                                        |
+| **highlight** | `boolean` | `true`  | Highlight message or render as plain text                                                                                               |
 
 ### Virtual Text Options
 
@@ -319,8 +319,8 @@ require("lualine").setup({
 ## 🚀 Usage
 
 - `:Noice` shows the message history  
-- `:Noice disable` disables **Noice** 
-- `:Noice enable` enables **Noice**   
+- `:Noice disable` disables **Noice**
+- `:Noice enable` enables **Noice**
 - `:Noice stats` shows debugging stats
 
 ## 🔥 Known Issues
