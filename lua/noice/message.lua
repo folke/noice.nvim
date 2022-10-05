@@ -17,6 +17,7 @@ local _id = 0
 ---@field tick number
 ---@field level? NotifyLevel
 ---@field kind? NoiceKind
+---@field opts table<string, any>
 ---@field cursor? { line: integer, col: integer, buf?: number, buf_line?: number, offset?: number }
 ---@diagnostic disable-next-line: undefined-field
 local Message = Block:extend("NoiceBlock")
@@ -32,6 +33,7 @@ function Message:init(event, kind, content)
   self.mtime = vim.fn.localtime()
   self.event = event
   self.kind = kind
+  self.opts = {}
   Message.super.init(self, content)
 end
 
