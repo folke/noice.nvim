@@ -10,6 +10,7 @@ local Hacks = require("noice.util.hacks")
 ---@field buf_options? table<string,any>
 ---@field filter_options? { filter: NoiceFilter, opts: NoiceNuiOptions }[]
 ---@field backend string
+---@field format? NoiceFormat
 --
 ---@alias NoiceViewOptions NoiceViewBaseOptions|NoiceNuiOptions|NoiceNotifyOptions
 
@@ -48,12 +49,13 @@ end
 
 function View:update_options() end
 
-function View:check_options()
+---@param messages NoiceMessage[]
+function View:check_options(messages)
   ---@type NoiceViewOptions
   local old = vim.deepcopy(self._opts)
   self._opts = vim.deepcopy(self._view_opts)
   for _, fo in ipairs(self._opts.filter_options or {}) do
-    if Filter.has(self._messages, fo.filter) then
+    if Filter.has(messages, fo.filter) then
       self._opts = vim.tbl_deep_extend("force", self._opts, fo.opts or {})
     end
   end
@@ -76,7 +78,7 @@ function View:display(messages)
   if dirty then
     self:format(messages)
     if #self._messages > 0 then
-      self:check_options()
+      self:check_options(messages)
 
       Hacks.block_redraw = true
       Util.try(self.show, self)
@@ -97,7 +99,7 @@ function View:format(messages)
   self._messages = vim.tbl_map(
     ---@param message NoiceMessage
     function(message)
-      return require("noice.text.format").format(message)
+      return require("noice.text.format").format(message, self._opts.format)
     end,
     messages
   )
