@@ -79,7 +79,11 @@ M.defaults = {
       style = "none",
     },
     win_options = {
-      winhighlight = { Normal = "MsgArea" },
+      winhighlight = {
+        Normal = "MsgArea",
+        IncSearch = "",
+        Search = "",
+      },
     },
   },
   cmdline_popup = {
@@ -105,7 +109,12 @@ M.defaults = {
       },
     },
     win_options = {
-      winhighlight = { Normal = "Normal", FloatBorder = "DiagnosticInfo" },
+      winhighlight = {
+        Normal = "Normal",
+        FloatBorder = "DiagnosticInfo",
+        IncSearch = "",
+        Search = "",
+      },
       cursorline = false,
     },
     filter_options = {
@@ -118,7 +127,12 @@ M.defaults = {
             },
           },
           win_options = {
-            winhighlight = { Normal = "Normal", FloatBorder = "DiagnosticWarn" },
+            winhighlight = {
+              Normal = "Normal",
+              FloatBorder = "DiagnosticWarn",
+              IncSearch = "",
+              Search = "",
+            },
           },
         },
       },
