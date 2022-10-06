@@ -26,7 +26,7 @@ function M.defaults()
       filter = { event = "cmdline" },
     },
     {
-      view = "cmdline_popup",
+      view = "confirm",
       filter = {
         any = {
           { event = "msg_show", kind = "confirm" },
@@ -35,15 +35,6 @@ function M.defaults()
           -- { event = "msg_show", kind = { "echo", "echomsg" }, instant = true },
           -- { event = "msg_show", find = "E325" },
           -- { event = "msg_show", find = "Found a swap file" },
-        },
-      },
-      opts = {
-        format = { "{confirm}" },
-        size = "auto",
-        border = {
-          text = {
-            top = " confirm ",
-          },
         },
       },
     },

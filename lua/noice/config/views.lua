@@ -139,6 +139,32 @@ M.defaults = {
       },
     },
   },
+  confirm = {
+    backend = "popup",
+    relative = "editor",
+    focusable = false,
+    enter = false,
+    zindex = 60,
+    format = { "{confirm}" },
+    position = {
+      row = "50%",
+      col = "50%",
+    },
+    size = "auto",
+    border = {
+      style = "rounded",
+      padding = { 0, 1, 0, 1 },
+      text = {
+        top = " Confirm ",
+      },
+    },
+    win_options = {
+      winhighlight = {
+        Normal = "Normal",
+        FloatBorder = "DiagnosticInfo",
+      },
+    },
+  },
 }
 
 return M
