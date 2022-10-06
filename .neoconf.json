@@ -4,7 +4,8 @@
       "plugins": [
         "nui.nvim",
         "nvim-cmp",
-        "nvim-notify"
+        "nvim-notify",
+        "telescope.nvim"
       ]
     }
   },
