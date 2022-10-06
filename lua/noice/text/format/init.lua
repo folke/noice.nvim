@@ -2,6 +2,7 @@ local require = require("noice.util.lazy")
 
 local Util = require("noice.util")
 local Config = require("noice.config")
+local FormatConfig = require("noice.config.format")
 local Formatters = require("noice.text.format.formatters")
 
 local M = {}
@@ -17,20 +18,6 @@ local M = {}
 
 M.format = { "level", "debug", "message" }
 M.format = { { "level" }, "debug", "message" }
-
-M.formats = {
-  default = { "{level} ", "{title} ", "{message}" },
-  notify = { "{message}" },
-  details = {
-    "{level} ",
-    "{date} ",
-    "{event}",
-    { "{kind}", before = { ".", hl_group = "Comment" } },
-    " ",
-    "{title} ",
-    "{message}",
-  },
-}
 
 ---@param entry string|table<string, any>
 ---@return NoiceFormatEntry?
@@ -88,7 +75,7 @@ function M.format(message, format, opts)
   format = format or "default"
 
   if type(format) == "string" then
-    format = vim.deepcopy(M.formats[format])
+    format = vim.deepcopy(FormatConfig.formats[format])
   end
 
   if Config.options.debug then

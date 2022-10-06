@@ -1,5 +1,19 @@
 local M = {}
 
+M.formats = {
+  default = { "{level} ", "{title} ", "{message}" },
+  notify = { "{message}" },
+  details = {
+    "{level} ",
+    "{date} ",
+    "{event}",
+    { "{kind}", before = { ".", hl_group = "Comment" } },
+    " ",
+    "{title} ",
+    "{message}",
+  },
+}
+
 ---@class NoiceFormatOptions
 M.defaults = {
   ---@class NoiceFormatOptions.debug
@@ -40,7 +54,7 @@ M.defaults = {
   },
   ---@class NoiceFormatOptions.message
   message = {
-    hl_group = nil,
+    hl_group = nil, -- if set, then the hl_group will be used instead of the message highlights
   },
 }
 
