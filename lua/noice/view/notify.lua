@@ -129,8 +129,6 @@ function NotifyView:_notify(msg)
 end
 
 function NotifyView:show()
-  -- TODO: add documentation
-
   ---@type NotifyMsg[]
   local todo = {}
 

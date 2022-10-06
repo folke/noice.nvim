@@ -8,7 +8,6 @@ local Msg = require("noice.ui.msg")
 
 local M = {}
 
--- TODO: add formatters for views
 -- TODO: add telescope extension
 
 ---@alias NotifyEvent "notify"

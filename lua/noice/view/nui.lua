@@ -63,10 +63,6 @@ function NuiView:create()
   local opts = vim.deepcopy(self._opts)
   self._nui = self._opts.type == "split" and require("nui.split")(opts) or require("nui.popup")(opts)
 
-  self._nui:on(Event.VimResized, function()
-    self:check_options()
-  end)
-
   if self._opts.close and self._opts.close.events then
     self._nui:on(self._opts.close.events, function()
       self:hide()
