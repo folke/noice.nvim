@@ -16,7 +16,7 @@ local NuiText = require("nui.text")
 ---@diagnostic disable-next-line: undefined-field
 local Text = NuiText:extend("NoiceText")
 
----@type NoiceText|fun(content:string, highlight:string|NoiceExtmark):NoiceText
+---@type NoiceText|fun(content:string, highlight?:string|NoiceExtmark):NoiceText
 local NoiceText = Text
 
 function Text.virtual_text(text, hl_group)
