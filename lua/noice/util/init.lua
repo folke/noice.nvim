@@ -149,7 +149,7 @@ end
 function M.panic(msg, ...)
   require("noice").disable()
   require("noice.view.notify").dismiss()
-  M.error(msg, vim.log.levels.ERROR, ...)
+  M.error(msg, ...)
   M.error("Noice was stopped to prevent further errors")
 end
 
