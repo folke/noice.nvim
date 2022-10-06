@@ -37,7 +37,8 @@ M.defaults = {
     -- Notification messages have their level and other properties set.
     -- event is always "notify" and kind can be any log level as a string
     -- The default routes will forward notifications to nvim-notify
-    enabled = false,
+    -- Benefit of using Noice for this is the routing and consistent history view
+    enabled = true,
   },
   throttle = 1000 / 30, -- how frequently does Noice need to check for ui updates? This has no effect when in blocking mode.
   views = {}, -- @see section on views
