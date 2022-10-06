@@ -91,6 +91,8 @@ Check the [wiki](https://github.com/folke/noice.nvim/wiki/Configuration-Recipes)
   routes = {}, -- @see the section on routes below
   ---@type table<string, NoiceFilter>
   status = {}, --@see the section on statusline components below
+  ---@type NoiceFormatOptions
+  format = {}, -- @see section on formatting
 }
 ```
 
@@ -214,6 +216,46 @@ String or can also be a table like:
 ### Virtual Text Options
 
 Right now there's only an option to set the `hl_group` used to render the virtual text.
+
+## 🎨 Formatting
+
+Formatting options can be specified with `config.format`.
+For a list of the defaults, please refer to [config.format](https://github.com/folke/noice.nvim/blob/main/lua/noice/config/format.lua)
+
+**Noice** includes the following formatters:
+
+- **level**: message level with optional `icon` and `hl_group` per level
+- **text**: any text with optional `hl_group`
+- **title**: message title with optional `hl_group`
+- **event**: message event with optional `hl_group`
+- **kind**: message kind with optional `hl_group`
+- **date**: formatted date with optional date format string
+- **message**: message content itself with optional `hl_group` to override message highlights
+
+Formatters are used in `format` definitions. **Noice** includes the following built-in formats:
+
+```lua
+{
+  -- default format
+  default = { "{level} ", "{title} ", "{message}" },
+  -- default format for vim.notify views
+  notify = { "{message}" },
+  -- default format for the history
+  details = {
+    "{level} ",
+    "{date} ",
+    "{event}",
+    { "{kind}", before = { ".", hl_group = "Comment" } },
+    " ",
+    "{title} ",
+    "{message}",
+  },
+}
+```
+
+Text before/after the formatter or in the before/after options, will only be rendered if the formatter itself rendered something.
+
+The `format` view option, can be either a `string` (one of the built-in formats), or a table with a custom format definition.
 
 ## 🚗 Routes
 
