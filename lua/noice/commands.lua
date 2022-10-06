@@ -24,6 +24,9 @@ function M.setup()
     disable = function()
       require("noice").disable()
     end,
+    telescope = function()
+      require("telescope").extensions.noice.noice({})
+    end,
     stats = function()
       Manager.add(Util.stats.message())
     end,

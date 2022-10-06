@@ -12,6 +12,22 @@ M.formats = {
     "{title} ",
     "{message}",
   },
+  telescope = {
+    "{level} ",
+    "{date} ",
+    "{title} ",
+    "{message}",
+  },
+  telescope_preview = {
+    "{level} ",
+    "{date} ",
+    "{event}",
+    { "{kind}", before = { ".", hl_group = "Comment" } },
+    "\n",
+    "{title}\n",
+    "\n",
+    "{message}",
+  },
 }
 
 ---@class NoiceFormatOptions

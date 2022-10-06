@@ -17,6 +17,7 @@ Highly experimental plugin that completely replaces the UI for `messages`, `cmdl
 - 💻 fully customizable **cmdline** with icons
 - 💅 **syntax highlighting** for `vim` and `lua` on the **cmdline**
 - 🚥 **statusline** components
+- 🔭 open message history in [telescope.nvim](https://github.com/nvim-telescope/telescope.nvim)
 
 ## ✅ Status
 
@@ -252,6 +253,8 @@ Formatters are used in `format` definitions. **Noice** includes the following bu
     "{title} ",
     "{message}",
   },
+  telescope = ..., -- formatter used to display telescope results
+  telescope_preview = ..., -- formatter used to preview telescope results
 }
 ```
 
@@ -359,12 +362,22 @@ require("lualine").setup({
 
 </details>
 
+## 🔭 Telescope
+
+In order to use **Noice** in **Telescope**, you can either do `:Noice telescope`, or register the extension and use `:Telescope noice`.
+The results panel is formatted using `config.format.formatters.telescope`. The preview is formatted with `config.format.formatters.telescope_preview`
+
+```lua
+require("telescope").load_extension("noice")
+```
+
 ## 🚀 Usage
 
 - `:Noice` shows the message history  
 - `:Noice disable` disables **Noice**
 - `:Noice enable` enables **Noice**
 - `:Noice stats` shows debugging stats
+- `:Noice telescope` opens message history in Telescope
 
 ## 🔥 Known Issues
 
