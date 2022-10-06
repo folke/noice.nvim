@@ -210,7 +210,6 @@ String or can also be a table like:
 | **replace**   | `boolean` | `true`  | when true, messages routing to the same notify instance will replace existing messages instead of pushing a new notification every time |
 | **merge**     | `boolean` | `true`  | Merge messages into one Notification or create separate notifications                                                                   |
 | **level**     | `number\|string`    |  `"info"` notification level. Uses `Message.level` if available.                                                                        |
-| **highlight** | `boolean` | `true`  | Highlight message or render as plain text                                                                                               |
 
 ### Virtual Text Options
 

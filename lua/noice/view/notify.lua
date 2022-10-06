@@ -8,13 +8,11 @@ local View = require("noice.view")
 ---@field level string|number
 ---@field merge boolean Merge messages into one Notification or create separate notifications
 ---@field replace boolean Replace existing notification or create a new one
----@field highlight boolean Highlight message, or render as plain text
 local defaults = {
   title = "Notification",
   merge = true,
   level = vim.log.levels.INFO,
   replace = true,
-  highlight = true,
 }
 
 ---@class NotifyInstance
@@ -83,9 +81,7 @@ function NotifyView:notify_render(messages)
     local offset = #buf_lines - self:height(messages) + 1
 
     -- do our rendering
-    if self._opts.highlight then
-      self:render(buf, { offset = offset, highlight = true, messages = messages })
-    end
+    self:render(buf, { offset = offset, highlight = true, messages = messages })
 
     -- resize notification
     local win = vim.fn.bufwinid(buf)
