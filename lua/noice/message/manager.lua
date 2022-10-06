@@ -65,13 +65,17 @@ end
 
 -- Sorts messages in-place by mtime & id
 ---@param messages NoiceMessage[]
-function M.sort(messages)
+function M.sort(messages, reverse)
   table.sort(
     messages,
     ---@param a NoiceMessage
     ---@param b NoiceMessage
     function(a, b)
-      return (a.mtime == b.mtime) and (a.id < b.id) or (a.mtime < b.mtime)
+      local ret = (a.mtime == b.mtime) and (a.id < b.id) or (a.mtime < b.mtime)
+      if reverse then
+        ret = not ret
+      end
+      return ret
     end
   )
 end
@@ -79,6 +83,7 @@ end
 ---@class NoiceMessageOpts
 ---@field history? boolean
 ---@field sort? boolean
+---@field reverse? boolean
 ---@field count? number
 ---@field messages? NoiceMessage[]
 
@@ -95,7 +100,7 @@ function M.get(filter, opts)
     end
   end
   if opts.sort then
-    M.sort(ret)
+    M.sort(ret, opts.reverse)
   end
   if opts.count and #ret > opts.count then
     local last = {}
