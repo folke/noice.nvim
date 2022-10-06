@@ -21,6 +21,17 @@ function M.once(fn)
   end
 end
 
+function M.debounce(ms, fn)
+  local timer = vim.loop.new_timer()
+  return function(...)
+    local argv = { ... }
+    timer:start(ms, 0, function()
+      timer:stop()
+      vim.schedule_wrap(fn)(unpack(argv))
+    end)
+  end
+end
+
 ---@param a table<string, any>
 ---@param b table<string, any>
 ---@return string[]
