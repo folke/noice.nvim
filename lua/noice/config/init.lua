@@ -29,7 +29,7 @@ M.defaults = {
   history = {
     -- options for the message history that you get with `:Noice`
     view = "split",
-    opts = { enter = true },
+    opts = { enter = true, format = "details" },
     filter = { event = { "msg_show", "notify" }, ["not"] = { kind = { "search_count", "echo" } } },
   },
   notify = {
