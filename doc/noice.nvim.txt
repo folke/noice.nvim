@@ -14,6 +14,7 @@ Table of Contents                               *noice.nvim-table-of-contents*
   - Formatting                                         |noice.nvim-formatting|
   - Routes                                                 |noice.nvim-routes|
   - Statusline Components                   |noice.nvim-statusline-components|
+  - Telescope                                           |noice.nvim-telescope|
   - Usage                                                   |noice.nvim-usage|
   - Known Issues                                     |noice.nvim-known-issues|
 
@@ -42,6 +43,7 @@ FEATURES                                                 *noice.nvim-features*
 - fully customizable **cmdline** with icons
 - **syntax highlighting** for `vim` and `lua` on the **cmdline**
 - **statusline** components
+- open message history in telescope.nvim <https://github.com/nvim-telescope/telescope.nvim>
 
 
 STATUS                                                     *noice.nvim-status*
@@ -325,6 +327,8 @@ built-in formats:
         "{title} ",
         "{message}",
       },
+      telescope = ..., -- formatter used to display telescope results
+      telescope_preview = ..., -- formatter used to preview telescope results
     }
 <
 
@@ -439,6 +443,18 @@ Example of configuring <a href="https://github.com/nvim-lualine/lualine.nvim">lu
 <
 
 
+TELESCOPE                                               *noice.nvim-telescope*
+
+In order to use **Noice** in **Telescope**, you can either do `:Noice
+telescope`, or register the extension and use `:Telescope noice`. The results
+panel is formatted using `config.format.formatters.telescope`. The preview is
+formatted with `config.format.formatters.telescope_preview`
+
+>
+    require("telescope").load_extension("noice")
+<
+
+
 USAGE                                                       *noice.nvim-usage*
 
 
@@ -446,6 +462,7 @@ USAGE                                                       *noice.nvim-usage*
 - `:Noice disable` disables **Noice**
 - `:Noice enable` enables **Noice**
 - `:Noice stats` shows debugging stats
+- `:Noice telescope` opens message history in Telescope
 
 
 KNOWN ISSUES                                         *noice.nvim-known-issues*
