@@ -10,19 +10,19 @@ assignees: ''
 **Describe the bug**
 A clear and concise description of what the bug is.
 
-**What version of Nevoim are you using?**
+**Which version of Neovim are you using?**
 Gui? Nightly? Version?
 
 **To Reproduce**
 Steps to reproduce the behavior:
 
-**Expected behavior**
+**Expected Behavior**
 A clear and concise description of what you expected to happen.
 
 **Screenshots**
 If applicable, add screenshots to help explain your problem.
 
-**Noice log**
+**Noice Log**
 Please include any related errors from the Noice log file. (open with `:Noice log`)
 
 <details>
