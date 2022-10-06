@@ -34,6 +34,15 @@ function M.get_layout(dim, opts)
   local position = vim.deepcopy(opts.position)
   local size = vim.deepcopy(opts.size)
 
+  if type(position) == "table" then
+    if type(position.col) == "number" and position.col < 0 then
+      position.col = vim.o.columns + position.col - dim.width
+    end
+    if type(position.row) == "number" and position.row < 0 then
+      position.row = vim.o.lines + position.row - dim.height
+    end
+  end
+
   ---@return number
   local function minmax(min, max, value)
     return math.max(min or 1, math.min(value, max or 1000))
