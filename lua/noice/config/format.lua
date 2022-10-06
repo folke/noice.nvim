@@ -49,7 +49,7 @@ M.defaults = {
   },
   ---@class NoiceFormatOptions.date
   date = {
-    format = "%c", --- @see https://www.lua.org/pil/22.1.html
+    format = "%X", --- @see https://www.lua.org/pil/22.1.html
     hl_group = "Special",
   },
   ---@class NoiceFormatOptions.message
