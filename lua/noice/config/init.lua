@@ -43,6 +43,7 @@ M.defaults = {
   views = {}, -- @see section on views
   routes = {}, -- @see section on routes
   status = {}, -- @see section on statusline components
+  format = {}, -- @see section on formatting
   debug = false,
   log = vim.fn.stdpath("state") .. "/noice.log",
 }
@@ -56,6 +57,7 @@ function M.setup(options)
   M.options = vim.tbl_deep_extend("force", {}, M.defaults, {
     views = require("noice.config.views").defaults,
     status = require("noice.config.status").defaults,
+    format = require("noice.config.format").defaults,
   }, options)
 
   M.options.routes = Routes.get(options.routes)
