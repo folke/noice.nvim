@@ -91,4 +91,33 @@ function M.debug(message)
   end
 end
 
+---@param message NoiceMessage
+---@param input NoiceMessage
+---@param opts NoiceFormatOptions.confirm
+function M.confirm(message, opts, input)
+  for l, line in ipairs(input._lines) do
+    if l ~= #input._lines then
+      message:append(line)
+    end
+  end
+  message:trim_empty_lines()
+  message:newline()
+  message:newline()
+  local _, _, buttons = input:last_line():content():find("(.*):")
+  if buttons then
+    buttons = vim.split(buttons, ", ")
+
+    for b, button in ipairs(buttons) do
+      local hl_group = button:find("%[") and opts.hl_group.default_choice or opts.hl_group.choice
+      message:append(" " .. button .. " ", hl_group)
+      if b ~= #buttons then
+        message:append(" ")
+      end
+    end
+
+    local padding = math.floor((message:width() - message:last_line():width()) / 2)
+    table.insert(message:last_line()._texts, 1, NoiceText((" "):rep(padding)))
+  end
+end
+
 return M

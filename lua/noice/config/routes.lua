@@ -37,6 +37,7 @@ function M.defaults()
           -- { event = "msg_show", find = "Found a swap file" },
         },
       },
+      opts = { format = { "{confirm}" }, size = "auto" },
     },
     {
       view = "split",

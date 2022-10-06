@@ -56,6 +56,13 @@ M.defaults = {
   message = {
     hl_group = nil, -- if set, then the hl_group will be used instead of the message highlights
   },
+  ---@class NoiceFormatOptions.confirm
+  confirm = {
+    hl_group = {
+      choice = "CursorLine",
+      default_choice = "Visual",
+    },
+  },
 }
 
 return M

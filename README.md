@@ -232,6 +232,7 @@ For a list of the defaults, please refer to [config.format](https://github.com/f
 - **kind**: message kind with optional `hl_group`
 - **date**: formatted date with optional date format string
 - **message**: message content itself with optional `hl_group` to override message highlights
+- **confirm**: only useful for `confirm` messages. Will format the choices as buttons.
 
 Formatters are used in `format` definitions. **Noice** includes the following built-in formats:
 
