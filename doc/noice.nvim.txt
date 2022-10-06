@@ -11,6 +11,7 @@ Table of Contents                               *noice.nvim-table-of-contents*
   - Configuration                                   |noice.nvim-configuration|
   - Filters                                               |noice.nvim-filters|
   - Views                                                   |noice.nvim-views|
+  - Formatting                                         |noice.nvim-formatting|
   - Routes                                                 |noice.nvim-routes|
   - Statusline Components                   |noice.nvim-statusline-components|
   - Usage                                                   |noice.nvim-usage|
@@ -111,6 +112,7 @@ for configuration recipes.
         -- Notification messages have their level and other properties set.
         -- event is always "notify" and kind can be any log level as a string
         -- The default routes will forward notifications to nvim-notify
+        -- Benefit of using Noice for this is the routing and consistent history view
         enabled = false,
       },
       throttle = 1000 / 30, -- how frequently does Noice need to check for ui updates? This has no effect when in blocking mode.
@@ -120,6 +122,8 @@ for configuration recipes.
       routes = {}, -- @see the section on routes below
       ---@type table<string, NoiceFilter>
       status = {}, --@see the section on statusline components below
+      ---@type NoiceFormatOptions
+      format = {}, -- @see section on formatting
     }
 <
 
@@ -271,18 +275,64 @@ String or can also be a table like:
 
 NOTIFY OPTIONS ~
 
-│   Option    │       Type       │                              Default                              │                                                              Description                                                              │
-│**title**    │string            │nil                                                                │title to be used for the notification. Uses Message.title if available.                                                                │
-│**replace**  │boolean           │true                                                               │when true, messages routing to the same notify instance will replace existing messages instead of pushing a new notification every time│
-│**merge**    │boolean           │true                                                               │Merge messages into one Notification or create separate notifications                                                                  │
-│**level**    │number\|string    │"info" notification level. Uses Message.level if available.        │                                                                                                                                       │
-│**highlight**│boolean           │true                                                               │Highlight message or render as plain text                                                                                              │
+│  Option   │       Type       │                              Default                              │                                                              Description                                                              │
+│**title**  │string            │nil                                                                │title to be used for the notification. Uses Message.title if available.                                                                │
+│**replace**│boolean           │true                                                               │when true, messages routing to the same notify instance will replace existing messages instead of pushing a new notification every time│
+│**merge**  │boolean           │true                                                               │Merge messages into one Notification or create separate notifications                                                                  │
+│**level**  │number\|string    │"info" notification level. Uses Message.level if available.        │                                                                                                                                       │
 
 
 VIRTUAL TEXT OPTIONS ~
 
 Right now there’s only an option to set the `hl_group` used to render the
 virtual text.
+
+FORMATTING                                             *noice.nvim-formatting*
+
+Formatting options can be specified with `config.format`. For a list of the
+defaults, please refer to config.format
+<https://github.com/folke/noice.nvim/blob/main/lua/noice/config/format.lua>
+
+**Noice** includes the following formatters:
+
+
+- **level**: message level with optional `icon` and `hl_group` per level
+- **text**: any text with optional `hl_group`
+- **title**: message title with optional `hl_group`
+- **event**: message event with optional `hl_group`
+- **kind**: message kind with optional `hl_group`
+- **date**: formatted date with optional date format string
+- **message**: message content itself with optional `hl_group` to override message highlights
+
+
+Formatters are used in `format` definitions. **Noice** includes the following
+built-in formats:
+
+>
+    {
+      -- default format
+      default = { "{level} ", "{title} ", "{message}" },
+      -- default format for vim.notify views
+      notify = { "{message}" },
+      -- default format for the history
+      details = {
+        "{level} ",
+        "{date} ",
+        "{event}",
+        { "{kind}", before = { ".", hl_group = "Comment" } },
+        " ",
+        "{title} ",
+        "{message}",
+      },
+    }
+<
+
+
+Text before/after the formatter or in the before/after options, will only be
+rendered if the formatter itself rendered something.
+
+The `format` view option, can be either a `string` (one of the built-in
+formats), or a table with a custom format definition.
 
 ROUTES                                                     *noice.nvim-routes*
 
