@@ -98,7 +98,7 @@ function NotifyView:notify_render(messages)
   end
 end
 
----@alias NotifyMsg {content:string, messages:NoiceMessage[], title?:string, level?:string}
+---@alias NotifyMsg {content:string, messages:NoiceMessage[], title?:string, level?:string, opts?: table}
 
 ---@param msg NotifyMsg
 function NotifyView:_notify(msg)
@@ -125,6 +125,10 @@ function NotifyView:_notify(msg)
     render = Util.protect(self:notify_render(msg.messages)),
   }
 
+  if msg.opts then
+    opts = vim.tbl_deep_extend("force", opts, msg.opts)
+  end
+
   self.notif[instance] = instance.notify(msg.content, level, opts)
 end
 
@@ -144,6 +148,7 @@ function NotifyView:show()
         messages = { m },
         title = m.opts.title,
         level = m.level,
+        opts = m.opts,
       })
     end
   end
