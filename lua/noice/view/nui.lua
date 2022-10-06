@@ -141,6 +141,9 @@ function NuiView:show()
   end
 
   self._nui:show()
+  if not self._visible then
+    self._nui:update_layout(self:get_layout())
+  end
 
   self:render(self._nui.bufnr)
 end
