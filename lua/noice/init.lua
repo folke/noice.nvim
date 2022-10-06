@@ -18,6 +18,11 @@ function M.setup(opts)
     Util.error("Noice needs nvim-notify to work properly")
     return
   end
+  if vim.g.lazyredraw then
+    Util.warn(
+      "You have enabled lazyredraw (see `:h 'lazyredraw'`)\nThis is only meant to be set temporarily.\nYou'll experience issues using Noice."
+    )
+  end
   require("noice.config").setup(opts)
   require("noice.commands").setup()
   require("noice.message.router").setup()
