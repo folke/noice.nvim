@@ -1,6 +1,7 @@
 local require = require("noice.util.lazy")
 
 local Config = require("noice.config")
+local Util = require("noice.util")
 
 ---@class CallOptions
 ---@field catch? fun(err:string)
@@ -22,6 +23,16 @@ local defaults = {
 local M = {}
 M.__index = M
 
+M._errors = 0
+M._max_errors = 20
+
+function M.reset()
+  M.reset = Util.debounce(200, function()
+    M._errors = 0
+  end)
+  M.reset()
+end
+
 ---@generic F: fun()
 ---@param fn F
 ---@param opts? CallOptions
@@ -37,6 +48,12 @@ function M.protect(fn, opts)
 end
 
 function M:on_error(err)
+  M._errors = M._errors + 1
+  if M._errors > M._max_errors then
+    Util.panic("Too many errors. Disabling Noice")
+  end
+  M.reset()
+
   if self._opts.catch then
     pcall(self._opts.catch, err)
   end

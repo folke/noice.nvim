@@ -145,6 +145,14 @@ function M.error(msg, ...)
   M.notify(msg, vim.log.levels.ERROR, ...)
 end
 
+--- Will stop Noice and show error
+function M.panic(msg, ...)
+  require("noice").disable()
+  require("noice.view.notify").dismiss()
+  M.error(msg, vim.log.levels.ERROR, ...)
+  M.error("Noice was stopped to prevent further errors")
+end
+
 function M.info(msg, ...)
   M.notify(msg, vim.log.levels.INFO, ...)
 end

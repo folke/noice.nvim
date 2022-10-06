@@ -43,6 +43,13 @@ function NotifyView.instance()
   return require("notify")
 end
 
+function NotifyView.dismiss()
+  require("notify").dismiss({ pending = true, silent = true })
+  if NotifyView._instant_notify then
+    NotifyView._instant_notify.dismiss({ pending = true, silent = true })
+  end
+end
+
 function NotifyView:init(opts)
   NotifyView.super.init(self, opts)
   self.notif = {}
