@@ -19,6 +19,7 @@ function VirtualText:show()
     self.extmark = vim.api.nvim_buf_set_extmark(0, Config.ns, line, col, {
       virt_text_pos = "eol",
       virt_text = { { vim.trim(self._messages[1]:content()), self._opts.hl_group or "DiagnosticVirtualTextInfo" } },
+      hl_mode = "combine",
     })
   end
 end
