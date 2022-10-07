@@ -2,7 +2,7 @@
 name: Bug report
 about: 'Create a report to help us improve. Make sure you check the known issues #6'
 title: ''
-labels: ''
+labels: 'bug'
 assignees: ''
 
 ---
@@ -11,10 +11,13 @@ assignees: ''
 A clear and concise description of what the bug is.
 
 **Which version of Neovim are you using?**
-Gui? Nightly? Version?
+Gui(specifiy which GUI client you are using)? Nightly? Version?
 
 **To Reproduce**
 Steps to reproduce the behavior:
+1.
+2.
+3.
 
 **Expected Behavior**
 A clear and concise description of what you expected to happen.
@@ -28,6 +31,6 @@ Please include any related errors from the Noice log file. (open with `:Noice lo
 <details>
 <summary>Noice log</summary>
 <pre>
-Log comes here
+paste log here
 </pre>
 </details>
