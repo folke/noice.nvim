@@ -11,7 +11,7 @@ assignees: ''
 A clear and concise description of what the bug is.
 
 **Which version of Neovim are you using?**
-Gui(specifiy which GUI client you are using)? Nightly? Version?
+Gui(specify which GUI client you are using)? Nightly? Version?
 
 **To Reproduce**
 Steps to reproduce the behavior:
