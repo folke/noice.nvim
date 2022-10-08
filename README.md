@@ -58,7 +58,7 @@ Check the [wiki](https://github.com/folke/noice.nvim/wiki/Configuration-Recipes)
 ```lua
 {
   cmdline = {
-    enabled = true, -- disable if you use native command line
+    enabled = true, -- disable if you use native command line UI
     view = "cmdline_popup", -- view for rendering the cmdline. Change to `cmdline` to get a classic cmdline at the bottom
     opts = { buf_options = { filetype = "vim" } }, -- enable syntax highlighting in the cmdline
     icons = {
@@ -68,6 +68,9 @@ Check the [wiki](https://github.com/folke/noice.nvim/wiki/Configuration-Recipes)
     },
   },
   messages = {
+    -- NOTE: If you enable noice messages UI, noice cmdline UI is enabled
+    -- automatically. You cannot enable noice messages UI only.
+    -- It is current neovim implementation limitation.  It may be fixed later.
     enabled = true, -- disable if you use native messages UI
   },
   popupmenu = {
