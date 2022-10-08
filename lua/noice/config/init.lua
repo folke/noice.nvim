@@ -27,6 +27,8 @@ M.defaults = {
     -- automatically. You cannot enable noice messages UI only.
     -- It is current neovim implementation limitation.  It may be fixed later.
     enabled = true, -- disable if you use native messages UI
+    ---@type 'notify'
+    backend = "notify", -- backend to use to show messages UI
   },
   popupmenu = {
     enabled = true, -- disable if you use something like cmp-cmdline

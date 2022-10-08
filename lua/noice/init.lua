@@ -14,16 +14,17 @@ function M.setup(opts)
     -- require("noice.util").error("Noice needs Neovim >= 0.9.0 (nightly)")
     return
   end
-  if not Util.module_exists("notify") then
-    Util.error("Noice needs nvim-notify to work properly")
-    return
-  end
   if vim.g.lazyredraw then
     Util.warn(
       "You have enabled lazyredraw (see `:h 'lazyredraw'`)\nThis is only meant to be set temporarily.\nYou'll experience issues using Noice."
     )
   end
   require("noice.config").setup(opts)
+  config = require("noice.config")
+  if config.options.messages.backend == "notify" and not Util.module_exists("notify") then
+    Util.error("Noice needs nvim-notify to work properly")
+    return
+  end
   require("noice.commands").setup()
   require("noice.message.router").setup()
   M.enable()
