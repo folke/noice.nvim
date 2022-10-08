@@ -58,6 +58,7 @@ Check the [wiki](https://github.com/folke/noice.nvim/wiki/Configuration-Recipes)
 ```lua
 {
   cmdline = {
+    enabled = true, -- disable if you use native command line
     view = "cmdline_popup", -- view for rendering the cmdline. Change to `cmdline` to get a classic cmdline at the bottom
     opts = { buf_options = { filetype = "vim" } }, -- enable syntax highlighting in the cmdline
     icons = {
@@ -65,6 +66,9 @@ Check the [wiki](https://github.com/folke/noice.nvim/wiki/Configuration-Recipes)
       ["?"] = { icon = " ", hl_group = "DiagnosticWarn" },
       [":"] = { icon = " ", hl_group = "DiagnosticInfo", firstc = false },
     },
+  },
+  messages = {
+    enabled = true, -- disable if you use native messages UI
   },
   popupmenu = {
     enabled = true, -- disable if you use something like cmp-cmdline

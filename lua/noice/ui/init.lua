@@ -16,8 +16,8 @@ function M.enable()
   M._attached = true
 
   vim.ui_attach(Config.ns, {
-    ext_messages = true,
-    ext_cmdline = true,
+    ext_messages = Config.options.messages.enabled,
+    ext_cmdline = Config.options.cmdline.enabled,
     ext_popupmenu = Config.options.popupmenu.enabled,
   }, function(event, ...)
     -- dont process any messages during redraw, since redraw triggers last messages
