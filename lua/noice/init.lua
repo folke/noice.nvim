@@ -14,6 +14,10 @@ function M.setup(opts)
     -- require("noice.util").error("Noice needs Neovim >= 0.9.0 (nightly)")
     return
   end
+  if vim.g.neovide then
+    Util.error("Noice doesn't work with Neovide. Please see #17")
+    return
+  end
   if not Util.module_exists("notify") then
     Util.error("Noice needs nvim-notify to work properly")
     return
