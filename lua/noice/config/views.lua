@@ -14,6 +14,10 @@ M.defaults = {
       },
     },
   },
+  virtualtext = {
+    backend = "virtualtext",
+    format = { "{message}" },
+  },
   notify = {
     backend = "notify",
     level = vim.log.levels.INFO,
