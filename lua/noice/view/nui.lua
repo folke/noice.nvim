@@ -34,6 +34,7 @@ local Util = require("noice.util")
 ---@class NuiSplitOptions: NuiBaseOptions
 ---@field position "top"|"right"|"bottom"|"left"
 ---@field size number|string
+---@field timeout? number
 ---@field min_size number
 ---@field max_size number
 
@@ -42,8 +43,28 @@ local Util = require("noice.util")
 ---@class NuiView: NoiceView
 ---@field _nui? NuiPopup|NuiSplit
 ---@field super NoiceView
+---@field _hider fun()
+---@filed _timeout_timer Timer
 ---@diagnostic disable-next-line: undefined-field
 local NuiView = View:extend("NuiView")
+
+function NuiView:init(opts)
+  NuiView.super.init(self, opts)
+  self._timer = vim.loop.new_timer()
+end
+
+function NuiView:autohide()
+  if self._opts.timeout then
+    self._timer:start(self._opts.timeout, 0, function()
+      if self._visible then
+        vim.schedule(function()
+          self:hide()
+        end)
+      end
+      self._timer:stop()
+    end)
+  end
+end
 
 function NuiView:update_options()
   self._opts = vim.tbl_deep_extend("force", {}, {
@@ -84,11 +105,15 @@ end
 ---@param old NoiceNuiOptions
 ---@param new NoiceNuiOptions
 function NuiView:reset(old, new)
+  self._timer:stop()
   if self._nui then
     local layout = false
     local diff = vim.tbl_filter(function(key)
       if vim.tbl_contains({ "relative", "size", "position" }, key) then
         layout = true
+        return false
+      end
+      if key == "timeout" then
         return false
       end
       return true
@@ -105,6 +130,7 @@ function NuiView:reset(old, new)
 end
 
 function NuiView:hide()
+  self._timer:stop()
   if self._nui then
     self._visible = false
 
@@ -142,6 +168,7 @@ function NuiView:show()
   end
 
   self:render(self._nui.bufnr)
+  self:autohide()
 end
 
 return NuiView
