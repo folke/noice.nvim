@@ -87,6 +87,27 @@ M.defaults = {
       },
     },
   },
+  minimal = {
+    backend = "popup",
+    relative = "editor",
+    timeout = 3000,
+    position = {
+      row = -1,
+      col = "100%",
+    },
+    size = "auto",
+    border = {
+      style = "none",
+    },
+    win_options = {
+      winblend = 60,
+      winhighlight = {
+        Normal = "Normal",
+        IncSearch = "",
+        Search = "",
+      },
+    },
+  },
   cmdline_popup = {
     backend = "popup",
     relative = "editor",
