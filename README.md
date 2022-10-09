@@ -121,6 +121,10 @@ Check the [wiki](https://github.com/folke/noice.nvim/wiki/Configuration-Recipes)
 | **find**       | `string`               | uses lua `string.find` to match the pattern                                                                                            |
 | **min_height** | `number`               | minimum height of the message                                                                                                          |
 | **max_height** | `number`               | maximum height of the message                                                                                                          |
+| **min_width**  | `number`               | minimum width of the message                                                                                                           |
+| **max_width**  | `number`               | maximum width of the message                                                                                                           |
+| **min_length** | `number`               | minimum length of the message (total width of all the lines)                                                                           |
+| **max_length** | `number`               | maximum length of the message (total width of all the lines)                                                                           |
 | **not**        | `filter`               | checks wether the filter matches or not                                                                                                |
 | **any**        | `filter[]`             | checks that at least one of the filters matches                                                                                        |
 

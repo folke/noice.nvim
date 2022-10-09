@@ -45,6 +45,14 @@ function Block:width()
   return ret
 end
 
+function Block:length()
+  local ret = 0
+  for _, line in ipairs(self._lines) do
+    ret = ret + line:width()
+  end
+  return ret
+end
+
 function Block:height()
   return #self._lines
 end
