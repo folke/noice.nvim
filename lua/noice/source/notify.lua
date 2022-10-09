@@ -17,7 +17,7 @@ function M.get_level(level)
   if type(level) == "string" then
     return level
   end
-  for k, v in ipairs(vim.log.levels) do
+  for k, v in pairs(vim.log.levels) do
     if v == level then
       return k:lower()
     end
