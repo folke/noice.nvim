@@ -31,6 +31,7 @@ M.defaults = {
     },
     win_options = {
       winhighlight = { Normal = "NormalFloat", FloatBorder = "FloatBorder" },
+      wrap = true,
     },
   },
   vsplit = {
