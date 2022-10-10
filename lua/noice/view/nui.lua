@@ -1,7 +1,6 @@
 local require = require("noice.util.lazy")
 
 local View = require("noice.view")
-local Event = require("nui.utils.autocmd").event
 local Util = require("noice.util")
 
 ---@class NuiRelative
@@ -153,6 +152,13 @@ function NuiView:get_layout()
   return Util.nui.get_layout({ width = self:width(), height = self:height() }, self._opts)
 end
 
+function NuiView:tag()
+  Util.tag(self._nui.bufnr, "nui." .. self._opts.type)
+  if self._nui.border then
+    Util.tag(self._nui.border.bufnr, "nui." .. self._opts.type .. ".border")
+  end
+end
+
 function NuiView:show()
   if not self._nui then
     self:create()
@@ -166,6 +172,8 @@ function NuiView:show()
   if not self._visible then
     self._nui:update_layout(self:get_layout())
   end
+
+  self:tag()
 
   self:render(self._nui.bufnr)
   self:autohide()

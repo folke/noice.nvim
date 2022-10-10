@@ -21,6 +21,26 @@ function M.once(fn)
   end
 end
 
+function M.tag(buf, tag)
+  local ft = vim.api.nvim_buf_get_option(buf, "filetype")
+
+  if ft == "" then
+    vim.api.nvim_buf_set_option(buf, "filetype", "noice")
+  end
+
+  if vim.api.nvim_buf_get_name(buf) == "" then
+    local path = "noice://" .. buf .. "/" .. tag
+    local params = {}
+    if ft ~= "" and ft ~= "noice" then
+      table.insert(params, "filetype=" .. ft)
+    end
+    if #params > 0 then
+      path = path .. "?" .. table.concat(params, "&")
+    end
+    vim.api.nvim_buf_set_name(buf, path)
+  end
+end
+
 function M.debounce(ms, fn)
   local timer = vim.loop.new_timer()
   return function(...)

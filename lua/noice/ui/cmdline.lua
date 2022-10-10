@@ -19,6 +19,8 @@ M.events = {
   block_hide = "cmdline_block_hide",
 }
 
+--- TODO: add injection for ! as shell in nvim-treesitter
+
 ---@class NoiceCmdline
 ---@field content {[1]: integer, [2]: string}[]
 ---@field pos number

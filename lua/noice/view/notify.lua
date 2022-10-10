@@ -76,6 +76,8 @@ function NotifyView:notify_render(messages)
     -- run notify view
     self:get_render(config)(buf, notif, hl, config)
 
+    Util.tag(buf, "notify")
+
     ---@type string[]
     local buf_lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
     local offset = #buf_lines - self:height(messages) + 1
