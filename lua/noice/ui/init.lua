@@ -15,11 +15,20 @@ function M.enable()
   local safe_handle = Util.protect(M.handle, { msg = "An error happened while handling a ui event" })
   M._attached = true
 
+  ---@type any?
+  local last_msg = nil
+
   vim.ui_attach(Config.ns, {
     ext_messages = Config.options.messages.enabled,
     ext_cmdline = Config.options.cmdline.enabled,
     ext_popupmenu = Config.options.popupmenu.enabled,
   }, function(event, ...)
+    local msg = { event, ... }
+
+    if Config.options.hacks.skip_duplicate_messages and vim.deep_equal(last_msg, msg) then
+      return
+    end
+    last_msg = msg
     -- dont process any messages during redraw, since redraw triggers last messages
     if not Hacks.inside_redraw then
       safe_handle(event, ...)
