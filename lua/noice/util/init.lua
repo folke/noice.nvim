@@ -157,6 +157,29 @@ function M.notify(msg, level, ...)
   })
 end
 
+---@type table<string, boolean>
+M.once = {}
+
+---@param msg string
+---@param level number
+---@param ... any
+function M.notify_once(msg, level, ...)
+  msg = msg:format(...)
+  local once = level .. msg
+  if not M.once[once] then
+    M.notify(msg, level)
+    M.once[once] = true
+  end
+end
+
+function M.warn_once(msg, ...)
+  M.notify_once(msg, vim.log.levels.WARN, ...)
+end
+
+function M.error_once(msg, ...)
+  M.notify_once(msg, vim.log.levels.ERROR, ...)
+end
+
 function M.warn(msg, ...)
   M.notify(msg, vim.log.levels.WARN, ...)
 end
