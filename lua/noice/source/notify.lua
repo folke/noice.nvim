@@ -8,8 +8,6 @@ local Msg = require("noice.ui.msg")
 
 local M = {}
 
--- TODO: add telescope extension
-
 ---@alias NotifyEvent "notify"
 ---@alias NotifyLevel "trace"|"debug"|"info"|"warn"|"error"|"off"
 
