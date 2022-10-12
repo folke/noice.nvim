@@ -93,6 +93,14 @@ Check the [wiki](https://github.com/folke/noice.nvim/wiki/Configuration-Recipes)
     -- Benefit of using Noice for this is the routing and consistent history view
     enabled = false,
   },
+  hacks = {
+    -- due to https://github.com/neovim/neovim/issues/20416
+    -- messages are resent during a redraw. Noice detects this in most cases, but
+    -- some plugins (mostly vim plugns), can still cause loops.
+    -- When a loop is detected, Noice exits.
+    -- Enable this option to simply skip duplicate messages instead.
+    skip_duplicate_messages = false,
+  },
   throttle = 1000 / 30, -- how frequently does Noice need to check for ui updates? This has no effect when in blocking mode.
   ---@type table<string, NoiceViewOptions>
   views = {}, -- @see the section on views below
