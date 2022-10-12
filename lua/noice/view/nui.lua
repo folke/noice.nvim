@@ -154,7 +154,7 @@ end
 
 function NuiView:tag()
   Util.tag(self._nui.bufnr, "nui." .. self._opts.type)
-  if self._nui.border then
+  if self._nui.border and self._nui.border.bufnr then
     Util.tag(self._nui.border.bufnr, "nui." .. self._opts.type .. ".border")
   end
 end
