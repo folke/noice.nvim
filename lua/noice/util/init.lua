@@ -158,7 +158,7 @@ function M.notify(msg, level, ...)
 end
 
 ---@type table<string, boolean>
-M.once = {}
+M._once = {}
 
 ---@param msg string
 ---@param level number
@@ -166,9 +166,9 @@ M.once = {}
 function M.notify_once(msg, level, ...)
   msg = msg:format(...)
   local once = level .. msg
-  if not M.once[once] then
+  if not M._once[once] then
     M.notify(msg, level)
-    M.once[once] = true
+    M._once[once] = true
   end
 end
 
