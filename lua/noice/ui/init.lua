@@ -15,6 +15,8 @@ function M.enable()
   local safe_handle = Util.protect(M.handle, { msg = "An error happened while handling a ui event" })
   M._attached = true
 
+  local stack_level = 0
+
   ---@type any?
   local last_msg = nil
 
@@ -29,14 +31,21 @@ function M.enable()
       return
     end
     last_msg = msg
+
     -- dont process any messages during redraw, since redraw triggers last messages
     if not Hacks.inside_redraw then
+      if stack_level > 50 then
+        Util.panic("Loop detected in Noice. Shutting down...")
+        return
+      end
+      stack_level = stack_level + 1
       safe_handle(event, ...)
 
       -- check if we need to update the ui
       if Util.is_blocking() then
         Util.try(Router.update)
       end
+      stack_level = stack_level - 1
     end
   end)
 end
