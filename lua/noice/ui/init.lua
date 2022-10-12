@@ -63,9 +63,23 @@ function M.handle(event, ...)
   local on = "on_" .. event_type
 
   local ok, handler = pcall(_G.require, "noice.ui." .. event_group)
-  if not (ok and type(handler[on]) == "function") then
+
+  if not ok then
     if Config.options.debug then
-      Util.error("No ui router for **" .. event .. "** events\n```lua\n" .. vim.inspect({ ... }) .. "\n```")
+      Util.error("No ui router for " .. event_group .. " (" .. handler .. ")")
+    end
+    return
+  end
+
+  if type(handler[on]) ~= "function" then
+    if Config.options.debug then
+      Util.error(
+        "No ui router for **"
+          .. event
+          .. "** events\n```lua\n"
+          .. vim.inspect({ group = event_group, on = on, args = ... })
+          .. "\n```"
+      )
     end
     return
   end
