@@ -118,8 +118,16 @@ function M.is_blocking(opts)
     redraw = true,
   }, opts or {})
   local mode = vim.api.nvim_get_mode()
+
+  local blocking_mode = false
+  for _, m in ipairs({ "ic", "c", "no" }) do
+    if mode.mode:find(m) == 1 then
+      blocking_mode = true
+    end
+  end
+
   local reason = opts.blocking and mode.blocking and "blocking"
-    or opts.mode and mode.mode:find("[cro]") and "mode"
+    or opts.mode and blocking_mode and "mode"
     or opts.input and Hacks.before_input and "input"
     or opts.redraw and Hacks.inside_redraw and "redraw"
     or nil
