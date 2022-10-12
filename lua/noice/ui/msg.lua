@@ -97,6 +97,7 @@ function M.check_clear()
 end
 
 function M.on_clear()
+  M.check_clear()
   M.last = nil
   M.clear = true
 end
