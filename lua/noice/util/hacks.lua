@@ -47,7 +47,7 @@ end
 
 ---@see https://github.com/neovim/neovim/issues/17810
 function M.fix_incsearch()
-  ---@type integer|string|nil
+  ---@type integer|nil
   local conceallevel
 
   vim.api.nvim_create_autocmd("CmdlineEnter", {
