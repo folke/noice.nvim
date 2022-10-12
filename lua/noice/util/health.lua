@@ -25,7 +25,7 @@ function M.check(loaded)
     return
   end
 
-  if vim.g.lazyredraw then
+  if vim.go.lazyredraw then
     Util.warn_once(
       "You have enabled 'lazyredraw' (see `:h 'lazyredraw'`)\nThis is only meant to be set temporarily.\nYou'll experience issues using Noice."
     )
