@@ -39,7 +39,7 @@ function NuiView:update_options()
     },
   }, self._opts, self:get_layout())
 
-  Util.nui.normalize(self._opts)
+  self._opts = Util.nui.normalize(self._opts)
 end
 
 function NuiView:create()
