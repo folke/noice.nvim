@@ -35,11 +35,11 @@ function MiniView:show()
       table.insert(self.active, 1, message)
       vim.defer_fn(function()
         self.active = Filter.filter(self.active, { ["not"] = { message = message } })
-        self.view:display(self.active, { dirty = true, format = true })
+        self.view:display(self.active, { dirty = true })
       end, self._opts.timeout)
     end
   end
-  self.view:display(self.active, { dirty = true, format = true })
+  self.view:display(self.active, { dirty = true })
 end
 
 return MiniView
