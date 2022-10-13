@@ -2,7 +2,6 @@ local require = require("noice.util.lazy")
 
 local Util = require("noice.util")
 local Manager = require("noice.message.manager")
-local Msg = require("noice.ui.msg")
 
 local M = {}
 
@@ -51,7 +50,7 @@ M.filters = {
   end,
   message = function(message, other)
     ---@cast message NoiceMessage
-    return other == message
+    return other.id == message.id
   end,
   error = function(message, error)
     ---@cast message NoiceMessage
