@@ -1,4 +1,4 @@
-*noice.nvim.txt*          For NVIM v0.5.0         Last change: 2022 October 12
+*noice.nvim.txt*          For NVIM v0.5.0         Last change: 2022 October 13
 
 ==============================================================================
 Table of Contents                               *noice.nvim-table-of-contents*
@@ -16,6 +16,7 @@ Table of Contents                               *noice.nvim-table-of-contents*
   - Statusline Components                   |noice.nvim-statusline-components|
   - Telescope                                           |noice.nvim-telescope|
   - Usage                                                   |noice.nvim-usage|
+  - Highlight Groups                             |noice.nvim-highlight-groups|
   - Known Issues                                     |noice.nvim-known-issues|
 
 ==============================================================================
@@ -482,6 +483,28 @@ USAGE                                                       *noice.nvim-usage*
 - `:Noice enable` enables **Noice**
 - `:Noice stats` shows debugging stats
 - `:Noice telescope` opens message history in Telescope
+
+
+HIGHLIGHT GROUPS                                 *noice.nvim-highlight-groups*
+
+│         Highlight Group         │       Default Group       │                    Description                     │
+│**NoiceCmdline**                 │_MsgArea_                  │Normal for the classic cmdline area at the bottom”│
+│**NoiceCmdlinePopup**            │_Normal_                   │Normal for the cmdline popup                        │
+│**NoiceCmdlinePopupBorder**      │_DiagnosticSignInfo_       │Cmdline popup border                                │
+│**NoiceCmdlinePopupSearchBorder**│_DiagnosticSignWarn_       │Cmdline popup border for search                     │
+│**NoiceConfirm**                 │_Normal_                   │Normal for the confirm view                         │
+│**NoiceConfirmBorder**           │_DiagnosticSignInfo_       │Border for the confirm view                         │
+│**NoicePopup**                   │_NormalFloat_              │Normal for popup views                              │
+│**NoicePopupBorder**             │_FloatBorder_              │Border for popup views                              │
+│**NoicePopupmenu**               │_Pmenu_                    │Normal for the popupmenu                            │
+│**NoicePopupmenuBorder**         │_FloatBorder_              │Popupmenu border                                    │
+│**NoicePopupmenuMatch**          │_Special_                  │Part of the item that matches the input             │
+│**NoicePopupmenuSelected**       │_PmenuSel_                 │Selected item in the popupmenu                      │
+│**NoiceScrollbar**               │_PmenuSbar_                │Normal for scrollbar                                │
+│**NoiceScrollbarThumb**          │_PmenuThumb_               │Scrollbar thumb                                     │
+│**NoiceSplit**                   │_NormalFloat_              │Normal for split views                              │
+│**NoiceSplitBorder**             │_FloatBorder_              │Border for split views                              │
+│**NoiceVirtualText**             │_DiagnosticVirtualTextInfo_│Default hl group for virtualtext views              │
 
 
 KNOWN ISSUES                                         *noice.nvim-known-issues*
