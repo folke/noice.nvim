@@ -75,7 +75,6 @@ end
 -- This wraps vim.cmd, nvim_cmd, nvim_command and nvim_exec
 ---@see https://github.com/neovim/neovim/issues/20416
 M.inside_redraw = false
-M.block_redraw = false
 function M.fix_redraw()
   local nvim_cmd = vim.api.nvim_cmd
 
