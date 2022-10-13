@@ -218,4 +218,36 @@ function M.debug(data)
   fd:close()
 end
 
+---@return string
+function M.read_file(file)
+  local fd = io.open(file, "r")
+  if not fd then
+    error(("Could not open file %s for reading"):format(file))
+  end
+  local data = fd:read("*a")
+  fd:close()
+  return data
+end
+
+function M.write_file(file, data)
+  local fd = io.open(file, "w+")
+  if not fd then
+    error(("Could not open file %s for writing"):format(file))
+  end
+  fd:write(data)
+  fd:close()
+end
+
+---@generic K
+---@generic V
+---@param tbl table<K, V>
+---@param fn fun(key: K, value: V)
+function M.for_each(tbl, fn)
+  local keys = vim.tbl_keys(tbl)
+  table.sort(keys)
+  for _, key in ipairs(keys) do
+    fn(key, tbl[key])
+  end
+end
+
 return M

@@ -18,8 +18,8 @@ local defaults = {
   winnr = 0,
   autohide = true,
   hl_group = {
-    bar = "PmenuSbar",
-    thumb = "PmenuThumb",
+    bar = "NoiceScrollbar",
+    thumb = "NoiceScrollbarThumb",
   },
   ---@type _.NuiBorderPadding
   border_size = {

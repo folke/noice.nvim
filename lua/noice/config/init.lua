@@ -78,6 +78,8 @@ function M.setup(options)
 
   M.options.routes = Routes.get(options.routes)
 
+  require("noice.config.highlights").setup()
+
   if M.options.notify.enabled then
     vim.notify = require("noice").notify
   end

@@ -398,6 +398,30 @@ require("telescope").load_extension("noice")
 - `:Noice stats` shows debugging stats
 - `:Noice telescope` opens message history in Telescope
 
+## 🌈 Highlight Groups
+
+<!-- hl_start -->
+| Highlight Group                   | Default Group               | Description                                        |
+| --------------------------------- | --------------------------- | -------------------------------------------------- |
+| **NoiceCmdline**                  | *MsgArea*                   | Normal for the classic cmdline area at the bottom" |
+| **NoiceCmdlinePopup**             | *Normal*                    | Normal for the cmdline popup                       |
+| **NoiceCmdlinePopupBorder**       | *DiagnosticSignInfo*        | Cmdline popup border                               |
+| **NoiceCmdlinePopupSearchBorder** | *DiagnosticSignWarn*        | Cmdline popup border for search                    |
+| **NoiceConfirm**                  | *Normal*                    | Normal for the confirm view                        |
+| **NoiceConfirmBorder**            | *DiagnosticSignInfo*        | Border for the confirm view                        |
+| **NoicePopup**                    | *NormalFloat*               | Normal for popup views                             |
+| **NoicePopupBorder**              | *FloatBorder*               | Border for popup views                             |
+| **NoicePopupmenu**                | *Pmenu*                     | Normal for the popupmenu                           |
+| **NoicePopupmenuBorder**          | *FloatBorder*               | Popupmenu border                                   |
+| **NoicePopupmenuMatch**           | *Special*                   | Part of the item that matches the input            |
+| **NoicePopupmenuSelected**        | *PmenuSel*                  | Selected item in the popupmenu                     |
+| **NoiceScrollbar**                | *PmenuSbar*                 | Normal for scrollbar                               |
+| **NoiceScrollbarThumb**           | *PmenuThumb*                | Scrollbar thumb                                    |
+| **NoiceSplit**                    | *NormalFloat*               | Normal for split views                             |
+| **NoiceSplitBorder**              | *FloatBorder*               | Border for split views                             |
+| **NoiceVirtualText**              | *DiagnosticVirtualTextInfo* | Default hl group for virtualtext views             |
+<!-- hl_end -->
+
 ## 🔥 Known Issues
 
 **Noice** is using the new experimental `vim.ui_attach` API, so issues are to be expected.

@@ -53,7 +53,6 @@ function M.defaults()
         event = "msg_show",
         kind = "search_count",
       },
-      opts = { hl_group = "DiagnosticVirtualTextInfo" },
     },
     {
       filter = {

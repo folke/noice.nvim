@@ -11,10 +11,10 @@ M.defaults = {
     },
     win_options = {
       winhighlight = {
-        Normal = "Pmenu", -- change to NormalFloat to make it look like other floats
-        FloatBorder = "FloatBorder", -- border highlight
-        CursorLine = "PmenuSel", -- used for highlighting the selected item
-        PmenuMatch = "Special", -- used to highlight the part of the item that matches the input
+        Normal = "NoicePopupmenu", -- change to NormalFloat to make it look like other floats
+        FloatBorder = "NoicePopupmenuBorder", -- border highlight
+        CursorLine = "NoicePopupmenuSelected", -- used for highlighting the selected item
+        PmenuMatch = "NoicePopupmenuMatch", -- used to highlight the part of the item that matches the input
       },
     },
     border = {
@@ -24,6 +24,7 @@ M.defaults = {
   virtualtext = {
     backend = "virtualtext",
     format = { "{message}" },
+    hl_group = "NoiceVirtualText",
   },
   notify = {
     backend = "notify",
@@ -41,7 +42,7 @@ M.defaults = {
       keys = { "q", "<esc>" },
     },
     win_options = {
-      winhighlight = { Normal = "NormalFloat", FloatBorder = "FloatBorder" },
+      winhighlight = { Normal = "NoiceSplit", FloatBorder = "NoiceSplitBorder" },
       wrap = true,
     },
   },
@@ -55,7 +56,7 @@ M.defaults = {
       keys = { "q", "<esc>" },
     },
     win_options = {
-      winhighlight = { Normal = "NormalFloat", FloatBorder = "FloatBorder" },
+      winhighlight = { Normal = "NoiceSplit", FloatBorder = "NoiceSplitBorder" },
     },
   },
   popup = {
@@ -74,7 +75,7 @@ M.defaults = {
       height = "60%",
     },
     win_options = {
-      winhighlight = { Normal = "NormalFloat", FloatBorder = "FloatBorder" },
+      winhighlight = { Normal = "NoicePopup", FloatBorder = "NoicePopupBorder" },
     },
   },
   cmdline = {
@@ -93,7 +94,7 @@ M.defaults = {
     },
     win_options = {
       winhighlight = {
-        Normal = "MsgArea",
+        Normal = "NoiceCmdline",
         IncSearch = "",
         Search = "",
       },
@@ -144,8 +145,8 @@ M.defaults = {
     },
     win_options = {
       winhighlight = {
-        Normal = "Normal",
-        FloatBorder = "DiagnosticInfo",
+        Normal = "NoiceCmdlinePopup",
+        FloatBorder = "NoiceCmdlinePopupBorder",
         IncSearch = "",
         Search = "",
       },
@@ -163,7 +164,7 @@ M.defaults = {
           win_options = {
             winhighlight = {
               Normal = "Normal",
-              FloatBorder = "DiagnosticWarn",
+              FloatBorder = "NoiceCmdlinePopupSearchBorder",
               IncSearch = "",
               Search = "",
             },
@@ -193,8 +194,8 @@ M.defaults = {
     },
     win_options = {
       winhighlight = {
-        Normal = "Normal",
-        FloatBorder = "DiagnosticInfo",
+        Normal = "NoiceConfirm",
+        FloatBorder = "NoiceConfirmBorder",
       },
     },
   },
