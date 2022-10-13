@@ -190,6 +190,7 @@ VIEWS                                                       *noice.nvim-views*
 - **split**: powered by nui.nvim <https://github.com/MunifTanjim/nui.nvim>
 - **notify**: powered by nvim-notify <https://github.com/rcarriga/nvim-notify>
 - **virtualtext**: shows the message as virtualtext (for example for `search_count`)
+- **mini**: similar to notifier.nvim <https://github.com/vigoux/notifier.nvim> & fidget.nvim <https://github.com/j-hui/fidget.nvim>
 
 
 A **View** (`config.views`) is a combination of a `backend` and options.
@@ -200,6 +201,7 @@ A **View** (`config.views`) is a combination of a `backend` and options.
 │**split**        │split       │horizontal split                                                                  │
 │**vsplit**       │split       │vertical split                                                                    │
 │**popup**        │popup       │simple popup                                                                      │
+│**mini**         │mini        │minimal view, by default bottom right, right-aligned                              │
 │**cmdline**      │popup       │bottom line, similar to the classic cmdline                                       │
 │**cmdline_popup**│popup       │fancy cmdline popup, with different styles according to the cmdline mode          │
 │**popupmenu**    │nui.menu    │special view with the options used to render the popupmenu when backend is **nui**│
@@ -359,6 +361,9 @@ rendered if the formatter itself rendered something.
 The `format` view option, can be either a `string` (one of the built-in
 formats), or a table with a custom format definition.
 
+To align text, you can use the `align` option for a view. Can be `center`,
+`left` or `right`.
+
 ROUTES                                                     *noice.nvim-routes*
 
 A **route** has a `filter`, `view` and optional `opts` attribute.
@@ -494,6 +499,7 @@ HIGHLIGHT GROUPS                                 *noice.nvim-highlight-groups*
 │**NoiceCmdlinePopupSearchBorder**│_DiagnosticSignWarn_       │Cmdline popup border for search                     │
 │**NoiceConfirm**                 │_Normal_                   │Normal for the confirm view                         │
 │**NoiceConfirmBorder**           │_DiagnosticSignInfo_       │Border for the confirm view                         │
+│**NoiceMini**                    │_MsgArea_                  │Normal for mini view                                │
 │**NoicePopup**                   │_NormalFloat_              │Normal for popup views                              │
 │**NoicePopupBorder**             │_FloatBorder_              │Border for popup views                              │
 │**NoicePopupmenu**               │_Pmenu_                    │Normal for the popupmenu                            │
