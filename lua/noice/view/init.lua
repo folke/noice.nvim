@@ -66,8 +66,10 @@ function View:check_options(messages)
 end
 
 ---@param messages NoiceMessage[]
-function View:display(messages)
-  local dirty = #messages ~= #self._messages
+---@param opts? {dirty?:boolean, format?: boolean}
+function View:display(messages, opts)
+  opts = opts or {}
+  local dirty = (#messages ~= #self._messages) or opts.dirty
   for _, m in ipairs(messages) do
     if m.tick > self._tick then
       self._tick = m.tick
@@ -76,13 +78,15 @@ function View:display(messages)
   end
 
   if dirty then
-    self:format(messages)
+    if opts.format == false then
+      self._messages = messages
+    else
+      self:format(messages)
+    end
     if #self._messages > 0 then
       self:check_options(messages)
 
-      Hacks.block_redraw = true
       Util.try(self.show, self)
-      Hacks.block_redraw = false
 
       self._visible = true
     else
