@@ -112,6 +112,22 @@ function M.normalize_padding(opts)
   }, opts.padding or {})
 end
 
+---@param opts? _.NuiBorder
+---@return _.NuiBorderPadding
+function M.get_border_size(opts)
+  opts = opts or {}
+
+  local border_size = opts.style and opts.style ~= "none" and 1 or 0
+  local padding = M.normalize_padding(opts)
+
+  return {
+    top = border_size + padding.top,
+    bottom = border_size + padding.bottom,
+    right = border_size + padding.right,
+    left = border_size + padding.left,
+  }
+end
+
 ---@param dim {width: number, height:number}
 ---@param _opts NoiceNuiOptions
 ---@return NoiceNuiOptions

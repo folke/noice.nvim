@@ -5,6 +5,10 @@ M.defaults = {
   popupmenu = {
     zindex = 65,
     position = "auto", -- when auto, then it will be positioned to the cmdline or cursor
+    size = {
+      width = "auto",
+      -- min_width = 10,
+    },
     win_options = {
       winhighlight = {
         Normal = "Pmenu", -- change to NormalFloat to make it look like other floats
@@ -12,6 +16,9 @@ M.defaults = {
         CursorLine = "PmenuSel", -- used for highlighting the selected item
         PmenuMatch = "Special", -- used to highlight the part of the item that matches the input
       },
+    },
+    border = {
+      padding = { 0, 1 },
     },
   },
   virtualtext = {
