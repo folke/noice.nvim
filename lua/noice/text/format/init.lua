@@ -16,9 +16,6 @@ local M = {}
 ---@field after? NoiceFormatEntry
 ---@field opts table
 
-M.format = { "level", "debug", "message" }
-M.format = { { "level" }, "debug", "message" }
-
 ---@param entry string|table<string, any>
 ---@return NoiceFormatEntry?
 function M.parse_entry(entry)
@@ -78,12 +75,12 @@ function M.format(message, format, opts)
     format = vim.deepcopy(FormatConfig.formats[format])
   end
 
-  if Config.options.debug then
-    table.insert(format, 1, "{debug}")
-  end
-
   -- use existing message, with a separate _lines array
   local ret = setmetatable({ _lines = {} }, { __index = message })
+  if Config.options.debug and not message.opts.debug then
+    table.insert(format, 1, "{debug}")
+    ret.opts.debug = true
+  end
 
   for _, entry in ipairs(format) do
     entry = M.parse_entry(entry)
