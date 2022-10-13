@@ -70,6 +70,7 @@ function M:on_error(err)
     end
 
     if self._opts.retry_on_E11 and err:find("E11:") then
+      M._errors = M._errors - 1
       self._defer_retry = true
       return
     end
