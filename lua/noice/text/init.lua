@@ -13,13 +13,11 @@ local NuiText = require("nui.text")
 ---@class NoiceText: NuiText
 ---@field super NuiText
 ---@field on_render? fun(text: NoiceText, buf:number, line: number, byte:number, col:number)
+---@overload fun(content:string, highlight?:string|NoiceExtmark):NoiceText
 ---@diagnostic disable-next-line: undefined-field
-local Text = NuiText:extend("NoiceText")
+local NoiceText = NuiText:extend("NoiceText")
 
----@type NoiceText|fun(content:string, highlight?:string|NoiceExtmark):NoiceText
-local NoiceText = Text
-
-function Text.virtual_text(text, hl_group)
+function NoiceText.virtual_text(text, hl_group)
   local content = (" "):rep(vim.api.nvim_strwidth(text))
   return NoiceText(content, {
     virt_text = { { text, hl_group } },
@@ -28,7 +26,7 @@ function Text.virtual_text(text, hl_group)
   })
 end
 
-function Text.cursor(col)
+function NoiceText.cursor(col)
   return NoiceText(" ", {
     hl_group = "Cursor",
     col = col,
@@ -41,7 +39,7 @@ end
 ---@param linenr number line number (1-indexed)
 ---@param byte_start number start byte position (0-indexed)
 ---@return nil
-function Text:highlight(bufnr, ns_id, linenr, byte_start)
+function NoiceText:highlight(bufnr, ns_id, linenr, byte_start)
   if not self.extmark then
     return
   end
@@ -77,7 +75,7 @@ function Text:highlight(bufnr, ns_id, linenr, byte_start)
     extmark.col = nil
   end
 
-  Text.super.highlight(self, bufnr, ns_id, linenr, byte_start)
+  NoiceText.super.highlight(self, bufnr, ns_id, linenr, byte_start)
 
   if self.on_render then
     self.on_render(self, bufnr, linenr, byte_start, col_start)

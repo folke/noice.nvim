@@ -15,7 +15,9 @@ local _id = 0
 ---@field tick number
 ---@field level? NotifyLevel
 ---@field kind? NoiceKind
+---@field _debug? boolean
 ---@field opts table<string, any>
+---@overload fun(event: NoiceEvent, kind?: NoiceKind, content?: NoiceContent|NoiceContent[]): NoiceMessage
 ---@diagnostic disable-next-line: undefined-field
 local Message = Block:extend("NoiceBlock")
 
@@ -36,6 +38,4 @@ end
 
 Message.is = Filter.is
 
----@alias NoiceMessage.constructor fun(event: NoiceEvent, kind?: NoiceKind, content?: NoiceContent|NoiceContent[]): NoiceMessage
----@return NoiceMessage|NoiceMessage.constructor
 return Message

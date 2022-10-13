@@ -21,6 +21,7 @@ local Format = require("noice.text.format")
 ---@field _opts NoiceViewOptions
 ---@field _view_opts NoiceViewOptions
 ---@field _visible boolean
+---@overload fun(opts?: NoiceViewOptions): NoiceView
 local View = Object("NoiceView")
 
 ---@param view string
@@ -182,6 +183,4 @@ function View:render(buf, opts)
   end
 end
 
----@alias NoiceView.constructor fun(opts?: NoiceViewOptions): NoiceView
----@return NoiceView|NoiceView.constructor
 return View

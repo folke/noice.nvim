@@ -11,6 +11,7 @@ local Util = require("noice.util")
 ---@field thumb {bufnr:integer, winnr:integer}?
 ---@field visible boolean
 ---@field opts ScrollbarOptions
+---@overload fun(opts?:ScrollbarOptions):NoiceScrollbar
 local Scrollbar = Object("NuiScrollbar")
 
 ---@class ScrollbarOptions
@@ -136,5 +137,4 @@ function Scrollbar:_open_win(opts)
   return ret
 end
 
----@return NoiceScrollbar|fun(opts?:ScrollbarOptions):NoiceScrollbar
 return Scrollbar

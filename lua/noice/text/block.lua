@@ -9,6 +9,7 @@ local Object = require("nui.object")
 
 ---@class NoiceBlock
 ---@field private _lines NuiLine[]
+---@overload fun(content?: NoiceContent|NoiceContent[], highlight?: string|table): NoiceBlock
 local Block = Object("Block")
 
 ---@param content? NoiceContent|NoiceContent[]
@@ -198,6 +199,4 @@ function Block:newline()
   table.insert(self._lines, NuiLine())
 end
 
----@alias NoiceBlock.constructor fun(content?: NoiceContent|NoiceContent[], highlight?: string|table): NoiceBlock
----@return NoiceBlock|NoiceBlock.constructor
 return Block
