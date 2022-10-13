@@ -100,22 +100,25 @@ M.defaults = {
       },
     },
   },
-  minimal = {
-    backend = "popup",
+  mini = {
+    backend = "mini",
     relative = "editor",
-    timeout = 3000,
+    align = "right",
+    timeout = 5000,
     position = {
       row = -1,
       col = "100%",
+      -- col = 0,
     },
     size = "auto",
     border = {
       style = "none",
     },
+    zindex = 60,
     win_options = {
       winblend = 60,
       winhighlight = {
-        Normal = "Normal",
+        Normal = "MsgArea",
         IncSearch = "",
         Search = "",
       },
