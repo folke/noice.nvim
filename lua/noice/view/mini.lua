@@ -13,7 +13,7 @@ local defaults = { timeout = 5000 }
 ---@field super NoiceView
 ---@field view? NuiView
 ---@diagnostic disable-next-line: undefined-field
-local MiniView = View:extend("NotifyView")
+local MiniView = View:extend("MiniView")
 
 function MiniView:init(opts)
   MiniView.super.init(self, opts)
