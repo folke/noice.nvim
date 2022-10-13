@@ -199,7 +199,5 @@ function Block:newline()
 end
 
 ---@alias NoiceBlock.constructor fun(content?: NoiceContent|NoiceContent[], highlight?: string|table): NoiceBlock
----@type NoiceBlock|NoiceBlock.constructor
-local NoiceBlock = Block
-
-return NoiceBlock
+---@return NoiceBlock|NoiceBlock.constructor
+return Block

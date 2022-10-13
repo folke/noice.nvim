@@ -173,6 +173,5 @@ function View:render(buf, opts)
 end
 
 ---@alias NoiceView.constructor fun(opts?: NoiceViewOptions): NoiceView
----@type NoiceView|NoiceView.constructor
-local NoiceView = View
-return NoiceView
+---@return NoiceView|NoiceView.constructor
+return View

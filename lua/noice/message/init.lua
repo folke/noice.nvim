@@ -37,7 +37,5 @@ end
 Message.is = Filter.is
 
 ---@alias NoiceMessage.constructor fun(event: NoiceEvent, kind?: NoiceKind, content?: NoiceContent|NoiceContent[]): NoiceMessage
----@type NoiceMessage|NoiceMessage.constructor
-local NoiceMessage = Message
-
-return NoiceMessage
+---@return NoiceMessage|NoiceMessage.constructor
+return Message
