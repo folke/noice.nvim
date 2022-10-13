@@ -5,22 +5,23 @@ local Util = require("noice.util")
 local M = {}
 
 M.defaults = {
-  Popupmenu = "Pmenu", -- Normal for the popupmenu
-  PopupmenuBorder = "FloatBorder", -- Popupmenu border
-  PopupmenuSelected = "PmenuSel", -- Selected item in the popupmenu
-  PopupmenuMatch = "Special", -- Part of the item that matches the input
-  Scrollbar = "PmenuSbar", -- Normal for scrollbar
-  ScrollbarThumb = "PmenuThumb", -- Scrollbar thumb
-  Split = "NormalFloat", -- Normal for split views
-  SplitBorder = "FloatBorder", -- Border for split views
-  Popup = "NormalFloat", -- Normal for popup views
-  PopupBorder = "FloatBorder", -- Border for popup views
   Cmdline = "MsgArea", -- Normal for the classic cmdline area at the bottom"
   CmdlinePopup = "Normal", -- Normal for the cmdline popup
   CmdlinePopupBorder = "DiagnosticSignInfo", -- Cmdline popup border
   CmdlinePopupSearchBorder = "DiagnosticSignWarn", -- Cmdline popup border for search
   Confirm = "Normal", -- Normal for the confirm view
   ConfirmBorder = "DiagnosticSignInfo", -- Border for the confirm view
+  Mini = "MsgArea", -- Normal for mini view
+  Popup = "NormalFloat", -- Normal for popup views
+  PopupBorder = "FloatBorder", -- Border for popup views
+  Popupmenu = "Pmenu", -- Normal for the popupmenu
+  PopupmenuBorder = "FloatBorder", -- Popupmenu border
+  PopupmenuMatch = "Special", -- Part of the item that matches the input
+  PopupmenuSelected = "PmenuSel", -- Selected item in the popupmenu
+  Scrollbar = "PmenuSbar", -- Normal for scrollbar
+  ScrollbarThumb = "PmenuThumb", -- Scrollbar thumb
+  Split = "NormalFloat", -- Normal for split views
+  SplitBorder = "FloatBorder", -- Border for split views
   VirtualText = "DiagnosticVirtualTextInfo", -- Default hl group for virtualtext views
 }
 

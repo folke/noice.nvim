@@ -118,7 +118,7 @@ M.defaults = {
     win_options = {
       winblend = 60,
       winhighlight = {
-        Normal = "MsgArea",
+        Normal = "NoiceMini",
         IncSearch = "",
         Search = "",
       },

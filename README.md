@@ -159,6 +159,7 @@ local filter = {
 - **split**: powered by [nui.nvim](https://github.com/MunifTanjim/nui.nvim)
 - **notify**: powered by [nvim-notify](https://github.com/rcarriga/nvim-notify)
 - **virtualtext**: shows the message as virtualtext (for example for `search_count`)
+- **mini**: similar to [notifier.nvim](https://github.com/vigoux/notifier.nvim) & [fidget.nvim](https://github.com/j-hui/fidget.nvim)
 
 A **View** (`config.views`) is a combination of a `backend` and options.
 **Noice** comes with the following built-in views with sane defaults:
@@ -169,6 +170,7 @@ A **View** (`config.views`) is a combination of a `backend` and options.
 | **split**         | `split`    | horizontal split                                                                   |
 | **vsplit**        | `split`    | vertical split                                                                     |
 | **popup**         | `popup`    | simple popup                                                                       |
+| **mini**          | `mini`     | minimal view, by default bottom right, right-aligned                                                                       |
 | **cmdline**       | `popup`    | bottom line, similar to the classic cmdline                                        |
 | **cmdline_popup** | `popup`    | fancy cmdline popup, with different styles according to the cmdline mode           |
 | **popupmenu**     | `nui.menu` | special view with the options used to render the popupmenu when backend is **nui** |
@@ -280,6 +282,8 @@ Formatters are used in `format` definitions. **Noice** includes the following bu
 Text before/after the formatter or in the before/after options, will only be rendered if the formatter itself rendered something.
 
 The `format` view option, can be either a `string` (one of the built-in formats), or a table with a custom format definition.
+
+To align text, you can use the `align` option for a view. Can be `center`, `left` or `right`.
 
 ## 🚗 Routes
 
@@ -409,6 +413,7 @@ require("telescope").load_extension("noice")
 | **NoiceCmdlinePopupSearchBorder** | *DiagnosticSignWarn*        | Cmdline popup border for search                    |
 | **NoiceConfirm**                  | *Normal*                    | Normal for the confirm view                        |
 | **NoiceConfirmBorder**            | *DiagnosticSignInfo*        | Border for the confirm view                        |
+| **NoiceMini**                     | *MsgArea*                   | Normal for mini view                               |
 | **NoicePopup**                    | *NormalFloat*               | Normal for popup views                             |
 | **NoicePopupBorder**              | *FloatBorder*               | Border for popup views                             |
 | **NoicePopupmenu**                | *Pmenu*                     | Normal for the popupmenu                           |
