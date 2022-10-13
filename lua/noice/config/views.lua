@@ -177,6 +177,7 @@ M.defaults = {
     backend = "popup",
     relative = "editor",
     focusable = false,
+    align = "center",
     enter = false,
     zindex = 60,
     format = { "{confirm}" },

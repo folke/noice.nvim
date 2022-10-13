@@ -4,13 +4,14 @@ local Config = require("noice.config")
 local Util = require("noice.util")
 local Object = require("nui.object")
 local Filter = require("noice.message.filter")
-local Hacks = require("noice.util.hacks")
+local Format = require("noice.text.format")
 
 ---@class NoiceViewBaseOptions
 ---@field buf_options? table<string,any>
 ---@field filter_options? { filter: NoiceFilter, opts: NoiceNuiOptions }[]
 ---@field backend string
 ---@field format? NoiceFormat
+---@field align? "center" | "left" | "right"
 --
 ---@alias NoiceViewOptions NoiceViewBaseOptions|NoiceNuiOptions|NoiceNotifyOptions
 
@@ -107,6 +108,11 @@ function View:format(messages)
     end,
     messages
   )
+
+  local width = self:width()
+  for _, message in ipairs(self._messages) do
+    Format.align(message, width, self._opts.align)
+  end
 end
 
 ---@param old NoiceViewOptions

@@ -4,6 +4,7 @@ local Util = require("noice.util")
 local Config = require("noice.config")
 local FormatConfig = require("noice.config.format")
 local Formatters = require("noice.text.format.formatters")
+local NuiText = require("nui.text")
 
 local M = {}
 
@@ -106,6 +107,24 @@ function M.format(message, format, opts)
   end
 
   return ret
+end
+
+---@param message NoiceMessage
+---@param width integer
+---@param align? "center" | "left" | "right"
+function M.align(message, width, align)
+  if align == nil or align == "left" then
+    return
+  end
+  for _, line in ipairs(message._lines) do
+    if line:width() < width then
+      if align == "right" then
+        table.insert(line._texts, 1, NuiText(string.rep(" ", width - line:width())))
+      elseif align == "center" then
+        table.insert(line._texts, 1, NuiText(string.rep(" ", math.floor((width - line:width()) / 2 + 0.5))))
+      end
+    end
+  end
 end
 
 return M
