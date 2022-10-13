@@ -92,6 +92,21 @@ function M.debug(message)
 end
 
 ---@param message NoiceMessage
+---@param opts NoiceFormatOptions.data
+function M.data(message, opts)
+  local value = vim.tbl_get(message.opts, unpack(vim.split(opts.key, ".", { plain = true })))
+  if value then
+    message:append("" .. value, opts.hl_group)
+  end
+end
+
+---@param message NoiceMessage
+---@param opts NoiceFormatOptions.spinner
+function M.spinner(message, opts)
+  message:append(require("noice.util.spinners").spin(opts.name), opts.hl_group)
+end
+
+---@param message NoiceMessage
 ---@param input NoiceMessage
 ---@param opts NoiceFormatOptions.confirm
 function M.confirm(message, opts, input)

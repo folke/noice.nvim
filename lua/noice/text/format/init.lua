@@ -37,11 +37,17 @@ function M.parse_entry(entry)
     opts = { text = text },
   }
 
-  local before, name, after = text:match("^(.*){(.*)}(.*)$")
+  local before, name, after = text:match("^(.*){(.-)}(.*)$")
   if before then
     ret.formatter = name
     ret.before = M.parse_entry(before)
     ret.after = M.parse_entry(after)
+  end
+
+  local opts_key = ret.formatter:match("^data%.(.*)")
+  if opts_key then
+    entry.key = opts_key
+    ret.formatter = "data"
   end
 
   if not Formatters[ret.formatter] then
@@ -77,10 +83,10 @@ function M.format(message, format, opts)
   end
 
   -- use existing message, with a separate _lines array
-  local ret = setmetatable({ _lines = {} }, { __index = message })
-  if Config.options.debug and not message.opts.debug then
+  local ret = setmetatable({ _lines = {}, _debug = false }, { __index = message })
+  if Config.options.debug and not message._debug then
     table.insert(format, 1, "{debug}")
-    ret.opts.debug = true
+    ret._debug = true
   end
 
   for _, entry in ipairs(format) do
