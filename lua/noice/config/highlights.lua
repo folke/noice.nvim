@@ -23,6 +23,8 @@ M.defaults = {
   Split = "NormalFloat", -- Normal for split views
   SplitBorder = "FloatBorder", -- Border for split views
   VirtualText = "DiagnosticVirtualTextInfo", -- Default hl group for virtualtext views
+  ProgressDone = "Search",
+  ProgressTodo = "CursorLine",
 }
 
 function M.setup()

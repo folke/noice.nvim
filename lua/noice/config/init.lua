@@ -6,6 +6,8 @@ local M = {}
 
 M.ns = vim.api.nvim_create_namespace("messages_highlights")
 
+-- TODO: restructure config
+
 ---@class NoiceConfig
 ---@field history NoiceRouteConfig
 ---@field views table<string, NoiceViewOptions>
@@ -47,6 +49,9 @@ M.defaults = {
     -- Benefit of using Noice for this is the routing and consistent history view
     enabled = true,
   },
+  lsp_progress = {
+    enabled = false,
+  },
   hacks = {
     -- due to https://github.com/neovim/neovim/issues/20416
     -- messages are resent during a redraw. Noice detects this in most cases, but
@@ -82,6 +87,9 @@ function M.setup(options)
 
   if M.options.notify.enabled then
     vim.notify = require("noice").notify
+  end
+  if M.options.lsp_progress.enabled then
+    require("noice.source.lsp").setup()
   end
 end
 

@@ -1,5 +1,7 @@
 local M = {}
 
+--TODO: make configurable
+---@type table<string, NoiceFormat>
 M.formats = {
   default = { "{level} ", "{title} ", "{message}" },
   notify = { "{message}" },
@@ -28,8 +30,27 @@ M.formats = {
     "\n",
     "{message}",
   },
+  lsp_progress = {
+    {
+      "{progress} ",
+      key = "progress.percentage",
+      contents = {
+        { "{data.progress.message} ", hl_group = nil },
+      },
+    },
+    "({data.progress.percentage}%) ",
+    { "{spinner} ", hl_group = "Constant" },
+    { "{data.progress.title} ", hl_group = "NonText" },
+    { "{data.progress.client_name} ", hl_group = "Title" },
+  },
+  lsp_progress_done = {
+    { "✔ ", hl_group = "Constant" },
+    { "{data.progress.title} ", hl_group = "NonText" },
+    { "{data.progress.client_name} ", hl_group = "Title" },
+  },
 }
 
+-- TODO: move hl groups to config.highlights
 ---@class NoiceFormatOptions
 M.defaults = {
   ---@class NoiceFormatOptions.debug
@@ -59,6 +80,17 @@ M.defaults = {
   ---@class NoiceFormatOptions.text
   text = {
     text = nil,
+    hl_group = nil,
+  },
+  ---@class NoiceFormatOptions.spinner
+  spinner = {
+    ---@type Spinner
+    name = "dots",
+    hl_group = nil,
+  },
+  ---@class NoiceFormatOptions.data
+  data = {
+    key = nil,
     hl_group = nil,
   },
   ---@class NoiceFormatOptions.title

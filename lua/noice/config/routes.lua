@@ -83,6 +83,10 @@ function M.defaults()
       opts = { title = "Notify", merge = false, replace = false },
     },
     {
+      view = "mini",
+      filter = { event = "lsp" },
+    },
+    {
       view = "notify",
       filter = {},
     },

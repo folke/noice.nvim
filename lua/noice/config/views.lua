@@ -1,5 +1,7 @@
 local M = {}
 
+-- TODO: fix single instance views
+
 ---@type table<string, NoiceViewOptions>
 M.defaults = {
   popupmenu = {
@@ -117,7 +119,7 @@ M.defaults = {
     },
     zindex = 60,
     win_options = {
-      winblend = 60,
+      winblend = 30,
       winhighlight = {
         Normal = "NoiceMini",
         IncSearch = "",
