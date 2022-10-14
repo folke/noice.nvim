@@ -1,3 +1,0 @@
----@class uv.Timer
----@field start fun(timer:uv.Timer, timeout:integer, repeat:integer, callback:fun())
----@field stop fun(timer:uv.Timer)
