@@ -63,10 +63,13 @@ function NoiceText:highlight(bufnr, ns_id, linenr, byte_start)
     if extmark.col then
       extmark.col = extmark.col + byte_start
     end
-    if extmark.end_col then
-      extmark.end_col = extmark.end_col + byte_start
-    end
     extmark.relative = nil
+  end
+
+  local length = self._length
+  if extmark.length then
+    self._length = extmark.length
+    extmark.length = nil
   end
 
   if extmark.col then
@@ -81,6 +84,7 @@ function NoiceText:highlight(bufnr, ns_id, linenr, byte_start)
     self.on_render(self, bufnr, linenr, byte_start, col_start)
   end
 
+  self._length = length
   self.extmark = orig
 end
 
