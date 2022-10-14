@@ -1,5 +1,5 @@
 {
-  "lua-dev": {
+  "neodev": {
     "library": {
       "plugins": [
         "nui.nvim",
