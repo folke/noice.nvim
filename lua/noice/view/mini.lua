@@ -5,13 +5,14 @@ local NuiView = require("noice.view.nui")
 
 ---@class NoiceMiniOptions
 ---@field timeout integer
+---@field reverse? boolean
 local defaults = { timeout = 5000 }
 
 ---@class MiniView: NoiceView
 ---@field active table<number, NoiceMessage>
 ---@field super NoiceView
 ---@field view? NuiView
----@field timers table<number, uv.Timer>
+---@field timers table<number, vim.loop.Timer>
 ---@diagnostic disable-next-line: undefined-field
 local MiniView = View:extend("MiniView")
 
@@ -58,7 +59,11 @@ function MiniView:update()
     ---@param a NoiceMessage
     ---@param b NoiceMessage
     function(a, b)
-      return a.id < b.id
+      local ret = a.id < b.id
+      if self._opts.reverse then
+        return not ret
+      end
+      return ret
     end
   )
   self.view:display(active, { dirty = true })

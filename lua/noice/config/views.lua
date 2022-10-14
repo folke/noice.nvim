@@ -105,6 +105,7 @@ M.defaults = {
     relative = "editor",
     align = "right",
     timeout = 2000,
+    reverse = true,
     position = {
       row = -1,
       col = "100%",
