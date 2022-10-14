@@ -46,6 +46,16 @@ M.defaults = {
     },
     icons = { error = " ", warn = " ", info = " " },
   },
+  ---@class NoiceFormatOptions.progress
+  progress = {
+    ---@type NoiceFormat
+    contents = {},
+    width = 20,
+    align = "right",
+    key = "progress", -- key in message.opts For example: "progress.percentage"
+    hl_group = "NoiceProgressTodo",
+    hl_group_done = "NoiceProgressDone",
+  },
   ---@class NoiceFormatOptions.text
   text = {
     text = nil,

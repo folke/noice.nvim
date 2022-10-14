@@ -25,6 +25,48 @@ function M.text(message, opts)
 end
 
 ---@param message NoiceMessage
+---@param opts NoiceFormatOptions.progress
+function M.progress(message, opts)
+  local contents = require("noice.text.format").format(message, opts.contents)
+  local value = vim.tbl_get(message.opts, unpack(vim.split(opts.key, ".", { plain = true })))
+  if type(value) == "number" then
+    local width = math.max(opts.width, contents:width() + 2)
+
+    local done_length = math.floor(value / 100 * width + 0.5)
+    local todo_length = width - done_length
+
+    if opts.align == "left" then
+      message:append(contents)
+    end
+
+    if width > contents:width() then
+      message:append(string.rep(" ", width - contents:width()))
+    end
+
+    if opts.align == "right" then
+      message:append(contents)
+    end
+
+    message:append(NoiceText("", {
+      hl_group = opts.hl_group_done,
+      hl_mode = "replace",
+      relative = true,
+      col = -width,
+      length = done_length,
+    }))
+    message:append(NoiceText("", {
+      hl_group = opts.hl_group,
+      hl_mode = "replace",
+      relative = true,
+      col = -width + done_length,
+      length = todo_length,
+    }))
+  else
+    message:append(contents)
+  end
+end
+
+---@param message NoiceMessage
 ---@param opts NoiceFormatOptions.level
 function M.level(message, opts)
   if message.level then
