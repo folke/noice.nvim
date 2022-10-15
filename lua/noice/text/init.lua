@@ -28,7 +28,7 @@ end
 
 function NoiceText.cursor(col)
   return NoiceText(" ", {
-    hl_group = "Cursor",
+    hl_group = "NoiceCursor",
     col = col,
     relative = true,
   })

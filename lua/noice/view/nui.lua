@@ -7,7 +7,7 @@ local Util = require("noice.util")
 ---@field _nui? NuiPopup|NuiSplit
 ---@field super NoiceView
 ---@field _hider fun()
----@field _timeout_timer uv.Timer
+---@field _timeout_timer vim.loop.Timer
 ---@diagnostic disable-next-line: undefined-field
 local NuiView = View:extend("NuiView")
 

@@ -38,7 +38,7 @@ function M.progress(_, msg, info)
     message.opts.progress = {
       client_id = info.client_id,
       ---@type string
-      client_name = vim.lsp.get_active_clients({ id = info.client_id })[1].name,
+      client = vim.lsp.get_active_clients({ id = info.client_id })[1].name,
     }
     -- message.once = true
     M._progress[id] = message

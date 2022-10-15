@@ -2,15 +2,21 @@ local require = require("noice.util.lazy")
 
 local Util = require("noice.util")
 
+-- Build docs with:
+-- require("noice.config.highlights").docs()
+
 local M = {}
 
 M.defaults = {
   Cmdline = "MsgArea", -- Normal for the classic cmdline area at the bottom"
+  CmdlineIcon = "DiagnosticSignInfo", -- Cmdline icon
+  CmdlineIconSearch = "DiagnosticSignWarn", -- Cmdline search icon (`/` and `?`)
   CmdlinePopup = "Normal", -- Normal for the cmdline popup
   CmdlinePopupBorder = "DiagnosticSignInfo", -- Cmdline popup border
   CmdlinePopupSearchBorder = "DiagnosticSignWarn", -- Cmdline popup border for search
   Confirm = "Normal", -- Normal for the confirm view
   ConfirmBorder = "DiagnosticSignInfo", -- Border for the confirm view
+  Cursor = "Cursor", -- Fake Cursor
   Mini = "MsgArea", -- Normal for mini view
   Popup = "NormalFloat", -- Normal for popup views
   PopupBorder = "FloatBorder", -- Border for popup views
@@ -23,8 +29,23 @@ M.defaults = {
   Split = "NormalFloat", -- Normal for split views
   SplitBorder = "FloatBorder", -- Border for split views
   VirtualText = "DiagnosticVirtualTextInfo", -- Default hl group for virtualtext views
-  ProgressDone = "Search",
-  ProgressTodo = "CursorLine",
+  FormatProgressDone = "Search", -- Progress bar done
+  FormatProgressTodo = "CursorLine", -- progress bar todo
+  FormatEvent = "NonText",
+  FormatKind = "NonText",
+  FormatDate = "Special",
+  FormatConfirm = "CursorLine",
+  FormatConfirmDefault = "Visual",
+  FormatTitle = "Title",
+  FormatLevelDebug = "NonText",
+  FormatLevelTrace = "NonText",
+  FormatLevelOff = "NonText",
+  FormatLevelInfo = "DiagnosticVirtualTextInfo",
+  FormatLevelWarn = "DiagnosticVirtualTextWarn",
+  FormatLevelError = "DiagnosticVirtualTextError",
+  LspProgressSpinner = "Constant", -- Lsp progress spinner
+  LspProgressTitle = "NonText", -- Lsp progress title
+  LspProgressClient = "Title", -- Lsp progress client name
 }
 
 function M.setup()

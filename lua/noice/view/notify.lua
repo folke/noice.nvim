@@ -16,7 +16,7 @@ local defaults = {
 }
 
 ---@class NotifyInstance
----@field notify fun(msg:string, level:string|number, opts?:table): notify.Record}
+---@field notify fun(msg:string, level?:string|number, opts?:table): notify.Record}
 
 ---@alias notify.RenderFun fun(buf:buffer, notif: Notification, hl: NotifyBufHighlights, config: notify.Config)
 

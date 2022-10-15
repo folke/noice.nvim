@@ -9,7 +9,7 @@ M.formats = {
     "{level} ",
     "{date} ",
     "{event}",
-    { "{kind}", before = { ".", hl_group = "Comment" } },
+    { "{kind}", before = { ".", hl_group = "NoiceFormatKind" } },
     " ",
     "{title} ",
     "{message}",
@@ -24,7 +24,7 @@ M.formats = {
     "{level} ",
     "{date} ",
     "{event}",
-    { "{kind}", before = { ".", hl_group = "Comment" } },
+    { "{kind}", before = { ".", hl_group = "NoiceFormatKind" } },
     "\n",
     "{title}\n",
     "\n",
@@ -35,22 +35,21 @@ M.formats = {
       "{progress} ",
       key = "progress.percentage",
       contents = {
-        { "{data.progress.message} ", hl_group = nil },
+        { "{data.progress.message} " },
       },
     },
     "({data.progress.percentage}%) ",
-    { "{spinner} ", hl_group = "Constant" },
-    { "{data.progress.title} ", hl_group = "NonText" },
-    { "{data.progress.client_name} ", hl_group = "Title" },
+    { "{spinner} ", hl_group = "NoiceLspProgressSpinner" },
+    { "{data.progress.title} ", hl_group = "NoiceLspProgressTitle" },
+    { "{data.progress.client} ", hl_group = "NoiceLspProgressClient" },
   },
   lsp_progress_done = {
-    { "✔ ", hl_group = "Constant" },
-    { "{data.progress.title} ", hl_group = "NonText" },
-    { "{data.progress.client_name} ", hl_group = "Title" },
+    { "✔ ", hl_group = "NoiceLspProgressSpinner" },
+    { "{data.progress.title} ", hl_group = "NoiceLspProgressTitle" },
+    { "{data.progress.client} ", hl_group = "NoiceLspProgressClient" },
   },
 }
 
--- TODO: move hl groups to config.highlights
 ---@class NoiceFormatOptions
 M.defaults = {
   ---@class NoiceFormatOptions.debug
@@ -58,12 +57,12 @@ M.defaults = {
   ---@class NoiceFormatOptions.level
   level = {
     hl_group = {
-      debug = "Comment",
-      trace = "Comment",
-      off = "Comment",
-      error = "DiagnosticVirtualTextError",
-      warn = "DiagnosticVirtualTextWarn",
-      info = "DiagnosticVirtualTextInfo",
+      trace = "NoiceFormatLevelTrace",
+      debug = "NoiceFormatLevelDebug",
+      info = "NoiceFormatLevelInfo",
+      warn = "NoiceFormatLevelWarn",
+      error = "NoiceFormatLevelError",
+      off = "NoiceFormatLevelOff",
     },
     icons = { error = " ", warn = " ", info = " " },
   },
@@ -74,8 +73,8 @@ M.defaults = {
     width = 20,
     align = "right",
     key = "progress", -- key in message.opts For example: "progress.percentage"
-    hl_group = "NoiceProgressTodo",
-    hl_group_done = "NoiceProgressDone",
+    hl_group = "NoiceFormatProgressTodo",
+    hl_group_done = "NoiceFormatProgressDone",
   },
   ---@class NoiceFormatOptions.text
   text = {
@@ -95,20 +94,20 @@ M.defaults = {
   },
   ---@class NoiceFormatOptions.title
   title = {
-    hl_group = "Identifier",
+    hl_group = "NoiceFormatTitle",
   },
   ---@class NoiceFormatOptions.event
   event = {
-    hl_group = "Comment",
+    hl_group = "NoiceFormatEvent",
   },
   ---@class NoiceFormatOptions.kind
   kind = {
-    hl_group = "Comment",
+    hl_group = "NoiceFormatKind",
   },
   ---@class NoiceFormatOptions.date
   date = {
     format = "%X", --- @see https://www.lua.org/pil/22.1.html
-    hl_group = "Special",
+    hl_group = "NoiceFormatDate",
   },
   ---@class NoiceFormatOptions.message
   message = {
@@ -117,8 +116,8 @@ M.defaults = {
   ---@class NoiceFormatOptions.confirm
   confirm = {
     hl_group = {
-      choice = "CursorLine",
-      default_choice = "Visual",
+      choice = "NoiceFormatConfirm",
+      default_choice = "NoiceFormatConfirmDefault",
     },
   },
 }
