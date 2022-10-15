@@ -30,7 +30,10 @@ M.defaults = {
 function M.setup()
   for hl, link in pairs(M.defaults) do
     local ok, opts = pcall(vim.api.nvim_get_hl_by_name, link, true)
-    if not ok then
+    if opts then
+      opts[vim.type_idx] = nil
+    end
+    if not ok or vim.tbl_isempty(opts) then
       opts = { link = link }
     end
     opts.default = true
