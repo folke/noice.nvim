@@ -29,7 +29,10 @@ M.defaults = {
 
 function M.setup()
   for hl, link in pairs(M.defaults) do
-    local opts = vim.api.nvim_get_hl_by_name(link, true) or { link = link }
+    local ok, opts = pcall(vim.api.nvim_get_hl_by_name, link, true)
+    if not ok then
+      opts = { link = link }
+    end
     opts.default = true
     vim.api.nvim_set_hl(0, "Noice" .. hl, opts)
   end
