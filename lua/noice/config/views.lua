@@ -2,7 +2,7 @@ local M = {}
 
 -- TODO: fix single instance views
 
----@type table<string, NoiceViewOptions>
+---@class NoiceConfigViews: table<string, NoiceViewOptions>
 M.defaults = {
   popupmenu = {
     zindex = 65,

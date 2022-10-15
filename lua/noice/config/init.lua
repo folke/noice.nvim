@@ -10,7 +10,7 @@ M.ns = vim.api.nvim_create_namespace("messages_highlights")
 
 ---@class NoiceConfig
 ---@field history NoiceRouteConfig
----@field views table<string, NoiceViewOptions>
+---@field views NoiceConfigViews
 ---@field status table<string, NoiceFilter>
 ---@field routes NoiceRouteConfig[]
 M.defaults = {
@@ -27,7 +27,7 @@ M.defaults = {
   messages = {
     -- NOTE: If you enable noice messages UI, noice cmdline UI is enabled
     -- automatically. You cannot enable noice messages UI only.
-    -- It is current neovim implementation limitation.  It may be fixed later.
+    -- It is a current neovim implementation limitation. It may be fixed later.
     enabled = true, -- disable if you use native messages UI
   },
   popupmenu = {
