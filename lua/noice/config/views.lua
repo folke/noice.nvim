@@ -30,7 +30,6 @@ M.defaults = {
   },
   notify = {
     backend = "notify",
-    level = vim.log.levels.INFO,
     replace = true,
     format = "notify",
   },

@@ -5,13 +5,13 @@ local View = require("noice.view")
 
 ---@class NoiceNotifyOptions
 ---@field title string
----@field level string|number
+---@field level? string|number Message log level
 ---@field merge boolean Merge messages into one Notification or create separate notifications
 ---@field replace boolean Replace existing notification or create a new one
 local defaults = {
   title = "Notification",
   merge = true,
-  level = vim.log.levels.INFO,
+  level = nil, -- vim.log.levels.INFO,
   replace = true,
 }
 
@@ -104,7 +104,7 @@ end
 
 ---@param msg NotifyMsg
 function NotifyView:_notify(msg)
-  local level = msg.level or self._opts.level
+  local level = self._opts.level or msg.level
 
   local instance = NotifyView.instance()
 
