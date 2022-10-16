@@ -4,6 +4,7 @@ local Message = require("noice.message")
 local Manager = require("noice.message.manager")
 local Config = require("noice.config")
 local NoiceText = require("noice.text")
+local Util = require("noice.util")
 
 local M = {}
 M.message = Message("cmdline", nil)
@@ -115,7 +116,7 @@ M.position = nil
 function M.on_render(_, buf, line, byte)
   local win = vim.fn.bufwinid(buf)
   if win ~= -1 then
-    local cmdline_start = byte - M.cmdlines[1]:length()
+    local cmdline_start = byte - M.last():length()
     local pos = vim.fn.screenpos(win, line, cmdline_start + 1)
     M.position = {
       buf = buf,
@@ -132,29 +133,32 @@ function M.on_render(_, buf, line, byte)
   end
 end
 
+function M.last()
+  local last = math.max(1, unpack(vim.tbl_keys(M.cmdlines)))
+  return M.cmdlines[last]
+end
+
 function M.update()
   M.message:clear()
   local count = 0
-  for _, cmdline in ipairs(M.cmdlines) do
-    if cmdline then
-      count = count + 1
-      if M.message:height() > 0 then
-        M.message:newline()
-      end
-
-      local icon = Config.options.cmdline.icons[cmdline.firstc]
-
-      if icon then
-        M.message:append(NoiceText.virtual_text(icon.icon, icon.hl_group))
-        M.message:append(" ")
-      end
-
-      M.message:append(cmdline:chunks(icon and icon.firstc ~= false))
-      local cursor = NoiceText.cursor(-cmdline:length() + cmdline.pos)
-      cursor.on_render = M.on_render
-      M.message:append(cursor)
+  Util.for_each(M.cmdlines, function(_, cmdline)
+    count = count + 1
+    if M.message:height() > 0 then
+      M.message:newline()
     end
-  end
+
+    local icon = Config.options.cmdline.icons[cmdline.firstc]
+
+    if icon then
+      M.message:append(NoiceText.virtual_text(icon.icon, icon.hl_group))
+      M.message:append(" ")
+    end
+
+    M.message:append(cmdline:chunks(icon and icon.firstc ~= false))
+    local cursor = NoiceText.cursor(-cmdline:length() + cmdline.pos)
+    cursor.on_render = M.on_render
+    M.message:append(cursor)
+  end)
 
   if count > 0 then
     Manager.add(M.message)
