@@ -74,7 +74,7 @@ end
 ---@param opts? NoiceFormatOptions
 ---@return NoiceMessage
 function M.format(message, format, opts)
-  opts = vim.tbl_deep_extend("force", Config.options.format, opts or {})
+  opts = vim.tbl_deep_extend("force", vim.deepcopy(Config.options.format), opts or {})
 
   format = format or "default"
 

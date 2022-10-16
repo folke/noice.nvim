@@ -46,6 +46,9 @@ end
 
 function MiniView:show()
   for _, message in ipairs(self._messages) do
+    -- we already have debug info,
+    -- so make sure we dont regen it in the child view
+    message._debug = true
     self.active[message.id] = message
     self:autohide(message.id)
   end

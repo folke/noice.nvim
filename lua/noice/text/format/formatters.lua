@@ -27,7 +27,9 @@ end
 ---@param message NoiceMessage
 ---@param opts NoiceFormatOptions.progress
 function M.progress(message, opts)
-  local contents = require("noice.text.format").format(message, opts.contents)
+  local contents = require("noice.text.format").format(message, opts.contents, {
+    debug = { enabled = false },
+  })
   local value = vim.tbl_get(message.opts, unpack(vim.split(opts.key, ".", { plain = true })))
   if type(value) == "number" then
     local width = math.max(opts.width, contents:width() + 2)
@@ -108,7 +110,11 @@ function M.date(message, opts)
 end
 
 ---@param message NoiceMessage
-function M.debug(message)
+---@param opts NoiceFormatOptions.debug
+function M.debug(message, opts)
+  if not opts.enabled then
+    return
+  end
   local blocking, reason = Util.is_blocking()
   local debug = {
     message:is({ cleared = true }) and "" or "",

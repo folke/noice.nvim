@@ -53,7 +53,9 @@ M.formats = {
 ---@class NoiceFormatOptions
 M.defaults = {
   ---@class NoiceFormatOptions.debug
-  debug = {},
+  debug = {
+    enabled = true,
+  },
   ---@class NoiceFormatOptions.level
   level = {
     hl_group = {
