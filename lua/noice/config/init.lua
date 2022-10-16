@@ -1,6 +1,7 @@
 local require = require("noice.util.lazy")
 
 local Routes = require("noice.config.routes")
+local Format = require("noice.config.format")
 
 local M = {}
 
@@ -51,6 +52,12 @@ M.defaults = {
   },
   lsp_progress = {
     enabled = false,
+    -- Lsp Progress is formatted using the builtins for lsp_progress. See config.format.builtin
+    -- See the section on formatting for more details on how to customize.
+    --- @type NoiceFormat|string
+    format = "lsp_progress",
+    --- @type NoiceFormat|string
+    format_done = "lsp_progress_done",
   },
   hacks = {
     -- due to https://github.com/neovim/neovim/issues/20416
@@ -61,10 +68,10 @@ M.defaults = {
     skip_duplicate_messages = false,
   },
   throttle = 1000 / 30, -- how frequently does Noice need to check for ui updates? This has no effect when in blocking mode.
-  views = {}, -- @see section on views
-  routes = {}, -- @see section on routes
-  status = {}, -- @see section on statusline components
-  format = {}, -- @see section on formatting
+  views = {}, ---@see section on views
+  routes = {}, --- @see section on routes
+  status = {}, --- @see section on statusline components
+  format = {}, --- @see section on formatting
   debug = false,
   log = vim.fn.stdpath("state") .. "/noice.log",
 }

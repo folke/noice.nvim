@@ -4,6 +4,7 @@ local Message = require("noice.message")
 local Manager = require("noice.message.manager")
 local Router = require("noice.message.router")
 local Format = require("noice.text.format")
+local Config = require("noice.config")
 local Util = require("noice.util")
 
 local M = {}
@@ -66,9 +67,9 @@ function M.update()
   if not vim.tbl_isempty(M._progress) then
     for _, message in pairs(M._progress) do
       if message.opts.progress.kind == "end" then
-        Manager.add(Format.format(message, "lsp_progress_done"))
+        Manager.add(Format.format(message, Config.options.lsp_progress.format_done))
       else
-        Manager.add(Format.format(message, "lsp_progress"))
+        Manager.add(Format.format(message, Config.options.lsp_progress.format))
       end
     end
     if not M._running then
