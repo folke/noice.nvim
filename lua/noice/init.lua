@@ -1,6 +1,6 @@
 local require = require("noice.util.lazy")
 
-local Health = require("noice.util.health")
+local Health = require("noice.health")
 local Api = require("noice.api")
 
 local M = {}
@@ -9,7 +9,7 @@ M.api = Api
 
 ---@param opts? NoiceConfig
 function M.setup(opts)
-  if not Health.check() then
+  if not Health.check({ checkhealth = false, loaded = false }) then
     return
   end
 
