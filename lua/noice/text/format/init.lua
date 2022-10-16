@@ -70,7 +70,7 @@ function M.parse_entry(entry)
 end
 
 ---@param message NoiceMessage
----@param format? NoiceFormat
+---@param format? NoiceFormat|string
 ---@param opts? NoiceFormatOptions
 ---@return NoiceMessage
 function M.format(message, format, opts)
@@ -79,7 +79,7 @@ function M.format(message, format, opts)
   format = format or "default"
 
   if type(format) == "string" then
-    format = vim.deepcopy(FormatConfig.formats[format])
+    format = vim.deepcopy(FormatConfig.builtin[format])
   end
 
   -- use existing message, with a separate _lines array

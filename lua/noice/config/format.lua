@@ -2,7 +2,7 @@ local M = {}
 
 --TODO: make configurable
 ---@type table<string, NoiceFormat>
-M.formats = {
+M.builtin = {
   default = { "{level} ", "{title} ", "{message}" },
   notify = { "{message}" },
   details = {
@@ -91,8 +91,8 @@ M.defaults = {
   },
   ---@class NoiceFormatOptions.data
   data = {
-    key = nil,
-    hl_group = nil,
+    key = nil, -- Key in the message.opts object.
+    hl_group = nil, -- Optional hl_group
   },
   ---@class NoiceFormatOptions.title
   title = {
