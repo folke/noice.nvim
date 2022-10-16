@@ -114,7 +114,7 @@ Check the [wiki](https://github.com/folke/noice.nvim/wiki/Configuration-Recipes)
 **Noice** uses filters to route messages to specific views.
 
 | Name           | Type                   | Description                                                                                                                            |
-| -------------- | ---------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+|  ------------- |  --------------------- |  ------------------------------------------------------------------------------------------------------------------------------------- |
 | **cleared**    | `boolean`              | checks if the message is cleared, meaning it's in the history                                                                          |
 | **mode**       | `string`               | checks if `vim.api.nvim_get_mode()` contains the given mode                                                                            |
 | **blocking**   | `boolean`              | are we in blocking mode?                                                                                                               |
@@ -160,16 +160,16 @@ local filter = {
 A **View** (`config.views`) is a combination of a `backend` and options.
 **Noice** comes with the following built-in views with sane defaults:
 
-| View              | Backend    | Description                                                                        |
-| ----------------- | ---------- | ---------------------------------------------------------------------------------- |
-| **notify**        | `notify`   | _nvim-notify_ with `level=true`, `replace=true`, `merge=true`                      |
-| **split**         | `split`    | horizontal split                                                                   |
-| **vsplit**        | `split`    | vertical split                                                                     |
-| **popup**         | `popup`    | simple popup                                                                       |
+| View              | Backend    | Description                                                                                                                |
+|  ---------------- |  --------- |  ------------------------------------------------------------------------------------------------------------------------- |
+| **notify**        | `notify`   | _nvim-notify_ with `level=true`, `replace=true`, `merge=true`                                                              |
+| **split**         | `split`    | horizontal split                                                                                                           |
+| **vsplit**        | `split`    | vertical split                                                                                                             |
+| **popup**         | `popup`    | simple popup                                                                                                               |
 | **mini**          | `mini`     | minimal view, by default bottom right, right-aligned                                                                       |
-| **cmdline**       | `popup`    | bottom line, similar to the classic cmdline                                        |
-| **cmdline_popup** | `popup`    | fancy cmdline popup, with different styles according to the cmdline mode           |
-| **popupmenu**     | `nui.menu` | special view with the options used to render the popupmenu when backend is **nui** |
+| **cmdline**       | `popup`    | bottom line, similar to the classic cmdline                                                                                |
+| **cmdline_popup** | `popup`    | fancy cmdline popup, with different styles according to the cmdline mode                                                   |
+| **popupmenu**     | `nui.menu` | special view with the options used to render the popupmenu when backend is **nui**                                         |
 
 Please refer to [noice.config.views](https://github.com/folke/noice.nvim/blob/main/lua/noice/config/views.lua)
 to see the options.
@@ -225,12 +225,12 @@ String or can also be a table like:
 
 ### Notify Options
 
-| Option        | Type      | Default | Description                                                                                                                             |
-| ------------- | --------- | ------- | --------------------------------------------------------------------------------------------------------------------------------------- |
-| **title**     | `string`  | `nil`   | title to be used for the notification. Uses `Message.title` if available.                                                               |
-| **replace**   | `boolean` | `true`  | when true, messages routing to the same notify instance will replace existing messages instead of pushing a new notification every time |
-| **merge**     | `boolean` | `true`  | Merge messages into one Notification or create separate notifications                                                                   |
-| **level**     | `number\|string`    |  `"info"` notification level. Uses `Message.level` if available.                                                                        |
+| Option      | Type             | Default  | Description                                                                                                                             |
+|  ---------- |  --------------- |  ------- |  -------------------------------------------------------------------------------------------------------------------------------------- |
+| **title**   | `string`         | `nil`    | title to be used for the notification. Uses `Message.title` if available.                                                               |
+| **replace** | `boolean`        | `true`   | when true, messages routing to the same notify instance will replace existing messages instead of pushing a new notification every time |
+| **merge**   | `boolean`        | `true`   | Merge messages into one Notification or create separate notifications                                                                   |
+| **level**   | `number\|string` | `"info"` | notification level. Uses `Message.level` if available.                                                                                  |
 
 ### Virtual Text Options
 
@@ -292,7 +292,7 @@ A **route** has a `filter`, `view` and optional `opts` attribute.
 Route options can be any of the view options above, or one of:
 
 | Option   | Type      | Default | Description                                                                                                                                                          |
-| -------- | --------- | ------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+|  ------- |  -------- |  ------ |  ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **skip** | `boolean` | `false` | messages matching this filter will be skipped and not shown in any views                                                                                             |
 | **stop** | `boolean` | `true`  | When `false` and a route matches the filter, then other routes can still process the message too. Useful if you want certain messages to be shown in multiple views. |
 
@@ -403,7 +403,7 @@ require("telescope").load_extension("noice")
 
 <!-- hl_start -->
 | Highlight Group                   | Default Group                | Description                                        |
-| --------------------------------- | ---------------------------- | -------------------------------------------------- |
+|  -------------------------------- |  --------------------------- |  ------------------------------------------------- |
 | **NoiceCmdline**                  | _MsgArea_                    | Normal for the classic cmdline area at the bottom" |
 | **NoiceCmdlineIcon**              | _DiagnosticSignInfo_         | Cmdline icon                                       |
 | **NoiceCmdlineIconSearch**        | _DiagnosticSignWarn_         | Cmdline search icon (`/` and `?`)                  |

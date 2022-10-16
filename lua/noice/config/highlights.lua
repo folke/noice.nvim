@@ -80,7 +80,7 @@ function M.docs()
   table.insert(rows, { "---", "---", "---" })
 
   Util.for_each(M.defaults, function(hl, link)
-    table.insert(rows, { "**Noice" .. hl .. "**", "*" .. link .. "*", docs[hl] or "" })
+    table.insert(rows, { "**Noice" .. hl .. "**", "_" .. link .. "_", docs[hl] or "" })
   end)
 
   local text = table.concat(
