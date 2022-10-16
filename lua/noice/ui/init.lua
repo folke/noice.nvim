@@ -66,7 +66,7 @@ function M.handle(event, ...)
 
   if not ok then
     if Config.options.debug then
-      Util.error("No ui router for " .. event_group .. " (" .. handler .. ")")
+      Util.error("No ui router for " .. event_group)
     end
     return
   end
