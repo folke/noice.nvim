@@ -115,9 +115,11 @@ function M.is(message, filter)
       if not M.filters[k](message, v) then
         return false
       end
-    elseif not M._unknown_notified[k] then
-      M._unknown_notified[k] = true
-      Util.error("Unknown filter key " .. k .. " for " .. vim.inspect(filter))
+    else
+      if not M._unknown_notified[k] then
+        M._unknown_notified[k] = true
+        Util.error("Unknown filter key " .. k .. " for " .. vim.inspect(filter))
+      end
       return false
     end
   end
