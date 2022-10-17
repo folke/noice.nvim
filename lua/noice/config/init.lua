@@ -91,6 +91,11 @@ function M.setup(options)
   M.options.routes = Routes.get(options.routes)
 
   require("noice.config.highlights").setup()
+  vim.api.nvim_create_autocmd("ColorScheme", {
+    callback = function()
+      require("noice.config.highlights").setup()
+    end,
+  })
 
   if M.options.notify.enabled then
     vim.notify = require("noice").notify
