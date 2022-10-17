@@ -115,6 +115,8 @@ function M.format(message, format, opts)
   return ret
 end
 
+---@alias NoiceAlign "center" | "left" | "right" | "message-center" | "message-left" | "message-right" | "line-center" | "line-left" | "line-right"
+
 ---@param message NoiceMessage
 ---@param width integer
 ---@param align? "center" | "left" | "right"
@@ -122,12 +124,22 @@ function M.align(message, width, align)
   if align == nil or align == "left" then
     return
   end
+
+  local align_object = "message"
+
+  local ao, a = align:match("^(.-)%-(.-)$")
+  if a then
+    align = a
+    align_object = ao
+  end
+
   for _, line in ipairs(message._lines) do
-    if line:width() < width then
+    local w = align_object == "line" and line:width() or message:width()
+    if w < width then
       if align == "right" then
-        table.insert(line._texts, 1, NuiText(string.rep(" ", width - line:width())))
+        table.insert(line._texts, 1, NuiText(string.rep(" ", width - w)))
       elseif align == "center" then
-        table.insert(line._texts, 1, NuiText(string.rep(" ", math.floor((width - line:width()) / 2 + 0.5))))
+        table.insert(line._texts, 1, NuiText(string.rep(" ", math.floor((width - w) / 2 + 0.5))))
       end
     end
   end

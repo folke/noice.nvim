@@ -11,7 +11,7 @@ local Format = require("noice.text.format")
 ---@field filter_options? { filter: NoiceFilter, opts: NoiceNuiOptions }[]
 ---@field backend string
 ---@field format? NoiceFormat
----@field align? "center" | "left" | "right"
+---@field align? NoiceAlign
 --
 ---@alias NoiceViewOptions NoiceViewBaseOptions|NoiceNuiOptions|NoiceNotifyOptions
 
