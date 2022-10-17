@@ -9,6 +9,8 @@ M.defaults = {
     position = "auto", -- when auto, then it will be positioned to the cmdline or cursor
     size = {
       width = "auto",
+      height = "auto",
+      max_height = 20,
       -- min_width = 10,
     },
     win_options = {

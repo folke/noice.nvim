@@ -20,11 +20,6 @@ function M.setup() end
 function M.create(state)
   M.on_hide()
 
-  local height = vim.api.nvim_get_option("pumheight")
-  height = height ~= 0 and height or #state.items
-  height = math.min(height, #state.items)
-  height = math.min(height, 30)
-
   local is_cmdline = state.grid == -1
 
   local _opts = vim.deepcopy(Config.options.views.popupmenu or {})
@@ -43,8 +38,6 @@ function M.create(state)
 
   local position_auto = not opts.position or opts.position.col == "auto"
   if position_auto then
-    opts = vim.tbl_deep_extend("force", opts, { size = { height = height } })
-
     if is_cmdline then
       -- Anchor to the cmdline
       local pos = Api.get_cmdline_position()
@@ -110,7 +103,7 @@ function M.create(state)
     opts,
     Util.nui.get_layout({
       width = max_width + 1, -- +1 for scrollbar
-      height = height,
+      height = #state.items,
     }, opts)
   )
 
