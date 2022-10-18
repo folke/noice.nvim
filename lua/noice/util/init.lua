@@ -52,6 +52,32 @@ function M.debounce(ms, fn)
   end
 end
 
+---@generic F: fun()
+---@param fn F
+---@param ms integer
+---@param opts? {enabled?:fun():boolean}
+---@return F
+function M.interval(ms, fn, opts)
+  opts = opts or {}
+  fn = vim.schedule_wrap(fn)
+  local timer = vim.loop.new_timer()
+  local running = false
+  return function(...)
+    local args = { ... }
+    if not running then
+      running = true
+      timer:start(ms, ms, function()
+        fn(unpack(args))
+        if not (opts.enabled and opts.enabled()) then
+          fn(unpack(args))
+          timer:stop()
+          running = false
+        end
+      end)
+    end
+  end
+end
+
 ---@param a table<string, any>
 ---@param b table<string, any>
 ---@return string[]
