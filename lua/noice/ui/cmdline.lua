@@ -167,6 +167,7 @@ function M.update()
       M.message:append(NoiceText.virtual_text(icon.icon, icon.hl_group))
       M.message:append(" ")
     end
+    M.message.kind = cmdline.firstc
 
     M.message:append(cmdline:chunks(icon and icon.firstc ~= false))
     local cursor = NoiceText.cursor(-cmdline:length() + cmdline.pos)

@@ -23,7 +23,7 @@ function M.defaults()
     {
       view = Config.options.cmdline.view_search,
       opts = Config.options.cmdline.opts,
-      filter = { event = "cmdline", find = "^%s*[/?]" },
+      filter = { event = "cmdline", kind = { "/", "?" } },
     },
     {
       view = Config.options.cmdline.view,
