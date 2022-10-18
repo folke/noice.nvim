@@ -43,6 +43,13 @@ end
 ---@param level number|string
 ---@param opts? table<string, any>
 function M.notify(msg, level, opts)
+  if vim.in_fast_event() then
+    vim.schedule(function()
+      M.notify(msg, level, opts)
+    end)
+    return
+  end
+
   level = M.get_level(level)
   local message = Message("notify", level, msg)
   message.opts = opts or {}
