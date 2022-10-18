@@ -6,6 +6,11 @@ local Config = require("noice.config")
 ---@type NoiceFilter
 local nothing = { ["not"] = {} }
 
+---@param str string
+local function escape(str)
+  return str:gsub("%%", "%%%%")
+end
+
 ---@param name string
 ---@return NoiceStatus
 local function NoiceStatus(name)
@@ -24,7 +29,7 @@ local function NoiceStatus(name)
     get = function()
       local message = _get()
       if message then
-        return vim.trim(message:content())
+        return escape(vim.trim(message:content()))
       end
     end,
     get_hl = function()
@@ -35,10 +40,10 @@ local function NoiceStatus(name)
         for _, text in ipairs(line._texts) do
           if text.extmark and text.extmark.hl_group then
             -- use hl_group
-            ret = ret .. "%#" .. text.extmark.hl_group .. "#" .. text:content()
+            ret = ret .. "%#" .. text.extmark.hl_group .. "#" .. escape(text:content())
           else
             -- or reset to StatusLine
-            ret = ret .. "%#StatusLine#" .. text:content()
+            ret = ret .. "%#StatusLine#" .. escape(text:content())
           end
         end
         return ret
