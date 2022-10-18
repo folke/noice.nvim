@@ -145,7 +145,7 @@ M.defaults = {
     },
     border = {
       style = "rounded",
-      padding = { 0, 1, 0, 1 },
+      padding = { 0, 1 },
       text = {
         top = " Cmdline ",
       },
@@ -195,7 +195,7 @@ M.defaults = {
     size = "auto",
     border = {
       style = "rounded",
-      padding = { 0, 1, 0, 1 },
+      padding = { 0, 1 },
       text = {
         top = " Confirm ",
       },
