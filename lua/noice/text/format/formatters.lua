@@ -158,6 +158,9 @@ end
 ---@param input NoiceMessage
 ---@param opts NoiceFormatOptions.confirm
 function M.confirm(message, opts, input)
+  if message.kind ~= "confirm" then
+    return message:append(input)
+  end
   for l, line in ipairs(input._lines) do
     if l ~= #input._lines then
       message:append(line)

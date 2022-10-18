@@ -127,7 +127,11 @@ end
 ---@param content NoiceChunk[]
 function M.on_confirm(event, kind, content)
   local message = Message(event, kind, content)
-  message:append(" ", "Cursor")
+  if not message:content():find("%s+$") then
+    message:append(" ")
+  end
+  message:append(" ", "NoiceCursor")
+  message.once = true
   Manager.add(message)
   vim.schedule(function()
     Manager.remove(message)
