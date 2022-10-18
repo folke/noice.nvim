@@ -2,6 +2,7 @@ local require = require("noice.util.lazy")
 
 local Manager = require("noice.message.manager")
 local Message = require("noice.message")
+local Hacks = require("noice.util.hacks")
 
 local M = {}
 
@@ -80,6 +81,10 @@ function M.on_show(event, kind, content, replace_last)
     message.level = "error"
   elseif M.is_warning(kind) then
     message.level = "warn"
+  end
+
+  if kind == M.kinds.search_count then
+    Hacks.fix_nohlsearch()
   end
 
   M.last = message

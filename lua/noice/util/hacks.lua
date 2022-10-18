@@ -32,17 +32,19 @@ function M.disable()
   M._disable = {}
 end
 
--- clear search_count on :nohlsearch
+-- start a timer that checks for vim.v.hlsearch.
+-- Clears search count and stops timer when hlsearch==0
 function M.fix_nohlsearch()
-  vim.api.nvim_create_autocmd("CmdlineLeave", {
-    group = M.group,
-    callback = function()
-      local cmd = vim.fn.getcmdline()
-      if cmd:find("noh") == 1 then
-        require("noice.message.manager").clear({ kind = "search_count" })
-      end
+  M.fix_nohlsearch = Util.interval(30, function()
+    if vim.v.hlsearch == 0 then
+      require("noice.message.manager").clear({ kind = "search_count" })
+    end
+  end, {
+    enabled = function()
+      return vim.v.hlsearch == 1
     end,
   })
+  M.fix_nohlsearch()
 end
 
 ---@see https://github.com/neovim/neovim/issues/17810
