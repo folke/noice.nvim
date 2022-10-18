@@ -14,12 +14,13 @@ function M.setup(opts)
     return
   end
 
-  require("noice.config").setup(opts)
-  require("noice.commands").setup()
-  require("noice.message.router").setup()
-  M.enable()
-
-  Health.checker()
+  require("noice.util").try(function()
+    require("noice.config").setup(opts)
+    require("noice.commands").setup()
+    require("noice.message.router").setup()
+    M.enable()
+    Health.checker()
+  end)
 end
 
 function M.disable()

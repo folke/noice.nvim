@@ -226,7 +226,7 @@ function M.panic(msg, ...)
   require("noice").disable()
   require("noice.view.notify").dismiss()
   M.error(msg, ...)
-  M.error("Noice was stopped to prevent further errors")
+  error("Noice was stopped to prevent further errors", 0)
 end
 
 function M.info(msg, ...)
