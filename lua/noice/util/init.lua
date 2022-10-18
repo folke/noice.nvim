@@ -69,7 +69,6 @@ function M.interval(ms, fn, opts)
       timer:start(ms, ms, function()
         fn(unpack(args))
         if not (opts.enabled and opts.enabled()) then
-          fn(unpack(args))
           timer:stop()
           running = false
         end
