@@ -91,6 +91,14 @@ function M.check(opts)
     log.ok("**vim.go.lazyredraw** is not enabled")
   end
 
+  if opts.checkhealth then
+    if vim.o.shortmess:find("S") then
+      log.warn(
+        "You added `S` to `vim.opt.shortmess`. Search count messages will not be handled by Noice. So no virtual text for search count."
+      )
+    end
+  end
+
   if opts.loaded then
     if Config.options.notify.enabled and vim.notify ~= require("noice").notify then
       log.error("`vim.notify` has been overwritten by another plugin?")
