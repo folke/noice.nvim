@@ -123,6 +123,16 @@ function NuiView:tag()
   end
 end
 
+function NuiView:fix_border()
+  if self._nui and self._nui.border and self._nui.border.winid then
+    local winhl = vim.api.nvim_win_get_option(self._nui.border.winid, "winhighlight") or ""
+    if not winhl:find("IncSearch") then
+      winhl = winhl .. ",Search:,Incsearch:"
+      vim.api.nvim_win_set_option(self._nui.border.winid, "winhighlight", winhl)
+    end
+  end
+end
+
 function NuiView:show()
   if not self._nui then
     self:create()
@@ -140,6 +150,7 @@ function NuiView:show()
   self:tag()
 
   self:render(self._nui.bufnr)
+  self:fix_border()
   self:autohide()
 end
 
