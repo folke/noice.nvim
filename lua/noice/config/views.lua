@@ -1,6 +1,7 @@
 local require = require("noice.util.lazy")
 
 local Util = require("noice.util")
+local Config = require("noice.config")
 
 local M = {}
 
@@ -17,11 +18,11 @@ function M.get_options(view)
   while opts.view and not done[opts.view] do
     done[opts.view] = true
 
-    if not M.defaults[opts.view] then
+    if not Config.options.views[opts.view] then
       Util.panic("View `" .. opts.view .. "` does not exist?")
     end
 
-    local view_opts = vim.deepcopy(M.defaults[opts.view])
+    local view_opts = vim.deepcopy(Config.options.views[opts.view])
     opts = vim.tbl_deep_extend("keep", opts, view_opts)
     opts.view = view_opts.view
   end
