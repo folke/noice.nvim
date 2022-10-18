@@ -1,22 +1,15 @@
 local require = require("noice.util.lazy")
 
 local Routes = require("noice.config.routes")
-local Format = require("noice.config.format")
 
 local M = {}
 
 M.ns = vim.api.nvim_create_namespace("messages_highlights")
 
--- TODO: restructure config
-
 ---@class NoiceConfig
----@field history NoiceRouteConfig
----@field views NoiceConfigViews
----@field status table<string, NoiceFilter>
----@field routes NoiceRouteConfig[]
 M.defaults = {
   cmdline = {
-    enabled = true, -- disable if you use native command line UI
+    enabled = true, -- enables the Noice cmdline UI
     view = "cmdline_popup", -- view for rendering the cmdline. Change to `cmdline` to get a classic cmdline at the bottom
     opts = { buf_options = { filetype = "vim" } }, -- enable syntax highlighting in the cmdline
     icons = {
@@ -26,16 +19,16 @@ M.defaults = {
     },
   },
   messages = {
-    -- NOTE: If you enable noice messages UI, noice cmdline UI is enabled
-    -- automatically. You cannot enable noice messages UI only.
-    -- It is a current neovim implementation limitation. It may be fixed later.
-    enabled = true, -- disable if you use native messages UI
+    -- NOTE: If you enable messages, then the cmdline is enabled automatically.
+    -- This is a current Neovim limitation.
+    enabled = true, -- enables the Noice messages UI
   },
   popupmenu = {
-    enabled = true, -- disable if you use something like cmp-cmdline
+    enabled = true, -- enables the Noice popupmenu UI
     ---@type 'nui'|'cmp'
     backend = "nui", -- backend to use to show regular cmdline completions
   },
+  ---@type NoiceRouteConfig
   history = {
     -- options for the message history that you get with `:Noice`
     view = "split",
@@ -60,6 +53,15 @@ M.defaults = {
     format_done = "lsp_progress_done",
     throttle = 1000 / 30, -- frequency to update lsp progress message
   },
+  throttle = 1000 / 30, -- how frequently does Noice need to check for ui updates? This has no effect when in blocking mode.
+  ---@type NoiceConfigViews
+  views = {}, ---@see section on views
+  ---@type NoiceRouteConfig[]
+  routes = {}, --- @see section on routes
+  ---@type table<string, NoiceFilter>
+  status = {}, --- @see section on statusline components
+  ---@type NoiceFormatOptions
+  format = {}, --- @see section on formatting
   hacks = {
     -- due to https://github.com/neovim/neovim/issues/20416
     -- messages are resent during a redraw. Noice detects this in most cases, but
@@ -68,11 +70,6 @@ M.defaults = {
     -- Enable this option to simply skip duplicate messages instead.
     skip_duplicate_messages = false,
   },
-  throttle = 1000 / 30, -- how frequently does Noice need to check for ui updates? This has no effect when in blocking mode.
-  views = {}, ---@see section on views
-  routes = {}, --- @see section on routes
-  status = {}, --- @see section on statusline components
-  format = {}, --- @see section on formatting
   debug = false,
   log = vim.fn.stdpath("state") .. "/noice.log",
 }
