@@ -116,6 +116,11 @@ function M.create(state)
   })
   M.scroll:mount()
 
+  -- redraw is needed when in blocking mode
+  if Util.is_blocking() then
+    Util.redraw()
+  end
+
   M.on_select(state)
 end
 
