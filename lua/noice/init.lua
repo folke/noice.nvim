@@ -2,6 +2,7 @@ local require = require("noice.util.lazy")
 
 local Health = require("noice.health")
 local Api = require("noice.api")
+local Config = require("noice.config")
 
 local M = {}
 
@@ -22,12 +23,18 @@ function M.setup(opts)
 end
 
 function M.disable()
+  if Config.options.notify.enabled then
+    require("noice.source.notify").disable()
+  end
   require("noice.message.router").disable()
   require("noice.ui").disable()
   require("noice.util.hacks").disable()
 end
 
 function M.enable()
+  if Config.options.notify.enabled then
+    require("noice.source.notify").enable()
+  end
   require("noice.util.hacks").enable()
   require("noice.ui").enable()
   require("noice.message.router").enable()

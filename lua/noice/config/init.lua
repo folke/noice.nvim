@@ -98,9 +98,6 @@ function M.setup(options)
     end,
   })
 
-  if M.options.notify.enabled then
-    vim.notify = require("noice").notify
-  end
   if M.options.lsp_progress.enabled then
     require("noice.source.lsp").setup()
   end

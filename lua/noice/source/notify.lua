@@ -11,6 +11,22 @@ local M = {}
 ---@alias NotifyEvent "notify"
 ---@alias NotifyLevel "trace"|"debug"|"info"|"warn"|"error"|"off"
 
+M._orig = nil
+
+function M.enable()
+  if vim.notify ~= M.notify then
+    M._orig = vim.notify
+    vim.notify = M.notify
+  end
+end
+
+function M.disable()
+  if M._orig then
+    vim.notify = M._orig
+    M._orig = nil
+  end
+end
+
 function M.get_level(level)
   if type(level) == "string" then
     return level

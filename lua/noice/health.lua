@@ -100,7 +100,7 @@ function M.check(opts)
   end
 
   if opts.loaded then
-    if Config.options.notify.enabled and vim.notify ~= require("noice").notify then
+    if Config.options.notify.enabled and vim.notify ~= require("noice.source.notify").notify then
       log.error("`vim.notify` has been overwritten by another plugin?")
     else
       log.ok("`vim.notify` is set to **Noice**")
