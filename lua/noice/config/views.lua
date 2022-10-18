@@ -179,24 +179,17 @@ M.defaults = {
       },
       cursorline = false,
     },
-    filter_options = {
-      {
-        filter = { event = "cmdline", find = "^%s*[/?]" },
-        opts = {
-          border = {
-            text = {
-              top = " Search ",
-            },
-          },
-          win_options = {
-            winhighlight = {
-              Normal = "Normal",
-              FloatBorder = "NoiceCmdlinePopupSearchBorder",
-              IncSearch = "",
-              Search = "",
-            },
-          },
-        },
+  },
+  cmdline_popup_search = {
+    view = "cmdline_popup",
+    border = {
+      text = {
+        top = " Search ",
+      },
+    },
+    win_options = {
+      winhighlight = {
+        FloatBorder = "NoiceCmdlinePopupSearchBorder",
       },
     },
   },

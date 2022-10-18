@@ -4,12 +4,10 @@ local Config = require("noice.config")
 local ConfigViews = require("noice.config.views")
 local Util = require("noice.util")
 local Object = require("nui.object")
-local Filter = require("noice.message.filter")
 local Format = require("noice.text.format")
 
 ---@class NoiceViewBaseOptions
 ---@field buf_options? table<string,any>
----@field filter_options? { filter: NoiceFilter, opts: NoiceNuiOptions }[]
 ---@field backend string
 ---@field format? NoiceFormat
 ---@field align? NoiceAlign
@@ -54,11 +52,6 @@ function View:check_options(messages)
   ---@type NoiceViewOptions
   local old = vim.deepcopy(self._opts)
   self._opts = vim.deepcopy(self._view_opts)
-  for _, fo in ipairs(self._opts.filter_options or {}) do
-    if Filter.has(messages, fo.filter) then
-      self._opts = vim.tbl_deep_extend("force", self._opts, fo.opts or {})
-    end
-  end
   self:update_options()
   if not vim.deep_equal(old, self._opts) then
     self:reset(old, self._opts)

@@ -21,6 +21,11 @@ end
 function M.defaults()
   return {
     {
+      view = Config.options.cmdline.view_search,
+      opts = Config.options.cmdline.opts,
+      filter = { event = "cmdline", find = "^%s*[/?]" },
+    },
+    {
       view = Config.options.cmdline.view,
       opts = Config.options.cmdline.opts,
       filter = { event = "cmdline" },

@@ -11,6 +11,7 @@ M.defaults = {
   cmdline = {
     enabled = true, -- enables the Noice cmdline UI
     view = "cmdline_popup", -- view for rendering the cmdline. Change to `cmdline` to get a classic cmdline at the bottom
+    view_search = "cmdline_popup_search", -- view for rendering the cmdline for search
     opts = { buf_options = { filetype = "vim" } }, -- enable syntax highlighting in the cmdline
     icons = {
       ["/"] = { icon = " ", hl_group = "NoiceCmdlineIconSearch" },
