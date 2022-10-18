@@ -1,4 +1,33 @@
+local require = require("noice.util.lazy")
+
+local Util = require("noice.util")
+
 local M = {}
+
+---@param view string
+---@return NoiceViewOptions
+function M.get_options(view)
+  if not view then
+    Util.panic("View is missing?")
+  end
+
+  local opts = { view = view }
+
+  local done = {}
+  while opts.view and not done[opts.view] do
+    done[opts.view] = true
+
+    if not M.defaults[opts.view] then
+      Util.panic("View `" .. opts.view .. "` does not exist?")
+    end
+
+    local view_opts = vim.deepcopy(M.defaults[opts.view])
+    opts = vim.tbl_deep_extend("keep", opts, view_opts)
+    opts.view = view_opts.view
+  end
+
+  return opts
+end
 
 -- TODO: fix single instance views
 
@@ -50,17 +79,8 @@ M.defaults = {
     },
   },
   vsplit = {
-    backend = "split",
-    enter = false,
-    relative = "editor",
+    view = "split",
     position = "right",
-    size = "20%",
-    close = {
-      keys = { "q", "<esc>" },
-    },
-    win_options = {
-      winhighlight = { Normal = "NoiceSplit", FloatBorder = "NoiceSplitBorder" },
-    },
   },
   popup = {
     backend = "popup",

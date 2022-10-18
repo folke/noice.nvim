@@ -1,6 +1,7 @@
 local require = require("noice.util.lazy")
 
 local Config = require("noice.config")
+local ConfigViews = require("noice.config.views")
 local Util = require("noice.util")
 local Object = require("nui.object")
 local Filter = require("noice.message.filter")
@@ -27,11 +28,8 @@ local View = Object("NoiceView")
 ---@param view string
 ---@param opts NoiceViewOptions
 function View.get_view(view, opts)
-  local view_options = Config.options.views[view] or {}
-  opts = vim.tbl_deep_extend("force", view_options, opts or {})
-  if view_options.filter_options then
-    vim.list_extend(opts.filter_options, view_options.filter_options)
-  end
+  opts = vim.tbl_deep_extend("force", ConfigViews.get_options(view), opts or {})
+
   ---@type NoiceView
   ---@diagnostic disable-next-line: undefined-field
   local class = Util.try(require, "noice.view." .. (opts.backend or opts.render or view))
