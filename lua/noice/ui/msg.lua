@@ -80,8 +80,6 @@ function M.on_show(event, kind, content, replace_last)
     message.level = "error"
   elseif M.is_warning(kind) then
     message.level = "warn"
-  else
-    message.level = "info"
   end
 
   M.last = message
