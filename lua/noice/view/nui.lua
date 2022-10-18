@@ -142,6 +142,10 @@ function NuiView:show()
     self._nui:mount()
   end
 
+  if self._nui.bufnr then
+    vim.api.nvim_buf_set_lines(self._nui.bufnr, 0, -1, false, {})
+  end
+
   self._nui:show()
   if not self._visible then
     self._nui:update_layout(self:get_layout())
