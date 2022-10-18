@@ -103,6 +103,20 @@ function M.on_pos(_, pos, level)
   end
 end
 
+M._guicursor = nil
+function M.hide_cursor()
+  if M._guicursor == nil then
+    M._guicursor = vim.go.guicursor
+    vim.go.guicursor = "a:NoiceHiddenCursor/NoiceHiddenCursor"
+  end
+end
+function M.show_cursor()
+  if M._guicursor then
+    vim.go.guicursor = M._guicursor
+    M._guicursor = nil
+  end
+end
+
 ---@class CmdlinePosition
 ---@field win number Window containing the cmdline
 ---@field buf number Buffer containing the cmdline
@@ -161,9 +175,11 @@ function M.update()
   end)
 
   if count > 0 then
+    M.hide_cursor()
     Manager.add(M.message)
   else
     Manager.remove(M.message)
+    M.show_cursor()
   end
 end
 

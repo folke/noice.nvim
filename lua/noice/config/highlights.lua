@@ -60,6 +60,7 @@ function M.setup()
     opts.default = true
     vim.api.nvim_set_hl(0, "Noice" .. hl, opts)
   end
+  vim.api.nvim_set_hl(0, "NoiceHiddenCursor", { blend = 100, nocombine = true })
 end
 
 function M.docs()
