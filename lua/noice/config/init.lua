@@ -58,6 +58,7 @@ M.defaults = {
     format = "lsp_progress",
     --- @type NoiceFormat|string
     format_done = "lsp_progress_done",
+    throttle = 1000 / 30, -- frequency to update lsp progress message
   },
   hacks = {
     -- due to https://github.com/neovim/neovim/issues/20416

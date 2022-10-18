@@ -63,7 +63,7 @@ function M.progress(_, msg, info)
   M.update()
 end
 
-function M.update()
+function M._update()
   if not vim.tbl_isempty(M._progress) then
     for _, message in pairs(M._progress) do
       if message.opts.progress.kind == "end" then
@@ -72,23 +72,20 @@ function M.update()
         Manager.add(Format.format(message, Config.options.lsp_progress.format))
       end
     end
-    if not M._running then
-      M._running = true
-      M.check()
-    end
     return
   end
-  M._running = false
 end
 
-function M.check()
-  M.update()
-  if M._running then
-    vim.defer_fn(M.check, 120)
-  end
+function M.update()
+  error("should never be called")
 end
 
 function M.setup()
+  M.update = Util.interval(Config.options.lsp_progress.throttle, M._update, {
+    enabled = function()
+      return not vim.tbl_isempty(M._progress)
+    end,
+  })
   local orig = vim.lsp.handlers["$/progress"]
   vim.lsp.handlers["$/progress"] = function(...)
     local args = { ... }
