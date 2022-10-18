@@ -119,7 +119,7 @@ end
 
 ---@param message NoiceMessage
 ---@param width integer
----@param align? "center" | "left" | "right"
+---@param align? NoiceAlign
 function M.align(message, width, align)
   if align == nil or align == "left" then
     return
