@@ -110,11 +110,14 @@ function M.check(opts)
   return true
 end
 
-function M.checker()
-  vim.defer_fn(function()
+M.checker = Util.interval(1000, function()
+  if require("noice")._running then
     M.check({ loaded = true, checkhealth = false })
-    M.checker()
-  end, 1000)
-end
+  end
+end, {
+  enabled = function()
+    return require("noice")._running
+  end,
+})
 
 return M

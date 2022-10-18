@@ -7,6 +7,7 @@ local Config = require("noice.config")
 local M = {}
 
 M.api = Api
+M._running = false
 
 ---@param opts? NoiceConfig
 function M.setup(opts)
@@ -19,11 +20,11 @@ function M.setup(opts)
     require("noice.commands").setup()
     require("noice.message.router").setup()
     M.enable()
-    Health.checker()
   end)
 end
 
 function M.disable()
+  M._running = false
   if Config.options.notify.enabled then
     require("noice.source.notify").disable()
   end
@@ -33,12 +34,14 @@ function M.disable()
 end
 
 function M.enable()
+  M._running = true
   if Config.options.notify.enabled then
     require("noice.source.notify").enable()
   end
   require("noice.util.hacks").enable()
   require("noice.ui").enable()
   require("noice.message.router").enable()
+  Health.checker()
 end
 
 ---@param msg string
