@@ -9,7 +9,7 @@ local View = require("noice.view")
 ---@field merge boolean Merge messages into one Notification or create separate notifications
 ---@field replace boolean Replace existing notification or create a new one
 local defaults = {
-  title = "Notification",
+  title = "Noice",
   merge = false,
   level = nil, -- vim.log.levels.INFO,
   replace = false,
