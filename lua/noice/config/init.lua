@@ -16,7 +16,7 @@ M.defaults = {
     icons = {
       ["/"] = { icon = " ", hl_group = "NoiceCmdlineIconSearch" },
       ["?"] = { icon = " ", hl_group = "NoiceCmdlineIconSearch" },
-      [":"] = { icon = " ", hl_group = "NoiceCmdlineIcon", firstc = false },
+      [":"] = { icon = "", hl_group = "NoiceCmdlineIcon", firstc = false },
     },
   },
   messages = {

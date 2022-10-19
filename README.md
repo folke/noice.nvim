@@ -64,7 +64,7 @@ Check the [wiki](https://github.com/folke/noice.nvim/wiki/Configuration-Recipes)
     icons = {
       ["/"] = { icon = " ", hl_group = "NoiceCmdlineIconSearch" },
       ["?"] = { icon = " ", hl_group = "NoiceCmdlineIconSearch" },
-      [":"] = { icon = " ", hl_group = "NoiceCmdlineIcon", firstc = false },
+      [":"] = { icon = "", hl_group = "NoiceCmdlineIcon", firstc = false },
     },
   },
   messages = {
