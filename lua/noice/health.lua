@@ -115,7 +115,7 @@ M.checker = Util.interval(1000, function()
   end
 end, {
   enabled = function()
-    return require("noice")._running
+    return Config.is_running()
   end,
 })
 
