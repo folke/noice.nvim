@@ -10,9 +10,9 @@ local View = require("noice.view")
 ---@field replace boolean Replace existing notification or create a new one
 local defaults = {
   title = "Notification",
-  merge = true,
+  merge = false,
   level = nil, -- vim.log.levels.INFO,
-  replace = true,
+  replace = false,
 }
 
 ---@class NotifyInstance

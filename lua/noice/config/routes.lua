@@ -71,6 +71,14 @@ function M.defaults()
     {
       view = "notify",
       filter = {
+        event = "msg_show",
+        kind = { "", "echo", "echomsg" },
+      },
+      opts = { replace = true, merge = true },
+    },
+    {
+      view = "notify",
+      filter = {
         event = "noice",
         kind = { "stats", "debug" },
       },
@@ -85,7 +93,7 @@ function M.defaults()
           { warning = true },
         },
       },
-      opts = { title = "Notify", merge = false, replace = false },
+      opts = { title = "Notify" },
     },
     {
       view = "mini",

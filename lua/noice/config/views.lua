@@ -60,8 +60,9 @@ M.defaults = {
   },
   notify = {
     backend = "notify",
-    replace = true,
     format = "notify",
+    replace = false,
+    merge = false,
   },
   split = {
     backend = "split",
