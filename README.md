@@ -108,14 +108,6 @@ Check the [wiki](https://github.com/folke/noice.nvim/wiki/Configuration-Recipes)
   status = {}, --- @see section on statusline components
   ---@type NoiceFormatOptions
   format = {}, --- @see section on formatting
-  hacks = {
-    -- due to https://github.com/neovim/neovim/issues/20416
-    -- messages are resent during a redraw. Noice detects this in most cases, but
-    -- some plugins (mostly vim plugns), can still cause loops.
-    -- When a loop is detected, Noice exits.
-    -- Enable this option to simply skip duplicate messages instead.
-    skip_duplicate_messages = false,
-  },
 }
 ```
 

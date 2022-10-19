@@ -2,7 +2,6 @@ local require = require("noice.util.lazy")
 
 local Config = require("noice.config")
 local Util = require("noice.util")
-local Hacks = require("noice.util.hacks")
 local Router = require("noice.message.router")
 
 ---@alias NoiceEvent MsgEvent|CmdlineEvent|NotifyEvent
@@ -10,6 +9,21 @@ local Router = require("noice.message.router")
 
 local M = {}
 M._attached = false
+---@type table<string, any>
+M._last = {}
+
+function M.skip(event, ...)
+  local msg = { event, ... }
+
+  local msg_handler = M.parse_event(event)
+
+  if vim.deep_equal(M._last[msg_handler], msg) then
+    Util.stats.track("ui." .. msg_handler .. ".skipped")
+    return true
+  end
+  M._last[msg_handler] = msg
+  Util.stats.track("ui." .. msg_handler)
+end
 
 function M.enable()
   local safe_handle = Util.protect(M.handle, { msg = "An error happened while handling a ui event" })
@@ -17,36 +31,29 @@ function M.enable()
 
   local stack_level = 0
 
-  ---@type any?
-  local last_msg = nil
-
   vim.ui_attach(Config.ns, {
     ext_messages = Config.options.messages.enabled,
     ext_cmdline = Config.options.cmdline.enabled,
     ext_popupmenu = Config.options.popupmenu.enabled,
   }, function(event, ...)
-    local msg = { event, ... }
-
-    if Config.options.hacks.skip_duplicate_messages and vim.deep_equal(last_msg, msg) then
+    if M.skip(event, ...) then
       return
     end
-    last_msg = msg
 
     -- dont process any messages during redraw, since redraw triggers last messages
-    if not Hacks.inside_redraw then
-      if stack_level > 50 then
-        Util.panic("Loop detected in Noice. Shutting down...")
-        return
-      end
-      stack_level = stack_level + 1
-      safe_handle(event, ...)
-
-      -- check if we need to update the ui
-      if Util.is_blocking() then
-        Util.try(Router.update)
-      end
-      stack_level = stack_level - 1
+    -- if not Hacks.inside_redraw then
+    if stack_level > 50 then
+      Util.panic("Event loop detected. Shutting down...")
+      return
     end
+    stack_level = stack_level + 1
+    safe_handle(event, ...)
+
+    -- check if we need to update the ui
+    if Util.is_blocking() then
+      Util.try(Router.update)
+    end
+    stack_level = stack_level - 1
   end)
 end
 
@@ -55,6 +62,11 @@ function M.disable()
     vim.ui_detach(Config.ns)
     M._attached = false
   end
+end
+
+---@return string, string
+function M.parse_event(event)
+  return event:match("([a-z]+)_(.*)")
 end
 
 ---@param event string
