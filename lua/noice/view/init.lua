@@ -23,16 +23,29 @@ local Format = require("noice.text.format")
 ---@overload fun(opts?: NoiceViewOptions): NoiceView
 local View = Object("NoiceView")
 
+---@type {view:NoiceView, opts:NoiceViewOptions}[]
+View._views = {}
+
 ---@param view string
 ---@param opts NoiceViewOptions
 function View.get_view(view, opts)
-  opts = vim.tbl_deep_extend("force", ConfigViews.get_options(view), opts or {})
+  opts = vim.tbl_deep_extend("force", ConfigViews.get_options(view), opts or {}, { view = view })
 
-  ---@type NoiceView
   ---@diagnostic disable-next-line: undefined-field
-  local class = Util.try(require, "noice.view." .. (opts.backend or opts.render or view))
-  opts.view = view
-  return class(opts)
+  opts.backend = opts.backend or opts.render or view
+
+  -- check if we already loaded this backend with the same options
+  for _, v in ipairs(View._views) do
+    if vim.deep_equal(opts, v.opts) then
+      return v.view
+    end
+  end
+
+  local mod = require("noice.view." .. opts.backend)
+  ---@type NoiceView
+  local ret = mod(opts)
+  table.insert(View._views, { view = ret, opts = vim.deepcopy(opts) })
+  return ret
 end
 
 ---@param opts? NoiceViewOptions
@@ -47,8 +60,7 @@ end
 
 function View:update_options() end
 
----@param messages NoiceMessage[]
-function View:check_options(messages)
+function View:check_options()
   ---@type NoiceViewOptions
   local old = vim.deepcopy(self._opts)
   self._opts = vim.deepcopy(self._view_opts)
@@ -77,7 +89,7 @@ function View:display(messages, opts)
       self:format(messages)
     end
     if #self._messages > 0 then
-      self:check_options(messages)
+      self:check_options()
 
       Util.try(self.show, self)
 

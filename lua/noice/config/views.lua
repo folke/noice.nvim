@@ -30,8 +30,6 @@ function M.get_options(view)
   return opts
 end
 
--- TODO: fix single instance views
-
 ---@class NoiceConfigViews: table<string, NoiceViewOptions>
 M.defaults = {
   popupmenu = {

@@ -48,14 +48,11 @@ end
 
 ---@param route NoiceRouteConfig
 function M.add(route)
-  route.opts = route.opts or {}
-  route.opts.title = route.opts.title or "Noice"
-
-  local view = route.view
-  if type(view) == "string" then
-    route.view = View.get_view(route.view, route.opts)
-  end
-  table.insert(M._routes, route)
+  table.insert(M._routes, {
+    filter = route.filter,
+    opts = route.opts or {},
+    view = route.view and View.get_view(route.view, route.opts) or nil,
+  })
 end
 
 function M.setup()
@@ -81,15 +78,19 @@ function M.update()
 
   Util.stats.track("router.update")
 
+  ---@type table<NoiceView,NoiceMessage[]>
+  local updates = {}
+
   local updated = 0
   local messages = Manager.get(nil, { sort = true })
   for _, route in ipairs(M._routes) do
-    local filter_opts = route.opts.history and { history = true, sort = true } or { messages = messages }
-    local messages_view = Manager.get(route.filter, filter_opts)
+    local route_message_opts = route.opts.history and { history = true, sort = true } or { messages = messages }
+    local route_messages = Manager.get(route.filter, route_message_opts)
 
     if not route.opts.skip then
-      updated = updated + (route.view:display(messages_view) and 1 or 0)
-      for _, m in ipairs(messages_view) do
+      updates[route.view] = updates[route.view] or {}
+      for _, m in ipairs(route_messages) do
+        table.insert(updates[route.view], m)
         if m.once then
           Manager.clear({ message = m })
         end
@@ -100,11 +101,15 @@ function M.update()
       messages = vim.tbl_filter(
         ---@param me NoiceMessage
         function(me)
-          return not vim.tbl_contains(messages_view, me)
+          return not vim.tbl_contains(route_messages, me)
         end,
         messages
       )
     end
+  end
+
+  for view, view_messages in pairs(updates) do
+    updated = updated + (view:display(view_messages) and 1 or 0)
   end
 
   M._tick = Manager.tick()
