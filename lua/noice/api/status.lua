@@ -15,6 +15,9 @@ end
 ---@return NoiceStatus
 local function NoiceStatus(name)
   local function _get()
+    if not Config.is_loaded() then
+      return {}
+    end
     local filter = Config.options.status[name] or nothing
     return Manager.get(filter, {
       count = 1,

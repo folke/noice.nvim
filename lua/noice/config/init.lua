@@ -77,6 +77,11 @@ M.defaults = {
 --- @type NoiceConfig
 M.options = {}
 
+M._loaded = false
+function M.is_loaded()
+  return M._loaded
+end
+
 function M.setup(options)
   options = options or {}
 
@@ -98,6 +103,7 @@ function M.setup(options)
   if M.options.lsp_progress.enabled then
     require("noice.source.lsp").setup()
   end
+  M._loaded = true
 end
 
 return M
