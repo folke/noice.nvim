@@ -145,7 +145,7 @@ function M.is_blocking(opts)
   local mode = vim.api.nvim_get_mode()
 
   local blocking_mode = false
-  for _, m in ipairs({ "ic", "ix", "c", "no", "r%?" }) do
+  for _, m in ipairs({ "ic", "ix", "c", "no", "r%?", "rm" }) do
     if mode.mode:find(m) == 1 then
       blocking_mode = true
     end
