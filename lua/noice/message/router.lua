@@ -89,12 +89,7 @@ function M.update()
 
     if not route.opts.skip then
       updates[route.view] = updates[route.view] or {}
-      for _, m in ipairs(route_messages) do
-        table.insert(updates[route.view], m)
-        if m.once then
-          Manager.clear({ message = m })
-        end
-      end
+      vim.list_extend(updates[route.view], route_messages)
     end
 
     if route.opts.stop ~= false and route.opts.history ~= true then
@@ -110,6 +105,11 @@ function M.update()
 
   for view, view_messages in pairs(updates) do
     updated = updated + (view:display(view_messages) and 1 or 0)
+    for _, m in ipairs(view_messages) do
+      if m.once then
+        Manager.clear({ message = m })
+      end
+    end
   end
 
   M._tick = Manager.tick()
