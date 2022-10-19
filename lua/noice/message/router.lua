@@ -48,11 +48,16 @@ end
 
 ---@param route NoiceRouteConfig
 function M.add(route)
-  table.insert(M._routes, {
+  local ret = {
     filter = route.filter,
     opts = route.opts or {},
     view = route.view and View.get_view(route.view, route.opts) or nil,
-  })
+  }
+  if ret.view == nil then
+    ret.view = nil
+    ret.opts.skip = true
+  end
+  table.insert(M._routes, ret)
 end
 
 function M.setup()

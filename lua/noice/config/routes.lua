@@ -44,7 +44,7 @@ function M.defaults()
       },
     },
     {
-      view = "split",
+      view = Config.options.messages.view_history,
       filter = {
         any = {
           { event = "msg_history_show" },
@@ -53,7 +53,7 @@ function M.defaults()
       },
     },
     {
-      view = "virtualtext",
+      view = Config.options.messages.view_search,
       filter = {
         event = "msg_show",
         kind = "search_count",
@@ -69,7 +69,7 @@ function M.defaults()
       opts = { skip = true },
     },
     {
-      view = "notify",
+      view = Config.options.messages.view,
       filter = {
         event = "msg_show",
         kind = { "", "echo", "echomsg" },
@@ -77,7 +77,22 @@ function M.defaults()
       opts = { replace = true, merge = true },
     },
     {
-      view = "notify",
+      view = Config.options.messages.view_error,
+      filter = { error = true },
+      opts = { title = "Error" },
+    },
+    {
+      view = Config.options.messages.view_warn,
+      filter = { warning = true },
+      opts = { title = "Warning" },
+    },
+    {
+      view = Config.options.notify.view,
+      filter = { event = "notify" },
+      opts = { title = "Notify" },
+    },
+    {
+      view = Config.options.notify.view,
       filter = {
         event = "noice",
         kind = { "stats", "debug" },
@@ -85,23 +100,8 @@ function M.defaults()
       opts = { buf_options = { filetype = "lua" }, replace = true },
     },
     {
-      view = "notify",
-      filter = {
-        any = {
-          { event = "notify" },
-          { error = true },
-          { warning = true },
-        },
-      },
-      opts = { title = "Notify" },
-    },
-    {
-      view = "mini",
+      view = Config.options.lsp_progress.view,
       filter = { event = "lsp" },
-    },
-    {
-      view = "notify",
-      filter = {},
     },
   }
 end

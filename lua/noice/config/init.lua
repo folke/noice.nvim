@@ -23,6 +23,11 @@ M.defaults = {
     -- NOTE: If you enable messages, then the cmdline is enabled automatically.
     -- This is a current Neovim limitation.
     enabled = true, -- enables the Noice messages UI
+    view = "notify", -- default view for messages
+    view_error = "notify", -- view for errors
+    view_warn = "notify", -- view for warnings
+    view_history = "split", -- view for :messages
+    view_search = "virtualtext", -- view for search count messages. Set to `false` to disable
   },
   popupmenu = {
     enabled = true, -- enables the Noice popupmenu UI
@@ -43,6 +48,7 @@ M.defaults = {
     -- The default routes will forward notifications to nvim-notify
     -- Benefit of using Noice for this is the routing and consistent history view
     enabled = true,
+    view = "notify",
   },
   lsp_progress = {
     enabled = false,
@@ -53,6 +59,7 @@ M.defaults = {
     --- @type NoiceFormat|string
     format_done = "lsp_progress_done",
     throttle = 1000 / 30, -- frequency to update lsp progress message
+    view = "mini",
   },
   throttle = 1000 / 30, -- how frequently does Noice need to check for ui updates? This has no effect when in blocking mode.
   ---@type NoiceConfigViews
