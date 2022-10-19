@@ -20,6 +20,7 @@ function MiniView:init(opts)
   MiniView.super.init(self, opts)
   self.active = {}
   self.timers = {}
+  self._instance = "view"
   local view_opts = vim.deepcopy(self._opts)
   view_opts.type = "popup"
   view_opts.format = { "{message}" }
@@ -31,6 +32,7 @@ function MiniView:update_options()
   self._opts = vim.tbl_deep_extend("force", defaults, self._opts)
 end
 
+-- TODO: add keep() method. Stay open by default during blocking event and on mouse enter
 function MiniView:autohide(id)
   if not self.timers[id] then
     self.timers[id] = vim.loop.new_timer()

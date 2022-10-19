@@ -60,6 +60,7 @@ M.defaults = {
   },
   notify = {
     backend = "notify",
+    fallback = "mini",
     format = "notify",
     replace = false,
     merge = false,

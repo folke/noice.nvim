@@ -9,9 +9,11 @@ local Format = require("noice.text.format")
 ---@class NoiceViewBaseOptions
 ---@field buf_options? table<string,any>
 ---@field backend string
+---@field fallback string Fallback view in case the backend could not be loaded
 ---@field format? NoiceFormat
 ---@field align? NoiceAlign
---
+---@field view string
+
 ---@alias NoiceViewOptions NoiceViewBaseOptions|NoiceNuiOptions|NoiceNotifyOptions
 
 ---@class NoiceView
@@ -20,6 +22,7 @@ local Format = require("noice.text.format")
 ---@field _opts NoiceViewOptions
 ---@field _view_opts NoiceViewOptions
 ---@field _visible boolean
+---@field _instance "opts" | "view" | "backend"
 ---@overload fun(opts?: NoiceViewOptions): NoiceView
 local View = Object("NoiceView")
 
@@ -29,21 +32,35 @@ View._views = {}
 ---@param view string
 ---@param opts NoiceViewOptions
 function View.get_view(view, opts)
+  local opts_orig = vim.deepcopy(opts)
   opts = vim.tbl_deep_extend("force", ConfigViews.get_options(view), opts or {}, { view = view })
 
   ---@diagnostic disable-next-line: undefined-field
   opts.backend = opts.backend or opts.render or view
 
-  -- check if we already loaded this backend with the same options
+  -- check if we already loaded this backend
   for _, v in ipairs(View._views) do
-    if vim.deep_equal(opts, v.opts) then
-      return v.view
+    if v.opts.view == opts.view then
+      if v.view._instance == "opts" and vim.deep_equal(opts, v.opts) then
+        return v.view
+      end
+      if v.view._instance == "view" then
+        return v.view
+      end
+    end
+    if v.opts.backend == opts.backend then
+      if v.view._instance == "backend" then
+        return v.view
+      end
     end
   end
 
   local mod = require("noice.view." .. opts.backend)
   ---@type NoiceView
   local ret = mod(opts)
+  if not ret:is_available() and opts.fallback then
+    return View.get_view(opts.fallback, opts_orig)
+  end
   table.insert(View._views, { view = ret, opts = vim.deepcopy(opts) })
   return ret
 end
@@ -55,7 +72,12 @@ function View:init(opts)
   self._opts = opts or {}
   self._visible = true
   self._view_opts = vim.deepcopy(self._opts)
+  self._instance = "opts"
   self:update_options()
+end
+
+function View:is_available()
+  return true
 end
 
 function View:update_options() end

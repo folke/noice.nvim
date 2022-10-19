@@ -53,6 +53,10 @@ function NotifyView:init(opts)
   self.notif = {}
 end
 
+function NotifyView:is_available()
+  return pcall(_G.require, "notify") == true
+end
+
 function NotifyView:update_options()
   self._opts = vim.tbl_deep_extend("force", defaults, self._opts)
 end

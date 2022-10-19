@@ -77,8 +77,8 @@ M.defaults = {
 --- @type NoiceConfig
 M.options = {}
 
-M._loaded = false
-function M.is_loaded()
+M._running = false
+function M.is_running()
   return M._loaded
 end
 

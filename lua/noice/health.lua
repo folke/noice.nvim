@@ -42,11 +42,10 @@ M.log = {
   },
 }
 
----@param opts? {loaded?: boolean, checkhealth?: boolean}
+---@param opts? {checkhealth?: boolean}
 function M.check(opts)
   opts = opts or {}
   opts.checkhealth = opts.checkhealth == nil and true or opts.checkhealth
-  opts.loaded = opts.loaded == nil and true or opts.loaded
 
   local log = opts.checkhealth and M.log.checkhealth or M.log.notify
 
@@ -74,15 +73,6 @@ function M.check(opts)
     log.ok("Not running inside **Neovide**")
   end
 
-  if not Util.module_exists("notify") then
-    log.error("Noice needs nvim-notify to work properly")
-    if not opts.checkhealth then
-      return
-    end
-  else
-    log.ok("**nvim-notify** is installed")
-  end
-
   if vim.go.lazyredraw then
     log.warn(
       "You have enabled 'lazyredraw' (see `:h 'lazyredraw'`)\nThis is only meant to be set temporarily.\nYou'll experience issues using Noice."
@@ -92,6 +82,15 @@ function M.check(opts)
   end
 
   if opts.checkhealth then
+    if not Util.module_exists("notify") then
+      log.warn("Noice needs nvim-notify for routes using the `notify` view")
+      if not opts.checkhealth then
+        return
+      end
+    else
+      log.ok("**nvim-notify** is installed")
+    end
+
     if vim.o.shortmess:find("S") then
       log.warn(
         "You added `S` to `vim.opt.shortmess`. Search count messages will not be handled by Noice. So no virtual text for search count."
@@ -99,7 +98,7 @@ function M.check(opts)
     end
   end
 
-  if opts.loaded then
+  if Config.is_running() then
     if Config.options.notify.enabled and vim.notify ~= require("noice.source.notify").notify then
       log.error("`vim.notify` has been overwritten by another plugin?")
     else
@@ -112,7 +111,7 @@ end
 
 M.checker = Util.interval(1000, function()
   if require("noice")._running then
-    M.check({ loaded = true, checkhealth = false })
+    M.check({ checkhealth = false })
   end
 end, {
   enabled = function()

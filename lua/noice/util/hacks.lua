@@ -188,24 +188,26 @@ end
 -- Allow nvim-notify to behave inside instant events
 function M.fix_notify()
   vim.schedule(Util.protect(function()
-    local NotifyService = require("notify.service")
-    ---@type NotificationService
-    local meta = getmetatable(NotifyService(require("notify")._config()))
-    local push = meta.push
-    meta.push = function(self, notif)
-      ---@type buffer
-      local buf = push(self, notif)
+    if pcall(_G.require, "notify") then
+      local NotifyService = require("notify.service")
+      ---@type NotificationService
+      local meta = getmetatable(NotifyService(require("notify")._config()))
+      local push = meta.push
+      meta.push = function(self, notif)
+        ---@type buffer
+        local buf = push(self, notif)
 
-      -- run animator and re-render instantly when inside instant events
-      if Util.is_blocking() then
-        pcall(self._animator.render, self._animator, self._pending, 1 / self._fps)
-        self._buffers[notif.id]:render()
+        -- run animator and re-render instantly when inside instant events
+        if Util.is_blocking() then
+          pcall(self._animator.render, self._animator, self._pending, 1 / self._fps)
+          self._buffers[notif.id]:render()
+        end
+        return buf
       end
-      return buf
+      table.insert(M._disable, function()
+        meta.push = push
+      end)
     end
-    table.insert(M._disable, function()
-      meta.push = push
-    end)
   end))
 end
 

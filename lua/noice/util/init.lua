@@ -179,15 +179,21 @@ end
 ---@param level number
 ---@param ... any
 function M.notify(msg, level, ...)
-  require("noice.view.notify").instance().notify(msg:format(...), level, {
-    title = "noice.nvim",
-    on_open = function(win)
-      vim.api.nvim_win_set_option(win, "conceallevel", 3)
-      local buf = vim.api.nvim_win_get_buf(win)
-      vim.api.nvim_buf_set_option(buf, "filetype", "markdown")
-      vim.api.nvim_win_set_option(win, "spell", false)
-    end,
-  })
+  if M.module_exists("notify") then
+    require("noice.view.notify").instance().notify(msg:format(...), level, {
+      title = "noice.nvim",
+      on_open = function(win)
+        vim.api.nvim_win_set_option(win, "conceallevel", 3)
+        local buf = vim.api.nvim_win_get_buf(win)
+        vim.api.nvim_buf_set_option(buf, "filetype", "markdown")
+        vim.api.nvim_win_set_option(win, "spell", false)
+      end,
+    })
+  else
+    vim.notify(msg:format(...), level, {
+      title = "noice.nvim",
+    })
+  end
 end
 
 ---@type table<string, boolean>

@@ -7,7 +7,6 @@ local Config = require("noice.config")
 local M = {}
 
 M.api = Api
-M._running = false
 
 ---@param opts? NoiceConfig
 function M.setup(opts)
@@ -24,7 +23,7 @@ function M.setup(opts)
 end
 
 function M.disable()
-  M._running = false
+  Config._running = false
   if Config.options.notify.enabled then
     require("noice.source.notify").disable()
   end
@@ -34,7 +33,7 @@ function M.disable()
 end
 
 function M.enable()
-  M._running = true
+  Config._running = true
   if Config.options.notify.enabled then
     require("noice.source.notify").enable()
   end
