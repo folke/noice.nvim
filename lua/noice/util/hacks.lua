@@ -26,7 +26,7 @@ end
 
 function M.disable()
   M.reset_augroup()
-  for _, fn in ipairs(M._disable) do
+  for _, fn in pairs(M._disable) do
     fn()
   end
   M._disable = {}
@@ -244,6 +244,22 @@ function M.fix_cmp()
     api.get_cursor = get_cursor
     api.get_screen_cursor = get_screen_cursor
   end)
+end
+
+M._guicursor = nil
+function M.hide_cursor()
+  if M._guicursor == nil then
+    M._guicursor = vim.go.guicursor
+    vim.go.guicursor = "a:NoiceHiddenCursor/NoiceHiddenCursor"
+    M._disable.guicursor = M.show_cursor
+  end
+end
+
+function M.show_cursor()
+  if M._guicursor then
+    vim.go.guicursor = M._guicursor
+    M._guicursor = nil
+  end
 end
 
 return M
