@@ -98,7 +98,7 @@ function M.on_hide(_, level)
 end
 
 function M.on_pos(_, pos, level)
-  if M.cmdlines[level] then
+  if M.cmdlines[level] and M.cmdlines[level].pos ~= pos then
     M.cmdlines[level].pos = pos
     M.update()
   end
