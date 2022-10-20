@@ -10,8 +10,10 @@ M.api = Api
 
 ---@param opts? NoiceConfig
 function M.setup(opts)
-  if not Health.check({ checkhealth = false, loaded = false }) then
-    return
+  if opts and opts.check_health.enable == true then
+    if not Health.check({ checkhealth = false, loaded = false }) then
+      return
+    end
   end
 
   require("noice.util").try(function()

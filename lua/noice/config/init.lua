@@ -34,6 +34,9 @@ M.defaults = {
     ---@type 'nui'|'cmp'
     backend = "nui", -- backend to use to show regular cmdline completions
   },
+  check_health = {
+    enable = true, -- Health Check
+  },
   ---@type NoiceRouteConfig
   history = {
     -- options for the message history that you get with `:Noice`
