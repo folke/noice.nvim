@@ -26,6 +26,9 @@ function M.setup()
         icon_hl_group = "Noice" .. hl_group_icon,
         view = Config.options.cmdline.view,
         opts = {
+          buf_options = {
+            filetype = format.ft,
+          },
           border = {
             text = {
               top = " " .. kind_cc .. " ",

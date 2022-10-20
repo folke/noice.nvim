@@ -67,10 +67,10 @@ Check the [wiki](https://github.com/folke/noice.nvim/wiki/Configuration-Recipes)
       -- opts: any options passed to the view
       -- icon_hl_group: optional hl_group for the icon
       cmdline = { pattern = "^:", icon = "" },
-      search_down = { kind = "search", pattern = "^/", icon = " " },
-      search_up = { kind = "search", pattern = "^%?", icon = " " },
-      filter = { pattern = "^:%s*!", icon = "$", opts = { buf_options = { filetype = "sh" } } },
-      lua = { pattern = "^:%s*lua%s+", icon = "", opts = { buf_options = { filetype = "lua" } } },
+      search_down = { kind = "search", pattern = "^/", icon = " ", ft = "regex" },
+      search_up = { kind = "search", pattern = "^%?", icon = " ", ft = "regex" },
+      filter = { pattern = "^:%s*!", icon = "$", ft = "sh" },
+      lua = { pattern = "^:%s*lua%s+", icon = "", ft = "lua" },
       -- lua = false, -- to disable a format, set to `false`
     },
   },
