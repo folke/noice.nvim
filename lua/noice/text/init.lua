@@ -43,6 +43,7 @@ function NoiceText:highlight(bufnr, ns_id, linenr, byte_start)
   if not self.extmark then
     return
   end
+  local byte_start_orig = byte_start
 
   ---@type NoiceExtmark
   local orig = vim.deepcopy(self.extmark)
@@ -81,7 +82,7 @@ function NoiceText:highlight(bufnr, ns_id, linenr, byte_start)
   NoiceText.super.highlight(self, bufnr, ns_id, linenr, byte_start)
 
   if self.on_render then
-    self.on_render(self, bufnr, linenr, byte_start, col_start)
+    self.on_render(self, bufnr, linenr, byte_start_orig, col_start)
   end
 
   self._length = length
