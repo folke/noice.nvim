@@ -7,11 +7,12 @@ local M = {}
 
 function M.setup()
   local formats = Config.options.cmdline.format
-  for kind, format in pairs(formats) do
+  for name, format in pairs(formats) do
     if format == false then
-      formats[kind] = nil
+      formats[name] = nil
     else
-      local kind_cc = kind:sub(1, 1):upper() .. kind:sub(2):lower()
+      local kind = format.kind or name
+      local kind_cc = kind:sub(1, 1):upper() .. kind:sub(2)
 
       local hl_group_icon = "CmdlineIcon" .. kind_cc
       Highlights.add(hl_group_icon, "DiagnosticSignInfo")
@@ -19,7 +20,7 @@ function M.setup()
       local hl_group_border = "CmdlinePopupBorder" .. kind_cc
       Highlights.add(hl_group_border, "DiagnosticSignInfo")
 
-      formats[kind] = vim.tbl_deep_extend("force", { opts = vim.deepcopy(Config.options.cmdline.opts) }, {
+      formats[name] = vim.tbl_deep_extend("force", { opts = vim.deepcopy(Config.options.cmdline.opts) }, {
         conceal = format.conceal ~= false,
         kind = kind,
         icon_hl_group = "Noice" .. hl_group_icon,

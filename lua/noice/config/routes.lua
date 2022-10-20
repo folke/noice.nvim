@@ -22,11 +22,11 @@ function M.defaults()
   ---@type NoiceRouteConfig[]
   local ret = {}
 
-  for kind, format in pairs(Config.options.cmdline.format) do
+  for _, format in pairs(Config.options.cmdline.format) do
     table.insert(ret, {
       view = format.view,
       opts = format.opts,
-      filter = { event = "cmdline", kind = kind },
+      filter = { event = "cmdline", kind = format.kind },
     })
   end
 

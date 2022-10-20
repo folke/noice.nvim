@@ -13,7 +13,7 @@ Highly experimental plugin that completely replaces the UI for `messages`, `cmdl
 - 📝 command output like [:messages](https://neovim.io/doc/user/message.html#:messages)
   is shown in normal buffers, which makes it much easier to work with
 - 📚 `:Noice` command to show a full message history
-- ⌨️  no more [:h more-prompt](https://neovim.io/doc/user/message.html#more-prompt)
+- ⌨️ no more [:h more-prompt](https://neovim.io/doc/user/message.html#more-prompt)
 - 💻 fully customizable **cmdline** with icons
 - 💅 **syntax highlighting** for `vim` and `lua` on the **cmdline**
 - 🚥 **statusline** components
@@ -23,7 +23,7 @@ Highly experimental plugin that completely replaces the UI for `messages`, `cmdl
 
 - Neovim >= 0.8.0
 - [nui.nvim](https://github.com/MunifTanjim/nui.nvim): used for proper rendering and multiple views
-- [nvim-notify](https://github.com/rcarriga/nvim-notify):  notification view _**(optional)**_
+- [nvim-notify](https://github.com/rcarriga/nvim-notify): notification view _**(optional)**_
 
 ## 📦 Installation
 
@@ -67,7 +67,8 @@ Check the [wiki](https://github.com/folke/noice.nvim/wiki/Configuration-Recipes)
       -- opts: any options passed to the view
       -- icon_hl_group: optional hl_group for the icon
       cmdline = { pattern = "^:", icon = "" },
-      search = { pattern = "^[?/]", icon = " ", conceal = false },
+      search_down = { kind = "search", pattern = "^/", icon = " " },
+      search_up = { kind = "search", pattern = "^%?", icon = " " },
       filter = { pattern = "^:%s*!", icon = "$", opts = { buf_options = { filetype = "sh" } } },
       lua = { pattern = "^:%s*lua%s+", icon = "", opts = { buf_options = { filetype = "lua" } } },
       -- lua = false, -- to disable a format, set to `false`
@@ -132,7 +133,7 @@ Check the [wiki](https://github.com/folke/noice.nvim/wiki/Configuration-Recipes)
 **Noice** uses filters to route messages to specific views.
 
 | Name           | Type                   | Description                                                                                                                            |
-|  ------------- |  --------------------- |  ------------------------------------------------------------------------------------------------------------------------------------- |
+| -------------- | ---------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
 | **cleared**    | `boolean`              | checks if the message is cleared, meaning it's in the history                                                                          |
 | **mode**       | `string`               | checks if `vim.api.nvim_get_mode()` contains the given mode                                                                            |
 | **blocking**   | `boolean`              | are we in blocking mode?                                                                                                               |
@@ -178,16 +179,16 @@ local filter = {
 A **View** (`config.views`) is a combination of a `backend` and options.
 **Noice** comes with the following built-in views with sane defaults:
 
-| View              | Backend    | Description                                                                                                                |
-|  ---------------- |  --------- |  ------------------------------------------------------------------------------------------------------------------------- |
-| **notify**        | `notify`   | _nvim-notify_ with `level=true`, `replace=true`, `merge=true`                                                              |
-| **split**         | `split`    | horizontal split                                                                                                           |
-| **vsplit**        | `split`    | vertical split                                                                                                             |
-| **popup**         | `popup`    | simple popup                                                                                                               |
-| **mini**          | `mini`     | minimal view, by default bottom right, right-aligned                                                                       |
-| **cmdline**       | `popup`    | bottom line, similar to the classic cmdline                                                                                |
-| **cmdline_popup** | `popup`    | fancy cmdline popup, with different styles according to the cmdline mode                                                   |
-| **popupmenu**     | `nui.menu` | special view with the options used to render the popupmenu when backend is **nui**                                         |
+| View              | Backend    | Description                                                                        |
+| ----------------- | ---------- | ---------------------------------------------------------------------------------- |
+| **notify**        | `notify`   | _nvim-notify_ with `level=true`, `replace=true`, `merge=true`                      |
+| **split**         | `split`    | horizontal split                                                                   |
+| **vsplit**        | `split`    | vertical split                                                                     |
+| **popup**         | `popup`    | simple popup                                                                       |
+| **mini**          | `mini`     | minimal view, by default bottom right, right-aligned                               |
+| **cmdline**       | `popup`    | bottom line, similar to the classic cmdline                                        |
+| **cmdline_popup** | `popup`    | fancy cmdline popup, with different styles according to the cmdline mode           |
+| **popupmenu**     | `nui.menu` | special view with the options used to render the popupmenu when backend is **nui** |
 
 Please refer to [noice.config.views](https://github.com/folke/noice.nvim/blob/main/lua/noice/config/views.lua)
 to see the options.
@@ -244,7 +245,7 @@ String or can also be a table like:
 ### Notify Options
 
 | Option      | Type             | Default  | Description                                                                                                                             |
-|  ---------- |  --------------- |  ------- |  -------------------------------------------------------------------------------------------------------------------------------------- |
+| ----------- | ---------------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------- |
 | **title**   | `string`         | `nil`    | title to be used for the notification. Uses `Message.title` if available.                                                               |
 | **replace** | `boolean`        | `true`   | when true, messages routing to the same notify instance will replace existing messages instead of pushing a new notification every time |
 | **merge**   | `boolean`        | `true`   | Merge messages into one Notification or create separate notifications                                                                   |
@@ -310,7 +311,7 @@ A **route** has a `filter`, `view` and optional `opts` attribute.
 Route options can be any of the view options above, or one of:
 
 | Option   | Type      | Default | Description                                                                                                                                                          |
-|  ------- |  -------- |  ------ |  ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| -------- | --------- | ------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **skip** | `boolean` | `false` | messages matching this filter will be skipped and not shown in any views                                                                                             |
 | **stop** | `boolean` | `true`  | When `false` and a route matches the filter, then other routes can still process the message too. Useful if you want certain messages to be shown in multiple views. |
 
@@ -411,7 +412,7 @@ require("telescope").load_extension("noice")
 
 ## 🚀 Usage
 
-- `:Noice` shows the message history  
+- `:Noice` shows the message history
 - `:Noice disable` disables **Noice**
 - `:Noice enable` enables **Noice**
 - `:Noice stats` shows debugging stats
@@ -420,6 +421,7 @@ require("telescope").load_extension("noice")
 ## 🌈 Highlight Groups
 
 <!-- hl_start -->
+
 | Highlight Group                    | Default Group                | Description                                        |
 | ---------------------------------- | ---------------------------- | -------------------------------------------------- |
 | **NoiceCmdline**                   | _MsgArea_                    | Normal for the classic cmdline area at the bottom" |
@@ -466,6 +468,7 @@ require("telescope").load_extension("noice")
 | **NoiceSplit**                     | _NormalFloat_                | Normal for split views                             |
 | **NoiceSplitBorder**               | _FloatBorder_                | Border for split views                             |
 | **NoiceVirtualText**               | _DiagnosticVirtualTextInfo_  | Default hl group for virtualtext views             |
+
 <!-- hl_end -->
 
 ## 🔥 Known Issues
