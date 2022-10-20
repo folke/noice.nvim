@@ -23,7 +23,7 @@ Highly experimental plugin that completely replaces the UI for `messages`, `cmdl
 
 - Neovim >= 0.8.0
 - [nui.nvim](https://github.com/MunifTanjim/nui.nvim): used for proper rendering and multiple views
-- [nvim-notify](https://github.com/rcarriga/nvim-notify): notification view
+- [nvim-notify](https://github.com/rcarriga/nvim-notify):  notification view ___(optional)___
 
 ## 📦 Installation
 
