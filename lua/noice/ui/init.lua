@@ -15,6 +15,13 @@ M._last = {}
 function M.skip(event, ...)
   local msg = { event, ... }
 
+  if vim.tbl_contains({ "msg_showcmd", "msg_showmode" }, event) and vim.deep_equal(M._last[event], msg) then
+    Util.stats.track("ui." .. event .. ".skipped")
+    return true
+  else
+    M._last[event] = msg
+  end
+
   local msg_handler = M.parse_event(event)
 
   if vim.deep_equal(M._last[msg_handler], msg) then
@@ -53,6 +60,7 @@ function M.enable()
     if Util.is_blocking() then
       Util.try(Router.update)
     end
+    -- Util.debug(vim.inspect({ event, ... }))
     stack_level = stack_level - 1
   end)
 end
