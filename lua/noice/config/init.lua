@@ -11,12 +11,18 @@ M.defaults = {
   cmdline = {
     enabled = true, -- enables the Noice cmdline UI
     view = "cmdline_popup", -- view for rendering the cmdline. Change to `cmdline` to get a classic cmdline at the bottom
-    view_search = "cmdline_popup_search", -- view for rendering the cmdline for search
     opts = { buf_options = { filetype = "vim" } }, -- enable syntax highlighting in the cmdline
-    icons = {
-      ["/"] = { icon = " ", hl_group = "NoiceCmdlineIconSearch" },
-      ["?"] = { icon = " ", hl_group = "NoiceCmdlineIconSearch" },
-      [":"] = { icon = "", hl_group = "NoiceCmdlineIcon", firstc = false },
+    ---@type table<string, CmdlineFormat>
+    format = {
+      -- conceal: (default=true) This will hide the text in the cmdline that matches the pattern.
+      -- view: (default is cmdline view)
+      -- opts: any options passed to the view
+      -- icon_hl_group: optional hl_group for the icon
+      cmdline = { pattern = "^:", icon = "" },
+      search = { pattern = "^[?/]", icon = " ", conceal = false },
+      filter = { pattern = "^:%s*!", icon = "$", opts = { buf_options = { filetype = "sh" } } },
+      lua = { pattern = "^:%s*lua%s+", icon = "", opts = { buf_options = { filetype = "lua" } } },
+      -- lua = false, -- to disable a format, set to `false`
     },
   },
   messages = {
@@ -90,6 +96,8 @@ function M.setup(options)
     status = require("noice.config.status").defaults,
     format = require("noice.config.format").defaults,
   }, options)
+
+  require("noice.config.cmdline").setup()
 
   M.options.routes = Routes.get(options.routes)
 

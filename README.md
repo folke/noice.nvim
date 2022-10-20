@@ -23,7 +23,7 @@ Highly experimental plugin that completely replaces the UI for `messages`, `cmdl
 
 - Neovim >= 0.8.0
 - [nui.nvim](https://github.com/MunifTanjim/nui.nvim): used for proper rendering and multiple views
-- [nvim-notify](https://github.com/rcarriga/nvim-notify):  notification view ___(optional)___
+- [nvim-notify](https://github.com/rcarriga/nvim-notify):  notification view _**(optional)**_
 
 ## 📦 Installation
 
@@ -59,12 +59,18 @@ Check the [wiki](https://github.com/folke/noice.nvim/wiki/Configuration-Recipes)
   cmdline = {
     enabled = true, -- enables the Noice cmdline UI
     view = "cmdline_popup", -- view for rendering the cmdline. Change to `cmdline` to get a classic cmdline at the bottom
-    view_search = "cmdline_popup_search", -- view for rendering the cmdline for search
     opts = { buf_options = { filetype = "vim" } }, -- enable syntax highlighting in the cmdline
-    icons = {
-      ["/"] = { icon = " ", hl_group = "NoiceCmdlineIconSearch" },
-      ["?"] = { icon = " ", hl_group = "NoiceCmdlineIconSearch" },
-      [":"] = { icon = "", hl_group = "NoiceCmdlineIcon", firstc = false },
+    ---@type table<string, CmdlineFormat>
+    format = {
+      -- conceal: (default=true) This will hide the text in the cmdline that matches the pattern.
+      -- view: (default is cmdline view)
+      -- opts: any options passed to the view
+      -- icon_hl_group: optional hl_group for the icon
+      cmdline = { pattern = "^:", icon = "" },
+      search = { pattern = "^[?/]", icon = " ", conceal = false },
+      filter = { pattern = "^:%s*!", icon = "$", opts = { buf_options = { filetype = "sh" } } },
+      lua = { pattern = "^:%s*lua%s+", icon = "", opts = { buf_options = { filetype = "lua" } } },
+      -- lua = false, -- to disable a format, set to `false`
     },
   },
   messages = {
@@ -414,46 +420,52 @@ require("telescope").load_extension("noice")
 ## 🌈 Highlight Groups
 
 <!-- hl_start -->
-| Highlight Group                   | Default Group                | Description                                        |
-|  -------------------------------- |  --------------------------- |  ------------------------------------------------- |
-| **NoiceCmdline**                  | _MsgArea_                    | Normal for the classic cmdline area at the bottom" |
-| **NoiceCmdlineIcon**              | _DiagnosticSignInfo_         | Cmdline icon                                       |
-| **NoiceCmdlineIconSearch**        | _DiagnosticSignWarn_         | Cmdline search icon (`/` and `?`)                  |
-| **NoiceCmdlinePopup**             | _Normal_                     | Normal for the cmdline popup                       |
-| **NoiceCmdlinePopupBorder**       | _DiagnosticSignInfo_         | Cmdline popup border                               |
-| **NoiceCmdlinePopupSearchBorder** | _DiagnosticSignWarn_         | Cmdline popup border for search                    |
-| **NoiceConfirm**                  | _Normal_                     | Normal for the confirm view                        |
-| **NoiceConfirmBorder**            | _DiagnosticSignInfo_         | Border for the confirm view                        |
-| **NoiceCursor**                   | _Cursor_                     | Fake Cursor                                        |
-| **NoiceFormatConfirm**            | _CursorLine_                 |                                                    |
-| **NoiceFormatConfirmDefault**     | _Visual_                     |                                                    |
-| **NoiceFormatDate**               | _Special_                    |                                                    |
-| **NoiceFormatEvent**              | _NonText_                    |                                                    |
-| **NoiceFormatKind**               | _NonText_                    |                                                    |
-| **NoiceFormatLevelDebug**         | _NonText_                    |                                                    |
-| **NoiceFormatLevelError**         | _DiagnosticVirtualTextError_ |                                                    |
-| **NoiceFormatLevelInfo**          | _DiagnosticVirtualTextInfo_  |                                                    |
-| **NoiceFormatLevelOff**           | _NonText_                    |                                                    |
-| **NoiceFormatLevelTrace**         | _NonText_                    |                                                    |
-| **NoiceFormatLevelWarn**          | _DiagnosticVirtualTextWarn_  |                                                    |
-| **NoiceFormatProgressDone**       | _Search_                     | Progress bar done                                  |
-| **NoiceFormatProgressTodo**       | _CursorLine_                 | progress bar todo                                  |
-| **NoiceFormatTitle**              | _Title_                      |                                                    |
-| **NoiceLspProgressClient**        | _Title_                      | Lsp progress client name                           |
-| **NoiceLspProgressSpinner**       | _Constant_                   | Lsp progress spinner                               |
-| **NoiceLspProgressTitle**         | _NonText_                    | Lsp progress title                                 |
-| **NoiceMini**                     | _MsgArea_                    | Normal for mini view                               |
-| **NoicePopup**                    | _NormalFloat_                | Normal for popup views                             |
-| **NoicePopupBorder**              | _FloatBorder_                | Border for popup views                             |
-| **NoicePopupmenu**                | _Pmenu_                      | Normal for the popupmenu                           |
-| **NoicePopupmenuBorder**          | _FloatBorder_                | Popupmenu border                                   |
-| **NoicePopupmenuMatch**           | _Special_                    | Part of the item that matches the input            |
-| **NoicePopupmenuSelected**        | _PmenuSel_                   | Selected item in the popupmenu                     |
-| **NoiceScrollbar**                | _PmenuSbar_                  | Normal for scrollbar                               |
-| **NoiceScrollbarThumb**           | _PmenuThumb_                 | Scrollbar thumb                                    |
-| **NoiceSplit**                    | _NormalFloat_                | Normal for split views                             |
-| **NoiceSplitBorder**              | _FloatBorder_                | Border for split views                             |
-| **NoiceVirtualText**              | _DiagnosticVirtualTextInfo_  | Default hl group for virtualtext views             |
+| Highlight Group                    | Default Group                | Description                                        |
+| ---------------------------------- | ---------------------------- | -------------------------------------------------- |
+| **NoiceCmdline**                   | _MsgArea_                    | Normal for the classic cmdline area at the bottom" |
+| **NoiceCmdlineIcon**               | _DiagnosticSignInfo_         | Cmdline icon                                       |
+| **NoiceCmdlineIconCmdline**        | _DiagnosticSignInfo_         |                                                    |
+| **NoiceCmdlineIconFilter**         | _DiagnosticSignInfo_         |                                                    |
+| **NoiceCmdlineIconLua**            | _DiagnosticSignInfo_         |                                                    |
+| **NoiceCmdlineIconSearch**         | _DiagnosticSignWarn_         | Cmdline search icon (`/` and `?`)                  |
+| **NoiceCmdlinePopup**              | _Normal_                     | Normal for the cmdline popup                       |
+| **NoiceCmdlinePopupBorder**        | _DiagnosticSignInfo_         | Cmdline popup border                               |
+| **NoiceCmdlinePopupBorderCmdline** | _DiagnosticSignInfo_         |                                                    |
+| **NoiceCmdlinePopupBorderFilter**  | _DiagnosticSignInfo_         |                                                    |
+| **NoiceCmdlinePopupBorderLua**     | _DiagnosticSignInfo_         |                                                    |
+| **NoiceCmdlinePopupBorderSearch**  | _DiagnosticSignWarn_         | Cmdline popup border for search                    |
+| **NoiceConfirm**                   | _Normal_                     | Normal for the confirm view                        |
+| **NoiceConfirmBorder**             | _DiagnosticSignInfo_         | Border for the confirm view                        |
+| **NoiceCursor**                    | _Cursor_                     | Fake Cursor                                        |
+| **NoiceFormatConfirm**             | _CursorLine_                 |                                                    |
+| **NoiceFormatConfirmDefault**      | _Visual_                     |                                                    |
+| **NoiceFormatDate**                | _Special_                    |                                                    |
+| **NoiceFormatEvent**               | _NonText_                    |                                                    |
+| **NoiceFormatKind**                | _NonText_                    |                                                    |
+| **NoiceFormatLevelDebug**          | _NonText_                    |                                                    |
+| **NoiceFormatLevelError**          | _DiagnosticVirtualTextError_ |                                                    |
+| **NoiceFormatLevelInfo**           | _DiagnosticVirtualTextInfo_  |                                                    |
+| **NoiceFormatLevelOff**            | _NonText_                    |                                                    |
+| **NoiceFormatLevelTrace**          | _NonText_                    |                                                    |
+| **NoiceFormatLevelWarn**           | _DiagnosticVirtualTextWarn_  |                                                    |
+| **NoiceFormatProgressDone**        | _Search_                     | Progress bar done                                  |
+| **NoiceFormatProgressTodo**        | _CursorLine_                 | progress bar todo                                  |
+| **NoiceFormatTitle**               | _Title_                      |                                                    |
+| **NoiceLspProgressClient**         | _Title_                      | Lsp progress client name                           |
+| **NoiceLspProgressSpinner**        | _Constant_                   | Lsp progress spinner                               |
+| **NoiceLspProgressTitle**          | _NonText_                    | Lsp progress title                                 |
+| **NoiceMini**                      | _MsgArea_                    | Normal for mini view                               |
+| **NoicePopup**                     | _NormalFloat_                | Normal for popup views                             |
+| **NoicePopupBorder**               | _FloatBorder_                | Border for popup views                             |
+| **NoicePopupmenu**                 | _Pmenu_                      | Normal for the popupmenu                           |
+| **NoicePopupmenuBorder**           | _FloatBorder_                | Popupmenu border                                   |
+| **NoicePopupmenuMatch**            | _Special_                    | Part of the item that matches the input            |
+| **NoicePopupmenuSelected**         | _PmenuSel_                   | Selected item in the popupmenu                     |
+| **NoiceScrollbar**                 | _PmenuSbar_                  | Normal for scrollbar                               |
+| **NoiceScrollbarThumb**            | _PmenuThumb_                 | Scrollbar thumb                                    |
+| **NoiceSplit**                     | _NormalFloat_                | Normal for split views                             |
+| **NoiceSplitBorder**               | _FloatBorder_                | Border for split views                             |
+| **NoiceVirtualText**               | _DiagnosticVirtualTextInfo_  | Default hl group for virtualtext views             |
 <!-- hl_end -->
 
 ## 🔥 Known Issues

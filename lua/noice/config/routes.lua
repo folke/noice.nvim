@@ -19,12 +19,18 @@ end
 
 ---@return NoiceRouteConfig[]
 function M.defaults()
-  return {
-    {
-      view = Config.options.cmdline.view_search,
-      opts = Config.options.cmdline.opts,
-      filter = { event = "cmdline", kind = { "/", "?" } },
-    },
+  ---@type NoiceRouteConfig[]
+  local ret = {}
+
+  for kind, format in pairs(Config.options.cmdline.format) do
+    table.insert(ret, {
+      view = format.view,
+      opts = format.opts,
+      filter = { event = "cmdline", kind = kind },
+    })
+  end
+
+  return vim.list_extend(ret, {
     {
       view = Config.options.cmdline.view,
       opts = Config.options.cmdline.opts,
@@ -103,7 +109,7 @@ function M.defaults()
       view = Config.options.lsp_progress.view,
       filter = { event = "lsp" },
     },
-  }
+  })
 end
 
 return M

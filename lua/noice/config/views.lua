@@ -181,19 +181,6 @@ M.defaults = {
       cursorline = false,
     },
   },
-  cmdline_popup_search = {
-    view = "cmdline_popup",
-    border = {
-      text = {
-        top = " Search ",
-      },
-    },
-    win_options = {
-      winhighlight = {
-        FloatBorder = "NoiceCmdlinePopupSearchBorder",
-      },
-    },
-  },
   confirm = {
     backend = "popup",
     relative = "editor",

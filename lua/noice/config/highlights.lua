@@ -48,6 +48,12 @@ M.defaults = {
   LspProgressClient = "Title", -- Lsp progress client name
 }
 
+function M.add(hl_group, link)
+  if not M.defaults[hl_group] then
+    M.defaults[hl_group] = link
+  end
+end
+
 function M.setup()
   for hl, link in pairs(M.defaults) do
     local ok, opts = pcall(vim.api.nvim_get_hl_by_name, link, true)

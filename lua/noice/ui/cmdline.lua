@@ -6,6 +6,7 @@ local Config = require("noice.config")
 local NoiceText = require("noice.text")
 local Util = require("noice.util")
 local Hacks = require("noice.util.hacks")
+local Object = require("nui.object")
 
 local M = {}
 M.message = Message("cmdline", nil)
@@ -23,7 +24,9 @@ M.events = {
 
 --- TODO: add injection for ! as shell in nvim-treesitter
 
----@class NoiceCmdline
+---@alias NoiceCmdlineFormatter fun(cmdline: NoiceCmdline): {icon?:string, offset?:number, view?:NoiceViewOptions}
+
+---@class CmdlineState
 ---@field content {[1]: integer, [2]: string}[]
 ---@field pos number
 ---@field firstc string
@@ -31,33 +34,86 @@ M.events = {
 ---@field indent number
 ---@field level number
 ---@field block table
-local Cmdline = {}
-Cmdline.__index = Cmdline
 
-function Cmdline:chunks(firstc)
-  local chunks = {}
+---@class CmdlineFormat
+---@field kind string
+---@field pattern? string
+---@field view string
+---@field conceal? boolean
+---@field icon? string
+---@field icon_hl_group? string
+---@field opts? NoiceViewOptions
 
-  -- indent content
-  if #self.content > 0 then
-    self.content[1][2] = string.rep(" ", self.indent) .. self.content[1][2]
-  end
+---@class NoiceCmdline
+---@field state CmdlineState
+---@field offset integer
+---@overload fun(state:CmdlineState): NoiceCmdline
+local Cmdline = Object("NoiceCmdline")
 
-  -- prefix with first character and optional prompt
-  table.insert(chunks, { 0, (firstc and self.firstc or "") .. self.prompt })
-
-  -- add content
-  vim.list_extend(chunks, self.content)
-
-  return chunks
+---@param state CmdlineState
+function Cmdline:init(state)
+  self.state = state or {}
+  self.offset = 0
 end
 
 function Cmdline:get()
   return table.concat(
     vim.tbl_map(function(c)
       return c[2]
-    end, self.content),
+    end, self.state.content),
     ""
   )
+end
+
+---@return CmdlineFormat
+function Cmdline:get_format()
+  local line = self.state.firstc .. self:get()
+
+  local formats = vim.tbl_values(Config.options.cmdline.format)
+  table.sort(formats, function(a, b)
+    return #a.pattern > #b.pattern
+  end)
+
+  for _, format in pairs(formats) do
+    local from, to = line:find(format.pattern)
+    -- if match and cmdline pos is visible
+    if from and self.state.pos >= to - 1 then
+      self.offset = format.conceal and to or 0
+      return format
+    end
+  end
+  self.offset = 0
+  return {
+    kind = self.state.firstc,
+    view = "cmdline_popup",
+  }
+end
+
+---@param message NoiceMessage
+function Cmdline:format(message)
+  local format = self:get_format()
+
+  if format.icon then
+    message:append(NoiceText.virtual_text(format.icon, format.icon_hl_group))
+    message:append(" ")
+  end
+
+  message.kind = format.kind
+
+  -- FIXME: prompt
+  if self.state.prompt ~= "" then
+    message:append(self.state.prompt)
+  end
+
+  if not format.conceal then
+    message:append(self.state.firstc)
+  end
+
+  message:append(self:get():sub(self.offset))
+
+  local cursor = NoiceText.cursor(-self:length() + self.state.pos)
+  cursor.on_render = M.on_render
+  message:append(cursor)
 end
 
 function Cmdline:width()
@@ -71,13 +127,8 @@ end
 ---@type NoiceCmdline[]
 M.cmdlines = {}
 
----@param opts table
-function M.new(opts)
-  return setmetatable(opts, Cmdline)
-end
-
 function M.on_show(event, content, pos, firstc, prompt, indent, level)
-  local c = M.new({
+  local c = Cmdline({
     event = event,
     content = content,
     pos = pos,
@@ -98,8 +149,8 @@ function M.on_hide(_, level)
 end
 
 function M.on_pos(_, pos, level)
-  if M.cmdlines[level] and M.cmdlines[level].pos ~= pos then
-    M.cmdlines[level].pos = pos
+  if M.cmdlines[level] and M.cmdlines[level].state.pos ~= pos then
+    M.cmdlines[level].state.pos = pos
     M.update()
   end
 end
@@ -117,8 +168,10 @@ M.position = nil
 function M.on_render(_, buf, line, byte)
   local win = vim.fn.bufwinid(buf)
   if win ~= -1 then
-    local cmdline_start = byte - M.last():length()
-    local pos = vim.fn.screenpos(win, line, cmdline_start + 1)
+    -- FIXME: check with cmp
+    -- FIXME: state.pos?
+    local cmdline_start = byte - (M.last():length() - M.last().offset)
+    local pos = vim.fn.screenpos(win, line, cmdline_start)
     M.position = {
       buf = buf,
       win = win,
@@ -147,19 +200,7 @@ function M.update()
     if M.message:height() > 0 then
       M.message:newline()
     end
-
-    local icon = Config.options.cmdline.icons[cmdline.firstc]
-
-    if icon then
-      M.message:append(NoiceText.virtual_text(icon.icon, icon.hl_group))
-      M.message:append(" ")
-    end
-    M.message.kind = cmdline.firstc
-
-    M.message:append(cmdline:chunks(icon and icon.firstc ~= false))
-    local cursor = NoiceText.cursor(-cmdline:length() + cmdline.pos)
-    cursor.on_render = M.on_render
-    M.message:append(cursor)
+    cmdline:format(M.message)
   end)
 
   if count > 0 then
