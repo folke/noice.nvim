@@ -194,6 +194,8 @@ function View:render(buf, opts)
     require("nui.utils")._.set_buf_options(buf, self._opts.buf_options)
   end
 
+  vim.api.nvim_buf_clear_namespace(buf, Config.ns, linenr - 1, -1)
+
   if not opts.highlight then
     vim.api.nvim_buf_set_lines(buf, linenr - 1, -1, false, {})
   end
