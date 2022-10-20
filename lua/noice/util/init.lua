@@ -273,9 +273,10 @@ end
 ---@generic V
 ---@param tbl table<K, V>
 ---@param fn fun(key: K, value: V)
-function M.for_each(tbl, fn)
+---@param sorter? fun(a:V, b:V): boolean
+function M.for_each(tbl, fn, sorter)
   local keys = vim.tbl_keys(tbl)
-  table.sort(keys)
+  table.sort(keys, sorter)
   for _, key in ipairs(keys) do
     fn(key, tbl[key])
   end
