@@ -74,7 +74,7 @@ function M.defaults()
         event = "msg_show",
         kind = { "", "echo", "echomsg" },
       },
-      opts = { replace = true, merge = true },
+      opts = { replace = true, merge = true, title = "Messages" },
     },
     {
       view = Config.options.messages.view_error,
@@ -97,7 +97,7 @@ function M.defaults()
         event = "noice",
         kind = { "stats", "debug" },
       },
-      opts = { buf_options = { filetype = "lua" }, replace = true },
+      opts = { buf_options = { filetype = "lua" }, replace = true, title = "Noice" },
     },
     {
       view = Config.options.lsp_progress.view,
