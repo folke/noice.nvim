@@ -4,6 +4,7 @@ local View = require("noice.view")
 local Manager = require("noice.message.manager")
 local Config = require("noice.config")
 local Util = require("noice.util")
+local Message = require("noice.message")
 
 local M = {}
 
@@ -29,6 +30,16 @@ function M.setup()
     end,
     stats = function()
       Manager.add(Util.stats.message())
+    end,
+    routes = function()
+      local message = Message("noice", "debug")
+      message:set(vim.inspect(Config.options.routes))
+      Manager.add(message)
+    end,
+    config = function()
+      local message = Message("noice", "debug")
+      message:set(vim.inspect(Config.options))
+      Manager.add(message)
     end,
     history = function()
       if not M._history_view then
