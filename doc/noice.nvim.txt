@@ -1,4 +1,4 @@
-*noice.nvim.txt*          For NVIM v0.5.0         Last change: 2022 October 19
+*noice.nvim.txt*          For NVIM v0.5.0         Last change: 2022 October 20
 
 ==============================================================================
 Table of Contents                               *noice.nvim-table-of-contents*
@@ -51,7 +51,7 @@ REQUIREMENTS                                         *noice.nvim-requirements*
 
 - Neovim >= 0.8.0
 - nui.nvim <https://github.com/MunifTanjim/nui.nvim>: used for proper rendering and multiple views
-- nvim-notify <https://github.com/rcarriga/nvim-notify>: notification view
+- nvim-notify <https://github.com/rcarriga/nvim-notify>: notification view **_(optional)_**
 
 
 INSTALLATION                                         *noice.nvim-installation*
@@ -95,7 +95,7 @@ for configuration recipes.
         icons = {
           ["/"] = { icon = " ", hl_group = "NoiceCmdlineIconSearch" },
           ["?"] = { icon = " ", hl_group = "NoiceCmdlineIconSearch" },
-          [":"] = { icon = " ", hl_group = "NoiceCmdlineIcon", firstc = false },
+          [":"] = { icon = "", hl_group = "NoiceCmdlineIcon", firstc = false },
         },
       },
       messages = {
