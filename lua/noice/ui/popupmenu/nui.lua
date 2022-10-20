@@ -61,7 +61,7 @@ function M.create(state)
   local prefix = nil
 
   if is_cmdline then
-    prefix = vim.fn.getcmdline():sub(state.col + 1, vim.fn.getcmdpos())
+    prefix = vim.fn.getcmdline():sub(state.col + 1, vim.fn.getcmdpos() - 1)
   end
 
   -- manage left/right padding on the line
