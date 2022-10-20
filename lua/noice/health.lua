@@ -110,7 +110,7 @@ function M.check(opts)
 end
 
 M.checker = Util.interval(1000, function()
-  if require("noice")._running then
+  if Config.is_running() then
     M.check({ checkhealth = false })
   end
 end, {
