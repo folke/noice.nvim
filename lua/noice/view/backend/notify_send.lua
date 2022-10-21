@@ -40,7 +40,7 @@ function NotifySendView:init(opts)
 end
 
 function NotifySendView:is_available()
-  return pcall(_G.require, "notify") == true
+  return vim.fn.executable("notify-send") == 1
 end
 
 function NotifySendView:update_options()
