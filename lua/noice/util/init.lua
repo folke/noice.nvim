@@ -245,7 +245,7 @@ function M.debug(data)
   if not fd then
     error(("Could not open file %s for writing"):format(file))
   end
-  fd:write("\n" .. data)
+  fd:write(data .. "\n")
   fd:close()
 end
 
