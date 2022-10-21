@@ -3,6 +3,7 @@ local require = require("noice.util.lazy")
 local Config = require("noice.config")
 local Util = require("noice.util")
 local Router = require("noice.message.router")
+local Manager = require("noice.message.manager")
 
 ---@alias NoiceEvent MsgEvent|CmdlineEvent|NotifyEvent
 ---@alias NoiceKind MsgKind|NotifyLevel
@@ -54,13 +55,17 @@ function M.enable()
       return
     end
     stack_level = stack_level + 1
+
+    local tick = Manager.tick()
     safe_handle(event, ...)
 
     -- check if we need to update the ui
-    if Util.is_blocking() then
-      Util.try(Router.update)
+    if Manager.tick() > tick then
+      -- Util.debug(vim.inspect({ event, ... }))
+      if Util.is_blocking() then
+        Util.try(Router.update)
+      end
     end
-    -- Util.debug(vim.inspect({ event, ... }))
     stack_level = stack_level - 1
   end)
 end
