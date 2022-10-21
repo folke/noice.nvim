@@ -55,7 +55,7 @@ function View.get_view(view, opts)
     end
   end
 
-  local mod = require("noice.view." .. opts.backend)
+  local mod = require("noice.view.backend." .. opts.backend)
   ---@type NoiceView
   local ret = mod(opts)
   if not ret:is_available() and opts.fallback then
