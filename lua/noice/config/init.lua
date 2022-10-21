@@ -86,7 +86,7 @@ M.options = {}
 
 M._running = false
 function M.is_running()
-  return M._loaded
+  return M._running
 end
 
 function M.setup(options)
@@ -112,7 +112,7 @@ function M.setup(options)
   if M.options.lsp_progress.enabled then
     require("noice.source.lsp").setup()
   end
-  M._loaded = true
+  M._running = true
 end
 
 return M
