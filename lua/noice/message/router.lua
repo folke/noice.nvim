@@ -85,6 +85,8 @@ function M.update()
 
   ---@type table<NoiceView,NoiceMessage[]>
   local updates = {}
+  ---@type table<NoiceView,NoiceViewOptions>
+  local updates_opts = {}
 
   local updated = 0
   local messages = Manager.get(nil, { sort = true })
@@ -94,6 +96,9 @@ function M.update()
 
     if not route.opts.skip then
       updates[route.view] = updates[route.view] or {}
+      if #route_messages > 0 then
+        updates_opts[route.view] = vim.tbl_deep_extend("force", updates_opts[route.view] or {}, route.opts)
+      end
       vim.list_extend(updates[route.view], route_messages)
     end
 
@@ -109,6 +114,7 @@ function M.update()
   end
 
   for view, view_messages in pairs(updates) do
+    view._route_opts = updates_opts[view]
     updated = updated + (view:display(view_messages) and 1 or 0)
     for _, m in ipairs(view_messages) do
       if m.once then

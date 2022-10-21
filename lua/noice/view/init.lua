@@ -21,6 +21,7 @@ local Format = require("noice.text.format")
 ---@field _messages NoiceMessage[]
 ---@field _opts NoiceViewOptions
 ---@field _view_opts NoiceViewOptions
+---@field _route_opts NoiceViewOptions
 ---@field _visible boolean
 ---@field _instance "opts" | "view" | "backend"
 ---@overload fun(opts?: NoiceViewOptions): NoiceView
@@ -85,7 +86,7 @@ function View:update_options() end
 function View:check_options()
   ---@type NoiceViewOptions
   local old = vim.deepcopy(self._opts)
-  self._opts = vim.deepcopy(self._view_opts)
+  self._opts = vim.tbl_deep_extend("force", vim.deepcopy(self._view_opts), self._route_opts or {})
   self:update_options()
   if not vim.deep_equal(old, self._opts) then
     self:reset(old, self._opts)
