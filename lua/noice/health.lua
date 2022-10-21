@@ -7,6 +7,8 @@ local M = {}
 
 M.checks = {}
 
+-- TODO: check for treesitter parsers
+
 M.log = {
   ---@class NoiceHealthLog
   checkhealth = {
@@ -95,6 +97,27 @@ function M.check(opts)
       log.warn(
         "You added `S` to `vim.opt.shortmess`. Search count messages will not be handled by Noice. So no virtual text for search count."
       )
+    end
+
+    local _, ts = pcall(require, "nvim-treesitter.parsers")
+
+    if ts then
+      log.ok("**treesitter-nvim** is installed")
+      for _, ft in ipairs({ "vim", "regex", "lua", "bash" }) do
+        if ts.has_parser(ft) then
+          log.ok("**TreeSitter " .. ft .. "** parser is installed")
+        else
+          log.warn(
+            "**TreeSitter "
+              .. ft
+              .. "** parser is not installed. Highlighting of the cmdline for "
+              .. ft
+              .. " might be broken"
+          )
+        end
+      end
+    else
+      log.warn("**treesitter-nvim** not installed. Highlighting of the cmdline might be wrong")
     end
   end
 
