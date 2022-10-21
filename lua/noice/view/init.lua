@@ -19,6 +19,7 @@ local Format = require("noice.text.format")
 ---@class NoiceView
 ---@field _tick number
 ---@field _messages NoiceMessage[]
+---@field _id integer
 ---@field _opts NoiceViewOptions
 ---@field _view_opts NoiceViewOptions
 ---@field _route_opts NoiceViewOptions
@@ -66,12 +67,15 @@ function View.get_view(view, opts)
   return ret
 end
 
+local _id = 0
 ---@param opts? NoiceViewOptions
 function View:init(opts)
+  _id = _id + 1
+  self._id = _id
   self._tick = 0
   self._messages = {}
   self._opts = opts or {}
-  self._visible = true
+  self._visible = false
   self._view_opts = vim.deepcopy(self._opts)
   self._instance = "opts"
   self:update_options()

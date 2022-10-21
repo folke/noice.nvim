@@ -5,6 +5,7 @@ local Util = require("noice.util")
 
 ---@class NuiView: NoiceView
 ---@field _nui? NuiPopup|NuiSplit
+---@field _loading? boolean
 ---@field super NoiceView
 ---@field _hider fun()
 ---@field _timeout_timer vim.loop.Timer
@@ -43,6 +44,10 @@ function NuiView:update_options()
 end
 
 function NuiView:create()
+  if self._loading then
+    return
+  end
+  self._loading = true
   -- needed, since Nui mutates the options
   local opts = vim.deepcopy(self._opts)
   self._nui = self._opts.type == "split" and require("nui.split")(opts) or require("nui.popup")(opts)
@@ -63,6 +68,7 @@ function NuiView:create()
 
   -- NOTE: this is needed, to make sure the border is rendered properly during blocking events
   self._nui:update_layout(self:get_layout())
+  self._loading = false
 end
 
 ---@param old NoiceNuiOptions
@@ -134,6 +140,10 @@ function NuiView:fix_border()
 end
 
 function NuiView:show()
+  if self._loading then
+    return
+  end
+
   if not self._nui then
     self:create()
   end
