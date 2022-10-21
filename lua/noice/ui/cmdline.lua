@@ -195,16 +195,10 @@ end
 
 function M.update()
   M.message:clear()
-  local count = 0
-  Util.for_each(M.cmdlines, function(_, cmdline)
-    count = count + 1
-    if M.message:height() > 0 then
-      M.message:newline()
-    end
-    cmdline:format(M.message)
-  end)
+  local cmdline = M.last()
 
-  if count > 0 then
+  if cmdline then
+    cmdline:format(M.message)
     Hacks.hide_cursor()
     Manager.add(M.message)
   else
