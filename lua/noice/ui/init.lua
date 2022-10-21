@@ -86,20 +86,25 @@ function M.handle(event, ...)
 
   if not ok then
     if Config.options.debug then
-      Util.error("No ui router for " .. event_group)
+      vim.schedule(function()
+        Util.error("No ui router for " .. event_group)
+      end)
     end
     return
   end
 
   if type(handler[on]) ~= "function" then
+    local args = { ... }
     if Config.options.debug then
-      Util.error(
-        "No ui router for **"
-          .. event
-          .. "** events\n```lua\n"
-          .. vim.inspect({ group = event_group, on = on, args = ... })
-          .. "\n```"
-      )
+      vim.schedule(function()
+        Util.error(
+          "No ui router for **"
+            .. event
+            .. "** events\n```lua\n"
+            .. vim.inspect({ group = event_group, on = on, args = args })
+            .. "\n```"
+        )
+      end)
     end
     return
   end
