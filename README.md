@@ -137,8 +137,8 @@ Check the [wiki](https://github.com/folke/noice.nvim/wiki/Configuration-Recipes)
 | **cleared**    | `boolean`              | checks if the message is cleared, meaning it's in the history                                                                          |
 | **mode**       | `string`               | checks if `vim.api.nvim_get_mode()` contains the given mode                                                                            |
 | **blocking**   | `boolean`              | are we in blocking mode?                                                                                                               |
-| **event**      | `string` or `string[]` | any of the events from `ext_messages` or `cmdline`. See [:h ui-messages](https://neovim.io/doc/user2/ui.html#_-message/dialog-events-) |
-| **kind**       | `string` or `string[]` | any of the kinds from `ext_messages`. See [:h ui-messages](https://neovim.io/doc/user2/ui.html#_-message/dialog-events-)               |
+| **event**      | `string` or `string[]` | any of the events from `ext_messages` or `cmdline`. See [:h ui-messages](https://neovim.io/doc/user/ui.html#ui-messages) |
+| **kind**       | `string` or `string[]` | any of the kinds from `ext_messages`. See [:h ui-messages](https://neovim.io/doc/user/ui.html#ui-messages)               |
 | **error**      | `boolean`              | all error-like kinds from `ext_messages`                                                                                               |
 | **warning**    | `boolean`              | all warning-like kinds from `ext_messages`                                                                                             |
 | **find**       | `string`               | uses lua `string.find` to match the pattern                                                                                            |
