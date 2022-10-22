@@ -13,6 +13,7 @@ M._attached = false
 ---@type table<string, any>
 M._last = {}
 
+-- TODO: move this to handlers and properly check there
 function M.skip(event, ...)
   local msg = { event, ... }
 
