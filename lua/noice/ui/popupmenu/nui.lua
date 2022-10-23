@@ -62,6 +62,16 @@ function M.create(state)
 
   if is_cmdline then
     prefix = vim.fn.getcmdline():sub(state.col + 1, vim.fn.getcmdpos() - 1)
+  elseif #state.items > 0 then
+    prefix = state.items[1].word
+    for _, item in ipairs(state.items) do
+      for i = 1, #prefix do
+        if prefix:sub(i, i) ~= item.word:sub(i, i) then
+          prefix = prefix:sub(1, i - 1)
+          break
+        end
+      end
+    end
   end
 
   -- manage left/right padding on the line
