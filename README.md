@@ -59,7 +59,7 @@ Check the [wiki](https://github.com/folke/noice.nvim/wiki/Configuration-Recipes)
   cmdline = {
     enabled = true, -- enables the Noice cmdline UI
     view = "cmdline_popup", -- view for rendering the cmdline. Change to `cmdline` to get a classic cmdline at the bottom
-    opts = { buf_options = { filetype = "vim" } }, -- enable syntax highlighting in the cmdline
+    opts = { lang = "vim" }, -- enable syntax highlighting in the cmdline
     ---@type table<string, CmdlineFormat>
     format = {
       -- conceal: (default=true) This will hide the text in the cmdline that matches the pattern.
@@ -67,10 +67,10 @@ Check the [wiki](https://github.com/folke/noice.nvim/wiki/Configuration-Recipes)
       -- opts: any options passed to the view
       -- icon_hl_group: optional hl_group for the icon
       cmdline = { pattern = "^:", icon = "" },
-      search_down = { kind = "search", pattern = "^/", icon = " ", ft = "regex" },
-      search_up = { kind = "search", pattern = "^%?", icon = " ", ft = "regex" },
-      filter = { pattern = "^:%s*!", icon = "$", ft = "sh" },
-      lua = { pattern = "^:%s*lua%s+", icon = "", ft = "lua" },
+      search_down = { kind = "search", pattern = "^/", icon = " ", lang = "regex" },
+      search_up = { kind = "search", pattern = "^%?", icon = " ", lang = "regex" },
+      filter = { pattern = "^:%s*!", icon = "$", lang = "sh" },
+      lua = { pattern = "^:%s*lua%s+", icon = "", lang = "lua" },
       -- lua = false, -- to disable a format, set to `false`
     },
   },

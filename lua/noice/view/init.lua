@@ -12,6 +12,7 @@ local Format = require("noice.text.format")
 ---@field fallback string Fallback view in case the backend could not be loaded
 ---@field format? NoiceFormat|string
 ---@field align? NoiceAlign
+---@field lang? string
 ---@field view string
 
 ---@alias NoiceViewOptions NoiceViewBaseOptions|NoiceNuiOptions|NoiceNotifyOptions
@@ -197,6 +198,10 @@ function View:render(buf, opts)
 
   if self._opts.buf_options then
     require("nui.utils")._.set_buf_options(buf, self._opts.buf_options)
+  end
+
+  if self._opts.lang and not vim.b[buf].ts_highlight then
+    vim.treesitter.start(buf, self._opts.lang)
   end
 
   vim.api.nvim_buf_clear_namespace(buf, Config.ns, linenr - 1, -1)

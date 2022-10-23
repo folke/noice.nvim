@@ -103,7 +103,7 @@ function M.defaults()
         event = "noice",
         kind = { "stats", "debug" },
       },
-      opts = { buf_options = { filetype = "lua" }, replace = true, title = "Noice" },
+      opts = { lang = "lua", replace = true, title = "Noice" },
     },
     {
       view = Config.options.lsp_progress.view,
