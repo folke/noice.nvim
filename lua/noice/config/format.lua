@@ -1,6 +1,5 @@
 local M = {}
 
---TODO: make configurable
 ---@type table<string, NoiceFormat>
 M.builtin = {
   default = { "{level} ", "{title} ", "{message}" },

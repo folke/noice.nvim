@@ -7,8 +7,6 @@ local M = {}
 
 M.checks = {}
 
--- TODO: check for treesitter parsers
-
 M.log = {
   ---@class NoiceHealthLog
   checkhealth = {

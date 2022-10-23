@@ -4,7 +4,6 @@ local Message = require("noice.message")
 local Manager = require("noice.message.manager")
 local Config = require("noice.config")
 local NoiceText = require("noice.text")
-local Util = require("noice.util")
 local Hacks = require("noice.util.hacks")
 local Object = require("nui.object")
 
@@ -13,6 +12,7 @@ M.message = Message("cmdline", nil)
 
 ---@enum CmdlineEvent
 M.events = {
+  cmdline = "cmdline",
   show = "cmdline_show",
   hide = "cmdline_hide",
   pos = "cmdline_pos",
@@ -21,8 +21,6 @@ M.events = {
   block_append = "cmdline_block_append",
   block_hide = "cmdline_block_hide",
 }
-
---- TODO: add injection for ! as shell in nvim-treesitter
 
 ---@alias NoiceCmdlineFormatter fun(cmdline: NoiceCmdline): {icon?:string, offset?:number, view?:NoiceViewOptions}
 
