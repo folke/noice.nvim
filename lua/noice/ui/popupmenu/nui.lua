@@ -89,6 +89,7 @@ function M.create(state)
     end
     local text = item.abbr or item.word
     local line = NuiLine()
+
     if padding.left then
       line:append(string.rep(" ", padding.left))
     end
@@ -98,8 +99,6 @@ function M.create(state)
     else
       line:append(text)
     end
-
-    -- line:append("|" .. item.menu .. "|" .. item.kind .. "|" .. item.info)
 
     if padding.right then
       line:append(string.rep(" ", padding.right))
