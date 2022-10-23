@@ -130,7 +130,12 @@ function NuiView:tag()
 end
 
 function NuiView:fix_border()
-  if self._nui and self._nui.border and self._nui.border.winid then
+  if
+    self._nui
+    and self._nui.border
+    and self._nui.border.winid
+    and vim.api.nvim_win_is_valid(self._nui.border.winid)
+  then
     local winhl = vim.api.nvim_win_get_option(self._nui.border.winid, "winhighlight") or ""
     if not winhl:find("IncSearch") then
       winhl = winhl .. ",Search:,Incsearch:"
