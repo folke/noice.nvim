@@ -46,6 +46,28 @@ M.defaults = {
   LspProgressSpinner = "Constant", -- Lsp progress spinner
   LspProgressTitle = "NonText", -- Lsp progress title
   LspProgressClient = "Title", -- Lsp progress client name
+  CompletionItemKindDefault = "Function",
+  CompletionItemKindColor = "NoiceCompletionItemKindDefault",
+  CompletionItemKindFunction = "NoiceCompletionItemKindDefault",
+  CompletionItemKindClass = "NoiceCompletionItemKindDefault",
+  CompletionItemKindMethod = "NoiceCompletionItemKindDefault",
+  CompletionItemKindConstructor = "NoiceCompletionItemKindDefault",
+  CompletionItemKindInterface = "NoiceCompletionItemKindDefault",
+  CompletionItemKindModule = "NoiceCompletionItemKindDefault",
+  CompletionItemKindStruct = "NoiceCompletionItemKindDefault",
+  CompletionItemKindKeyword = "NoiceCompletionItemKindDefault",
+  CompletionItemKindValue = "NoiceCompletionItemKindDefault",
+  CompletionItemKindProperty = "NoiceCompletionItemKindDefault",
+  CompletionItemKindConstant = "NoiceCompletionItemKindDefault",
+  CompletionItemKindSnippet = "NoiceCompletionItemKindDefault",
+  CompletionItemKindFolder = "NoiceCompletionItemKindDefault",
+  CompletionItemKindText = "NoiceCompletionItemKindDefault",
+  CompletionItemKindEnumMember = "NoiceCompletionItemKindDefault",
+  CompletionItemKindUnit = "NoiceCompletionItemKindDefault",
+  CompletionItemKindField = "NoiceCompletionItemKindDefault",
+  CompletionItemKindFile = "NoiceCompletionItemKindDefault",
+  CompletionItemKindVariable = "NoiceCompletionItemKindDefault",
+  CompletionItemKindEnum = "NoiceCompletionItemKindDefault",
 }
 
 function M.add(hl_group, link)
@@ -54,16 +76,26 @@ function M.add(hl_group, link)
   end
 end
 
+function M.get_link(hl_group)
+  local ok, opts = pcall(vim.api.nvim_get_hl_by_name, hl_group, true)
+  if opts then
+    opts[vim.type_idx] = nil
+  end
+  if not ok or vim.tbl_isempty(opts) then
+    opts = { link = hl_group }
+  end
+  opts.default = true
+  return opts
+end
+
 function M.setup()
   for hl, link in pairs(M.defaults) do
-    local ok, opts = pcall(vim.api.nvim_get_hl_by_name, link, true)
-    if opts then
-      opts[vim.type_idx] = nil
+    local opts = { link = link, default = true }
+
+    if vim.tbl_contains({ "IncSearch", "Search" }, link) then
+      opts = M.get_link(link)
     end
-    if not ok or vim.tbl_isempty(opts) then
-      opts = { link = link }
-    end
-    opts.default = true
+
     vim.api.nvim_set_hl(0, "Noice" .. hl, opts)
   end
   vim.api.nvim_set_hl(0, "NoiceHiddenCursor", { blend = 100, nocombine = true })

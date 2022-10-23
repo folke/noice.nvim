@@ -70,44 +70,61 @@ function M.create(state)
     opts.border.padding = vim.tbl_deep_extend("force", {}, padding, { left = 0, right = 0 })
   end
 
-  local max_width = 0
+  ---@type number[]
+  local max_width = { 0, 0 }
 
-  local menu_items = vim.tbl_map(
-    ---@param item CompleteItem|string
-    function(item)
-      if type(item) == "string" then
-        item = { word = item }
+  for _, item in ipairs(state.items) do
+    if type(item) == "string" then
+      item = { word = item }
+    end
+    local text = item.abbr or item.word
+    local line = NuiLine()
+    if padding.left then
+      line:append(string.rep(" ", padding.left))
+    end
+    if prefix and text:lower():find(prefix:lower(), 1, true) == 1 then
+      line:append(prefix, "NoicePopupmenuMatch")
+      line:append(text:sub(#prefix + 1))
+    else
+      line:append(text)
+    end
+
+    -- line:append("|" .. item.menu .. "|" .. item.kind .. "|" .. item.info)
+
+    if padding.right then
+      line:append(string.rep(" ", padding.right))
+    end
+    max_width[1] = math.max(max_width[1] or 0, line:width())
+    item.text = line
+  end
+
+  for _, item in ipairs(state.items) do
+    item.text:append(string.rep(" ", max_width[1] - item.text:width()))
+    if item.text and item.kind and item.kind ~= "" then
+      local hl_group = "NoiceCompletionItemKind" .. item.kind
+      local icon = Config.options.popupmenu.kind_icons[item.kind]
+      if icon then
+        item.text:append(vim.trim(icon) .. " ", hl_group)
       end
-      local text = item.abbr or item.word
-      local line = NuiLine()
-      if padding.left then
-        line:append(string.rep(" ", padding.left))
-      end
-      if prefix and text:lower():find(prefix:lower(), 1, true) == 1 then
-        line:append(prefix, "PmenuMatch")
-        line:append(text:sub(#prefix + 1))
-      else
-        line:append(text)
-      end
-      if padding.right then
-        line:append(string.rep(" ", padding.right))
-      end
-      max_width = math.max(max_width, line:width())
-      return Menu.item(line, item)
-    end,
-    state.items
-  )
+      item.text:append(item.kind, hl_group)
+    end
+    max_width[2] = math.max(max_width[2] or 0, item.text:width())
+  end
 
   opts = vim.tbl_deep_extend(
     "force",
     opts,
     Util.nui.get_layout({
-      width = max_width + 1, -- +1 for scrollbar
+      width = max_width[2] + 1, -- +1 for scrollbar
       height = #state.items,
     }, opts)
   )
 
-  M.menu = Menu(opts, { lines = menu_items })
+  M.menu = Menu(opts, {
+    lines = vim.tbl_map(function(item)
+      return Menu.item(item)
+    end, state.items),
+  })
   M.menu:mount()
 
   M.scroll = Scrollbar({

@@ -10,7 +10,7 @@ local Format = require("noice.text.format")
 ---@field buf_options? table<string,any>
 ---@field backend string
 ---@field fallback string Fallback view in case the backend could not be loaded
----@field format? NoiceFormat
+---@field format? NoiceFormat|string
 ---@field align? NoiceAlign
 ---@field view string
 

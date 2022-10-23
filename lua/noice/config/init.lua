@@ -40,6 +40,9 @@ M.defaults = {
     enabled = true, -- enables the Noice popupmenu UI
     ---@type 'nui'|'cmp'
     backend = "nui", -- backend to use to show regular cmdline completions
+    ---@type NoicePopupmenuItemKind|false
+    -- Icons for completion item kinds (see defaults at noice.config.icons.kinds)
+    kind_icons = {}, -- set to `false` to disable icons
   },
   ---@type NoiceRouteConfig
   history = {
@@ -92,11 +95,22 @@ end
 function M.setup(options)
   options = options or {}
 
+  if options.popupmenu and options.popupmenu.kind_icons == true then
+    options.popupmenu.kind_icons = nil
+  end
+
   M.options = vim.tbl_deep_extend("force", {}, M.defaults, {
     views = require("noice.config.views").defaults,
     status = require("noice.config.status").defaults,
     format = require("noice.config.format").defaults,
+    popupmenu = {
+      kind_icons = require("noice.config.icons").kinds,
+    },
   }, options)
+
+  if M.options.popupmenu.kind_icons == false then
+    M.options.popupmenu.kind_icons = {}
+  end
 
   require("noice.config.cmdline").setup()
 
