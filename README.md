@@ -466,7 +466,8 @@ require("telescope").load_extension("noice")
 | **NoiceCompletionItemKindUnit**        | _NoiceCompletionItemKindDefault_ |                                                    |
 | **NoiceCompletionItemKindValue**       | _NoiceCompletionItemKindDefault_ |                                                    |
 | **NoiceCompletionItemKindVariable**    | _NoiceCompletionItemKindDefault_ |                                                    |
-| **NoiceCompletionItemMenu**            | _NonText_                        | Normal for the popupmenu                           |
+| **NoiceCompletionItemMenu**            | _NoicePopupmenu_                 | Normal for the popupmenu                           |
+| **NoiceCompletionItemWord**            | _NoicePopupmenu_                 | Normal for the popupmenu                           |
 | **NoiceConfirm**                       | _Normal_                         | Normal for the confirm view                        |
 | **NoiceConfirmBorder**                 | _DiagnosticSignInfo_             | Border for the confirm view                        |
 | **NoiceCursor**                        | _Cursor_                         | Fake Cursor                                        |
