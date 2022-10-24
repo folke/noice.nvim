@@ -17,6 +17,58 @@ M.scroll = nil
 function M.setup() end
 
 ---@param state Popupmenu
+function M.align(state)
+  local max_width = 0
+  for _, item in ipairs(state.items) do
+    max_width = math.max(max_width, item.text:width())
+  end
+  for _, item in ipairs(state.items) do
+    local width = item.text:width()
+    if width < max_width then
+      item.text:append(string.rep(" ", max_width - width))
+    end
+  end
+  return max_width
+end
+
+---@param item CompleteItem
+---@param prefix? string
+function M.format_abbr(item, prefix)
+  local text = item.abbr or item.word
+  if prefix and text:lower():find(prefix:lower(), 1, true) == 1 then
+    item.text:append(prefix, "NoicePopupmenuMatch")
+    item.text:append(text:sub(#prefix + 1))
+  else
+    item.text:append(text)
+  end
+end
+
+---@param item CompleteItem
+function M.format_menu(item)
+  if item.menu and item.menu ~= "" then
+    item.text:append(" ")
+    item.text:append(item.menu, "NoiceCompletionItemMenu")
+  end
+end
+
+---@param item CompleteItem
+function M.format_kind(item)
+  if item.kind and item.kind ~= "" then
+    local hl_group = "NoiceCompletionItemKind" .. item.kind
+    local icon = Config.options.popupmenu.kind_icons[item.kind]
+    item.text:append(" ")
+    if icon then
+      item.text:append(vim.trim(icon) .. " ", hl_group)
+    end
+    item.text:append(item.kind, hl_group)
+  end
+end
+
+---@param state Popupmenu
+---@param prefix? string
+function M.format(state, prefix) end
+
+---@param state Popupmenu
 function M.create(state)
   M.on_hide()
 
@@ -80,51 +132,35 @@ function M.create(state)
     opts.border.padding = vim.tbl_deep_extend("force", {}, padding, { left = 0, right = 0 })
   end
 
-  ---@type number[]
-  local max_width = { 0, 0 }
-
   for _, item in ipairs(state.items) do
     if type(item) == "string" then
       item = { word = item }
     end
-    local text = item.abbr or item.word
-    local line = NuiLine()
-
+    item.text = NuiLine()
     if padding.left then
-      line:append(string.rep(" ", padding.left))
+      item.text:append(string.rep(" ", padding.left))
     end
-    if prefix and text:lower():find(prefix:lower(), 1, true) == 1 then
-      line:append(prefix, "NoicePopupmenuMatch")
-      line:append(text:sub(#prefix + 1))
-    else
-      line:append(text)
-    end
+  end
 
-    if padding.right then
-      line:append(string.rep(" ", padding.right))
+  local max_width = 0
+  for _, format in ipairs({ M.format_abbr, M.format_menu, M.format_kind }) do
+    for _, item in ipairs(state.items) do
+      format(item, prefix)
     end
-    max_width[1] = math.max(max_width[1] or 0, line:width())
-    item.text = line
+    max_width = M.align(state)
   end
 
   for _, item in ipairs(state.items) do
-    item.text:append(string.rep(" ", max_width[1] - item.text:width()))
-    if item.text and item.kind and item.kind ~= "" then
-      local hl_group = "NoiceCompletionItemKind" .. item.kind
-      local icon = Config.options.popupmenu.kind_icons[item.kind]
-      if icon then
-        item.text:append(vim.trim(icon) .. " ", hl_group)
-      end
-      item.text:append(item.kind, hl_group)
+    if padding.right then
+      item.text:append(string.rep(" ", padding.right))
     end
-    max_width[2] = math.max(max_width[2] or 0, item.text:width())
   end
 
   opts = vim.tbl_deep_extend(
     "force",
     opts,
     Util.nui.get_layout({
-      width = max_width[2] + 1, -- +1 for scrollbar
+      width = max_width + 1, -- +1 for scrollbar
       height = #state.items,
     }, opts)
   )

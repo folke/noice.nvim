@@ -46,6 +46,7 @@ M.defaults = {
   LspProgressSpinner = "Constant", -- Lsp progress spinner
   LspProgressTitle = "NonText", -- Lsp progress title
   LspProgressClient = "Title", -- Lsp progress client name
+  CompletionItemMenu = "NonText", -- Normal for the popupmenu
   CompletionItemKindDefault = "Special",
   CompletionItemKindColor = "NoiceCompletionItemKindDefault",
   CompletionItemKindFunction = "NoiceCompletionItemKindDefault",
