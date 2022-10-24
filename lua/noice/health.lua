@@ -65,10 +65,7 @@ function M.check(opts)
   end
 
   if vim.g.neovide then
-    log.error("Noice doesn't work with Neovide. Please see #17")
-    if not opts.checkhealth then
-      return
-    end
+    log.warn("Noice may not work correctly with Neovide. Please see #17")
   else
     log.ok("Not running inside **Neovide**")
   end
