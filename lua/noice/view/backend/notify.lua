@@ -25,6 +25,7 @@ local defaults = {
 ---@field buf? number
 ---@field notif table<NotifyInstance, notify.Record>
 ---@field super NoiceView
+---@field _notifs table<number, any>
 ---@diagnostic disable-next-line: undefined-field
 local NotifyView = View:extend("NotifyView")
 
@@ -51,6 +52,7 @@ end
 function NotifyView:init(opts)
   NotifyView.super.init(self, opts)
   self.notif = {}
+  self._notifs = {}
 end
 
 function NotifyView:is_available()
@@ -126,6 +128,9 @@ function NotifyView:_notify(msg)
     end,
     on_close = function()
       self.notif[instance] = nil
+      for _, m in ipairs(msg.messages) do
+        self._notifs[m.id] = nil
+      end
       self.win = nil
     end,
     render = Util.protect(self:notify_render(msg.messages)),
@@ -133,9 +138,16 @@ function NotifyView:_notify(msg)
 
   if msg.opts then
     opts = vim.tbl_deep_extend("force", opts, msg.opts)
+    if type(msg.opts.replace) == "table" then
+      opts.replace = self._notifs[msg.opts.replace.id]
+    end
   end
 
-  self.notif[instance] = instance.notify(msg.content, level, opts)
+  local id = instance.notify(msg.content, level, opts)
+  self.notif[instance] = id
+  for _, m in ipairs(msg.messages) do
+    self._notifs[m.id] = id
+  end
 end
 
 function NotifyView:show()

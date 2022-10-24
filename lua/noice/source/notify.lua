@@ -60,6 +60,7 @@ function M.notify(msg, level, opts)
   if Util.is_blocking() then
     Router.update()
   end
+  return { id = message.id }
 end
 
 return M
