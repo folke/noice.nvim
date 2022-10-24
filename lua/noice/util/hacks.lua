@@ -153,8 +153,10 @@ function M.fix_input()
       M.before_input = true
       Router.update()
 
+      M.hide_cursor()
       ---@type boolean, any
       local ok, ret = pcall(fn, unpack(args))
+      M.show_cursor()
 
       -- clear any message right after input
       Manager.clear({ event = "msg_show", kind = { "echo", "echomsg", "" } })
