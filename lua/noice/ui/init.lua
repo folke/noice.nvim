@@ -13,27 +13,6 @@ M._attached = false
 ---@type table<string, any>
 M._last = {}
 
--- TODO: move this to handlers and properly check there
-function M.skip(event, ...)
-  local msg = { event, ... }
-
-  if vim.tbl_contains({ "msg_showcmd", "msg_showmode" }, event) and vim.deep_equal(M._last[event], msg) then
-    Util.stats.track("ui." .. event .. ".skipped")
-    return true
-  else
-    M._last[event] = msg
-  end
-
-  local msg_handler = M.parse_event(event)
-
-  if vim.deep_equal(M._last[msg_handler], msg) then
-    Util.stats.track("ui." .. msg_handler .. ".skipped")
-    return true
-  end
-  M._last[msg_handler] = msg
-  Util.stats.track("ui." .. msg_handler)
-end
-
 function M.enable()
   local safe_handle = Util.protect(M.handle, { msg = "An error happened while handling a ui event" })
   M._attached = true
@@ -45,10 +24,6 @@ function M.enable()
     ext_cmdline = Config.options.cmdline.enabled,
     ext_popupmenu = Config.options.popupmenu.enabled,
   }, function(event, ...)
-    if M.skip(event, ...) then
-      return
-    end
-
     -- dont process any messages during redraw, since redraw triggers last messages
     -- if not Hacks.inside_redraw then
     if stack_level > 50 then
@@ -62,10 +37,13 @@ function M.enable()
 
     -- check if we need to update the ui
     if Manager.tick() > tick then
-      -- Util.debug(vim.inspect({ event, ... }))
+      -- Util.debug(vim.inspect({ event, tick, ... }))
       if Util.is_blocking() then
         Util.try(Router.update)
       end
+    else
+      local handler = M.parse_event(event)
+      Util.stats.track(handler .. ".skipped")
     end
     stack_level = stack_level - 1
   end)

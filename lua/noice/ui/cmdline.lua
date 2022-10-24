@@ -136,15 +136,18 @@ function M.on_show(event, content, pos, firstc, prompt, indent, level)
     indent = indent,
     level = level,
   })
-  if not vim.deep_equal(c, M.cmdlines[level]) then
+  local last = M.cmdlines[level] and M.cmdlines[level].state
+  if not vim.deep_equal(c.state, last) then
     M.cmdlines[level] = c
     M.update()
   end
 end
 
 function M.on_hide(_, level)
-  M.cmdlines[level] = nil
-  M.update()
+  if M.cmdlines[level] then
+    M.cmdlines[level] = nil
+    M.update()
+  end
 end
 
 function M.on_pos(_, pos, level)
