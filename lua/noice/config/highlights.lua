@@ -3,7 +3,7 @@ local require = require("noice.util.lazy")
 local Util = require("noice.util")
 
 -- Build docs with:
--- require("noice.config.highlights").docs()
+-- lua require("noice.config.highlights").docs()
 
 local M = {}
 

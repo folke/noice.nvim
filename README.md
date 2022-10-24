@@ -448,7 +448,7 @@ require("telescope").load_extension("noice")
 | **NoiceCompletionItemKindColor**       | _NoiceCompletionItemKindDefault_ |                                                    |
 | **NoiceCompletionItemKindConstant**    | _NoiceCompletionItemKindDefault_ |                                                    |
 | **NoiceCompletionItemKindConstructor** | _NoiceCompletionItemKindDefault_ |                                                    |
-| **NoiceCompletionItemKindDefault**     | _Function_                       |                                                    |
+| **NoiceCompletionItemKindDefault**     | _Special_                        |                                                    |
 | **NoiceCompletionItemKindEnum**        | _NoiceCompletionItemKindDefault_ |                                                    |
 | **NoiceCompletionItemKindEnumMember**  | _NoiceCompletionItemKindDefault_ |                                                    |
 | **NoiceCompletionItemKindField**       | _NoiceCompletionItemKindDefault_ |                                                    |
@@ -466,6 +466,7 @@ require("telescope").load_extension("noice")
 | **NoiceCompletionItemKindUnit**        | _NoiceCompletionItemKindDefault_ |                                                    |
 | **NoiceCompletionItemKindValue**       | _NoiceCompletionItemKindDefault_ |                                                    |
 | **NoiceCompletionItemKindVariable**    | _NoiceCompletionItemKindDefault_ |                                                    |
+| **NoiceCompletionItemMenu**            | _NonText_                        | Normal for the popupmenu                           |
 | **NoiceConfirm**                       | _Normal_                         | Normal for the confirm view                        |
 | **NoiceConfirmBorder**                 | _DiagnosticSignInfo_             | Border for the confirm view                        |
 | **NoiceCursor**                        | _Cursor_                         | Fake Cursor                                        |
