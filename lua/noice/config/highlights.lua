@@ -46,8 +46,8 @@ M.defaults = {
   LspProgressSpinner = "Constant", -- Lsp progress spinner
   LspProgressTitle = "NonText", -- Lsp progress title
   LspProgressClient = "Title", -- Lsp progress client name
-  CompletionItemMenu = "NoicePopupmenu", -- Normal for the popupmenu
-  CompletionItemWord = "NoicePopupmenu", -- Normal for the popupmenu
+  CompletionItemMenu = "none", -- Normal for the popupmenu
+  CompletionItemWord = "none", -- Normal for the popupmenu
   CompletionItemKindDefault = "Special",
   CompletionItemKindColor = "NoiceCompletionItemKindDefault",
   CompletionItemKindFunction = "NoiceCompletionItemKindDefault",
@@ -92,13 +92,15 @@ end
 
 function M.setup()
   for hl, link in pairs(M.defaults) do
-    local opts = { link = link, default = true }
+    if link ~= "none" then
+      local opts = { link = link, default = true }
 
-    if vim.tbl_contains({ "IncSearch", "Search" }, link) then
-      opts = M.get_link(link)
+      if vim.tbl_contains({ "IncSearch", "Search" }, link) then
+        opts = M.get_link(link)
+      end
+
+      vim.api.nvim_set_hl(0, "Noice" .. hl, opts)
     end
-
-    vim.api.nvim_set_hl(0, "Noice" .. hl, opts)
   end
   vim.api.nvim_set_hl(0, "NoiceHiddenCursor", { blend = 100, nocombine = true })
 end
