@@ -13,6 +13,7 @@ local defaults = {
   retry_on_vim_errors = true,
   retry_on_E11 = false,
   ignore_E565 = true,
+  retry_on_E565 = false,
   ignore_keyboard_interrupt = true,
 }
 
@@ -62,6 +63,12 @@ function M:on_error(err)
   if err then
     if self._opts.ignore_keyboard_interrupt and err:lower():find("keyboard interrupt") then
       M._errors = M._errors - 1
+      return
+    end
+
+    if self._opts.retry_on_E565 and err:find("E565") then
+      M._errors = M._errors - 1
+      self._defer_retry = true
       return
     end
 

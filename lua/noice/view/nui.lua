@@ -114,6 +114,7 @@ function NuiView:hide()
         end
       end,
       retry_on_E11 = true,
+      retry_on_E565 = true,
     })()
   end
 end
