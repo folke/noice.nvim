@@ -201,6 +201,7 @@ function M.update()
   if cmdline then
     cmdline:format(M.message)
     Hacks.hide_cursor()
+    Hacks.cmdline_force_redraw()
     Manager.add(M.message)
   else
     Manager.remove(M.message)

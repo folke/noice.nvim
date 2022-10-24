@@ -248,6 +248,13 @@ function M.fix_cmp()
   end)
 end
 
+function M.cmdline_force_redraw()
+  if vim.api.nvim_get_mode().mode == "c" and vim.fn.getcmdline():find("s/") then
+    -- HACK: this will trigger redraw during substitue
+    vim.api.nvim_input("<space><bs>")
+  end
+end
+
 M._guicursor = nil
 function M.hide_cursor()
   if M._guicursor == nil then
