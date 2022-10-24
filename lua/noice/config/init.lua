@@ -19,8 +19,8 @@ M.defaults = {
       -- opts: any options passed to the view
       -- icon_hl_group: optional hl_group for the icon
       cmdline = { pattern = "^:", icon = "", lang = "vim" },
-      search_down = { kind = "search", pattern = "^/", icon = " ", lang = "regex" },
-      search_up = { kind = "search", pattern = "^%?", icon = " ", lang = "regex" },
+      search_down = { kind = "search", pattern = "^/", icon = " ", lang = "regex" },
+      search_up = { kind = "search", pattern = "^%?", icon = " ", lang = "regex" },
       filter = { pattern = "^:%s*!", icon = "$", lang = "bash" },
       lua = { pattern = "^:%s*lua%s+", icon = "", lang = "lua" },
       help = { pattern = "^:%s*h%s+", icon = "" },
