@@ -152,7 +152,7 @@ function M.is_blocking(opts)
   end
 
   local reason = opts.blocking and mode.blocking and "blocking"
-    or opts.mode and blocking_mode and "mode"
+    or opts.mode and blocking_mode and ("mode:" .. mode.mode)
     or opts.input and Hacks.before_input and "input"
     or opts.redraw and Hacks.inside_redraw and "redraw"
     or nil
