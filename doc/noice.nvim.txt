@@ -52,6 +52,7 @@ REQUIREMENTS                                         *noice.nvim-requirements*
 - Neovim >= 0.8.0
 - nui.nvim <https://github.com/MunifTanjim/nui.nvim>: used for proper rendering and multiple views
 - nvim-notify <https://github.com/rcarriga/nvim-notify>: notification view _**(optional)**_
+- a Nerd Font <https://www.nerdfonts.com/> **(optional)**
 
 
 INSTALLATION                                         *noice.nvim-installation*
@@ -161,6 +162,24 @@ for configuration recipes.
       ---@type NoiceFormatOptions
       format = {}, --- @see section on formatting
     }
+<
+
+
+If you don’t want to use a Nerd Font, you can replace the icons with Unicode symbols.
+
+>
+      require("noice").setup({
+        cmdline = {
+          format = {
+            cmdline = { icon = ">" },
+            search_down = { icon = "⌄" },
+            search_up = { icon = "⌃" },
+            filter = { icon = "$" },
+            lua = { icon = "" },
+            help = { icon = "?" },
+          },
+        },
+      })
 <
 
 
