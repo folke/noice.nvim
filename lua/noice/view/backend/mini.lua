@@ -37,7 +37,6 @@ function MiniView:can_hide()
   return not Util.is_blocking()
 end
 
--- TODO: add keep() method. Stay open by default during blocking event and on mouse enter
 function MiniView:autohide(id)
   if not self.timers[id] then
     self.timers[id] = vim.loop.new_timer()
