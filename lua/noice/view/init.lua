@@ -196,6 +196,11 @@ function View:render(buf, opts)
   opts = opts or {}
   local linenr = opts.offset or 1
 
+  local win = vim.fn.bufwinid(buf)
+  if win ~= -1 then
+    vim.api.nvim_win_set_option(win, "winbar", "")
+  end
+
   if self._opts.buf_options then
     require("nui.utils")._.set_buf_options(buf, self._opts.buf_options)
   end
