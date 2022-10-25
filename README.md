@@ -530,6 +530,6 @@ require("telescope").load_extension("noice")
 ## 🔥 Known Issues
 
 **Noice** is using the new experimental `vim.ui_attach` API, so issues are to be expected.
-During setup, we apply a bunch of [Hacks](https://github.com/folke/noice.nvim/blob/main/lua/noice/hacks.lua)
+During setup, we apply a bunch of [Hacks](https://github.com/folke/noice.nvim/blob/main/lua/noice/util/hacks.lua)
 to work around some of the current issues.
 For more details, see this [tracking issue](https://github.com/folke/noice.nvim/issues/6)
