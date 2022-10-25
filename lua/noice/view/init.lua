@@ -201,7 +201,9 @@ function View:render(buf, opts)
   end
 
   if self._opts.lang and not vim.b[buf].ts_highlight then
-    pcall(vim.treesitter.start, buf, self._opts.lang)
+    if not pcall(vim.treesitter.start, buf, self._opts.lang) then
+      vim.bo[buf].syntax = self._opts.lang
+    end
   end
 
   vim.api.nvim_buf_clear_namespace(buf, Config.ns, linenr - 1, -1)
