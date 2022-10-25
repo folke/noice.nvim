@@ -261,15 +261,14 @@ M._guicursor = nil
 function M.hide_cursor()
   if M._guicursor == nil then
     M._guicursor = vim.go.guicursor
-    vim.go.guicursor = "a:NoiceHiddenCursor/NoiceHiddenCursor"
-    M._disable.guicursor = M.show_cursor
   end
+  vim.go.guicursor = "a:NoiceHiddenCursor/NoiceHiddenCursor"
+  M._disable.guicursor = M.show_cursor
 end
 
 function M.show_cursor()
   if M._guicursor then
     vim.go.guicursor = M._guicursor
-    M._guicursor = nil
   end
 end
 
