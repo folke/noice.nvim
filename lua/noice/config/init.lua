@@ -18,6 +18,7 @@ M.defaults = {
       -- view: (default is cmdline view)
       -- opts: any options passed to the view
       -- icon_hl_group: optional hl_group for the icon
+      -- title: set to anything or empty string to hide
       cmdline = { pattern = "^:", icon = "", lang = "vim" },
       search_down = { kind = "search", pattern = "^/", icon = " ", lang = "regex" },
       search_up = { kind = "search", pattern = "^%?", icon = " ", lang = "regex" },
@@ -62,16 +63,22 @@ M.defaults = {
     enabled = true,
     view = "notify",
   },
-  lsp_progress = {
-    enabled = true,
-    -- Lsp Progress is formatted using the builtins for lsp_progress. See config.format.builtin
-    -- See the section on formatting for more details on how to customize.
-    --- @type NoiceFormat|string
-    format = "lsp_progress",
-    --- @type NoiceFormat|string
-    format_done = "lsp_progress_done",
-    throttle = 1000 / 30, -- frequency to update lsp progress message
-    view = "mini",
+  lsp = {
+    progress = {
+      enabled = true,
+      -- Lsp Progress is formatted using the builtins for lsp_progress. See config.format.builtin
+      -- See the section on formatting for more details on how to customize.
+      --- @type NoiceFormat|string
+      format = "lsp_progress",
+      --- @type NoiceFormat|string
+      format_done = "lsp_progress_done",
+      throttle = 1000 / 30, -- frequency to update lsp progress message
+      view = "mini",
+    },
+    hover = {
+      enabled = false,
+      view = "notify",
+    },
   },
   throttle = 1000 / 30, -- how frequently does Noice need to check for ui updates? This has no effect when in blocking mode.
   ---@type NoiceConfigViews
@@ -96,6 +103,8 @@ end
 
 function M.setup(options)
   options = options or {}
+
+  M.fix_legacy(options)
 
   if options.popupmenu and options.popupmenu.kind_icons == true then
     options.popupmenu.kind_icons = nil
@@ -125,10 +134,15 @@ function M.setup(options)
     end,
   })
 
-  if M.options.lsp_progress.enabled then
-    require("noice.source.lsp.progress").setup()
-  end
+  require("noice.source.lsp").setup()
   M._running = true
+end
+
+function M.fix_legacy(opts)
+  if opts.lsp_progress then
+    opts.lsp = opts.lsp or {}
+    opts.lsp.progress = opts.lsp_progress
+  end
 end
 
 return M

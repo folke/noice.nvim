@@ -67,9 +67,9 @@ function M._update()
   if not vim.tbl_isempty(M._progress) then
     for _, message in pairs(M._progress) do
       if message.opts.progress.kind == "end" then
-        Manager.add(Format.format(message, Config.options.lsp_progress.format_done))
+        Manager.add(Format.format(message, Config.options.lsp.progress.format_done))
       else
-        Manager.add(Format.format(message, Config.options.lsp_progress.format))
+        Manager.add(Format.format(message, Config.options.lsp.progress.format))
       end
     end
     return
@@ -81,7 +81,7 @@ function M.update()
 end
 
 function M.setup()
-  M.update = Util.interval(Config.options.lsp_progress.throttle, M._update, {
+  M.update = Util.interval(Config.options.lsp.progress.throttle, M._update, {
     enabled = function()
       return not vim.tbl_isempty(M._progress)
     end,

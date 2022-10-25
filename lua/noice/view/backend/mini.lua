@@ -33,7 +33,11 @@ function MiniView:update_options()
   self._opts = vim.tbl_deep_extend("force", defaults, self._opts)
 end
 
-function MiniView:can_hide()
+---@param message NoiceMessage
+function MiniView:can_hide(message)
+  if message.opts.keep and message.opts.keep() then
+    return false
+  end
   return not Util.is_blocking()
 end
 
@@ -42,7 +46,10 @@ function MiniView:autohide(id)
     self.timers[id] = vim.loop.new_timer()
   end
   self.timers[id]:start(self._opts.timeout, 0, function()
-    if not self:can_hide() then
+    if not self.active[id] then
+      return
+    end
+    if not self:can_hide(self.active[id]) then
       return self:autohide(id)
     end
     self.active[id] = nil

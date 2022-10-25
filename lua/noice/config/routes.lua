@@ -106,8 +106,13 @@ function M.defaults()
       opts = { lang = "lua", replace = true, title = "Noice" },
     },
     {
-      view = Config.options.lsp_progress.view,
-      filter = { event = "lsp" },
+      view = Config.options.lsp.hover.view,
+      filter = { event = "lsp", kind = "hover" },
+      opts = { lang = "markdown", replace = true },
+    },
+    {
+      view = Config.options.lsp.progress.view,
+      filter = { event = "lsp", kind = "progress" },
     },
   })
 end
