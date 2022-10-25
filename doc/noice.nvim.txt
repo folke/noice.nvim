@@ -264,6 +264,10 @@ Example:
 <
 
 
+
+  All built-in Noice views have the filetype `noice`
+
+
 NUI OPTIONS ~
 
 See the Nui documentation for Popup
