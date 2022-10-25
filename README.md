@@ -24,6 +24,7 @@ Highly experimental plugin that completely replaces the UI for `messages`, `cmdl
 - Neovim >= 0.8.0
 - [nui.nvim](https://github.com/MunifTanjim/nui.nvim): used for proper rendering and multiple views
 - [nvim-notify](https://github.com/rcarriga/nvim-notify): notification view _**(optional)**_
+- a [Nerd Font](https://www.nerdfonts.com/) **(optional)**
 
 ## 📦 Installation
 
@@ -131,6 +132,26 @@ Check the [wiki](https://github.com/folke/noice.nvim/wiki/Configuration-Recipes)
   format = {}, --- @see section on formatting
 }
 ```
+
+<details>
+<summary>If you don't want to use a Nerd Font, you can replace the icons with Unicode symbols.</summary>
+
+```lua
+  require("noice").setup({
+    cmdline = {
+      format = {
+        cmdline = { icon = ">" },
+        search_down = { icon = "🔍⌄" },
+        search_up = { icon = "🔍⌃" },
+        filter = { icon = "$" },
+        lua = { icon = "☾" },
+        help = { icon = "?" },
+      },
+    },
+  })
+```
+
+</details>
 
 ## 🔍 Filters
 
