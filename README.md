@@ -73,6 +73,7 @@ Check the [wiki](https://github.com/folke/noice.nvim/wiki/Configuration-Recipes)
       filter = { pattern = "^:%s*!", icon = "$", lang = "bash" },
       lua = { pattern = "^:%s*lua%s+", icon = "", lang = "lua" },
       help = { pattern = "^:%s*h%s+", icon = "" },
+      input = {}, -- Used by input()
       -- lua = false, -- to disable a format, set to `false`
     },
   },
@@ -458,16 +459,21 @@ require("telescope").load_extension("noice")
 | **NoiceCmdlineIcon**                   | _DiagnosticSignInfo_             | Cmdline icon                                       |
 | **NoiceCmdlineIconCmdline**            | _DiagnosticSignInfo_             |                                                    |
 | **NoiceCmdlineIconFilter**             | _DiagnosticSignInfo_             |                                                    |
+| **NoiceCmdlineIconHelp**               | _DiagnosticSignInfo_             |                                                    |
 | **NoiceCmdlineIconIncRename**          | _DiagnosticSignInfo_             |                                                    |
+| **NoiceCmdlineIconInput**              | _DiagnosticSignInfo_             |                                                    |
 | **NoiceCmdlineIconLua**                | _DiagnosticSignInfo_             |                                                    |
 | **NoiceCmdlineIconSearch**             | _DiagnosticSignWarn_             | Cmdline search icon (`/` and `?`)                  |
 | **NoiceCmdlinePopup**                  | _Normal_                         | Normal for the cmdline popup                       |
 | **NoiceCmdlinePopupBorder**            | _DiagnosticSignInfo_             | Cmdline popup border                               |
 | **NoiceCmdlinePopupBorderCmdline**     | _DiagnosticSignInfo_             |                                                    |
 | **NoiceCmdlinePopupBorderFilter**      | _DiagnosticSignInfo_             |                                                    |
+| **NoiceCmdlinePopupBorderHelp**        | _DiagnosticSignInfo_             |                                                    |
 | **NoiceCmdlinePopupBorderIncRename**   | _DiagnosticSignInfo_             |                                                    |
+| **NoiceCmdlinePopupBorderInput**       | _DiagnosticSignInfo_             |                                                    |
 | **NoiceCmdlinePopupBorderLua**         | _DiagnosticSignInfo_             |                                                    |
 | **NoiceCmdlinePopupBorderSearch**      | _DiagnosticSignWarn_             | Cmdline popup border for search                    |
+| **NoiceCmdlinePrompt**                 | _Title_                          | prompt for input()                                 |
 | **NoiceCompletionItemKindClass**       | _NoiceCompletionItemKindDefault_ |                                                    |
 | **NoiceCompletionItemKindColor**       | _NoiceCompletionItemKindDefault_ |                                                    |
 | **NoiceCompletionItemKindConstant**    | _NoiceCompletionItemKindDefault_ |                                                    |

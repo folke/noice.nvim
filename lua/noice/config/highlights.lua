@@ -11,6 +11,7 @@ M.defaults = {
   Cmdline = "MsgArea", -- Normal for the classic cmdline area at the bottom"
   CmdlineIcon = "DiagnosticSignInfo", -- Cmdline icon
   CmdlineIconSearch = "DiagnosticSignWarn", -- Cmdline search icon (`/` and `?`)
+  CmdlinePrompt = "Title", -- prompt for input()
   CmdlinePopup = "Normal", -- Normal for the cmdline popup
   CmdlinePopupBorder = "DiagnosticSignInfo", -- Cmdline popup border
   CmdlinePopupBorderSearch = "DiagnosticSignWarn", -- Cmdline popup border for search

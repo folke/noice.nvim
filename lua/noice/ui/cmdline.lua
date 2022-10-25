@@ -66,9 +66,14 @@ end
 
 ---@return CmdlineFormat
 function Cmdline:get_format()
+  if self.state.prompt and self.state.prompt ~= "" then
+    return Config.options.cmdline.format.input
+  end
   local line = self.state.firstc .. self:get()
 
-  local formats = vim.tbl_values(Config.options.cmdline.format)
+  local formats = vim.tbl_values(vim.tbl_filter(function(f)
+    return f.pattern
+  end, Config.options.cmdline.format))
   table.sort(formats, function(a, b)
     return #a.pattern > #b.pattern
   end)
@@ -101,7 +106,7 @@ function Cmdline:format(message)
 
   -- FIXME: prompt
   if self.state.prompt ~= "" then
-    message:append(self.state.prompt)
+    message:append(self.state.prompt, "NoiceCmdlinePrompt")
   end
 
   if not format.conceal then
