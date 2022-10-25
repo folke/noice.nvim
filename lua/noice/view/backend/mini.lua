@@ -2,6 +2,7 @@ local require = require("noice.util.lazy")
 
 local View = require("noice.view")
 local NuiView = require("noice.view.nui")
+local Util = require("noice.util")
 
 ---@class NoiceMiniOptions
 ---@field timeout integer
@@ -32,12 +33,19 @@ function MiniView:update_options()
   self._opts = vim.tbl_deep_extend("force", defaults, self._opts)
 end
 
+function MiniView:can_hide()
+  return not Util.is_blocking()
+end
+
 -- TODO: add keep() method. Stay open by default during blocking event and on mouse enter
 function MiniView:autohide(id)
   if not self.timers[id] then
     self.timers[id] = vim.loop.new_timer()
   end
   self.timers[id]:start(self._opts.timeout, 0, function()
+    if not self:can_hide() then
+      return self:autohide(id)
+    end
     self.active[id] = nil
     self.timers[id] = nil
     vim.schedule(function()
