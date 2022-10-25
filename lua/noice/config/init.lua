@@ -78,6 +78,20 @@ M.defaults = {
     hover = {
       enabled = false,
       view = "notify",
+      opts = {
+        lang = "markdown",
+        replace = true,
+        render = "plain",
+        buf_options = { iskeyword = '!-~,^*,^|,^",192-255', keywordprg = ":help" },
+      },
+    },
+    hl_patterns = {
+      ["|%S-|"] = "@text.reference",
+      ["@%S+"] = "@parameter",
+      ["^%s*(Parameters:)"] = "@text.title",
+      ["^%s*(Return:)"] = "@text.title",
+      ["^%s*(See also:)"] = "@text.title",
+      ["{%S-}"] = "@parameter",
     },
   },
   throttle = 1000 / 30, -- how frequently does Noice need to check for ui updates? This has no effect when in blocking mode.

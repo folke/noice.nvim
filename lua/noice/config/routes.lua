@@ -108,7 +108,7 @@ function M.defaults()
     {
       view = Config.options.lsp.hover.view,
       filter = { event = "lsp", kind = "hover" },
-      opts = { lang = "markdown", replace = true },
+      opts = Config.options.lsp.hover.opts,
     },
     {
       view = Config.options.lsp.progress.view,
