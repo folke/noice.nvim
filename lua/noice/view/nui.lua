@@ -43,6 +43,27 @@ function NuiView:update_options()
   self._opts = Util.nui.normalize(self._opts)
 end
 
+-- Check if other floating windows are overlapping and move out of the way
+function NuiView:smart_move()
+  if not (self._opts.type == "popup" and self._opts.relative and self._opts.relative.type == "editor") then
+    return
+  end
+
+  local wins = vim.tbl_filter(function(win)
+    return win ~= self._nui.winid
+      and not (self._nui.border and self._nui.border.winid == win)
+      and vim.api.nvim_win_is_valid(win)
+      and vim.api.nvim_win_get_config(win).relative == "editor"
+      and Util.nui.overlap(self._nui.winid, win)
+  end, vim.api.nvim_list_wins())
+
+  if #wins > 0 then
+    local layout = self:get_layout()
+    layout.position.row = 2
+    self._nui:update_layout(layout)
+  end
+end
+
 function NuiView:create()
   if self._loading then
     return
@@ -165,6 +186,7 @@ function NuiView:show()
   self._nui:show()
   if not self._visible then
     self._nui:update_layout(self:get_layout())
+    self:smart_move()
   end
 
   self:tag()

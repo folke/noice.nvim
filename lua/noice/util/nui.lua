@@ -30,6 +30,32 @@ function M.normalize_win_options(opts)
   end
 end
 
+---@return {xmin:integer, xmax:integer, ymin:integer, ymax:integer}
+function M.bounds(win)
+  local pos = vim.api.nvim_win_get_position(win)
+  local height = vim.api.nvim_win_get_height(win)
+  local width = vim.api.nvim_win_get_width(win)
+  return {
+    xmin = pos[2],
+    xmax = pos[2] + width,
+    ymin = pos[1],
+    ymax = pos[1] + height,
+  }
+end
+
+function M.overlap(win1, win2)
+  local b1 = M.bounds(win1)
+  local b2 = M.bounds(win2)
+
+  if b2.xmin > b1.xmax or b1.xmin > b2.xmax then
+    return false
+  end
+  if b2.ymin > b1.ymax or b1.ymin > b2.ymax then
+    return false
+  end
+  return true
+end
+
 ---@param opts? NuiPopupOptions
 ---@return _.NuiPopupOptions
 function M.normalize_popup_options(opts)
