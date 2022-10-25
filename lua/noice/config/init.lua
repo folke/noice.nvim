@@ -77,7 +77,7 @@ M.defaults = {
     },
     hover = {
       enabled = false,
-      view = "notify",
+      view = "hover",
       ---@type NoiceViewOptions
       opts = {
         lang = "markdown",
