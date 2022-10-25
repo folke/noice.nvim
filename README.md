@@ -236,6 +236,8 @@ require("noice").setup({
 
 </details>
 
+> All built-in Noice views have the filetype `noice`
+
 ### Nui Options
 
 See the Nui documentation for [Popup](https://github.com/MunifTanjim/nui.nvim/tree/main/lua/nui/popup)
