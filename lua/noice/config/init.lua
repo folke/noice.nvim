@@ -126,7 +126,7 @@ function M.setup(options)
   })
 
   if M.options.lsp_progress.enabled then
-    require("noice.source.lsp").setup()
+    require("noice.source.lsp.progress").setup()
   end
   M._running = true
 end
