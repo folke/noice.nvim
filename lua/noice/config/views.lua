@@ -87,7 +87,7 @@ M.defaults = {
     backend = "popup",
     close = {
       events = { "BufLeave" },
-      keys = { "q", "<esc>" },
+      keys = { "q" },
     },
     enter = true,
     border = {
@@ -101,6 +101,17 @@ M.defaults = {
     win_options = {
       winhighlight = { Normal = "NoicePopup", FloatBorder = "NoicePopupBorder" },
     },
+  },
+  hover = {
+    view = "popup",
+    relative = "cursor",
+    enter = false,
+    size = "auto",
+    border = {
+      style = "none",
+      padding = { 0, 2 },
+    },
+    position = { row = 1, col = 0 },
   },
   cmdline = {
     backend = "popup",

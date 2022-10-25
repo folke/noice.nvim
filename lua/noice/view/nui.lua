@@ -184,6 +184,7 @@ function NuiView:show()
   end
 
   self._nui:show()
+  self:set_win_options(self._nui.winid)
   if not self._visible then
     self._nui:update_layout(self:get_layout())
     self:smart_move()

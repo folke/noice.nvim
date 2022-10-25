@@ -6,6 +6,17 @@ local Config = require("noice.config")
 
 local M = {}
 
+---@type NoiceMessage[]
+M._messages = {}
+
+function M.get(kind)
+  if not M._messages[kind] then
+    M._messages[kind] = Message("lsp", kind)
+  end
+  M._messages[kind]:clear()
+  return M._messages[kind]
+end
+
 ---@alias MarkedString string | { language: string; value: string }
 ---@alias MarkupContent { kind: ('plaintext' | 'markdown'), value: string}
 ---@alias MarkupContents MarkedString | MarkedString[] | MarkupContent
@@ -43,8 +54,8 @@ function M.format(contents, kind)
     width = math.max(width, vim.api.nvim_strwidth(line))
   end
 
-  local message = Message(M.event, kind)
-  message.once = true
+  local message = M.get(kind)
+  -- message.once = true
   message.opts.title = kind
 
   for _, line in ipairs(lines) do

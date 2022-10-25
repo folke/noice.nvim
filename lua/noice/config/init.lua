@@ -78,11 +78,14 @@ M.defaults = {
     hover = {
       enabled = false,
       view = "notify",
+      ---@type NoiceViewOptions
       opts = {
         lang = "markdown",
         replace = true,
         render = "plain",
+        format = { "{message}" },
         buf_options = { iskeyword = '!-~,^*,^|,^",192-255', keywordprg = ":help" },
+        win_options = { concealcursor = "n", conceallevel = 3 },
       },
     },
     hl_patterns = {

@@ -190,16 +190,19 @@ function View:content()
   )
 end
 
+function View:set_win_options(win)
+  vim.api.nvim_win_set_option(win, "winbar", "")
+  vim.api.nvim_win_set_option(win, "foldenable", false)
+  if self._opts.win_options then
+    require("nui.utils")._.set_win_options(win, self._opts.win_options)
+  end
+end
+
 ---@param buf number buffer number
 ---@param opts? {offset: number, highlight: boolean, messages?: NoiceMessage[]} line number (1-indexed), if `highlight`, then only highlight
 function View:render(buf, opts)
   opts = opts or {}
   local linenr = opts.offset or 1
-
-  local win = vim.fn.bufwinid(buf)
-  if win ~= -1 then
-    vim.api.nvim_win_set_option(win, "winbar", "")
-  end
 
   if self._opts.buf_options then
     require("nui.utils")._.set_buf_options(buf, self._opts.buf_options)
@@ -217,7 +220,12 @@ function View:render(buf, opts)
     vim.api.nvim_buf_set_lines(buf, linenr - 1, -1, false, {})
   end
 
+  local buf_messages = vim.b[buf].messages or {}
+
   for _, m in ipairs(opts.messages or self._messages) do
+    if not vim.tbl_contains(buf_messages, m.id) then
+      table.insert(buf_messages, m.id)
+    end
     if opts.highlight then
       m:highlight(buf, Config.ns, linenr)
     else
@@ -225,6 +233,7 @@ function View:render(buf, opts)
     end
     linenr = linenr + m:height()
   end
+  vim.b[buf].messages = buf_messages
 end
 
 return View

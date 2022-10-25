@@ -132,7 +132,7 @@ function NotifyView:_notify(msg)
       return Util.is_blocking()
     end,
     on_open = function(win)
-      vim.api.nvim_win_set_option(win, "foldenable", false)
+      self:set_win_options(win)
       if self._opts.merge then
         self.win = win
       end

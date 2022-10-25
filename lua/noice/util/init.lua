@@ -21,6 +21,11 @@ function M.once(fn)
   end
 end
 
+---@param message NoiceMessage
+function M.buf_has_message(buf, message)
+  return vim.b[buf].messages and vim.tbl_contains(vim.b[buf].messages, message.id)
+end
+
 function M.tag(buf, tag)
   local ft = vim.api.nvim_buf_get_option(buf, "filetype")
 

@@ -21,8 +21,8 @@
 ---@field timeout? number
 ---@field min_size? number
 ---@field max_size? number
----@field buf_options? table<string, any>
----@field win_options? table<string, any>
+---@field buf_options? vim.bo
+---@field win_options? vim.wo
 ---@field close? {events?:string[], keys?:string[]}
 
 ---@class NuiBaseOptions: _.NuiBaseOptions
