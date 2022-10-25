@@ -30,7 +30,7 @@ function M.setup()
           lang = format.lang or format.ft,
           border = {
             text = {
-              top = " " .. kind_cc .. " ",
+              top = format.title or (" " .. kind_cc .. " "),
             },
           },
           win_options = {

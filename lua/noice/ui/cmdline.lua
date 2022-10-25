@@ -41,6 +41,7 @@ M.events = {
 ---@field icon? string
 ---@field icon_hl_group? string
 ---@field opts? NoiceViewOptions
+---@field title? string
 ---@field lang? string
 
 ---@class NoiceCmdline

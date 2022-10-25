@@ -167,9 +167,6 @@ M.defaults = {
     border = {
       style = "rounded",
       padding = { 0, 1 },
-      text = {
-        top = " Cmdline ",
-      },
     },
     win_options = {
       winhighlight = {
