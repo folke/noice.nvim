@@ -55,6 +55,12 @@ function M.notify(msg, level, opts)
   message.opts = opts or {}
   message.level = level
   message.once = true
+
+  if msg == nil then
+    -- special case for some destinations like nvim-notify
+    message.opts.is_nil = true
+  end
+
   Msg.check_clear()
   Manager.add(message)
   if Util.is_blocking() then

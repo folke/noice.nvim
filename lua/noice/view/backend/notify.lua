@@ -2,6 +2,7 @@ local require = require("noice.util.lazy")
 
 local Util = require("noice.util")
 local View = require("noice.view")
+local Manager = require("noice.message.manager")
 
 ---@class NoiceNotifyOptions
 ---@field title string
@@ -16,7 +17,7 @@ local defaults = {
 }
 
 ---@class NotifyInstance
----@field notify fun(msg:string, level?:string|number, opts?:table): notify.Record}
+---@field notify fun(msg:string?, level?:string|number, opts?:table): notify.Record}
 
 ---@alias notify.RenderFun fun(buf:buffer, notif: Notification, hl: NotifyBufHighlights, config: notify.Config)
 
@@ -25,7 +26,6 @@ local defaults = {
 ---@field buf? number
 ---@field notif table<NotifyInstance, notify.Record>
 ---@field super NoiceView
----@field _notifs table<number, any>
 ---@diagnostic disable-next-line: undefined-field
 local NotifyView = View:extend("NotifyView")
 
@@ -52,7 +52,6 @@ end
 function NotifyView:init(opts)
   NotifyView.super.init(self, opts)
   self.notif = {}
-  self._notifs = {}
 end
 
 function NotifyView:is_available()
@@ -129,7 +128,7 @@ function NotifyView:_notify(msg)
     on_close = function()
       self.notif[instance] = nil
       for _, m in ipairs(msg.messages) do
-        self._notifs[m.id] = nil
+        m.opts.notify_id = nil
       end
       self.win = nil
     end,
@@ -139,14 +138,22 @@ function NotifyView:_notify(msg)
   if msg.opts then
     opts = vim.tbl_deep_extend("force", opts, msg.opts)
     if type(msg.opts.replace) == "table" then
-      opts.replace = self._notifs[msg.opts.replace.id]
+      local m = Manager.get_by_id(msg.opts.replace.id)
+      opts.replace = m and m.opts.notify_id or nil
     end
   end
 
-  local id = instance.notify(msg.content, level, opts)
+  ---@type string?
+  local content = msg.content
+
+  if msg.opts and msg.opts.is_nil then
+    content = nil
+  end
+
+  local id = instance.notify(content, level, opts)
   self.notif[instance] = id
   for _, m in ipairs(msg.messages) do
-    self._notifs[m.id] = id
+    m.opts.notify_id = id
   end
 end
 
