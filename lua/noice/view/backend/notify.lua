@@ -62,24 +62,36 @@ function NotifyView:update_options()
   self._opts = vim.tbl_deep_extend("force", defaults, self._opts)
 end
 
+function NotifyView:plain()
+  return function(bufnr, notif)
+    vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, notif.message)
+  end
+end
+
 ---@param config notify.Config
+---@param render? notify.RenderFun
 ---@return notify.RenderFun
-function NotifyView:get_render(config)
+function NotifyView:get_render(config, render)
   ---@type string|notify.RenderFun
-  local ret = config.render()
+  local ret = render or config.render()
   if type(ret) == "string" then
-    ---@type notify.RenderFun
-    ret = require("notify.render")[ret]
+    if ret == "plain" then
+      ret = self:plain()
+    else
+      ---@type notify.RenderFun
+      ret = require("notify.render")[ret]
+    end
   end
   return ret
 end
 
 ---@param messages NoiceMessage[]
-function NotifyView:notify_render(messages)
+---@param render? notify.RenderFun
+function NotifyView:notify_render(messages, render)
   ---@param config notify.Config
   return function(buf, notif, hl, config)
     -- run notify view
-    self:get_render(config)(buf, notif, hl, config)
+    self:get_render(config, render)(buf, notif, hl, config)
 
     Util.tag(buf, "notify")
 
@@ -132,7 +144,7 @@ function NotifyView:_notify(msg)
       end
       self.win = nil
     end,
-    render = Util.protect(self:notify_render(msg.messages)),
+    render = Util.protect(self:notify_render(msg.messages, self._opts.render)),
   }
 
   if msg.opts then
