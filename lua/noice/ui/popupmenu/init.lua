@@ -50,7 +50,7 @@ M.setup = Util.once(M.setup)
 
 ---@param items string[][]
 function M.on_show(_, items, selected, row, col, grid)
-  M.state = {
+  local state = {
     items = vim.tbl_map(
       ---@param item string[]
       function(item)
@@ -69,19 +69,30 @@ function M.on_show(_, items, selected, row, col, grid)
     col = col,
     grid = grid,
   }
-  M.setup()
-  M.backend.on_show(M.state)
+  if not vim.deep_equal(state, M.state) then
+    M.state = state
+    M.setup()
+    M.backend.on_show(M.state)
+  end
 end
 
 function M.on_select(_, selected)
-  M.state.selected = selected
-  M.state.visible = true
-  M.backend.on_select(M.state)
+  if M.state.selected ~= selected then
+    M.state.selected = selected
+    M.state.visible = true
+    M.backend.on_select(M.state)
+  end
 end
 
 function M.on_hide()
-  M.state.visible = false
-  M.backend.on_hide()
+  if M.state.visible then
+    M.state.visible = false
+    vim.schedule(function()
+      if not M.state.visible then
+        M.backend.on_hide()
+      end
+    end)
+  end
 end
 
 return M
