@@ -130,6 +130,7 @@ end
 
 function Scrollbar:_open_win(opts)
   local bufnr = vim.api.nvim_create_buf(false, true)
+  Util.tag(bufnr, "scrollbar")
   local ret = {
     bufnr = bufnr,
     winnr = vim.api.nvim_open_win(bufnr, false, {

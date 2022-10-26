@@ -171,6 +171,7 @@ function M.create(state)
     end, state.items),
   })
   M.menu:mount()
+  Util.tag(M.menu.bufnr, "popupmenu")
 
   M.scroll = Scrollbar({
     winnr = M.menu.winid,
