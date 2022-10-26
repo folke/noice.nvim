@@ -200,10 +200,6 @@ function NuiView:show()
     self._nui:mount()
   end
 
-  if self._nui.bufnr then
-    vim.api.nvim_buf_set_lines(self._nui.bufnr, 0, -1, false, {})
-  end
-
   self._nui:show()
   self:set_win_options(self._nui.winid)
   if not self._visible then
@@ -213,7 +209,10 @@ function NuiView:show()
 
   self:tag()
 
+  vim.bo[self._nui.bufnr].modifiable = true
   self:render(self._nui.bufnr)
+  vim.bo[self._nui.bufnr].modifiable = false
+
   self._scroll.winnr = self._nui.winid
   self._scroll:show()
   self:fix_border()
