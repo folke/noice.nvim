@@ -153,7 +153,13 @@ function NuiView:get_layout()
   local layout = Util.nui.get_layout({ width = self:width(), height = self:height() }, self._opts)
   if self._opts.type == "popup" then
     ---@cast layout _.NuiPopupOptions
-    if layout.size and layout.size.width < self:width() and self._opts.win_options and self._opts.win_options.wrap then
+    if
+      layout.size
+      and type(layout.size.width) == "number"
+      and layout.size.width < self:width()
+      and self._opts.win_options
+      and self._opts.win_options.wrap
+    then
       local height = 0
       for _, m in ipairs(self._messages) do
         for _, l in ipairs(m._lines) do
