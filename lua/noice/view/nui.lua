@@ -2,6 +2,7 @@ local require = require("noice.util.lazy")
 
 local View = require("noice.view")
 local Util = require("noice.util")
+local Scrollbar = require("noice.view.scrollbar")
 
 ---@class NuiView: NoiceView
 ---@field _nui? NuiPopup|NuiSplit
@@ -9,6 +10,7 @@ local Util = require("noice.util")
 ---@field super NoiceView
 ---@field _hider fun()
 ---@field _timeout_timer vim.loop.Timer
+---@field _scroll NoiceScrollbar
 ---@diagnostic disable-next-line: undefined-field
 local NuiView = View:extend("NuiView")
 
@@ -87,8 +89,13 @@ function NuiView:create()
 
   self._nui:mount()
 
-  -- NOTE: this is needed, to make sure the border is rendered properly during blocking events
   self._nui:update_layout(self:get_layout())
+  self._scroll = Scrollbar({
+    winnr = self._nui.winid,
+    border_size = Util.nui.get_border_size(self._opts.border),
+  })
+  self._scroll:mount()
+  -- NOTE: this is needed, to make sure the border is rendered properly during blocking events
   self._loading = false
 end
 
@@ -127,6 +134,7 @@ function NuiView:hide()
     Util.protect(function()
       if self._nui and not self._visible then
         self._nui:hide()
+        self._scroll:hide()
       end
     end, {
       finally = function()
@@ -193,6 +201,8 @@ function NuiView:show()
   self:tag()
 
   self:render(self._nui.bufnr)
+  self._scroll.winnr = self._nui.winid
+  self._scroll:show()
   self:fix_border()
   self:autohide()
 end
