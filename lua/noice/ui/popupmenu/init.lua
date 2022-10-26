@@ -22,6 +22,7 @@ local M = {}
 ---@field dup? boolean when non-zero this match will be added even when an item with the same word is already present.
 ---@field empty? boolean when non-zero this match will be added even when it is an empty string
 ---@field user_data? any custom data which is associated with the item and available in |v:completed_item|; it can be any type; defaults to an empty string
+---@field text? NuiLine
 
 ---@class Popupmenu
 ---@field selected number

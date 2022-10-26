@@ -2,7 +2,6 @@ local require = require("noice.util.lazy")
 
 local Block = require("noice.text.block")
 local Filter = require("noice.message.filter")
-local Config = require("noice.config")
 
 local _id = 0
 
@@ -16,7 +15,9 @@ local _id = 0
 ---@field tick number
 ---@field level? NotifyLevel
 ---@field kind? NoiceKind
+---@field _debug? boolean
 ---@field opts table<string, any>
+---@overload fun(event: NoiceEvent, kind?: NoiceKind, content?: NoiceContent|NoiceContent[]): NoiceMessage
 ---@diagnostic disable-next-line: undefined-field
 local Message = Block:extend("NoiceBlock")
 
@@ -37,8 +38,4 @@ end
 
 Message.is = Filter.is
 
----@alias NoiceMessage.constructor fun(event: NoiceEvent, kind?: NoiceKind, content?: NoiceContent|NoiceContent[]): NoiceMessage
----@type NoiceMessage|NoiceMessage.constructor
-local NoiceMessage = Message
-
-return NoiceMessage
+return Message

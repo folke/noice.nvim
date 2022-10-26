@@ -2,21 +2,22 @@ local require = require("noice.util.lazy")
 
 local Util = require("noice.util")
 local View = require("noice.view")
+local Manager = require("noice.message.manager")
 
 ---@class NoiceNotifyOptions
 ---@field title string
----@field level string|number
+---@field level? string|number Message log level
 ---@field merge boolean Merge messages into one Notification or create separate notifications
 ---@field replace boolean Replace existing notification or create a new one
 local defaults = {
   title = "Notification",
-  merge = true,
-  level = vim.log.levels.INFO,
-  replace = true,
+  merge = false,
+  level = nil, -- vim.log.levels.INFO,
+  replace = false,
 }
 
 ---@class NotifyInstance
----@field notify fun(msg:string, level:string|number, opts?:table): notify.Record}
+---@field notify fun(msg:string?, level?:string|number, opts?:table): notify.Record}
 
 ---@alias notify.RenderFun fun(buf:buffer, notif: Notification, hl: NotifyBufHighlights, config: notify.Config)
 
@@ -53,28 +54,46 @@ function NotifyView:init(opts)
   self.notif = {}
 end
 
+function NotifyView:is_available()
+  return pcall(_G.require, "notify") == true
+end
+
 function NotifyView:update_options()
   self._opts = vim.tbl_deep_extend("force", defaults, self._opts)
 end
 
+function NotifyView:plain()
+  return function(bufnr, notif)
+    vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, notif.message)
+  end
+end
+
 ---@param config notify.Config
+---@param render? notify.RenderFun
 ---@return notify.RenderFun
-function NotifyView:get_render(config)
+function NotifyView:get_render(config, render)
   ---@type string|notify.RenderFun
-  local ret = config.render()
+  local ret = render or config.render()
   if type(ret) == "string" then
-    ---@type notify.RenderFun
-    ret = require("notify.render")[ret]
+    if ret == "plain" then
+      ret = self:plain()
+    else
+      ---@type notify.RenderFun
+      ret = require("notify.render")[ret]
+    end
   end
   return ret
 end
 
 ---@param messages NoiceMessage[]
-function NotifyView:notify_render(messages)
+---@param render? notify.RenderFun
+function NotifyView:notify_render(messages, render)
   ---@param config notify.Config
   return function(buf, notif, hl, config)
     -- run notify view
-    self:get_render(config)(buf, notif, hl, config)
+    self:get_render(config, render)(buf, notif, hl, config)
+
+    Util.tag(buf, "notify")
 
     ---@type string[]
     local buf_lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
@@ -102,7 +121,7 @@ end
 
 ---@param msg NotifyMsg
 function NotifyView:_notify(msg)
-  local level = msg.level or self._opts.level
+  local level = self._opts.level or msg.level
 
   local instance = NotifyView.instance()
 
@@ -113,23 +132,41 @@ function NotifyView:_notify(msg)
       return Util.is_blocking()
     end,
     on_open = function(win)
-      vim.api.nvim_win_set_option(win, "foldenable", false)
+      self:set_win_options(win)
       if self._opts.merge then
         self.win = win
       end
     end,
     on_close = function()
       self.notif[instance] = nil
+      for _, m in ipairs(msg.messages) do
+        m.opts.notify_id = nil
+      end
       self.win = nil
     end,
-    render = Util.protect(self:notify_render(msg.messages)),
+    render = Util.protect(self:notify_render(msg.messages, self._opts.render)),
   }
 
   if msg.opts then
     opts = vim.tbl_deep_extend("force", opts, msg.opts)
+    if type(msg.opts.replace) == "table" then
+      local m = Manager.get_by_id(msg.opts.replace.id)
+      opts.replace = m and m.opts.notify_id or nil
+    end
   end
 
-  self.notif[instance] = instance.notify(msg.content, level, opts)
+  ---@type string?
+  local content = msg.content
+
+  if msg.opts and msg.opts.is_nil then
+    content = nil
+  end
+
+  local id = instance.notify(content, level, opts)
+  self.notif[instance] = id
+  for _, m in ipairs(msg.messages) do
+    m.opts.notify_id = id
+  end
 end
 
 function NotifyView:show()

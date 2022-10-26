@@ -2,7 +2,6 @@ local require = require("noice.util.lazy")
 
 local Util = require("noice.util")
 local Manager = require("noice.message.manager")
-local Msg = require("noice.ui.msg")
 
 local M = {}
 
@@ -16,6 +15,10 @@ local M = {}
 ---@field not? NoiceFilter
 ---@field min_height? integer
 ---@field max_height? integer
+---@field min_width? integer
+---@field max_width? integer
+---@field min_length? integer
+---@field max_length? integer
 ---@field find? string
 ---@field error? boolean
 ---@field warning? boolean
@@ -47,7 +50,7 @@ M.filters = {
   end,
   message = function(message, other)
     ---@cast message NoiceMessage
-    return other == message
+    return other.id == message.id
   end,
   error = function(message, error)
     ---@cast message NoiceMessage
@@ -68,6 +71,22 @@ M.filters = {
   max_height = function(message, max_height)
     ---@cast message NoiceMessage
     return message:height() <= max_height
+  end,
+  min_width = function(message, min_width)
+    ---@cast message NoiceMessage
+    return message:width() >= min_width
+  end,
+  max_width = function(message, max_width)
+    ---@cast message NoiceMessage
+    return message:width() <= max_width
+  end,
+  min_length = function(message, min_length)
+    ---@cast message NoiceMessage
+    return message:length() >= min_length
+  end,
+  max_length = function(message, max_length)
+    ---@cast message NoiceMessage
+    return message:length() <= max_length
   end,
   any = function(message, any)
     ---@cast message NoiceMessage
@@ -96,9 +115,11 @@ function M.is(message, filter)
       if not M.filters[k](message, v) then
         return false
       end
-    elseif not M._unknown_notified[k] then
-      M._unknown_notified[k] = true
-      Util.error("Unknown filter key " .. k .. " for " .. vim.inspect(filter))
+    else
+      if not M._unknown_notified[k] then
+        M._unknown_notified[k] = true
+        Util.error("Unknown filter key " .. k .. " for " .. vim.inspect(filter))
+      end
       return false
     end
   end

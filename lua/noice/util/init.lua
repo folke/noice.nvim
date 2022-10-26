@@ -21,6 +21,31 @@ function M.once(fn)
   end
 end
 
+---@param message NoiceMessage
+function M.buf_has_message(buf, message)
+  return vim.b[buf].messages and vim.tbl_contains(vim.b[buf].messages, message.id)
+end
+
+function M.tag(buf, tag)
+  local ft = vim.api.nvim_buf_get_option(buf, "filetype")
+
+  if ft == "" then
+    vim.api.nvim_buf_set_option(buf, "filetype", "noice")
+  end
+
+  if vim.api.nvim_buf_get_name(buf) == "" then
+    local path = "noice://" .. buf .. "/" .. tag
+    local params = {}
+    if ft ~= "" and ft ~= "noice" then
+      table.insert(params, "filetype=" .. ft)
+    end
+    if #params > 0 then
+      path = path .. "?" .. table.concat(params, "&")
+    end
+    vim.api.nvim_buf_set_name(buf, path)
+  end
+end
+
 function M.debounce(ms, fn)
   local timer = vim.loop.new_timer()
   return function(...)
@@ -29,6 +54,31 @@ function M.debounce(ms, fn)
       timer:stop()
       vim.schedule_wrap(fn)(unpack(argv))
     end)
+  end
+end
+
+---@generic F: fun()
+---@param fn F
+---@param ms integer
+---@param opts? {enabled?:fun():boolean}
+---@return F
+function M.interval(ms, fn, opts)
+  opts = opts or {}
+  fn = vim.schedule_wrap(fn)
+  local timer = vim.loop.new_timer()
+  local running = false
+  return function(...)
+    local args = { ... }
+    if not running then
+      running = true
+      timer:start(ms, ms, function()
+        fn(unpack(args))
+        if not (opts.enabled and opts.enabled()) then
+          timer:stop()
+          running = false
+        end
+      end)
+    end
   end
 end
 
@@ -98,8 +148,16 @@ function M.is_blocking(opts)
     redraw = true,
   }, opts or {})
   local mode = vim.api.nvim_get_mode()
+
+  local blocking_mode = false
+  for _, m in ipairs({ "ic", "ix", "c", "no", "r%?", "rm" }) do
+    if mode.mode:find(m) == 1 then
+      blocking_mode = true
+    end
+  end
+
   local reason = opts.blocking and mode.blocking and "blocking"
-    or opts.mode and mode.mode:find("[cro]") and "mode"
+    or opts.mode and blocking_mode and ("mode:" .. mode.mode)
     or opts.input and Hacks.before_input and "input"
     or opts.redraw and Hacks.inside_redraw and "redraw"
     or nil
@@ -126,15 +184,44 @@ end
 ---@param level number
 ---@param ... any
 function M.notify(msg, level, ...)
-  require("noice.view.notify").instance().notify(msg:format(...), level, {
-    title = "noice.nvim",
-    on_open = function(win)
-      vim.api.nvim_win_set_option(win, "conceallevel", 3)
-      local buf = vim.api.nvim_win_get_buf(win)
-      vim.api.nvim_buf_set_option(buf, "filetype", "markdown")
-      vim.api.nvim_win_set_option(win, "spell", false)
-    end,
-  })
+  if M.module_exists("notify") then
+    require("noice.view.backend.notify").instance().notify(msg:format(...), level, {
+      title = "noice.nvim",
+      on_open = function(win)
+        vim.api.nvim_win_set_option(win, "conceallevel", 3)
+        local buf = vim.api.nvim_win_get_buf(win)
+        vim.api.nvim_buf_set_option(buf, "filetype", "markdown")
+        vim.api.nvim_win_set_option(win, "spell", false)
+      end,
+    })
+  else
+    vim.notify(msg:format(...), level, {
+      title = "noice.nvim",
+    })
+  end
+end
+
+---@type table<string, boolean>
+M._once = {}
+
+---@param msg string
+---@param level number
+---@param ... any
+function M.notify_once(msg, level, ...)
+  msg = msg:format(...)
+  local once = level .. msg
+  if not M._once[once] then
+    M.notify(msg, level)
+    M._once[once] = true
+  end
+end
+
+function M.warn_once(msg, ...)
+  M.notify_once(msg, vim.log.levels.WARN, ...)
+end
+
+function M.error_once(msg, ...)
+  M.notify_once(msg, vim.log.levels.ERROR, ...)
 end
 
 function M.warn(msg, ...)
@@ -148,9 +235,9 @@ end
 --- Will stop Noice and show error
 function M.panic(msg, ...)
   require("noice").disable()
-  require("noice.view.notify").dismiss()
-  M.error(msg, ...)
-  M.error("Noice was stopped to prevent further errors")
+  require("noice.view.backend.notify").dismiss()
+  vim.notify(msg:format(...), vim.log.levels.ERROR)
+  error("Noice was stopped to prevent further errors", 0)
 end
 
 function M.info(msg, ...)
@@ -163,8 +250,41 @@ function M.debug(data)
   if not fd then
     error(("Could not open file %s for writing"):format(file))
   end
-  fd:write("\n" .. data)
+  fd:write(data .. "\n")
   fd:close()
+end
+
+---@return string
+function M.read_file(file)
+  local fd = io.open(file, "r")
+  if not fd then
+    error(("Could not open file %s for reading"):format(file))
+  end
+  local data = fd:read("*a")
+  fd:close()
+  return data
+end
+
+function M.write_file(file, data)
+  local fd = io.open(file, "w+")
+  if not fd then
+    error(("Could not open file %s for writing"):format(file))
+  end
+  fd:write(data)
+  fd:close()
+end
+
+---@generic K
+---@generic V
+---@param tbl table<K, V>
+---@param fn fun(key: K, value: V)
+---@param sorter? fun(a:V, b:V): boolean
+function M.for_each(tbl, fn, sorter)
+  local keys = vim.tbl_keys(tbl)
+  table.sort(keys, sorter)
+  for _, key in ipairs(keys) do
+    fn(key, tbl[key])
+  end
 end
 
 return M

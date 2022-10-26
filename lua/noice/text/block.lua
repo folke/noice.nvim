@@ -9,6 +9,7 @@ local Object = require("nui.object")
 
 ---@class NoiceBlock
 ---@field private _lines NuiLine[]
+---@overload fun(content?: NoiceContent|NoiceContent[], highlight?: string|table): NoiceBlock
 local Block = Object("Block")
 
 ---@param content? NoiceContent|NoiceContent[]
@@ -41,6 +42,14 @@ function Block:width()
   local ret = 0
   for _, line in ipairs(self._lines) do
     ret = math.max(ret, line:width())
+  end
+  return ret
+end
+
+function Block:length()
+  local ret = 0
+  for _, line in ipairs(self._lines) do
+    ret = ret + line:width()
   end
   return ret
 end
@@ -190,8 +199,4 @@ function Block:newline()
   table.insert(self._lines, NuiLine())
 end
 
----@alias NoiceBlock.constructor fun(content?: NoiceContent|NoiceContent[], highlight?: string|table): NoiceBlock
----@type NoiceBlock|NoiceBlock.constructor
-local NoiceBlock = Block
-
-return NoiceBlock
+return Block

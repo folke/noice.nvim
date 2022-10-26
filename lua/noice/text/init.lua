@@ -13,13 +13,11 @@ local NuiText = require("nui.text")
 ---@class NoiceText: NuiText
 ---@field super NuiText
 ---@field on_render? fun(text: NoiceText, buf:number, line: number, byte:number, col:number)
+---@overload fun(content:string, highlight?:string|NoiceExtmark):NoiceText
 ---@diagnostic disable-next-line: undefined-field
-local Text = NuiText:extend("NoiceText")
+local NoiceText = NuiText:extend("NoiceText")
 
----@type NoiceText|fun(content:string, highlight?:string|NoiceExtmark):NoiceText
-local NoiceText = Text
-
-function Text.virtual_text(text, hl_group)
+function NoiceText.virtual_text(text, hl_group)
   local content = (" "):rep(vim.api.nvim_strwidth(text))
   return NoiceText(content, {
     virt_text = { { text, hl_group } },
@@ -28,9 +26,9 @@ function Text.virtual_text(text, hl_group)
   })
 end
 
-function Text.cursor(col)
+function NoiceText.cursor(col)
   return NoiceText(" ", {
-    hl_group = "Cursor",
+    hl_group = "NoiceCursor",
     col = col,
     relative = true,
   })
@@ -41,10 +39,11 @@ end
 ---@param linenr number line number (1-indexed)
 ---@param byte_start number start byte position (0-indexed)
 ---@return nil
-function Text:highlight(bufnr, ns_id, linenr, byte_start)
+function NoiceText:highlight(bufnr, ns_id, linenr, byte_start)
   if not self.extmark then
     return
   end
+  local byte_start_orig = byte_start
 
   ---@type NoiceExtmark
   local orig = vim.deepcopy(self.extmark)
@@ -65,10 +64,13 @@ function Text:highlight(bufnr, ns_id, linenr, byte_start)
     if extmark.col then
       extmark.col = extmark.col + byte_start
     end
-    if extmark.end_col then
-      extmark.end_col = extmark.end_col + byte_start
-    end
     extmark.relative = nil
+  end
+
+  local length = self._length
+  if extmark.length then
+    self._length = extmark.length
+    extmark.length = nil
   end
 
   if extmark.col then
@@ -77,12 +79,13 @@ function Text:highlight(bufnr, ns_id, linenr, byte_start)
     extmark.col = nil
   end
 
-  Text.super.highlight(self, bufnr, ns_id, linenr, byte_start)
+  NoiceText.super.highlight(self, bufnr, ns_id, linenr, byte_start)
 
   if self.on_render then
-    self.on_render(self, bufnr, linenr, byte_start, col_start)
+    self.on_render(self, bufnr, linenr, byte_start_orig, col_start)
   end
 
+  self._length = length
   self.extmark = orig
 end
 

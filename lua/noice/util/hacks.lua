@@ -26,28 +26,30 @@ end
 
 function M.disable()
   M.reset_augroup()
-  for _, fn in ipairs(M._disable) do
+  for _, fn in pairs(M._disable) do
     fn()
   end
   M._disable = {}
 end
 
--- clear search_count on :nohlsearch
+-- start a timer that checks for vim.v.hlsearch.
+-- Clears search count and stops timer when hlsearch==0
 function M.fix_nohlsearch()
-  vim.api.nvim_create_autocmd("CmdlineLeave", {
-    group = M.group,
-    callback = function()
-      local cmd = vim.fn.getcmdline()
-      if cmd:find("noh") == 1 then
-        require("noice.message.manager").clear({ kind = "search_count" })
-      end
+  M.fix_nohlsearch = Util.interval(30, function()
+    if vim.v.hlsearch == 0 then
+      require("noice.message.manager").clear({ kind = "search_count" })
+    end
+  end, {
+    enabled = function()
+      return vim.v.hlsearch == 1
     end,
   })
+  M.fix_nohlsearch()
 end
 
 ---@see https://github.com/neovim/neovim/issues/17810
 function M.fix_incsearch()
-  ---@type integer|string|nil
+  ---@type integer|nil
   local conceallevel
 
   vim.api.nvim_create_autocmd("CmdlineEnter", {
@@ -75,7 +77,6 @@ end
 -- This wraps vim.cmd, nvim_cmd, nvim_command and nvim_exec
 ---@see https://github.com/neovim/neovim/issues/20416
 M.inside_redraw = false
-M.block_redraw = false
 function M.fix_redraw()
   local nvim_cmd = vim.api.nvim_cmd
 
@@ -152,8 +153,10 @@ function M.fix_input()
       M.before_input = true
       Router.update()
 
+      M.hide_cursor()
       ---@type boolean, any
       local ok, ret = pcall(fn, unpack(args))
+      M.show_cursor()
 
       -- clear any message right after input
       Manager.clear({ event = "msg_show", kind = { "echo", "echomsg", "" } })
@@ -187,24 +190,26 @@ end
 -- Allow nvim-notify to behave inside instant events
 function M.fix_notify()
   vim.schedule(Util.protect(function()
-    local NotifyService = require("notify.service")
-    ---@type NotificationService
-    local meta = getmetatable(NotifyService(require("notify")._config()))
-    local push = meta.push
-    meta.push = function(self, notif)
-      ---@type buffer
-      local buf = push(self, notif)
+    if pcall(_G.require, "notify") then
+      local NotifyService = require("notify.service")
+      ---@type NotificationService
+      local meta = getmetatable(NotifyService(require("notify")._config()))
+      local push = meta.push
+      meta.push = function(self, notif)
+        ---@type buffer
+        local buf = push(self, notif)
 
-      -- run animator and re-render instantly when inside instant events
-      if Util.is_blocking() then
-        pcall(self._animator.render, self._animator, self._pending, 1 / self._fps)
-        self._buffers[notif.id]:render()
+        -- run animator and re-render instantly when inside instant events
+        if Util.is_blocking() then
+          pcall(self._animator.render, self._animator, self._pending, 1 / self._fps)
+          self._buffers[notif.id]:render()
+        end
+        return buf
       end
-      return buf
+      table.insert(M._disable, function()
+        meta.push = push
+      end)
     end
-    table.insert(M._disable, function()
-      meta.push = push
-    end)
   end))
 end
 
@@ -243,6 +248,28 @@ function M.fix_cmp()
     api.get_cursor = get_cursor
     api.get_screen_cursor = get_screen_cursor
   end)
+end
+
+function M.cmdline_force_redraw()
+  if vim.api.nvim_get_mode().mode == "c" and vim.fn.getcmdline():find("s/") then
+    -- HACK: this will trigger redraw during substitue
+    vim.api.nvim_input("<space><bs>")
+  end
+end
+
+M._guicursor = nil
+function M.hide_cursor()
+  if M._guicursor == nil then
+    M._guicursor = vim.go.guicursor
+  end
+  vim.go.guicursor = "a:NoiceHiddenCursor/NoiceHiddenCursor"
+  M._disable.guicursor = M.show_cursor
+end
+
+function M.show_cursor()
+  if M._guicursor then
+    vim.go.guicursor = M._guicursor
+  end
 end
 
 return M

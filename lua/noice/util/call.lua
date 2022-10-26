@@ -12,6 +12,8 @@ local Util = require("noice.util")
 local defaults = {
   retry_on_vim_errors = true,
   retry_on_E11 = false,
+  ignore_E565 = true,
+  retry_on_E565 = false,
   ignore_keyboard_interrupt = true,
 }
 
@@ -58,19 +60,34 @@ function M:on_error(err)
     pcall(self._opts.catch, err)
   end
 
-  if self._opts.ignore_keyboard_interrupt and err:lower():find("keyboard interrupt") then
-    return
-  end
+  if err then
+    if self._opts.ignore_keyboard_interrupt and err:lower():find("keyboard interrupt") then
+      M._errors = M._errors - 1
+      return
+    end
 
-  -- catch any Vim Errors and retry once
-  if not self._retry and err:find("Vim:E%d+") and self._opts.retry_on_vim_errors then
-    self._retry = true
-    return
-  end
+    if self._opts.retry_on_E565 and err:find("E565") then
+      M._errors = M._errors - 1
+      self._defer_retry = true
+      return
+    end
 
-  if self._opts.retry_on_E11 and err and err:find("E11:") then
-    self._defer_retry = true
-    return
+    if self._opts.ignore_E565 and err:find("E565") then
+      M._errors = M._errors - 1
+      return
+    end
+
+    -- catch any Vim Errors and retry once
+    if not self._retry and err:find("Vim:E%d+") and self._opts.retry_on_vim_errors then
+      self._retry = true
+      return
+    end
+
+    if self._opts.retry_on_E11 and err:find("E11:") then
+      M._errors = M._errors - 1
+      self._defer_retry = true
+      return
+    end
   end
 
   pcall(M.log, self, err)
@@ -102,8 +119,12 @@ function M:format(err, stack)
 end
 
 function M:notify(err)
-  local Util = require("noice.util")
-  Util.error(self:format(err, Config.options.debug))
+  vim.schedule(function()
+    local msg = self:format(err, Config.options.debug)
+    if not pcall(Util.error, msg) then
+      vim.notify(msg, vim.log.levels.ERROR, { title = "noice.nvim" })
+    end
+  end)
 end
 
 function M:__call(...)
@@ -116,7 +137,7 @@ function M:__call(...)
 
   -- error handler
   local error_handler = function(err)
-    self:on_error(err)
+    pcall(self.on_error, self, err)
     return err
   end
 

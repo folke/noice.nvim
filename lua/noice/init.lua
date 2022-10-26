@@ -1,7 +1,8 @@
 local require = require("noice.util.lazy")
 
-local Util = require("noice.util")
+local Health = require("noice.health")
 local Api = require("noice.api")
+local Config = require("noice.config")
 
 local M = {}
 
@@ -9,36 +10,51 @@ M.api = Api
 
 ---@param opts? NoiceConfig
 function M.setup(opts)
-  if vim.fn.has("nvim-0.8.0") ~= 1 then
-    Util.error("Noice needs Neovim >= 0.8.0")
-    -- require("noice.util").error("Noice needs Neovim >= 0.9.0 (nightly)")
+  -- run some checks before setting up
+  if not Health.check({ checkhealth = false, loaded = false }) then
     return
   end
-  if not Util.module_exists("notify") then
-    Util.error("Noice needs nvim-notify to work properly")
-    return
+
+  local function load()
+    require("noice.util").try(function()
+      require("noice.config").setup(opts)
+      require("noice.commands").setup()
+      require("noice.message.router").setup()
+      M.enable()
+    end)
   end
-  if vim.g.lazyredraw then
-    Util.warn(
-      "You have enabled lazyredraw (see `:h 'lazyredraw'`)\nThis is only meant to be set temporarily.\nYou'll experience issues using Noice."
-    )
+
+  if vim.v.vim_did_enter == 0 then
+    -- Schedule loading after VimEnter. Get the UI up and running first.
+    vim.api.nvim_create_autocmd("VimEnter", {
+      once = true,
+      callback = load,
+    })
+  else
+    -- Schedule on the event loop
+    vim.schedule(load)
   end
-  require("noice.config").setup(opts)
-  require("noice.commands").setup()
-  require("noice.message.router").setup()
-  M.enable()
 end
 
 function M.disable()
+  Config._running = false
+  if Config.options.notify.enabled then
+    require("noice.source.notify").disable()
+  end
   require("noice.message.router").disable()
   require("noice.ui").disable()
   require("noice.util.hacks").disable()
 end
 
 function M.enable()
+  Config._running = true
+  if Config.options.notify.enabled then
+    require("noice.source.notify").enable()
+  end
   require("noice.util.hacks").enable()
   require("noice.ui").enable()
   require("noice.message.router").enable()
+  Health.checker()
 end
 
 ---@param msg string

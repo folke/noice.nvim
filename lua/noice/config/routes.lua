@@ -19,7 +19,18 @@ end
 
 ---@return NoiceRouteConfig[]
 function M.defaults()
-  return {
+  ---@type NoiceRouteConfig[]
+  local ret = {}
+
+  for _, format in pairs(Config.options.cmdline.format) do
+    table.insert(ret, {
+      view = format.view,
+      opts = format.opts,
+      filter = { event = "cmdline", kind = format.kind },
+    })
+  end
+
+  return vim.list_extend(ret, {
     {
       view = Config.options.cmdline.view,
       opts = Config.options.cmdline.opts,
@@ -39,7 +50,7 @@ function M.defaults()
       },
     },
     {
-      view = "split",
+      view = Config.options.messages.view_history,
       filter = {
         any = {
           { event = "msg_history_show" },
@@ -48,12 +59,11 @@ function M.defaults()
       },
     },
     {
-      view = "virtualtext",
+      view = Config.options.messages.view_search,
       filter = {
         event = "msg_show",
         kind = "search_count",
       },
-      opts = { hl_group = "DiagnosticVirtualTextInfo" },
     },
     {
       filter = {
@@ -65,29 +75,46 @@ function M.defaults()
       opts = { skip = true },
     },
     {
-      view = "notify",
+      view = Config.options.messages.view,
+      filter = {
+        event = "msg_show",
+        kind = { "", "echo", "echomsg" },
+      },
+      opts = { replace = true, merge = true, title = "Messages" },
+    },
+    {
+      view = Config.options.messages.view_error,
+      filter = { error = true },
+      opts = { title = "Error" },
+    },
+    {
+      view = Config.options.messages.view_warn,
+      filter = { warning = true },
+      opts = { title = "Warning" },
+    },
+    {
+      view = Config.options.notify.view,
+      filter = { event = "notify" },
+      opts = { title = "Notify" },
+    },
+    {
+      view = Config.options.notify.view,
       filter = {
         event = "noice",
         kind = { "stats", "debug" },
       },
-      opts = { buf_options = { filetype = "lua" }, replace = true },
+      opts = { lang = "lua", replace = true, title = "Noice" },
     },
     {
-      view = "notify",
-      filter = {
-        any = {
-          { event = "notify" },
-          { error = true },
-          { warning = true },
-        },
-      },
-      opts = { title = "Notify", merge = false, replace = false },
+      view = Config.options.lsp.hover.view,
+      filter = { event = "lsp", kind = "hover" },
+      opts = Config.options.lsp.hover.opts,
     },
     {
-      view = "notify",
-      filter = {},
+      view = Config.options.lsp.progress.view,
+      filter = { event = "lsp", kind = "progress" },
     },
-  }
+  })
 end
 
 return M

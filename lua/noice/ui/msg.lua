@@ -2,6 +2,8 @@ local require = require("noice.util.lazy")
 
 local Manager = require("noice.message.manager")
 local Message = require("noice.message")
+local Hacks = require("noice.util.hacks")
+local State = require("noice.ui.state")
 
 local M = {}
 
@@ -69,6 +71,10 @@ function M.on_show(event, kind, content, replace_last)
     return M.on_confirm(event, kind, content)
   end
 
+  if State.skip(event, kind, content, replace_last) then
+    return
+  end
+
   if M.last and replace_last then
     Manager.clear({ message = M.last })
     M.last = nil
@@ -80,8 +86,10 @@ function M.on_show(event, kind, content, replace_last)
     message.level = "error"
   elseif M.is_warning(kind) then
     message.level = "warn"
-  else
-    message.level = "info"
+  end
+
+  if kind == M.kinds.search_count then
+    Hacks.fix_nohlsearch()
   end
 
   M.last = message
@@ -97,12 +105,17 @@ function M.check_clear()
 end
 
 function M.on_clear()
+  State.clear("msg_show")
+  M.check_clear()
   M.last = nil
   M.clear = true
 end
 
 -- mode like recording...
 function M.on_showmode(event, content)
+  if State.skip(event, content) then
+    return
+  end
   local message = M.get(event)
   if vim.tbl_isempty(content) then
     if event == "msg_showmode" then
@@ -122,8 +135,15 @@ end
 
 ---@param content NoiceChunk[]
 function M.on_confirm(event, kind, content)
+  if State.skip(event, kind, content) then
+    return
+  end
   local message = Message(event, kind, content)
-  message:append(" ", "Cursor")
+  if not message:content():find("%s+$") then
+    message:append(" ")
+  end
+  message:append(" ", "NoiceCursor")
+  message.once = true
   Manager.add(message)
   vim.schedule(function()
     Manager.remove(message)

@@ -4,6 +4,7 @@ local Util = require("noice.util")
 local Config = require("noice.config")
 local FormatConfig = require("noice.config.format")
 local Formatters = require("noice.text.format.formatters")
+local NuiText = require("nui.text")
 
 local M = {}
 
@@ -15,9 +16,6 @@ local M = {}
 ---@field before? NoiceFormatEntry
 ---@field after? NoiceFormatEntry
 ---@field opts table
-
-M.format = { "level", "debug", "message" }
-M.format = { { "level" }, "debug", "message" }
 
 ---@param entry string|table<string, any>
 ---@return NoiceFormatEntry?
@@ -39,11 +37,17 @@ function M.parse_entry(entry)
     opts = { text = text },
   }
 
-  local before, name, after = text:match("^(.*){(.*)}(.*)$")
+  local before, name, after = text:match("^(.*){(.-)}(.*)$")
   if before then
     ret.formatter = name
     ret.before = M.parse_entry(before)
     ret.after = M.parse_entry(after)
+  end
+
+  local opts_key = ret.formatter:match("^data%.(.*)")
+  if opts_key then
+    entry.key = opts_key
+    ret.formatter = "data"
   end
 
   if not Formatters[ret.formatter] then
@@ -66,24 +70,24 @@ function M.parse_entry(entry)
 end
 
 ---@param message NoiceMessage
----@param format? NoiceFormat
+---@param format? NoiceFormat|string
 ---@param opts? NoiceFormatOptions
 ---@return NoiceMessage
 function M.format(message, format, opts)
-  opts = vim.tbl_deep_extend("force", Config.options.format, opts or {})
+  opts = vim.tbl_deep_extend("force", vim.deepcopy(Config.options.format), opts or {})
 
   format = format or "default"
 
   if type(format) == "string" then
-    format = vim.deepcopy(FormatConfig.formats[format])
-  end
-
-  if Config.options.debug then
-    table.insert(format, 1, "{debug}")
+    format = vim.deepcopy(FormatConfig.builtin[format])
   end
 
   -- use existing message, with a separate _lines array
-  local ret = setmetatable({ _lines = {} }, { __index = message })
+  local ret = setmetatable({ _lines = {}, _debug = false }, { __index = message })
+  if Config.options.debug and not message._debug then
+    table.insert(format, 1, "{debug}")
+    ret._debug = true
+  end
 
   for _, entry in ipairs(format) do
     entry = M.parse_entry(entry)
@@ -109,6 +113,36 @@ function M.format(message, format, opts)
   end
 
   return ret
+end
+
+---@alias NoiceAlign "center" | "left" | "right" | "message-center" | "message-left" | "message-right" | "line-center" | "line-left" | "line-right"
+
+---@param message NoiceMessage
+---@param width integer
+---@param align? NoiceAlign
+function M.align(message, width, align)
+  if align == nil or align == "left" then
+    return
+  end
+
+  local align_object = "message"
+
+  local ao, a = align:match("^(.-)%-(.-)$")
+  if a then
+    align = a
+    align_object = ao
+  end
+
+  for _, line in ipairs(message._lines) do
+    local w = align_object == "line" and line:width() or message:width()
+    if w < width then
+      if align == "right" then
+        table.insert(line._texts, 1, NuiText(string.rep(" ", width - w)))
+      elseif align == "center" then
+        table.insert(line._texts, 1, NuiText(string.rep(" ", math.floor((width - w) / 2 + 0.5))))
+      end
+    end
+  end
 end
 
 return M

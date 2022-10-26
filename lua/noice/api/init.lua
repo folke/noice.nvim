@@ -1,11 +1,14 @@
 local require = require("noice.util.lazy")
 
 local Cmdline = require("noice.ui.cmdline")
-local Statusline = require("noice.api.statusline")
+local Status = require("noice.api.status")
 
 local M = {}
 
-M.statusline = Statusline
+M.status = Status
+
+---@deprecated
+M.statusline = Status
 
 ---@return CmdlinePosition?
 function M.get_cmdline_position()

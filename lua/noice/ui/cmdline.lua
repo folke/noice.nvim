@@ -4,12 +4,15 @@ local Message = require("noice.message")
 local Manager = require("noice.message.manager")
 local Config = require("noice.config")
 local NoiceText = require("noice.text")
+local Hacks = require("noice.util.hacks")
+local Object = require("nui.object")
 
 local M = {}
 M.message = Message("cmdline", nil)
 
 ---@enum CmdlineEvent
 M.events = {
+  cmdline = "cmdline",
   show = "cmdline_show",
   hide = "cmdline_hide",
   pos = "cmdline_pos",
@@ -19,7 +22,9 @@ M.events = {
   block_hide = "cmdline_block_hide",
 }
 
----@class NoiceCmdline
+---@alias NoiceCmdlineFormatter fun(cmdline: NoiceCmdline): {icon?:string, offset?:number, view?:NoiceViewOptions}
+
+---@class CmdlineState
 ---@field content {[1]: integer, [2]: string}[]
 ---@field pos number
 ---@field firstc string
@@ -27,33 +32,93 @@ M.events = {
 ---@field indent number
 ---@field level number
 ---@field block table
-local Cmdline = {}
-Cmdline.__index = Cmdline
 
-function Cmdline:chunks(firstc)
-  local chunks = {}
+---@class CmdlineFormat
+---@field kind string
+---@field pattern? string
+---@field view string
+---@field conceal? boolean
+---@field icon? string
+---@field icon_hl_group? string
+---@field opts? NoiceViewOptions
+---@field title? string
+---@field lang? string
 
-  -- indent content
-  if #self.content > 0 then
-    self.content[1][2] = string.rep(" ", self.indent) .. self.content[1][2]
-  end
+---@class NoiceCmdline
+---@field state CmdlineState
+---@field offset integer
+---@overload fun(state:CmdlineState): NoiceCmdline
+local Cmdline = Object("NoiceCmdline")
 
-  -- prefix with first character and optional prompt
-  table.insert(chunks, { 0, (firstc and self.firstc or "") .. self.prompt })
-
-  -- add content
-  vim.list_extend(chunks, self.content)
-
-  return chunks
+---@param state CmdlineState
+function Cmdline:init(state)
+  self.state = state or {}
+  self.offset = 0
 end
 
 function Cmdline:get()
   return table.concat(
     vim.tbl_map(function(c)
       return c[2]
-    end, self.content),
+    end, self.state.content),
     ""
   )
+end
+
+---@return CmdlineFormat
+function Cmdline:get_format()
+  if self.state.prompt and self.state.prompt ~= "" then
+    return Config.options.cmdline.format.input
+  end
+  local line = self.state.firstc .. self:get()
+
+  local formats = vim.tbl_values(vim.tbl_filter(function(f)
+    return f.pattern
+  end, Config.options.cmdline.format))
+  table.sort(formats, function(a, b)
+    return #a.pattern > #b.pattern
+  end)
+
+  for _, format in pairs(formats) do
+    local from, to = line:find(format.pattern)
+    -- if match and cmdline pos is visible
+    if from and self.state.pos >= to - 1 then
+      self.offset = format.conceal and to or 0
+      return format
+    end
+  end
+  self.offset = 0
+  return {
+    kind = self.state.firstc,
+    view = "cmdline_popup",
+  }
+end
+
+---@param message NoiceMessage
+function Cmdline:format(message)
+  local format = self:get_format()
+
+  if format.icon then
+    message:append(NoiceText.virtual_text(format.icon, format.icon_hl_group))
+    message:append(" ")
+  end
+
+  message.kind = format.kind
+
+  -- FIXME: prompt
+  if self.state.prompt ~= "" then
+    message:append(self.state.prompt, "NoiceCmdlinePrompt")
+  end
+
+  if not format.conceal then
+    message:append(self.state.firstc)
+  end
+
+  message:append(self:get():sub(self.offset))
+
+  local cursor = NoiceText.cursor(-self:length() + self.state.pos)
+  cursor.on_render = M.on_render
+  message:append(cursor)
 end
 
 function Cmdline:width()
@@ -67,13 +132,8 @@ end
 ---@type NoiceCmdline[]
 M.cmdlines = {}
 
----@param opts table
-function M.new(opts)
-  return setmetatable(opts, Cmdline)
-end
-
 function M.on_show(event, content, pos, firstc, prompt, indent, level)
-  local c = M.new({
+  local c = Cmdline({
     event = event,
     content = content,
     pos = pos,
@@ -82,20 +142,23 @@ function M.on_show(event, content, pos, firstc, prompt, indent, level)
     indent = indent,
     level = level,
   })
-  if not vim.deep_equal(c, M.cmdlines[level]) then
+  local last = M.cmdlines[level] and M.cmdlines[level].state
+  if not vim.deep_equal(c.state, last) then
     M.cmdlines[level] = c
     M.update()
   end
 end
 
 function M.on_hide(_, level)
-  M.cmdlines[level] = nil
-  M.update()
+  if M.cmdlines[level] then
+    M.cmdlines[level] = nil
+    M.update()
+  end
 end
 
 function M.on_pos(_, pos, level)
-  if M.cmdlines[level] then
-    M.cmdlines[level].pos = pos
+  if M.cmdlines[level] and M.cmdlines[level].state.pos ~= pos then
+    M.cmdlines[level].state.pos = pos
     M.update()
   end
 end
@@ -113,8 +176,10 @@ M.position = nil
 function M.on_render(_, buf, line, byte)
   local win = vim.fn.bufwinid(buf)
   if win ~= -1 then
-    local cmdline_start = byte - M.cmdlines[1]:length()
-    local pos = vim.fn.screenpos(win, line, cmdline_start + 1)
+    -- FIXME: check with cmp
+    -- FIXME: state.pos?
+    local cmdline_start = byte - (M.last():length() - M.last().offset)
+    local pos = vim.fn.screenpos(win, line, cmdline_start)
     M.position = {
       buf = buf,
       win = win,
@@ -130,34 +195,23 @@ function M.on_render(_, buf, line, byte)
   end
 end
 
+function M.last()
+  local last = math.max(1, unpack(vim.tbl_keys(M.cmdlines)))
+  return M.cmdlines[last]
+end
+
 function M.update()
   M.message:clear()
-  local count = 0
-  for _, cmdline in ipairs(M.cmdlines) do
-    if cmdline then
-      count = count + 1
-      if M.message:height() > 0 then
-        M.message:newline()
-      end
+  local cmdline = M.last()
 
-      local icon = Config.options.cmdline.icons[cmdline.firstc]
-
-      if icon then
-        M.message:append(NoiceText.virtual_text(icon.icon, icon.hl_group))
-        M.message:append(" ")
-      end
-
-      M.message:append(cmdline:chunks(icon and icon.firstc ~= false))
-      local cursor = NoiceText.cursor(-cmdline:length() + cmdline.pos)
-      cursor.on_render = M.on_render
-      M.message:append(cursor)
-    end
-  end
-
-  if count > 0 then
+  if cmdline then
+    cmdline:format(M.message)
+    Hacks.hide_cursor()
+    Hacks.cmdline_force_redraw()
     Manager.add(M.message)
   else
     Manager.remove(M.message)
+    Hacks.show_cursor()
   end
 end
 

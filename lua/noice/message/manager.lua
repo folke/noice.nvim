@@ -19,7 +19,7 @@ end
 
 ---@param message NoiceMessage
 function M.add(message)
-  if not message:is_empty() then
+  if not (message:is_empty() and vim.tbl_isempty(message.opts)) then
     message.tick = next_tick()
     message.mtime = vim.fn.localtime()
     M._history[message.id] = message
@@ -78,6 +78,10 @@ function M.sort(messages, reverse)
       return ret
     end
   )
+end
+
+function M.get_by_id(id)
+  return M._history[id]
 end
 
 ---@class NoiceMessageOpts

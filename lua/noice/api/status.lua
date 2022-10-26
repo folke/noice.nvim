@@ -3,10 +3,22 @@ local require = require("noice.util.lazy")
 local Manager = require("noice.message.manager")
 local Config = require("noice.config")
 
----@param filter NoiceFilter
+---@type NoiceFilter
+local nothing = { ["not"] = {} }
+
+---@param str string
+local function escape(str)
+  return str:gsub("%%", "%%%%")
+end
+
+---@param name string
 ---@return NoiceStatus
-local function NoiceStatus(filter)
+local function NoiceStatus(name)
   local function _get()
+    if not Config.is_running() then
+      return {}
+    end
+    local filter = Config.options.status[name] or nothing
     return Manager.get(filter, {
       count = 1,
       sort = true,
@@ -20,7 +32,7 @@ local function NoiceStatus(filter)
     get = function()
       local message = _get()
       if message then
-        return vim.trim(message:content())
+        return escape(vim.trim(message:content()))
       end
     end,
     get_hl = function()
@@ -31,10 +43,10 @@ local function NoiceStatus(filter)
         for _, text in ipairs(line._texts) do
           if text.extmark and text.extmark.hl_group then
             -- use hl_group
-            ret = ret .. "%#" .. text.extmark.hl_group .. "#" .. text:content()
+            ret = ret .. "%#" .. text.extmark.hl_group .. "#" .. escape(text:content())
           else
             -- or reset to StatusLine
-            ret = ret .. "%#StatusLine#" .. text:content()
+            ret = ret .. "%#StatusLine#" .. escape(text:content())
           end
         end
         return ret
@@ -43,19 +55,11 @@ local function NoiceStatus(filter)
   }
 end
 
-local empty_status = NoiceStatus({ event = "__will_never_match__" })
-
 ---@type table<string, NoiceStatus>
 local status = {}
 
 return setmetatable(status, {
   __index = function(_, key)
-    if Config.options.status and Config.options.status[key] then
-      status[key] = NoiceStatus(Config.options.status[key])
-      return status[key]
-    else
-      -- can happen when Noice is not loaded yet. Return an empty status
-      return empty_status
-    end
+    return NoiceStatus(key)
   end,
 })
