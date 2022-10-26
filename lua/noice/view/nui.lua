@@ -47,7 +47,10 @@ end
 
 -- Check if other floating windows are overlapping and move out of the way
 function NuiView:smart_move()
-  if not (self._opts.type == "popup" and self._opts.relative and self._opts.relative.type == "editor") then
+  if
+    not (self._opts.type == "popup" and self._opts.relative and self._opts.relative.type == "editor")
+    or self._opts.view == "cmdline"
+  then
     return
   end
 
