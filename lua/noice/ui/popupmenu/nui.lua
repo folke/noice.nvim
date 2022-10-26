@@ -99,6 +99,10 @@ function M.opts(state)
           row = pos.screenpos.row,
           col = pos.screenpos.col + state.col - padding.left,
         }
+        if pos.screenpos.row == vim.go.lines then
+          opts.position.row = opts.position.row - 1
+          opts.anchor = "SW"
+        end
       end
     else
       opts.relative = { type = "cursor" }
@@ -123,6 +127,7 @@ end
 
 ---@param state Popupmenu
 function M.show(state)
+  M.on_hide()
   local is_cmdline = state.grid == -1
   local opts, padding = M.opts(state)
 
@@ -143,7 +148,7 @@ function M.show(state)
     end
   end
 
-  for i, item in ipairs(state.items) do
+  for _, item in ipairs(state.items) do
     if type(item) == "string" then
       item = { word = item }
     end
