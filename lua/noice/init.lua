@@ -54,7 +54,10 @@ function M.enable()
   require("noice.util.hacks").enable()
   require("noice.ui").enable()
   require("noice.message.router").enable()
-  Health.checker()
+
+  if Config.options.health.checker then
+    Health.checker()
+  end
 end
 
 ---@param msg string

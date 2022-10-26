@@ -115,6 +115,9 @@ M.defaults = {
       ["{%S-}"] = "@parameter",
     },
   },
+  health = {
+    checker = true, -- Disable if you don't want health checks to run
+  },
   throttle = 1000 / 30, -- how frequently does Noice need to check for ui updates? This has no effect when in blocking mode.
   ---@type NoiceConfigViews
   views = {}, ---@see section on views
