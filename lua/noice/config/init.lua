@@ -81,6 +81,15 @@ M.defaults = {
       ---@type NoiceViewOptions
       opts = {}, -- merged with defaults from documentation
     },
+    signature = {
+      enabled = false,
+      auto_open = true, -- Automatically show signature help when typing a trigger character from the LSP
+      view = nil, -- when nil, use defaults from documentation
+      ---@type NoiceViewOptions
+      opts = {}, -- merged with defaults from documentation
+    },
+    -- defaults for hover and signature help
+    documentation = {
       view = "hover",
       ---@type NoiceViewOptions
       opts = {
@@ -88,11 +97,9 @@ M.defaults = {
         replace = true,
         render = "plain",
         format = { "{message}" },
-        buf_options = { iskeyword = '!-~,^*,^|,^",192-255', keywordprg = ":help" },
         win_options = { concealcursor = "n", conceallevel = 3 },
       },
     },
-    hl_patterns = {
   },
   markdown = {
     hover = {

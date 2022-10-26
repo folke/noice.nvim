@@ -30,6 +30,19 @@ function M.defaults()
     })
   end
 
+  for _, kind in ipairs({ "signature", "hover" }) do
+    table.insert(ret, {
+      view = Config.options.lsp[kind].view or Config.options.lsp.documentation.view,
+      filter = { event = "lsp", kind = kind },
+      opts = vim.tbl_deep_extend(
+        "force",
+        {},
+        Config.options.lsp.documentation.opts,
+        Config.options.lsp[kind].opts or {}
+      ),
+    })
+  end
+
   return vim.list_extend(ret, {
     {
       view = Config.options.cmdline.view,
@@ -104,11 +117,6 @@ function M.defaults()
         kind = { "stats", "debug" },
       },
       opts = { lang = "lua", replace = true, title = "Noice" },
-    },
-    {
-      view = Config.options.lsp.hover.view,
-      filter = { event = "lsp", kind = "hover" },
-      opts = Config.options.lsp.hover.opts,
     },
     {
       view = Config.options.lsp.progress.view,

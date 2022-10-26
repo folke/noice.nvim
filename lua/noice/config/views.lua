@@ -106,12 +106,21 @@ M.defaults = {
     view = "popup",
     relative = "cursor",
     enter = false,
-    size = "auto",
+    size = {
+      width = "auto",
+      height = "auto",
+      max_height = 20,
+      max_width = 120,
+    },
     border = {
       style = "none",
       padding = { 0, 2 },
     },
     position = { row = 1, col = 0 },
+    win_options = {
+      wrap = true,
+      linebreak = true,
+    },
   },
   cmdline = {
     backend = "popup",
