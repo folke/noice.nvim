@@ -118,6 +118,11 @@ M.defaults = {
   health = {
     checker = true, -- Disable if you don't want health checks to run
   },
+  smart_move = {
+    -- noice tries to move out of the way of existing floating windows.
+    -- add any filetypes here, that shouldn't trigger smart move.
+    excluded_filetypes = { "cmp_menu", "cmp_docs", "notify" },
+  },
   throttle = 1000 / 30, -- how frequently does Noice need to check for ui updates? This has no effect when in blocking mode.
   ---@type NoiceConfigViews
   views = {}, ---@see section on views

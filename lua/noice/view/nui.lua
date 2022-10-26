@@ -3,6 +3,7 @@ local require = require("noice.util.lazy")
 local View = require("noice.view")
 local Util = require("noice.util")
 local Scrollbar = require("noice.view.scrollbar")
+local Config = require("noice.config")
 
 ---@class NuiView: NoiceView
 ---@field _nui? NuiPopup|NuiSplit
@@ -36,6 +37,7 @@ function NuiView:update_options()
   self._opts = vim.tbl_deep_extend("force", {}, {
     buf_options = {
       buftype = "nofile",
+      filetype = "noice",
     },
     win_options = {
       foldenable = false,
@@ -71,17 +73,41 @@ function NuiView:smart_move()
   if not (self._opts.type == "popup" and self._opts.relative and self._opts.relative.type == "editor") then
     return
   end
+  if not (self._nui.winid and vim.api.nvim_win_is_valid(self._nui.winid)) then
+    return
+  end
+  if not (self._nui.border.winid and vim.api.nvim_win_is_valid(self._nui.border.winid)) then
+    return
+  end
+
+  local nui_win = self._nui.border._.type == "complex" and self._nui.border.winid or self._nui.winid
 
   local wins = vim.tbl_filter(function(win)
+    local ft = vim.bo[vim.api.nvim_win_get_buf(win)].filetype
     return win ~= self._nui.winid
+      and ft ~= "noice"
+      and not vim.tbl_contains(Config.options.smart_move.excluded_filetypes, ft)
       and not (self._nui.border and self._nui.border.winid == win)
       and vim.api.nvim_win_is_valid(win)
-      and vim.bo[vim.api.nvim_win_get_buf(win)].filetype ~= "noice"
       and vim.api.nvim_win_get_config(win).relative == "editor"
-      and Util.nui.overlap(self._nui.winid, win)
+      and Util.nui.overlap(nui_win, win) > 0.3
   end, vim.api.nvim_list_wins())
 
   if #wins > 0 then
+    -- local info = vim.tbl_map(function(win)
+    --   local buf = vim.api.nvim_win_get_buf(win)
+    --   return {
+    --     win = win,
+    --     buftype = vim.bo[buf].buftype,
+    --     ft = vim.bo[buf].filetype,
+    --     syntax = vim.bo[buf].syntax,
+    --     text = table.concat(vim.api.nvim_buf_get_lines(buf, 0, -1, false), "\n"),
+    --     name = vim.api.nvim_buf_get_name(buf),
+    --     -- config = vim.api.nvim_win_get_config(win),
+    --     area = Util.nui.overlap(nui_win, win),
+    --   }
+    -- end, wins)
+    -- dumpp(info)
     local layout = self:get_layout()
     layout.position.row = 2
     self._nui:update_layout(layout)

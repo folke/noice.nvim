@@ -44,16 +44,31 @@ function M.bounds(win)
 end
 
 function M.overlap(win1, win2)
-  local b1 = M.bounds(win1)
-  local b2 = M.bounds(win2)
+  local bb1 = M.bounds(win1)
+  local bb2 = M.bounds(win2)
 
-  if b2.xmin > b1.xmax or b1.xmin > b2.xmax then
-    return false
+  -- # determine the coordinates of the intersection rectangle
+  local x_left = math.max(bb1["xmin"], bb2["xmin"])
+  local y_top = math.max(bb1["ymin"], bb2["ymin"])
+  local x_right = math.min(bb1["xmax"], bb2["xmax"])
+  local y_bottom = math.min(bb1["ymax"], bb2["ymax"])
+
+  if x_right < x_left or y_bottom < y_top then
+    return 0.0
   end
-  if b2.ymin > b1.ymax or b1.ymin > b2.ymax then
-    return false
-  end
-  return true
+
+  -- # The intersection of two axis-aligned bounding boxes is always an
+  -- # axis-aligned bounding box
+  local intersection_area = math.max(x_right - x_left, 1) * math.max(y_bottom - y_top, 1)
+
+  -- # compute the area of both AABBs
+  local bb1_area = (bb1["xmax"] - bb1["xmin"]) * (bb1["ymax"] - bb1["ymin"])
+  local bb2_area = (bb2["xmax"] - bb2["xmin"]) * (bb2["ymax"] - bb2["ymin"])
+
+  -- # compute the intersection over union by taking the intersection
+  -- # area and dividing it by the sum of prediction + ground-truth
+  -- # areas - the interesection area
+  return intersection_area / (bb1_area + bb2_area - intersection_area)
 end
 
 ---@param opts? NuiPopupOptions
