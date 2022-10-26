@@ -156,7 +156,7 @@ end
 
 ---@param dim {width: number, height:number}
 ---@param _opts NoiceNuiOptions
----@return NoiceNuiOptions
+---@return _.NoiceNuiOptions
 function M.get_layout(dim, _opts)
   ---@type _.NoiceNuiOptions
   local opts = M.normalize(_opts)

@@ -149,7 +149,20 @@ function NuiView:hide()
 end
 
 function NuiView:get_layout()
-  return Util.nui.get_layout({ width = self:width(), height = self:height() }, self._opts)
+  local layout = Util.nui.get_layout({ width = self:width(), height = self:height() }, self._opts)
+  if self._opts.type == "popup" then
+    ---@cast layout _.NuiPopupOptions
+    if layout.size and layout.size.width < self:width() and self._opts.win_options and self._opts.win_options.wrap then
+      local height = 0
+      for _, m in ipairs(self._messages) do
+        for _, l in ipairs(m._lines) do
+          height = height + (math.ceil(l:width() / layout.size.width))
+        end
+      end
+      return Util.nui.get_layout({ width = self:width(), height = height }, self._opts)
+    end
+  end
+  return layout
 end
 
 function NuiView:tag()

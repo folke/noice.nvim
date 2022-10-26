@@ -19,8 +19,6 @@
 ---@field relative? NuiRelative
 ---@field enter? boolean
 ---@field timeout? number
----@field min_size? number
----@field max_size? number
 ---@field buf_options? vim.bo
 ---@field win_options? vim.wo
 ---@field close? {events?:string[], keys?:string[]}
@@ -30,7 +28,7 @@
 
 ---@class _.NuiPopupOptions: _.NuiBaseOptions
 ---@field position { row: number|string, col: number|string}
----@field size { row: number|string, col: number|string}
+---@field size { width: number|string, height: number|string, max_width:number, max_height:number}
 ---@field border? _.NuiBorder
 ---@field focusable boolean
 ---@field zindex? number
@@ -42,6 +40,8 @@
 
 ---@class _.NuiSplitOptions: _.NuiBaseOptions
 ---@field position "top"|"right"|"bottom"|"left"
+---@field min_size? number
+---@field max_size? number
 ---@field size number|string
 
 ---@class NuiSplitOptions: NuiBaseOptions,_.NuiSplitOptions
