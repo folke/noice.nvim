@@ -85,18 +85,19 @@ M.defaults = {
   },
   popup = {
     backend = "popup",
+    relative = "editor",
     close = {
       events = { "BufLeave" },
       keys = { "q" },
     },
     enter = true,
     border = {
-      style = "single",
+      style = "rounded",
     },
     position = "50%",
     size = {
-      width = "80%",
-      height = "60%",
+      width = "120",
+      height = "20",
     },
     win_options = {
       winhighlight = { Normal = "NoicePopup", FloatBorder = "NoicePopupBorder" },

@@ -47,12 +47,29 @@ M.defaults = {
     -- Icons for completion item kinds (see defaults at noice.config.icons.kinds)
     kind_icons = {}, -- set to `false` to disable icons
   },
-  ---@type NoiceRouteConfig
-  history = {
-    -- options for the message history that you get with `:Noice`
-    view = "split",
-    opts = { enter = true, format = "details" },
-    filter = { event = { "msg_show", "notify" }, ["not"] = { kind = { "search_count", "echo" } } },
+  ---@type table<string, NoiceCommand>
+  commands = {
+    history = {
+      -- options for the message history that you get with `:Noice`
+      view = "split",
+      opts = { enter = true, format = "details" },
+      filter = { event = { "msg_show", "notify" }, ["not"] = { kind = { "search_count", "echo" } } },
+    },
+    -- :Noice last
+    last = {
+      view = "popup",
+      opts = { enter = true, format = "details" },
+      filter = { event = { "msg_show", "notify" }, ["not"] = { kind = { "search_count", "echo" } } },
+      filter_opts = { count = 1 },
+    },
+    -- :Noice errors
+    errors = {
+      -- options for the message history that you get with `:Noice`
+      view = "popup",
+      opts = { enter = true, format = "details" },
+      filter = { error = true },
+      filter_opts = { reverse = true },
+    },
   },
   notify = {
     -- Noice can be used as `vim.notify` so you can route any notification like other messages
@@ -185,6 +202,12 @@ function M.fix_legacy(opts)
   if opts.lsp_progress then
     opts.lsp = opts.lsp or {}
     opts.lsp.progress = opts.lsp_progress
+    opts.lsp_progress = nil
+  end
+  if opts.history then
+    opts.commands = opts.commands or {}
+    opts.commands.history = opts.history
+    opts.history = nil
   end
 end
 

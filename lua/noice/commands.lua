@@ -6,10 +6,25 @@ local Config = require("noice.config")
 local Util = require("noice.util")
 local Message = require("noice.message")
 
+---@class NoiceCommand: NoiceRouteConfig
+---@field filter_opts NoiceMessageOpts
+
 local M = {}
 
----@type NoiceView?
-M._history_view = nil
+---@param command NoiceCommand
+function M.command(command)
+  return function()
+    local view = View.get_view(command.view, command.opts)
+    view:display(Manager.get(
+      command.filter,
+      vim.tbl_deep_extend("force", {
+        history = true,
+        sort = true,
+      }, command.filter_opts or {})
+    ))
+    view:show()
+  end
+end
 
 function M.setup()
   local commands = {
@@ -41,17 +56,11 @@ function M.setup()
       message:set(vim.inspect(Config.options))
       Manager.add(message)
     end,
-    history = function()
-      if not M._history_view then
-        M._history_view = View.get_view(Config.options.history.view, Config.options.history.opts)
-      end
-      M._history_view:display(Manager.get(Config.options.history.filter, {
-        history = true,
-        sort = true,
-      }))
-      M._history_view:show()
-    end,
   }
+
+  for name, command in pairs(Config.options.commands) do
+    commands[name] = M.command(command)
+  end
 
   vim.api.nvim_create_user_command("Noice", function(args)
     local cmd = vim.trim(args.args or "")
