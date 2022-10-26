@@ -2,6 +2,7 @@ local require = require("noice.util.lazy")
 
 local Util = require("noice.util")
 local Config = require("noice.config")
+local Lsp = require("noice.source.lsp")
 
 local M = {}
 
@@ -117,10 +118,40 @@ function M.check(opts)
   end
 
   if Config.is_running() then
-    if Config.options.notify.enabled and vim.notify ~= require("noice.source.notify").notify then
-      log.error("`vim.notify` has been overwritten by another plugin?")
+    if Config.options.notify.enabled then
+      if vim.notify ~= require("noice.source.notify").notify then
+        log.error("`vim.notify` has been overwritten by another plugin?")
+      else
+        log.ok("`vim.notify` is set to **Noice**")
+      end
     else
-      log.ok("`vim.notify` is set to **Noice**")
+      if opts.checkhealth then
+        log.warn("Noice `vim.notify` is disabled")
+      end
+    end
+
+    if Config.options.lsp.hover.enabled then
+      if vim.lsp.handlers["textDocument/hover"] ~= Lsp.hover then
+        log.error([[`vim.lsp.handlers["textDocument/hover"]` has been overwritten by another plugin?]])
+      else
+        log.ok([[`vim.lsp.handlers["textDocument/hover"]` is handled by **Noice**]])
+      end
+    else
+      if opts.checkhealth then
+        log.warn([[`vim.lsp.handlers["textDocument/hover"]` is not handled by **Noice**]])
+      end
+    end
+
+    if Config.options.lsp.signature.enabled then
+      if vim.lsp.handlers["textDocument/signatureHelp"] ~= Lsp.signature then
+        log.error([[`vim.lsp.handlers["textDocument/signatureHelp"]` has been overwritten by another plugin?]])
+      else
+        log.ok([[`vim.lsp.handlers["textDocument/signatureHelp"]` is handled by **Noice**]])
+      end
+    else
+      if opts.checkhealth then
+        log.warn([[`vim.lsp.handlers["textDocument/signatureHelp"]` is not handled by **Noice**]])
+      end
     end
   end
 

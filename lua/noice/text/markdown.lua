@@ -51,7 +51,7 @@ function M.keys(buf)
       local pos = vim.api.nvim_win_get_cursor(0)
       local col = pos[2] + 1
 
-      for pattern, handler in pairs(require("noice.config").options.markdown.hover) do
+      for pattern, handler in pairs(Config.options.markdown.hover) do
         local from = 1
         local to, url
         while from do

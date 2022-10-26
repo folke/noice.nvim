@@ -32,16 +32,20 @@ function M.get(kind)
 end
 
 function M.setup()
-  -- vim.api.nvim_win_get_option(win,
+  M.hover = Util.protect(M.hover)
   if Config.options.lsp.hover.enabled then
-    vim.lsp.handlers["textDocument/hover"] = Util.protect(M.hover)
+    vim.lsp.handlers["textDocument/hover"] = M.hover
   end
+
+  M.signature = Util.protect(M.signature)
   if Config.options.lsp.signature.enabled then
-    vim.lsp.handlers["textDocument/signatureHelp"] = Util.protect(M.signature)
+    vim.lsp.handlers["textDocument/signatureHelp"] = M.signature
   end
+
   if Config.options.lsp.signature.auto_open then
     require("noice.source.lsp.signature").setup()
   end
+
   if Config.options.lsp.progress.enabled then
     require("noice.source.lsp.progress").setup()
   end
