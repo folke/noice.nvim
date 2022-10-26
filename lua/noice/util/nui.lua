@@ -138,22 +138,6 @@ function M.normalize_padding(opts)
   }, opts.padding or {})
 end
 
----@param opts? _.NuiBorder
----@return _.NuiBorderPadding
-function M.get_border_size(opts)
-  opts = opts or {}
-
-  local border_size = opts.style and opts.style ~= "none" and 1 or 0
-  local padding = M.normalize_padding(opts)
-
-  return {
-    top = border_size + padding.top,
-    bottom = border_size + padding.bottom,
-    right = border_size + padding.right,
-    left = border_size + padding.left,
-  }
-end
-
 function M.win_buf_height(win)
   local buf = vim.api.nvim_win_get_buf(win)
 
@@ -168,7 +152,6 @@ function M.win_buf_height(win)
   for _, l in ipairs(lines) do
     height = height + math.max(1, (math.ceil(vim.fn.strwidth(l) / width)))
   end
-  assert(height >= vim.api.nvim_buf_line_count(buf))
   return height
 end
 

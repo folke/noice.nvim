@@ -23,7 +23,7 @@ local defaults = {
     thumb = "NoiceScrollbarThumb",
   },
   ---@type _.NuiBorderPadding
-  border_size = {
+  padding = {
     top = 0,
     right = 0,
     bottom = 0,
@@ -89,10 +89,10 @@ function Scrollbar:update()
   local pos = vim.api.nvim_win_get_position(self.winnr)
 
   local dim = {
-    row = pos[1] - self.opts.border_size.top,
-    col = pos[2] - self.opts.border_size.left,
-    width = vim.api.nvim_win_get_width(self.winnr) + self.opts.border_size.left + self.opts.border_size.right,
-    height = vim.api.nvim_win_get_height(self.winnr) + self.opts.border_size.top + self.opts.border_size.bottom,
+    row = pos[1] - self.opts.padding.top,
+    col = pos[2] - self.opts.padding.left,
+    width = vim.api.nvim_win_get_width(self.winnr) + self.opts.padding.left + self.opts.padding.right,
+    height = vim.api.nvim_win_get_height(self.winnr) + self.opts.padding.top + self.opts.padding.bottom,
   }
 
   local buf_height = Util.nui.win_buf_height(self.winnr)

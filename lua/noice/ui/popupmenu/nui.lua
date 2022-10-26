@@ -130,6 +130,9 @@ function M.create(state)
   -- otherwise the selected CursorLine does not extend to the edges
   if opts.border and opts.border.padding then
     opts.border.padding = vim.tbl_deep_extend("force", {}, padding, { left = 0, right = 0 })
+    if opts.size and type(opts.size.width) == "number" then
+      opts.size.width = opts.size.width + padding.left + padding.right
+    end
   end
 
   for _, item in ipairs(state.items) do
@@ -178,7 +181,7 @@ function M.create(state)
 
   M.scroll = Scrollbar({
     winnr = M.menu.winid,
-    border_size = Util.nui.get_border_size(opts.border),
+    border_size = Util.nui.normalize_padding(opts.border),
   })
   M.scroll:mount()
 

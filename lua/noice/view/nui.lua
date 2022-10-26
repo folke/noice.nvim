@@ -114,7 +114,7 @@ function NuiView:create()
   self:update_layout()
   self._scroll = Scrollbar({
     winnr = self._nui.winid,
-    border_size = Util.nui.get_border_size(self._opts.border),
+    border_size = Util.nui.normalize_padding(self._opts.border),
   })
   self._scroll:mount()
   -- NOTE: this is needed, to make sure the border is rendered properly during blocking events
