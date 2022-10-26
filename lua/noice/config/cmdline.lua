@@ -20,7 +20,7 @@ function M.setup()
       local hl_group_border = "CmdlinePopupBorder" .. kind_cc
       Highlights.add(hl_group_border, "DiagnosticSignInfo")
 
-      formats[name] = vim.tbl_deep_extend("force", { opts = vim.deepcopy(Config.options.cmdline.opts) }, {
+      formats[name] = vim.tbl_deep_extend("force", {
         conceal = format.conceal ~= false,
         kind = kind,
         icon_hl_group = "Noice" .. hl_group_icon,
@@ -39,7 +39,7 @@ function M.setup()
             },
           },
         },
-      }, format)
+      }, { opts = vim.deepcopy(Config.options.cmdline.opts) }, format)
     end
   end
 end
