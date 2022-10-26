@@ -8,7 +8,7 @@ local NuiLine = require("nui.line")
 local Scrollbar = require("noice.view.scrollbar")
 
 local M = {}
----@type NuiMenu
+---@type NuiMenu|NuiTree
 M.menu = nil
 
 ---@type NoiceScrollbar
@@ -68,10 +68,10 @@ end
 ---@param prefix? string
 function M.format(state, prefix) end
 
----@param state Popupmenu
-function M.create(state)
-  M.on_hide()
+function M.update_layout() end
 
+---@param state Popupmenu
+function M.opts(state)
   local is_cmdline = state.grid == -1
 
   local _opts = vim.deepcopy(Config.options.views.popupmenu or {})
@@ -109,6 +109,23 @@ function M.create(state)
     end
   end
 
+  -- manage left/right padding on the line
+  -- otherwise the selected CursorLine does not extend to the edges
+  if opts.border and opts.border.padding then
+    opts.border.padding = vim.tbl_deep_extend("force", {}, padding, { left = 0, right = 0 })
+    if opts.size and type(opts.size.width) == "number" then
+      opts.size.width = opts.size.width + padding.left + padding.right
+    end
+  end
+
+  return opts, padding
+end
+
+---@param state Popupmenu
+function M.show(state)
+  local is_cmdline = state.grid == -1
+  local opts, padding = M.opts(state)
+
   ---@type string?
   local prefix = nil
 
@@ -126,16 +143,7 @@ function M.create(state)
     end
   end
 
-  -- manage left/right padding on the line
-  -- otherwise the selected CursorLine does not extend to the edges
-  if opts.border and opts.border.padding then
-    opts.border.padding = vim.tbl_deep_extend("force", {}, padding, { left = 0, right = 0 })
-    if opts.size and type(opts.size.width) == "number" then
-      opts.size.width = opts.size.width + padding.left + padding.right
-    end
-  end
-
-  for _, item in ipairs(state.items) do
+  for i, item in ipairs(state.items) do
     if type(item) == "string" then
       item = { word = item }
     end
@@ -168,22 +176,22 @@ function M.create(state)
     }, opts)
   )
 
-  M.menu = Menu(opts, {
-    lines = vim.tbl_map(function(item)
-      return Menu.item(item)
-    end, state.items),
-  })
-  M.menu:mount()
-  Util.tag(M.menu.bufnr, "popupmenu")
-  if M.menu.border then
-    Util.tag(M.menu.border.bufnr, "popupmenu.border")
+  ---@type NuiTreeNode[]
+  local items = vim.tbl_map(function(item)
+    return Menu.item(item)
+  end, state.items)
+  for i, item in ipairs(items) do
+    item._index = i
   end
 
-  M.scroll = Scrollbar({
-    winnr = M.menu.winid,
-    border_size = Util.nui.normalize_padding(opts.border),
-  })
-  M.scroll:mount()
+  if M.menu then
+    M.menu._.items = items
+    M.menu._tree:set_nodes(items)
+    M.menu._tree:render()
+    M.menu:update_layout(opts)
+  else
+    M.create(items, opts)
+  end
 
   -- redraw is needed when in blocking mode
   if Util.is_blocking() then
@@ -193,9 +201,28 @@ function M.create(state)
   M.on_select(state)
 end
 
+---@param opts _.NuiPopupOptions
+---@param items NuiTreeNode[]
+function M.create(items, opts)
+  M.menu = Menu(opts, {
+    lines = items,
+  })
+  M.menu:mount()
+  Util.tag(M.menu.bufnr, "popupmenu")
+  if M.menu.border then
+    Util.tag(M.menu.border.bufnr, "popupmenu.border")
+  end
+
+  M.scroll = Scrollbar({
+    winnr = M.menu.winid,
+    padding = Util.nui.normalize_padding(opts.border),
+  })
+  M.scroll:mount()
+end
+
 ---@param state Popupmenu
 function M.on_show(state)
-  M.create(state)
+  M.show(state)
 end
 
 ---@param state Popupmenu
