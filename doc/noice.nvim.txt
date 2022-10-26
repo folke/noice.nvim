@@ -79,6 +79,17 @@ Install the plugin with your preferred package manager:
 <
 
 
+>
+    " vim-plug
+    call plugbegin()
+      Plug 'folke/noice.nvim'
+      Plug 'MunifTanjim/nui.nvim'
+    call plugend()
+    
+    lua require("noice").setup()
+<
+
+
 CONFIGURATION                                       *noice.nvim-configuration*
 
 **noice.nvim** comes with the following defaults:
