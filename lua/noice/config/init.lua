@@ -77,6 +77,10 @@ M.defaults = {
     },
     hover = {
       enabled = false,
+      view = nil, -- when nil, use defaults from documentation
+      ---@type NoiceViewOptions
+      opts = {}, -- merged with defaults from documentation
+    },
       view = "hover",
       ---@type NoiceViewOptions
       opts = {
@@ -89,6 +93,13 @@ M.defaults = {
       },
     },
     hl_patterns = {
+  },
+  markdown = {
+    hover = {
+      ["|(%S-)|"] = vim.cmd.help, -- vim help links
+      ["%[.-%]%((%S-)%)"] = require("noice.util").open, -- markdown links
+    },
+    highlights = {
       ["|%S-|"] = "@text.reference",
       ["@%S+"] = "@parameter",
       ["^%s*(Parameters:)"] = "@text.title",
