@@ -154,6 +154,24 @@ function M.get_border_size(opts)
   }
 end
 
+function M.win_buf_height(win)
+  local buf = vim.api.nvim_win_get_buf(win)
+
+  if not vim.wo[win].wrap then
+    return vim.api.nvim_buf_line_count(buf)
+  end
+
+  local width = vim.api.nvim_win_get_width(win)
+
+  local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
+  local height = 0
+  for _, l in ipairs(lines) do
+    height = height + math.max(1, (math.ceil(vim.fn.strwidth(l) / width)))
+  end
+  assert(height >= vim.api.nvim_buf_line_count(buf))
+  return height
+end
+
 ---@param dim {width: number, height:number}
 ---@param _opts NoiceNuiOptions
 ---@return _.NoiceNuiOptions

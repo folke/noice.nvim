@@ -156,7 +156,7 @@ function NuiView:get_layout()
       local height = 0
       for _, m in ipairs(self._messages) do
         for _, l in ipairs(m._lines) do
-          height = height + (math.ceil(l:width() / layout.size.width))
+          height = height + math.max(1, (math.ceil(l:width() / layout.size.width)))
         end
       end
       return Util.nui.get_layout({ width = self:width(), height = height }, self._opts)
