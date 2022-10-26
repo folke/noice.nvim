@@ -51,6 +51,17 @@ function M.setup()
   end
 end
 
+function M.scroll(delta)
+  for _, kind in ipairs({ M.kinds.hover, M.kinds.signature }) do
+    local message = M.get(kind)
+    local win = message:win()
+    if win then
+      Util.nui.scroll(win, delta)
+      return
+    end
+  end
+end
+
 ---@param message NoiceMessage
 function M.augroup(message)
   return "noice_lsp_" .. message.id

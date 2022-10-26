@@ -235,4 +235,20 @@ function M.anchor(width, height)
   return anchor
 end
 
+function M.scroll(win, delta)
+  local info = vim.fn.getwininfo(win)[1] or {}
+  local top = info.topline or 1
+  local buf = vim.api.nvim_win_get_buf(win)
+  top = top + delta
+  top = math.max(top, 1)
+  top = math.min(top, M.win_buf_height(win) - info.height + 1)
+
+  vim.defer_fn(function()
+    vim.api.nvim_buf_call(buf, function()
+      vim.api.nvim_command("normal! " .. top .. "zt")
+      vim.cmd([[do WinScrolled]])
+    end)
+  end, 0)
+end
+
 return M

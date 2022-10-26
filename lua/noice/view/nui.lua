@@ -39,6 +39,8 @@ function NuiView:update_options()
     },
     win_options = {
       foldenable = false,
+      scrolloff = 0,
+      sidescrolloff = 0,
     },
   }, self._opts, self:get_layout())
 
