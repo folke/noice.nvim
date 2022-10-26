@@ -104,12 +104,14 @@ function Scrollbar:update()
     self:show()
   end
 
+  local zindex = vim.api.nvim_win_get_config(self.winnr).zindex or 50
+
   Util.win_apply_config(self.bar.winnr, {
     height = dim.height,
     width = 1,
     col = dim.col + dim.width - 1,
     row = dim.row,
-    zindex = vim.api.nvim_win_get_config(self.winnr).zindex + 10,
+    zindex = zindex + 10,
   })
 
   local thumb_height = math.floor(dim.height * dim.height / buf_height + 0.5)
@@ -124,7 +126,7 @@ function Scrollbar:update()
     height = thumb_height,
     row = dim.row + thumb_offset,
     col = dim.col + dim.width - 1, -- info.col was already added scrollbar offset.
-    zindex = vim.api.nvim_win_get_config(self.winnr).zindex + 20,
+    zindex = zindex + 20,
   })
 end
 
