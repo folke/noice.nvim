@@ -26,10 +26,13 @@
 ---@class NuiBaseOptions: _.NuiBaseOptions
 ---@field relative "'cursor'"|"'editor'"|"'win'"|NuiRelative
 
+---@alias NuiAnchor "NW"|"NE"|"SW"|"SE"
+
 ---@class _.NuiPopupOptions: _.NuiBaseOptions
 ---@field position { row: number|string, col: number|string}
 ---@field size { width: number|string, height: number|string, max_width:number, max_height:number}
 ---@field border? _.NuiBorder
+---@field anchor? NuiAnchor|"auto"
 ---@field focusable boolean
 ---@field zindex? number
 

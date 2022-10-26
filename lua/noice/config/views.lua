@@ -106,6 +106,7 @@ M.defaults = {
     view = "popup",
     relative = "cursor",
     enter = false,
+    anchor = "auto",
     size = {
       width = "auto",
       height = "auto",

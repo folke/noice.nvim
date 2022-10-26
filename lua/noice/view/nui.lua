@@ -43,6 +43,25 @@ function NuiView:update_options()
   }, self._opts, self:get_layout())
 
   self._opts = Util.nui.normalize(self._opts)
+  if self._opts.anchor == "auto" then
+    if self._opts.type == "popup" and self._opts.size then
+      local width = self._opts.size.width
+      local height = self._opts.size.height
+      if type(width) == "number" and type(height) == "number" then
+        local col = self._opts.position and self._opts.position.col
+        local row = self._opts.position and self._opts.position.row
+        self._opts.anchor = Util.nui.anchor(width, height)
+        if self._opts.anchor:find("S") and row then
+          self._opts.position.row = -row + 1
+        end
+        if self._opts.anchor:find("E") and col then
+          self._opts.position.col = -col
+        end
+      end
+    else
+      self._opts.anchor = "NW"
+    end
+  end
 end
 
 -- Check if other floating windows are overlapping and move out of the way
@@ -90,7 +109,7 @@ function NuiView:create()
 
   self._nui:mount()
 
-  self._nui:update_layout(self:get_layout())
+  self:update_layout()
   self._scroll = Scrollbar({
     winnr = self._nui.winid,
     border_size = Util.nui.get_border_size(self._opts.border),
@@ -122,7 +141,7 @@ function NuiView:reset(old, new)
       self._nui = nil
       self._visible = false
     elseif layout then
-      self._nui:update_layout(self:get_layout())
+      self:update_layout()
     end
   end
 end
@@ -166,7 +185,7 @@ function NuiView:get_layout()
           height = height + math.max(1, (math.ceil(l:width() / layout.size.width)))
         end
       end
-      return Util.nui.get_layout({ width = self:width(), height = height }, self._opts)
+      layout = Util.nui.get_layout({ width = self:width(), height = height }, self._opts)
     end
   end
   return layout
@@ -194,6 +213,10 @@ function NuiView:fix_border()
   end
 end
 
+function NuiView:update_layout()
+  self._nui:update_layout(self:get_layout())
+end
+
 function NuiView:show()
   if self._loading then
     return
@@ -209,12 +232,11 @@ function NuiView:show()
 
   self._nui:show()
   self:set_win_options(self._nui.winid)
+  self:tag()
   if not self._visible then
-    self._nui:update_layout(self:get_layout())
+    self:update_layout()
     self:smart_move()
   end
-
-  self:tag()
 
   vim.bo[self._nui.bufnr].modifiable = true
   self:render(self._nui.bufnr)

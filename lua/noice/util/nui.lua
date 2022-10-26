@@ -216,4 +216,23 @@ function M.get_layout(dim, _opts)
   return { size = size, position = position, relative = opts.relative }
 end
 
+function M.anchor(width, height)
+  local anchor = ""
+  local lines_above = vim.fn.screenrow() - 1
+  local lines_below = vim.fn.winheight(0) - lines_above
+
+  if height < lines_below then
+    anchor = anchor .. "N"
+  else
+    anchor = anchor .. "S"
+  end
+
+  if vim.go.columns - vim.fn.screencol() > width then
+    anchor = anchor .. "W"
+  else
+    anchor = anchor .. "E"
+  end
+  return anchor
+end
+
 return M
