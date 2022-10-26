@@ -47,10 +47,7 @@ end
 
 -- Check if other floating windows are overlapping and move out of the way
 function NuiView:smart_move()
-  if
-    not (self._opts.type == "popup" and self._opts.relative and self._opts.relative.type == "editor")
-    or self._opts.view == "cmdline"
-  then
+  if not (self._opts.type == "popup" and self._opts.relative and self._opts.relative.type == "editor") then
     return
   end
 
@@ -58,6 +55,7 @@ function NuiView:smart_move()
     return win ~= self._nui.winid
       and not (self._nui.border and self._nui.border.winid == win)
       and vim.api.nvim_win_is_valid(win)
+      and vim.bo[vim.api.nvim_win_get_buf(win)].filetype ~= "noice"
       and vim.api.nvim_win_get_config(win).relative == "editor"
       and Util.nui.overlap(self._nui.winid, win)
   end, vim.api.nvim_list_wins())
