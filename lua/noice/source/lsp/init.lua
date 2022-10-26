@@ -56,6 +56,7 @@ function M.try_enter(message)
       local win = vim.fn.bufwinid(buf)
       if win ~= -1 then
         vim.api.nvim_set_current_win(win)
+        vim.wo[win].conceallevel = 0
         return true
       end
     end
