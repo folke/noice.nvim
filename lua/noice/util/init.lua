@@ -21,6 +21,27 @@ function M.once(fn)
   end
 end
 
+function M.open(uri)
+  local cmd
+  if vim.fn.has("win32") == 1 then
+    cmd = { "cmd.exe", "/c", "start", '""', vim.fn.shellescape(uri) }
+  elseif vim.fn.has("macunix") == 1 then
+    cmd = { "open", uri }
+  else
+    cmd = { "xdg-open", uri }
+  end
+
+  local ret = vim.fn.system(cmd)
+  if vim.v.shell_error ~= 0 then
+    local msg = {
+      "Failed to open uri",
+      ret,
+      vim.inspect(cmd),
+    }
+    vim.notify(table.concat(msg, "\n"), vim.log.levels.ERROR)
+  end
+end
+
 function M.tag(buf, tag)
   local ft = vim.api.nvim_buf_get_option(buf, "filetype")
 

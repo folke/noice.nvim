@@ -5,6 +5,7 @@ local ConfigViews = require("noice.config.views")
 local Util = require("noice.util")
 local Object = require("nui.object")
 local Format = require("noice.text.format")
+local Markdown = require("noice.text.markdown")
 
 ---@class NoiceViewBaseOptions
 ---@field buf_options? table<string,any>
@@ -206,6 +207,10 @@ function View:render(buf, opts)
 
   if self._opts.buf_options then
     require("nui.utils")._.set_buf_options(buf, self._opts.buf_options)
+  end
+
+  if self._opts.lang == "markdown" then
+    Markdown.keys(buf)
   end
 
   if self._opts.lang and not vim.b[buf].ts_highlight then

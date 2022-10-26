@@ -40,4 +40,44 @@ function M.format(message, text)
   end
 end
 
+function M.keys(buf)
+  if vim.b[buf].markdown_keys then
+    return
+  end
+
+  local function map(lhs)
+    vim.keymap.set("n", lhs, function()
+      local line = vim.api.nvim_get_current_line()
+      local pos = vim.api.nvim_win_get_cursor(0)
+      local col = pos[2] + 1
+
+      for pattern, handler in pairs(require("noice.config").options.markdown.hover) do
+        local from = 1
+        local to, url
+        while from do
+          from, to, url = line:find(pattern, from)
+          if from and col >= from and col <= to then
+            return handler(url)
+          end
+        end
+      end
+      vim.api.nvim_feedkeys(lhs, "n", false)
+    end, { buffer = buf, silent = true })
+  end
+
+  map("gx")
+  map("K")
+
+  vim.b[buf].markdown_keys = true
+end
+
+---@param message NoiceMessage
+function M.horizontal_line(message)
+  message:append(NoiceText("", {
+    virt_text_win_col = 0,
+    virt_text = { { string.rep("─", vim.go.columns), "@punctuation.special.markdown" } },
+    priority = 100,
+  }))
+end
+
 return M
