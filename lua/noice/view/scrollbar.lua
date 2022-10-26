@@ -56,27 +56,36 @@ function Scrollbar:unmount()
 end
 
 function Scrollbar:show()
-  self.visible = true
-  self.bar = self:_open_win({ normal = self.opts.hl_group.bar })
-  self.thumb = self:_open_win({ normal = self.opts.hl_group.thumb })
+  if not self.visible then
+    self.visible = true
+    self.bar = self:_open_win({ normal = self.opts.hl_group.bar })
+    self.thumb = self:_open_win({ normal = self.opts.hl_group.thumb })
+  end
+  self:update()
 end
 
 function Scrollbar:hide()
-  self.visible = false
-  if self.bar then
-    pcall(vim.api.nvim_buf_delete, self.bar.bufnr, { force = true })
-    pcall(vim.api.nvim_win_close, self.bar.winnr, true)
-    self.bar = nil
-  end
+  if self.visible then
+    self.visible = false
+    if self.bar then
+      pcall(vim.api.nvim_buf_delete, self.bar.bufnr, { force = true })
+      pcall(vim.api.nvim_win_close, self.bar.winnr, true)
+      self.bar = nil
+    end
 
-  if self.thumb then
-    pcall(vim.api.nvim_buf_delete, self.thumb.bufnr, { force = true })
-    pcall(vim.api.nvim_win_close, self.thumb.winnr, true)
-    self.thumb = nil
+    if self.thumb then
+      pcall(vim.api.nvim_buf_delete, self.thumb.bufnr, { force = true })
+      pcall(vim.api.nvim_win_close, self.thumb.winnr, true)
+      self.thumb = nil
+    end
   end
 end
 
 function Scrollbar:update()
+  if not vim.api.nvim_win_is_valid(self.winnr) then
+    return self:hide()
+  end
+
   local pos = vim.api.nvim_win_get_position(self.winnr)
 
   local dim = {
