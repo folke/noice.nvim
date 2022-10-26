@@ -39,7 +39,7 @@ M.trigger_kind = {
 
 -- TODO: add scroll up/down
 -- TODO: horz line for Hover should overlap end of code block
--- TODO: markdown links
+-- TODO: positioning of the signature help window
 
 function M.setup()
   vim.api.nvim_create_autocmd("LspAttach", {
