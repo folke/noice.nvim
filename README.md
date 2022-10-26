@@ -207,8 +207,6 @@ Check the [wiki](https://github.com/folke/noice.nvim/wiki/Configuration-Recipes)
   status = {}, --- @see section on statusline components
   ---@type NoiceFormatOptions
   format = {}, --- @see section on formatting
-  debug = false,
-  log = vim.fn.stdpath("state") .. "/noice.log",
 }
 ```
 
