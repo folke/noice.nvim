@@ -215,17 +215,13 @@ function View:render(buf, opts)
   end
 
   vim.api.nvim_buf_clear_namespace(buf, Config.ns, linenr - 1, -1)
+  vim.b[buf].messages = {}
 
   if not opts.highlight then
     vim.api.nvim_buf_set_lines(buf, linenr - 1, -1, false, {})
   end
 
-  local buf_messages = vim.b[buf].messages or {}
-
   for _, m in ipairs(opts.messages or self._messages) do
-    if not vim.tbl_contains(buf_messages, m.id) then
-      table.insert(buf_messages, m.id)
-    end
     if opts.highlight then
       m:highlight(buf, Config.ns, linenr)
     else
@@ -233,7 +229,6 @@ function View:render(buf, opts)
     end
     linenr = linenr + m:height()
   end
-  vim.b[buf].messages = buf_messages
 end
 
 return View

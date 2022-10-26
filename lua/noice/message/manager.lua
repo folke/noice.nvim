@@ -44,6 +44,7 @@ function M.remove(message)
     M._messages[message.id] = nil
     next_tick()
   end
+  message:on_remove()
 end
 
 ---@param filter? NoiceFilter
