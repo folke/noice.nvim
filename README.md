@@ -49,6 +49,16 @@ use({
 })
 ```
 
+```viml
+" vim-plug
+call plug#begin()
+  Plug 'folke/noice.nvim'
+  Plug 'MunifTanjim/nui.nvim'
+call plug#end()
+
+lua require("noice").setup()
+```
+
 ## ⚙️ Configuration
 
 **noice.nvim** comes with the following defaults:
