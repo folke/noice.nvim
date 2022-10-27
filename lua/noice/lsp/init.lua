@@ -2,10 +2,10 @@ local require = require("noice.util.lazy")
 
 local Manager = require("noice.message.manager")
 local Config = require("noice.config")
-local Format = require("noice.source.lsp.format")
+local Format = require("noice.lsp.format")
 local Util = require("noice.util")
 local Message = require("noice.message")
-local Signature = require("noice.source.lsp.signature")
+local Signature = require("noice.lsp.signature")
 
 local M = {}
 
@@ -48,11 +48,11 @@ function M.setup()
   end
 
   if Config.options.lsp.signature.auto_open.enabled then
-    require("noice.source.lsp.signature").setup(group)
+    require("noice.lsp.signature").setup(group)
   end
 
   if Config.options.lsp.progress.enabled then
-    require("noice.source.lsp.progress").setup()
+    require("noice.lsp.progress").setup()
   end
 
   vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI", "InsertCharPre" }, {

@@ -1,7 +1,7 @@
 local require = require("noice.util.lazy")
 
 local NoiceText = require("noice.text")
-local Format = require("noice.source.lsp.format")
+local Format = require("noice.lsp.format")
 local Markdown = require("noice.text.markdown")
 local Config = require("noice.config")
 local Util = require("noice.util")
@@ -88,7 +88,7 @@ function M.check(buf, chars, encoding)
     if vim.tbl_contains(chars, M.get_char(buf)) then
       local params = vim.lsp.util.make_position_params(0, encoding)
       vim.lsp.buf_request(buf, "textDocument/signatureHelp", params, function(err, result, ctx)
-        require("noice.source.lsp").signature(err, result, ctx, {
+        require("noice.lsp").signature(err, result, ctx, {
           trigger = true,
           stay = function()
             return vim.tbl_contains(chars, M.get_char(buf))

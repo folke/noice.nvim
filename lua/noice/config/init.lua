@@ -215,7 +215,7 @@ function M.setup(options)
     end,
   })
 
-  require("noice.source.lsp").setup()
+  require("noice.lsp").setup()
   M._running = true
 end
 

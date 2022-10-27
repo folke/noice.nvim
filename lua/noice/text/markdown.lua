@@ -48,9 +48,6 @@ function M.format(message, text)
   local lines = vim.split(vim.trim(text), "\n")
   lines = M.trim(lines)
 
-  text = table.concat(lines, "\n")
-  vim.notify(text)
-
   for l, line in ipairs(lines) do
     local prev = lines[l - 1]
     local next = lines[l + 1]
