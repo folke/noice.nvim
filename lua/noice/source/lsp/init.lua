@@ -77,7 +77,8 @@ function M.close(message)
 end
 
 ---@param message NoiceMessage
-function M.auto_close(message)
+---@param keep? fun():boolean
+function M.auto_close(message, keep)
   message.opts.timeout = 100
   message.opts.keep = function()
     return true
@@ -90,6 +91,9 @@ function M.auto_close(message)
   vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI", "InsertCharPre" }, {
     group = group,
     callback = function()
+      if keep and keep() then
+        return
+      end
       if not message:on_buf(vim.api.nvim_get_current_buf()) then
         M.close(message)
       end
@@ -123,7 +127,7 @@ function M.signature(_, result, ctx, config)
     result.ft = vim.bo[ctx.bufnr].filetype
     result.message = message
     Signature.new(result):format()
-    M.auto_close(message)
+    M.auto_close(message, config.keep)
     Manager.add(message)
   end
 end

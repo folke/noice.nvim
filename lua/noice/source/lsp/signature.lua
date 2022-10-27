@@ -41,18 +41,28 @@ M.trigger_kind = {
 -- TODO: horz line for Hover should overlap end of code block
 -- TODO: positioning of the signature help window
 
+function M.get_char(buf)
+  local win = vim.fn.bufwinid(buf)
+  local cursor = vim.api.nvim_win_get_cursor(win == -1 and 0 or win)
+  local row = cursor[1] - 1
+  local col = cursor[2]
+  local _, lines = pcall(vim.api.nvim_buf_get_text, buf, row, 0, row, col, {})
+  local line = vim.trim(lines and lines[1] or "")
+  return line:sub(-1, -1)
+end
+
 function M.setup()
   vim.api.nvim_create_autocmd("LspAttach", {
     callback = function(args)
-      local bufnr = args.buf
+      local buf = args.buf
       local client = vim.lsp.get_client_by_id(args.data.client_id)
       if client.server_capabilities.signatureHelpProvider then
         local chars = client.server_capabilities.signatureHelpProvider.triggerCharacters
         if #chars > 0 then
           vim.api.nvim_create_autocmd({ "TextChangedI", "TextChangedP", "InsertEnter" }, {
-            buffer = bufnr,
+            buffer = buf,
             callback = function()
-              if vim.api.nvim_get_current_buf() ~= bufnr then
+              if vim.api.nvim_get_current_buf() ~= buf then
                 return
               end
               local message = Lsp.get(Lsp.kinds.signature)
@@ -60,19 +70,18 @@ function M.setup()
                 -- no need to fetch signature when signature is already shown
                 return
               end
-              local cursor = vim.api.nvim_win_get_cursor(0)
-              local row = cursor[1] - 1
-              local col = cursor[2]
-              local _, lines = pcall(vim.api.nvim_buf_get_text, bufnr, row, 0, row, col, {})
-              local line = vim.trim(lines and lines[1] or "")
-              local char = line:sub(-1, -1)
-              if vim.tbl_contains(chars, char) then
+              if vim.tbl_contains(chars, M.get_char(buf)) then
                 local params = vim.lsp.util.make_position_params(0, client.offset_encoding)
                 vim.lsp.buf_request(
-                  bufnr,
+                  buf,
                   "textDocument/signatureHelp",
                   params,
-                  vim.lsp.with(require("noice.source.lsp").signature, { trigger = true })
+                  vim.lsp.with(require("noice.source.lsp").signature, {
+                    trigger = true,
+                    keep = function()
+                      return vim.tbl_contains(chars, M.get_char(buf))
+                    end,
+                  })
                 )
               end
             end,
