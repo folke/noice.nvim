@@ -257,6 +257,10 @@ function NuiView:show()
     self:create()
   end
 
+  vim.bo[self._nui.bufnr].modifiable = true
+  self:render(self._nui.bufnr)
+  vim.bo[self._nui.bufnr].modifiable = false
+
   if not self._nui._.mounted then
     self._nui:mount()
   end
@@ -268,10 +272,6 @@ function NuiView:show()
     self:update_layout()
     self:smart_move()
   end
-
-  vim.bo[self._nui.bufnr].modifiable = true
-  self:render(self._nui.bufnr)
-  vim.bo[self._nui.bufnr].modifiable = false
 
   self._scroll.winnr = self._nui.winid
   self._scroll:show()
