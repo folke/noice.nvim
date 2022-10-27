@@ -549,21 +549,21 @@ require("telescope").load_extension("noice")
 | -------------------------------------- | -------------------------------- | -------------------------------------------------- |
 | **NoiceCmdline**                       | _MsgArea_                        | Normal for the classic cmdline area at the bottom" |
 | **NoiceCmdlineIcon**                   | _DiagnosticSignInfo_             | Cmdline icon                                       |
-| **NoiceCmdlineIconCmdline**            | _DiagnosticSignInfo_             |                                                    |
-| **NoiceCmdlineIconFilter**             | _DiagnosticSignInfo_             |                                                    |
-| **NoiceCmdlineIconHelp**               | _DiagnosticSignInfo_             |                                                    |
-| **NoiceCmdlineIconIncRename**          | _DiagnosticSignInfo_             |                                                    |
-| **NoiceCmdlineIconInput**              | _DiagnosticSignInfo_             |                                                    |
-| **NoiceCmdlineIconLua**                | _DiagnosticSignInfo_             |                                                    |
+| **NoiceCmdlineIconCmdline**            | _NoiceCmdlineIcon_               |                                                    |
+| **NoiceCmdlineIconFilter**             | _NoiceCmdlineIcon_               |                                                    |
+| **NoiceCmdlineIconHelp**               | _NoiceCmdlineIcon_               |                                                    |
+| **NoiceCmdlineIconIncRename**          | _NoiceCmdlineIcon_               |                                                    |
+| **NoiceCmdlineIconInput**              | _NoiceCmdlineIcon_               |                                                    |
+| **NoiceCmdlineIconLua**                | _NoiceCmdlineIcon_               |                                                    |
 | **NoiceCmdlineIconSearch**             | _DiagnosticSignWarn_             | Cmdline search icon (`/` and `?`)                  |
 | **NoiceCmdlinePopup**                  | _Normal_                         | Normal for the cmdline popup                       |
 | **NoiceCmdlinePopupBorder**            | _DiagnosticSignInfo_             | Cmdline popup border                               |
-| **NoiceCmdlinePopupBorderCmdline**     | _DiagnosticSignInfo_             |                                                    |
-| **NoiceCmdlinePopupBorderFilter**      | _DiagnosticSignInfo_             |                                                    |
-| **NoiceCmdlinePopupBorderHelp**        | _DiagnosticSignInfo_             |                                                    |
-| **NoiceCmdlinePopupBorderIncRename**   | _DiagnosticSignInfo_             |                                                    |
-| **NoiceCmdlinePopupBorderInput**       | _DiagnosticSignInfo_             |                                                    |
-| **NoiceCmdlinePopupBorderLua**         | _DiagnosticSignInfo_             |                                                    |
+| **NoiceCmdlinePopupBorderCmdline**     | _NoiceCmdlinePopupBorder_        |                                                    |
+| **NoiceCmdlinePopupBorderFilter**      | _NoiceCmdlinePopupBorder_        |                                                    |
+| **NoiceCmdlinePopupBorderHelp**        | _NoiceCmdlinePopupBorder_        |                                                    |
+| **NoiceCmdlinePopupBorderIncRename**   | _NoiceCmdlinePopupBorder_        |                                                    |
+| **NoiceCmdlinePopupBorderInput**       | _NoiceCmdlinePopupBorder_        |                                                    |
+| **NoiceCmdlinePopupBorderLua**         | _NoiceCmdlinePopupBorder_        |                                                    |
 | **NoiceCmdlinePopupBorderSearch**      | _DiagnosticSignWarn_             | Cmdline popup border for search                    |
 | **NoiceCmdlinePrompt**                 | _Title_                          | prompt for input()                                 |
 | **NoiceCompletionItemKindClass**       | _NoiceCompletionItemKindDefault_ |                                                    |

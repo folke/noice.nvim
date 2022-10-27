@@ -15,10 +15,10 @@ function M.setup()
       local kind_cc = kind:sub(1, 1):upper() .. kind:sub(2)
 
       local hl_group_icon = "CmdlineIcon" .. kind_cc
-      Highlights.add(hl_group_icon, "DiagnosticSignInfo")
+      Highlights.add(hl_group_icon, "NoiceCmdlineIcon")
 
       local hl_group_border = "CmdlinePopupBorder" .. kind_cc
-      Highlights.add(hl_group_border, "DiagnosticSignInfo")
+      Highlights.add(hl_group_border, "NoiceCmdlinePopupBorder")
 
       format = vim.tbl_deep_extend("force", {
         conceal = format.conceal ~= false,
