@@ -102,6 +102,7 @@ M.defaults = {
   hover = {
     view = "popup",
     relative = "cursor",
+    zindex = 45,
     enter = false,
     anchor = "auto",
     size = {
