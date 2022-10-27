@@ -191,8 +191,8 @@ function M.show(state)
 
   if M.menu then
     M.menu._.items = items
-    M.menu._tree:set_nodes(items)
-    M.menu._tree:render()
+    M.menu.tree:set_nodes(items)
+    M.menu.tree:render()
     M.menu:update_layout(opts)
   else
     M.create(items, opts)
