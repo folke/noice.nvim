@@ -5,35 +5,89 @@ local Config = require("noice.config")
 
 local M = {}
 
+function M.is_rule(line)
+  return line and line:find("^[%*%-_][%*%-_][%*%-_]+$")
+end
+
+function M.is_code_block(line)
+  return line and line:find("^%s*```")
+end
+
+function M.is_empty(line)
+  return line and line:find("^%s*$")
+end
+
+function M.trim(lines)
+  local ret = {}
+  local l = 1
+  while l <= #lines do
+    local line = lines[l]
+    if M.is_empty(line) then
+      while M.is_empty(lines[l + 1]) do
+        l = l + 1
+      end
+      if not (M.is_code_block(lines[l + 1]) or M.is_rule(lines[l + 1])) then
+        table.insert(ret, line)
+      end
+    elseif M.is_code_block(line) or M.is_rule(line) then
+      table.insert(ret, line)
+      while M.is_empty(lines[l + 1]) do
+        l = l + 1
+      end
+    else
+      table.insert(ret, line)
+    end
+    l = l + 1
+  end
+  return ret
+end
+
 ---@param message NoiceMessage
 ---@param text string
 function M.format(message, text)
-  text = text:gsub("\n\n\n", "\n\n")
-  text = text:gsub("\n%s*\n```", "\n```")
-  text = text:gsub("```\n%s*\n", "```\n")
-
   local lines = vim.split(vim.trim(text), "\n")
+  lines = M.trim(lines)
 
   for l, line in ipairs(lines) do
-    if l ~= 1 then
-      message:newline()
-    end
-    -- Make the horizontal ruler extend the whole window width
-    if line:find("^[%*%-_][%*%-_][%*%-_]+$") then
+    local prev = lines[l - 1]
+    local next = lines[l + 1]
+
+    if M.is_rule(line) and M.is_code_block(prev) then
+      -- add the rule on top of the end of the code block
       M.horizontal_line(message)
+    elseif
+      M.is_rule(line) and M.is_code_block(next)
+      -- will be taken care of at the next iteration
+    then
     else
-      message:append(line)
-      for pattern, hl_group in pairs(Config.options.markdown.highlights) do
-        local from, to, match = line:find(pattern)
-        if match then
-          from, to = line:find(match, from)
-        end
-        if from then
-          message:append(NoiceText("", {
-            hl_group = hl_group,
-            col = from - 1,
-            length = to - from + 1,
-          }))
+      if l ~= 1 then
+        message:newline()
+      end
+      if M.is_code_block(line) and M.is_rule(prev) then
+        M.horizontal_line(message)
+      end
+      -- Make the horizontal ruler extend the whole window width
+      if M.is_rule(line) then
+        M.horizontal_line(message)
+      else
+        message:append(line)
+        for pattern, hl_group in pairs(Config.options.markdown.highlights) do
+          local from = 1
+          while from do
+            local to, match
+            from, to, match = line:find(pattern, from)
+            if match then
+              from, to = line:find(match, from)
+            end
+            if from then
+              message:append(NoiceText("", {
+                hl_group = hl_group,
+                col = from - 1,
+                length = to - from + 1,
+              }))
+            end
+            from = to and to + 1 or nil
+          end
         end
       end
     end
