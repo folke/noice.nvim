@@ -67,6 +67,7 @@ Check the [wiki](https://github.com/folke/noice.nvim/wiki/Configuration-Recipes)
 
 ```lua
 {
+  cmdline = {
     enabled = true, -- enables the Noice cmdline UI
     view = "cmdline_popup", -- view for rendering the cmdline. Change to `cmdline` to get a classic cmdline at the bottom
     opts = {}, -- global options for the cmdline. See section on views
@@ -105,6 +106,7 @@ Check the [wiki](https://github.com/folke/noice.nvim/wiki/Configuration-Recipes)
     -- Icons for completion item kinds (see defaults at noice.config.icons.kinds)
     kind_icons = {}, -- set to `false` to disable icons
   },
+  -- You can add any custom commands below that will be available with `:Noice command`
   ---@type table<string, NoiceCommand>
   commands = {
     history = {
