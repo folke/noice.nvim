@@ -22,14 +22,6 @@ function M.defaults()
   ---@type NoiceRouteConfig[]
   local ret = {}
 
-  for _, format in pairs(Config.options.cmdline.format) do
-    table.insert(ret, {
-      view = format.view,
-      opts = format.opts,
-      filter = { event = "cmdline", kind = format.kind },
-    })
-  end
-
   for _, kind in ipairs({ "signature", "hover" }) do
     table.insert(ret, {
       view = Config.options.lsp[kind].view or Config.options.lsp.documentation.view,
