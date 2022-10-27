@@ -11,6 +11,9 @@ local Message = require("noice.message")
 
 local M = {}
 
+---@type table<string, fun()>
+M.commands = {}
+
 ---@param command NoiceCommand
 function M.command(command)
   return function()
@@ -26,8 +29,16 @@ function M.command(command)
   end
 end
 
+function M.cmd(cmd)
+  if M.commands[cmd] then
+    M.commands[cmd]()
+  else
+    M.commands.history()
+  end
+end
+
 function M.setup()
-  local commands = {
+  M.commands = {
     debug = function()
       Config.options.debug = not Config.options.debug
     end,
@@ -59,16 +70,12 @@ function M.setup()
   }
 
   for name, command in pairs(Config.options.commands) do
-    commands[name] = M.command(command)
+    M.commands[name] = M.command(command)
   end
 
   vim.api.nvim_create_user_command("Noice", function(args)
     local cmd = vim.trim(args.args or "")
-    if commands[cmd] then
-      commands[cmd]()
-    else
-      commands.history()
-    end
+    M.cmd(cmd)
   end, {
     nargs = "?",
     desc = "Noice",
@@ -79,9 +86,16 @@ function M.setup()
       local prefix = line:match("^%s*Noice (%w*)")
       return vim.tbl_filter(function(key)
         return key:find(prefix) == 1
-      end, vim.tbl_keys(commands))
+      end, vim.tbl_keys(M.commands))
     end,
   })
+
+  for name in pairs(M.commands) do
+    local cmd = "Noice" .. name:sub(1, 1):upper() .. name:sub(2)
+    vim.api.nvim_create_user_command(cmd, function()
+      M.cmd(name)
+    end, { desc = "Noice " .. name })
+  end
 end
 
 return M

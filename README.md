@@ -536,6 +536,20 @@ require("telescope").load_extension("noice")
 - `:Noice stats` shows debugging stats
 - `:Noice telescope` opens message history in Telescope
 
+Alternatively, all commands also exist as a full name like `:NoiceLast`, `:NoiceDisable`.
+
+You can also use `Lua` equivalents.
+
+```lua
+vim.keymap.set("n", "<leader>nl", function()
+  require("noice").cmd("last")
+end)
+
+vim.keymap.set("n", "<leader>nh", function()
+  require("noice").cmd("history")
+end)
+```
+
 > You can add custom commands with `config.commands`
 
 ## 🌈 Highlight Groups

@@ -46,6 +46,10 @@ function M.disable()
   require("noice.util.hacks").disable()
 end
 
+function M.cmd(name)
+  require("noice.commands").cmd(name)
+end
+
 function M.enable()
   Config._running = true
   if Config.options.notify.enabled then
