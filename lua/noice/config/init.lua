@@ -142,6 +142,13 @@ M.defaults = {
     -- add any filetypes here, that shouldn't trigger smart move.
     excluded_filetypes = { "cmp_menu", "cmp_docs", "notify" },
   },
+  ---@type NoicePresets
+  presets = {
+    -- you can enable a preset by setting it to true, or a table that will override the preset config
+    bottom_search = false, -- use a classic bottom cmdline for search
+    command_palette = false, -- position the cmdline and popupmenu together
+    long_message_to_split = false, -- long messages will be sent to a split
+  },
   throttle = 1000 / 30, -- how frequently does Noice need to check for ui updates? This has no effect when in blocking mode.
   ---@type NoiceConfigViews
   views = {}, ---@see section on views
@@ -181,13 +188,15 @@ function M.setup(options)
     },
   }, options)
 
+  require("noice.config.preset").setup()
+
   if M.options.popupmenu.kind_icons == false then
     M.options.popupmenu.kind_icons = {}
   end
 
   require("noice.config.cmdline").setup()
 
-  M.options.routes = Routes.get(options.routes)
+  M.options.routes = Routes.get(M.options.routes)
 
   require("noice.config.highlights").setup()
   vim.api.nvim_create_autocmd("ColorScheme", {
