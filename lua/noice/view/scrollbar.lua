@@ -111,7 +111,7 @@ function Scrollbar:update()
     width = 1,
     col = dim.col + dim.width - 1,
     row = dim.row,
-    zindex = zindex + 10,
+    zindex = zindex + 1,
   })
 
   local thumb_height = math.floor(dim.height * dim.height / buf_height + 0.5)
@@ -126,7 +126,7 @@ function Scrollbar:update()
     height = thumb_height,
     row = dim.row + thumb_offset,
     col = dim.col + dim.width - 1, -- info.col was already added scrollbar offset.
-    zindex = zindex + 20,
+    zindex = zindex + 2,
   })
 end
 
