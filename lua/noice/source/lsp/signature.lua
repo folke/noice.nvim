@@ -3,7 +3,8 @@ local require = require("noice.util.lazy")
 local NoiceText = require("noice.text")
 local Format = require("noice.source.lsp.format")
 local Markdown = require("noice.text.markdown")
-local Lsp = require("noice.source.lsp")
+local Config = require("noice.config")
+local Util = require("noice.util")
 
 ---@class SignatureInformation
 ---@field label string
@@ -37,9 +38,8 @@ M.trigger_kind = {
   content_change = 3,
 }
 
--- TODO: add scroll up/down
+-- TODO: document add scroll up/down
 -- TODO: horz line for Hover should overlap end of code block
--- TODO: positioning of the signature help window
 
 function M.get_char(buf)
   local win = vim.fn.bufwinid(buf)
@@ -51,45 +51,55 @@ function M.get_char(buf)
   return line:sub(-1, -1)
 end
 
-function M.setup()
+function M.setup(group)
   vim.api.nvim_create_autocmd("LspAttach", {
+    group = group,
     callback = function(args)
       local buf = args.buf
       local client = vim.lsp.get_client_by_id(args.data.client_id)
       if client.server_capabilities.signatureHelpProvider then
         local chars = client.server_capabilities.signatureHelpProvider.triggerCharacters
         if #chars > 0 then
-          vim.api.nvim_create_autocmd({ "TextChangedI", "TextChangedP", "InsertEnter" }, {
-            buffer = buf,
-            callback = function()
-              if vim.api.nvim_get_current_buf() ~= buf then
-                return
-              end
-              local message = Lsp.get(Lsp.kinds.signature)
-              if message:win() then
-                -- no need to fetch signature when signature is already shown
-                return
-              end
-              if vim.tbl_contains(chars, M.get_char(buf)) then
-                local params = vim.lsp.util.make_position_params(0, client.offset_encoding)
-                vim.lsp.buf_request(
-                  buf,
-                  "textDocument/signatureHelp",
-                  params,
-                  vim.lsp.with(require("noice.source.lsp").signature, {
-                    trigger = true,
-                    keep = function()
-                      return vim.tbl_contains(chars, M.get_char(buf))
-                    end,
-                  })
-                )
-              end
-            end,
-          })
+          local callback = M.check(buf, chars, client.offset_encoding)
+          if Config.options.lsp.signature.auto_open.luasnip then
+            vim.api.nvim_create_autocmd("User", {
+              pattern = "LuasnipInsertNodeEnter",
+              callback = callback,
+            })
+          end
+          if Config.options.lsp.signature.auto_open.trigger then
+            vim.api.nvim_create_autocmd({ "TextChangedI", "TextChangedP", "InsertEnter" }, {
+              buffer = buf,
+              callback = callback,
+            })
+          end
         end
       end
     end,
   })
+end
+
+function M.check(buf, chars, encoding)
+  return Util.debounce(Config.options.lsp.signature.auto_open.throttle, function(_event)
+    if vim.api.nvim_get_current_buf() ~= buf then
+      return
+    end
+
+    if vim.tbl_contains(chars, M.get_char(buf)) then
+      local params = vim.lsp.util.make_position_params(0, encoding)
+      vim.lsp.buf_request(
+        buf,
+        "textDocument/signatureHelp",
+        params,
+        vim.lsp.with(require("noice.source.lsp").signature, {
+          trigger = true,
+          stay = function()
+            return vim.tbl_contains(chars, M.get_char(buf))
+          end,
+        })
+      )
+    end
+  end)
 end
 
 ---@param help SignatureHelp

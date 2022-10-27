@@ -33,6 +33,11 @@ end
 
 function M.setup()
   M.hover = Util.protect(M.hover)
+
+  local group = vim.api.nvim_create_augroup("noice_lsp", {
+    clear = true,
+  })
+
   if Config.options.lsp.hover.enabled then
     vim.lsp.handlers["textDocument/hover"] = M.hover
   end
@@ -42,12 +47,29 @@ function M.setup()
     vim.lsp.handlers["textDocument/signatureHelp"] = M.signature
   end
 
-  if Config.options.lsp.signature.auto_open then
-    require("noice.source.lsp.signature").setup()
+  if Config.options.lsp.signature.auto_open.enabled then
+    require("noice.source.lsp.signature").setup(group)
   end
 
   if Config.options.lsp.progress.enabled then
     require("noice.source.lsp.progress").setup()
+  end
+
+  vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI", "InsertCharPre" }, {
+    group = group,
+    callback = function()
+      vim.defer_fn(M.on_close, 10)
+    end,
+  })
+end
+
+function M.on_close()
+  for _, message in pairs(M._messages) do
+    -- close the message if we're not in it's buffer (focus)
+    local keep = message:on_buf(vim.api.nvim_get_current_buf()) or (message.opts.stay and message.opts.stay())
+    if not keep then
+      M.hide(message)
+    end
   end
 end
 
@@ -63,13 +85,7 @@ function M.scroll(delta)
 end
 
 ---@param message NoiceMessage
-function M.augroup(message)
-  return "noice_lsp_" .. message.id
-end
-
----@param message NoiceMessage
-function M.close(message)
-  pcall(vim.api.nvim_del_augroup_by_name, M.augroup(message))
+function M.hide(message)
   message.opts.keep = function()
     return false
   end
@@ -77,37 +93,19 @@ function M.close(message)
 end
 
 ---@param message NoiceMessage
----@param keep? fun():boolean
-function M.auto_close(message, keep)
+---@param stay? fun():boolean
+function M.show(message, stay)
   message.opts.timeout = 100
   message.opts.keep = function()
     return true
   end
-
-  local group = vim.api.nvim_create_augroup(M.augroup(message), {
-    clear = true,
-  })
-
-  vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI", "InsertCharPre" }, {
-    group = group,
-    callback = function()
-      if keep and keep() then
-        return
-      end
-      if not message:on_buf(vim.api.nvim_get_current_buf()) then
-        M.close(message)
-      end
-    end,
-  })
-end
-
----@param message NoiceMessage
-function M.close_others(message)
+  message.opts.stay = stay
   for _, m in pairs(M._messages) do
     if m ~= message then
-      M.close(m)
+      M.hide(m)
     end
   end
+  Manager.add(message)
 end
 
 ---@param result SignatureHelp
@@ -121,14 +119,12 @@ function M.signature(_, result, ctx, config)
   end
 
   local message = M.get(M.kinds.signature)
-  M.close_others(message)
 
   if config.trigger or not message:focus() then
     result.ft = vim.bo[ctx.bufnr].filetype
     result.message = message
     Signature.new(result):format()
-    M.auto_close(message, config.keep)
-    Manager.add(message)
+    M.show(message, config.stay)
   end
 end
 
@@ -139,11 +135,10 @@ function M.hover(_, result)
   end
 
   local message = M.get(M.kinds.hover)
-  M.close_others(message)
+
   if not message:focus() then
     Format.format(message, result.contents)
-    M.auto_close(message)
-    Manager.add(message)
+    M.show(message)
   end
 end
 

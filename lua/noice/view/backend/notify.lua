@@ -9,7 +9,7 @@ local Manager = require("noice.message.manager")
 ---@field level? string|number Message log level
 ---@field merge boolean Merge messages into one Notification or create separate notifications
 ---@field replace boolean Replace existing notification or create a new one
----@field render? notify.RenderFun
+---@field render? notify.RenderFun|string
 ---@field timeout? integer
 local defaults = {
   title = "Notification",

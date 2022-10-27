@@ -102,7 +102,12 @@ function M.defaults()
       },
       signature = {
         enabled = false,
-        auto_open = true, -- Automatically show signature help when typing a trigger character from the LSP
+        auto_open = {
+          enabled = true,
+          trigger = true, -- Automatically show signature help when typing a trigger character from the LSP
+          luasnip = true, -- Will open signature help when jumping to Luasnip insert nodes
+          throttle = 50, -- Debounce lsp signature help request by 50ms
+        },
         view = nil, -- when nil, use defaults from documentation
         ---@type NoiceViewOptions
         opts = {}, -- merged with defaults from documentation
@@ -214,7 +219,13 @@ function M.setup(options)
   M._running = true
 end
 
+---@param opts NoiceConfig
 function M.fix_legacy(opts)
+  if opts.lsp and opts.lsp.signature and type(opts.lsp.signature.auto_open) == "boolean" then
+    opts.lsp.signature.auto_open = {
+      enabled = opts.lsp.signature.auto_open,
+    }
+  end
   if opts.lsp_progress then
     opts.lsp = opts.lsp or {}
     opts.lsp.progress = opts.lsp_progress
