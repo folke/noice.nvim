@@ -528,11 +528,15 @@ require("telescope").load_extension("noice")
 
 ## 🚀 Usage
 
-- `:Noice` shows the message history
+- `:Noice` or `:Noice history` shows the message history
+- `:Noice last` shows the last message in a popup
+- `:Noice errors` shows the error messages in a split. Last errors on top
 - `:Noice disable` disables **Noice**
 - `:Noice enable` enables **Noice**
 - `:Noice stats` shows debugging stats
 - `:Noice telescope` opens message history in Telescope
+
+> You can add custom commands with `config.commands`
 
 ## 🌈 Highlight Groups
 
