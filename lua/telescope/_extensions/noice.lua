@@ -27,7 +27,7 @@ function M.display(message)
 end
 
 function M.finder()
-  local messages = Manager.get(Config.options.history.filter, {
+  local messages = Manager.get(Config.options.commands.history.filter, {
     history = true,
     sort = true,
     reverse = true,
