@@ -24,7 +24,7 @@ M.defaults = {
       search_up = { kind = "search", pattern = "^%?", icon = " ", lang = "regex" },
       filter = { pattern = "^:%s*!", icon = "$", lang = "bash" },
       lua = { pattern = "^:%s*lua%s+", icon = "", lang = "lua" },
-      help = { pattern = "^:%s*h%s+", icon = "" },
+      help = { pattern = "^:%s*he?l?p?%s+", icon = "" },
       input = {}, -- Used by input()
       -- lua = false, -- to disable a format, set to `false`
     },
