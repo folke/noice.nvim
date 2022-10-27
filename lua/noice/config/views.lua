@@ -68,7 +68,7 @@ M.defaults = {
     position = "bottom",
     size = "20%",
     close = {
-      keys = { "q", "<esc>" },
+      keys = { "q" },
     },
     win_options = {
       winhighlight = { Normal = "NoiceSplit", FloatBorder = "NoiceSplitBorder" },
