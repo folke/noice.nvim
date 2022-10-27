@@ -79,7 +79,7 @@ function M.scroll(delta)
     local win = message:win()
     if win then
       Util.nui.scroll(win, delta)
-      return
+      return true
     end
   end
 end
