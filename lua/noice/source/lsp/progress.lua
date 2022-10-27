@@ -88,9 +88,9 @@ function M.setup()
   })
   local orig = vim.lsp.handlers["$/progress"]
   vim.lsp.handlers["$/progress"] = function(...)
-    local args = { ... }
+    local args = vim.F.pack_len(...)
     Util.try(function()
-      M.progress(unpack(args))
+      M.progress(vim.F.unpack_len(args))
     end)
     orig(...)
   end

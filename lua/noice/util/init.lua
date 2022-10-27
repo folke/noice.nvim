@@ -65,10 +65,10 @@ end
 function M.debounce(ms, fn)
   local timer = vim.loop.new_timer()
   return function(...)
-    local argv = { ... }
+    local argv = vim.F.pack_len(...)
     timer:start(ms, 0, function()
       timer:stop()
-      vim.schedule_wrap(fn)(unpack(argv))
+      vim.schedule_wrap(fn)(vim.F.unpack_len(argv))
     end)
   end
 end
@@ -84,11 +84,11 @@ function M.interval(ms, fn, opts)
   local timer = vim.loop.new_timer()
   local running = false
   return function(...)
-    local args = { ... }
+    local args = vim.F.pack_len(...)
     if not running then
       running = true
       timer:start(ms, ms, function()
-        fn(unpack(args))
+        fn(vim.F.unpack_len(args))
         if not (opts.enabled and opts.enabled()) then
           timer:stop()
           running = false

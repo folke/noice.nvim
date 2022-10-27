@@ -142,9 +142,8 @@ M.before_input = false
 function M.fix_input()
   local function wrap(fn, skip)
     return function(...)
-      local args = { ... }
-      if skip and skip(unpack(args)) then
-        return fn(unpack(args))
+      if skip and skip(...) then
+        return fn(...)
       end
 
       local Manager = require("noice.message.manager")
@@ -155,7 +154,7 @@ function M.fix_input()
 
       M.hide_cursor()
       ---@type boolean, any
-      local ok, ret = pcall(fn, unpack(args))
+      local ok, ret = pcall(fn, ...)
       M.show_cursor()
 
       -- clear any message right after input

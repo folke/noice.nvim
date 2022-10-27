@@ -128,11 +128,11 @@ function M:notify(err)
 end
 
 function M:__call(...)
-  local args = { ... }
+  local args = vim.F.pack_len(...)
 
   -- wrap the function and call with args
   local wrapped = function()
-    return self._fn(unpack(args))
+    return self._fn(vim.F.unpack_len(args))
   end
 
   -- error handler
@@ -154,7 +154,7 @@ function M:__call(...)
 
   if not ok and self._defer_retry then
     vim.defer_fn(function()
-      self(unpack(args))
+      self(vim.F.unpack_len(args))
     end, 100)
   end
 

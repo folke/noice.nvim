@@ -87,17 +87,14 @@ function M.check(buf, chars, encoding)
 
     if vim.tbl_contains(chars, M.get_char(buf)) then
       local params = vim.lsp.util.make_position_params(0, encoding)
-      vim.lsp.buf_request(
-        buf,
-        "textDocument/signatureHelp",
-        params,
-        vim.lsp.with(require("noice.source.lsp").signature, {
+      vim.lsp.buf_request(buf, "textDocument/signatureHelp", params, function(err, result, ctx)
+        require("noice.source.lsp").signature(err, result, ctx, {
           trigger = true,
           stay = function()
             return vim.tbl_contains(chars, M.get_char(buf))
           end,
         })
-      )
+      end)
     end
   end)
 end
