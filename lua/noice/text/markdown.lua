@@ -48,6 +48,9 @@ function M.format(message, text)
   local lines = vim.split(vim.trim(text), "\n")
   lines = M.trim(lines)
 
+  text = table.concat(lines, "\n")
+  vim.notify(text)
+
   for l, line in ipairs(lines) do
     local prev = lines[l - 1]
     local next = lines[l + 1]
@@ -63,7 +66,7 @@ function M.format(message, text)
       if l ~= 1 then
         message:newline()
       end
-      if M.is_code_block(line) and M.is_rule(prev) then
+      if M.is_code_block(line) and M.is_rule(prev) and not M.is_code_block(lines[l - 2]) then
         M.horizontal_line(message)
       end
       -- Make the horizontal ruler extend the whole window width
