@@ -1,4 +1,4 @@
-*noice.nvim.txt*          For NVIM v0.5.0         Last change: 2022 October 26
+*noice.nvim.txt*          For NVIM v0.5.0         Last change: 2022 October 27
 
 ==============================================================================
 Table of Contents                               *noice.nvim-table-of-contents*
@@ -99,6 +99,7 @@ for configuration recipes.
 
 >
     {
+      cmdline = {
         enabled = true, -- enables the Noice cmdline UI
         view = "cmdline_popup", -- view for rendering the cmdline. Change to `cmdline` to get a classic cmdline at the bottom
         opts = {}, -- global options for the cmdline. See section on views
@@ -137,6 +138,7 @@ for configuration recipes.
         -- Icons for completion item kinds (see defaults at noice.config.icons.kinds)
         kind_icons = {}, -- set to `false` to disable icons
       },
+      -- You can add any custom commands below that will be available with `:Noice command`
       ---@type table<string, NoiceCommand>
       commands = {
         history = {
