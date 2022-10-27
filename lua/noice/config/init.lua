@@ -138,6 +138,7 @@ M.defaults = {
   },
   smart_move = {
     -- noice tries to move out of the way of existing floating windows.
+    enabled = true, -- you can disable this behaviour here
     -- add any filetypes here, that shouldn't trigger smart move.
     excluded_filetypes = { "cmp_menu", "cmp_docs", "notify" },
   },
