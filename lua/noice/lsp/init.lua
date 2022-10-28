@@ -46,15 +46,14 @@ function M.setup()
   M.signature = Util.protect(M.signature)
   if Config.options.lsp.signature.enabled then
     vim.lsp.handlers["textDocument/signatureHelp"] = M.signature
+    if Config.options.lsp.signature.auto_open.enabled then
+      require("noice.lsp.signature").setup(group)
+    end
   end
 
   M.message = Util.protect(M.message)
   if Config.options.lsp.message.enabled then
     vim.lsp.handlers["window/showMessage"] = M.message
-  end
-
-  if Config.options.lsp.signature.auto_open.enabled then
-    require("noice.lsp.signature").setup(group)
   end
 
   if Config.options.lsp.progress.enabled then
