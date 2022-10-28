@@ -118,6 +118,9 @@ function M.check(opts)
   end
 
   if Config.is_running() then
+    if vim.g.loaded_sleuth == 1 then
+      log.warn("`vim-sleuth` is known to cause issues with the Noice popupmenu.")
+    end
     if Config.options.notify.enabled then
       if vim.notify ~= require("noice.source.notify").notify then
         log.error([[`vim.notify` has been overwritten by another plugin?
