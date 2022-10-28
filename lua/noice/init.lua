@@ -21,6 +21,13 @@ function M.setup(opts)
       require("noice.commands").setup()
       require("noice.message.router").setup()
       M.enable()
+      vim.api.nvim_create_autocmd("VimLeave", {
+        callback = function()
+          if Config.is_running() then
+            pcall(M.disable)
+          end
+        end,
+      })
     end)
   end
 

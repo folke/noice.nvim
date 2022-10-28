@@ -21,29 +21,26 @@ local Manager = require("noice.message.manager")
 ---@field opts? NoiceRouteOptions|NoiceViewOptions
 
 local M = {}
-M._running = false
 ---@type NoiceRoute[]
 M._routes = {}
 M._tick = 0
 M._need_redraw = false
-
-local function run()
-  if not M._running then
-    return
-  end
-  Util.try(M.update)
-  vim.defer_fn(run, Config.options.throttle)
-end
+---@type fun()|Interval?
+M._updater = nil
 
 function M.enable()
-  M._running = true
-  vim.schedule(run)
+  if not M._updater then
+    M._updater = Util.interval(Config.options.throttle, Util.protect(M.update))
+  end
+  M._updater()
 end
 
 function M.disable()
-  M._running = false
-  Manager.clear()
-  M.update()
+  if M._updater then
+    M._updater.stop()
+    Manager.clear()
+    M.update()
+  end
 end
 
 ---@param route NoiceRouteConfig

@@ -77,25 +77,45 @@ end
 ---@param fn F
 ---@param ms integer
 ---@param opts? {enabled?:fun():boolean}
----@return F
+---@return F|Interval
 function M.interval(ms, fn, opts)
   opts = opts or {}
-  fn = vim.schedule_wrap(fn)
-  local timer = vim.loop.new_timer()
-  local running = false
-  return function(...)
-    local args = vim.F.pack_len(...)
-    if not running then
-      running = true
-      timer:start(ms, ms, function()
-        fn(vim.F.unpack_len(args))
-        if not (opts.enabled and opts.enabled()) then
-          timer:stop()
-          running = false
-        end
-      end)
+  ---@type vim.loop.Timer?
+  local timer = nil
+
+  ---@class Interval
+  local T = {}
+
+  function T.keep()
+    return opts.enabled == nil or opts.enabled()
+  end
+
+  function T.running()
+    return timer and not timer:is_closing()
+  end
+
+  function T.stop()
+    if timer and T.running() then
+      timer:stop()
     end
   end
+
+  function T.fn()
+    pcall(fn)
+    if timer and T.running() and not T.keep() then
+      timer:stop()
+    elseif T.keep() and not T.running() then
+      timer = vim.defer_fn(T.fn, ms)
+    end
+  end
+
+  function T.__call()
+    if not T.running() and T.keep() then
+      timer = vim.defer_fn(T.fn, ms)
+    end
+  end
+
+  return setmetatable(T, T)
 end
 
 ---@param a table<string, any>
