@@ -60,7 +60,7 @@ function M.setup()
     require("noice.lsp.progress").setup()
   end
 
-  vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI", "InsertCharPre" }, {
+  vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI", "InsertEnter" }, {
     group = group,
     callback = function()
       vim.defer_fn(M.on_close, 10)
