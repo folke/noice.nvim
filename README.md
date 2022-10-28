@@ -46,11 +46,11 @@ use({
     "rcarriga/nvim-notify",
     }
 })
-
-<
 ```
 
-```viml
+<details><summary>vim-plug</summary>
+
+```vim
 " vim-plug
 call plug#begin()
   Plug 'folke/noice.nvim'
@@ -58,7 +58,10 @@ call plug#begin()
 call plug#end()
 
 lua require("noice").setup()
+
 ```
+
+</details>
 
 ## ⚙️ Configuration
 
