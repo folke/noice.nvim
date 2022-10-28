@@ -34,7 +34,6 @@ Install the plugin with your preferred package manager:
 -- Packer
 use({
   "folke/noice.nvim",
-  event = "VimEnter",
   config = function()
     require("noice").setup()
   end,
@@ -49,6 +48,8 @@ use({
 })
 ```
 
+<details><summary>vim-plug</summary>
+
 ```viml
 " vim-plug
 call plug#begin()
@@ -58,6 +59,8 @@ call plug#end()
 
 lua require("noice").setup()
 ```
+
+</details>
 
 ## ⚙️ Configuration
 
