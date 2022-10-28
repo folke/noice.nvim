@@ -75,6 +75,10 @@ M.defaults = {
       wrap = true,
     },
   },
+  messages = {
+    view = "split",
+    enter = true,
+  },
   vsplit = {
     view = "split",
     position = "right",
