@@ -75,10 +75,10 @@ Install the plugin with your preferred package manager:
         "rcarriga/nvim-notify",
         }
     })
-    
-    <
 <
 
+
+vim-plug
 
 >
     " vim-plug
