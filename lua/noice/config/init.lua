@@ -55,13 +55,29 @@ function M.defaults()
         -- options for the message history that you get with `:Noice`
         view = "split",
         opts = { enter = true, format = "details" },
-        filter = { event = { "msg_show", "notify" }, ["not"] = { kind = { "search_count", "echo" } } },
+        filter = {
+          any = {
+            { event = "notify" },
+            { error = true },
+            { warning = true },
+            { event = "msg_show", kind = { "" } },
+            { event = "lsp", kind = "message" },
+          },
+        },
       },
       -- :Noice last
       last = {
         view = "popup",
         opts = { enter = true, format = "details" },
-        filter = { event = { "msg_show", "notify" }, ["not"] = { kind = { "search_count", "echo" } } },
+        filter = {
+          any = {
+            { event = "notify" },
+            { error = true },
+            { warning = true },
+            { event = "msg_show", kind = { "" } },
+            { event = "lsp", kind = "message" },
+          },
+        },
         filter_opts = { count = 1 },
       },
       -- :Noice errors
