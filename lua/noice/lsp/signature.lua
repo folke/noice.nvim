@@ -59,7 +59,7 @@ function M.setup(group)
       local client = vim.lsp.get_client_by_id(args.data.client_id)
       if client.server_capabilities.signatureHelpProvider then
         local chars = client.server_capabilities.signatureHelpProvider.triggerCharacters
-        if #chars > 0 then
+        if chars and #chars > 0 then
           local callback = M.check(buf, chars, client.offset_encoding)
           if Config.options.lsp.signature.auto_open.luasnip then
             vim.api.nvim_create_autocmd("User", {
