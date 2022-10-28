@@ -112,6 +112,12 @@ function M.defaults()
         ---@type NoiceViewOptions
         opts = {}, -- merged with defaults from documentation
       },
+      message = {
+        -- Messages shown by lsp servers
+        enabled = false,
+        view = "notify",
+        opts = {},
+      },
       -- defaults for hover and signature help
       documentation = {
         view = "hover",

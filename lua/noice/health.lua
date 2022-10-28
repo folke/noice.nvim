@@ -153,6 +153,18 @@ function M.check(opts)
         log.warn([[`vim.lsp.handlers["textDocument/signatureHelp"]` is not handled by **Noice**]])
       end
     end
+
+    if Config.options.lsp.message.enabled then
+      if vim.lsp.handlers["window/showMessage"] ~= Lsp.message then
+        log.error([[`vim.lsp.handlers["window/showMessage"]` has been overwritten by another plugin?]])
+      else
+        log.ok([[`vim.lsp.handlers["window/showMessage"]` is handled by **Noice**]])
+      end
+    else
+      if opts.checkhealth then
+        log.warn([[`vim.lsp.handlers["window/showMessage"]` is not handled by **Noice**]])
+      end
+    end
   end
 
   return true

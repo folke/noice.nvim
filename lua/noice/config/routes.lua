@@ -114,6 +114,11 @@ function M.defaults()
       view = Config.options.lsp.progress.view,
       filter = { event = "lsp", kind = "progress" },
     },
+    {
+      view = Config.options.lsp.message.view,
+      opts = Config.options.lsp.message.opts,
+      filter = { event = "lsp", kind = "message" },
+    },
   })
 end
 

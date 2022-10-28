@@ -16,6 +16,7 @@ M.event = "lsp"
 M.kinds = {
   progress = "progress",
   hover = "hover",
+  message = "message",
   signature = "signature",
 }
 
@@ -32,12 +33,11 @@ function M.get(kind)
 end
 
 function M.setup()
-  M.hover = Util.protect(M.hover)
-
   local group = vim.api.nvim_create_augroup("noice_lsp", {
     clear = true,
   })
 
+  M.hover = Util.protect(M.hover)
   if Config.options.lsp.hover.enabled then
     vim.lsp.handlers["textDocument/hover"] = M.hover
   end
@@ -45,6 +45,11 @@ function M.setup()
   M.signature = Util.protect(M.signature)
   if Config.options.lsp.signature.enabled then
     vim.lsp.handlers["textDocument/signatureHelp"] = M.signature
+  end
+
+  M.message = Util.protect(M.message)
+  if Config.options.lsp.message.enabled then
+    vim.lsp.handlers["window/showMessage"] = M.message
   end
 
   if Config.options.lsp.signature.auto_open.enabled then
@@ -61,6 +66,33 @@ function M.setup()
       vim.defer_fn(M.on_close, 10)
     end,
   })
+end
+
+---@enum MessageType
+M.message_type = {
+  error = 1,
+  warn = 2,
+  info = 3,
+  debug = 4,
+}
+
+---@alias ShowMessageParams {type:MessageType, message:string}
+
+---@param result ShowMessageParams
+function M.message(_, result, ctx)
+  local client_id = ctx.client_id
+  local client = vim.lsp.get_client_by_id(client_id)
+  local client_name = client and client.name or string.format("lsp id=%d", client_id)
+
+  local message = Message(M.event, M.kinds.message, result.message)
+  message.opts.title = "LSP Message (" .. client_name .. ")"
+  for level, type in pairs(M.message_type) do
+    if type == result.type then
+      message.level = level
+    end
+  end
+  message.once = true
+  Manager.add(message)
 end
 
 function M.on_close()
