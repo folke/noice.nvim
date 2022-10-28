@@ -98,6 +98,7 @@ function M.setup()
           vim.bo[buf].syntax = "markdown"
         end
       end
+      return vim.api.nvim_buf_get_lines(buf, 0, -1, false)
     end
   end
 end
