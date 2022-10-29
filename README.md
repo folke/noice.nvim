@@ -19,9 +19,15 @@ Highly experimental plugin that completely replaces the UI for `messages`, `cmdl
 - 🚥 **statusline** components
 - 🔭 open message history in [telescope.nvim](https://github.com/nvim-telescope/telescope.nvim)
 
+## 🔥 Status
+
+**Noice** is using the new experimental `vim.ui_attach` API, so issues are to be expected.
+It is highly recommended to use Neovim nightly, since a bunch of issues have already been fixed upstream.
+Check this [tracking issue](https://github.com/folke/noice.nvim/issues/6) for a list of known issues.
+
 ## ⚡️ Requirements
 
-- Neovim >= 0.8.0
+- Neovim >= 0.8.0 **_(nightly highly recommended)_**
 - [nui.nvim](https://github.com/MunifTanjim/nui.nvim): used for proper rendering and multiple views
 - [nvim-notify](https://github.com/rcarriga/nvim-notify): notification view _**(optional)**_
 - a [Nerd Font](https://www.nerdfonts.com/) **(optional)**
@@ -696,10 +702,3 @@ end)
 <!-- hl_end -->
 
 </details>
-
-## 🔥 Known Issues
-
-**Noice** is using the new experimental `vim.ui_attach` API, so issues are to be expected.
-During setup, we apply a bunch of [Hacks](https://github.com/folke/noice.nvim/blob/main/lua/noice/util/hacks.lua)
-to work around some of the current issues.
-For more details, see this [tracking issue](https://github.com/folke/noice.nvim/issues/6)
