@@ -115,7 +115,7 @@ function M:active_parameter(sig_index)
   if self.activeParameter and sig.parameters[self.activeParameter + 1] then
     return sig.parameters[self.activeParameter + 1]
   end
-  return sig.parameters[1]
+  return sig.parameters and sig.parameters[1] or 1
 end
 
 ---@param sig SignatureInformation
