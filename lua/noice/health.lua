@@ -101,7 +101,7 @@ function M.check(opts)
 
     if ts then
       log.ok("**treesitter-nvim** is installed")
-      for _, ft in ipairs({ "vim", "regex", "lua", "bash", "markdown" }) do
+      for _, ft in ipairs({ "vim", "regex", "lua", "bash", "markdown", "markdown_inline" }) do
         if ts.has_parser(ft) then
           log.ok("**TreeSitter " .. ft .. "** parser is installed")
         else
