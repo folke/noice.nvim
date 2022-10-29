@@ -72,9 +72,11 @@ function M.check(opts)
   end
 
   if vim.go.lazyredraw then
-    log.warn(
-      "You have enabled 'lazyredraw' (see `:h 'lazyredraw'`)\nThis is only meant to be set temporarily.\nYou'll experience issues using Noice."
-    )
+    if not opts.checkhealth then
+      log.warn(
+        "You have enabled 'lazyredraw' (see `:h 'lazyredraw'`)\nThis is only meant to be set temporarily.\nYou'll experience issues using Noice."
+      )
+    end
   else
     log.ok("**vim.go.lazyredraw** is not enabled")
   end
