@@ -201,7 +201,9 @@ function M.get_source(fn)
     source = source,
     plugin = "unknown",
   }
-  if source:find("/runtime/lua/") then
+  if source:find("noice") then
+    ret.plugin = "noice.nvim"
+  elseif source:find("/runtime/lua/") then
     ret.plugin = "nvim"
   else
     local opt = source:match("/pack/[^%/]-/opt/([^%/]-)/")
