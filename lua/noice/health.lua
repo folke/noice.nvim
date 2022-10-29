@@ -118,7 +118,7 @@ function M.check(opts)
   end
 
   if Config.is_running() then
-    if vim.g.loaded_sleuth == 1 then
+    if vim.g.loaded_sleuth == 1 and vim.g.sleuth_noice_heuristics ~= 1 then
       log.warn("`vim-sleuth` is known to cause issues with the Noice popupmenu.")
     end
     if Config.options.notify.enabled then
