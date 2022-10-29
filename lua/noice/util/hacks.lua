@@ -24,6 +24,10 @@ function M.enable()
   M.fix_cmp()
 end
 
+function M.fix_vim_sleuth()
+  vim.g.sleuth_noice_heuristics = 0
+end
+
 function M.disable()
   M.reset_augroup()
   for _, fn in pairs(M._disable) do

@@ -120,10 +120,6 @@ function M.check(opts)
   end
 
   if Config.is_running() then
-    if vim.g.loaded_sleuth == 1 then
-      log.warn("`vim-sleuth` is known to cause issues with the Noice popupmenu.")
-    end
-
     ---@type {opt:string[], opt_str?:string, handler:fun(), handler_str:string}
     local checks = {
       {
