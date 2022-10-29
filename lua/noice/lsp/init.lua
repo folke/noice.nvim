@@ -191,6 +191,12 @@ function M.signature(_, result, ctx, config)
     result.ft = vim.bo[ctx.bufnr].filetype
     result.message = message
     Signature.new(result):format()
+    if message:is_empty() then
+      if not config.trigger then
+        vim.notify("No signature help available")
+      end
+      return
+    end
     M.show(message, config.stay)
   end
 end
@@ -205,6 +211,10 @@ function M.hover(_, result)
 
   if not message:focus() then
     Format.format(message, result.contents)
+    if message:is_empty() then
+      vim.notify("No information available")
+      return
+    end
     M.show(message)
   end
 end
