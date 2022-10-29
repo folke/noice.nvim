@@ -592,6 +592,22 @@ end)
 
 > You can add custom commands with `config.commands`
 
+### Lsp Hover Doc Scrolling
+
+```lua
+  vim.keymap.set("n", "<c-f>", function()
+    if not require("noice.source.lsp").scroll(4) then
+      return "<c-f>"
+    end
+  end, { silent = true, expr = true })
+
+  vim.keymap.set("n", "<c-b>", function()
+    if not require("noice.source.lsp").scroll(-4) then
+      return "<c-b>"
+    end
+  end, { silent = true, expr = true })
+```
+
 ## 🌈 Highlight Groups
 
 <details>
