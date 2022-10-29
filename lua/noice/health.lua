@@ -121,60 +121,98 @@ function M.check(opts)
     if vim.g.loaded_sleuth == 1 then
       log.warn("`vim-sleuth` is known to cause issues with the Noice popupmenu.")
     end
-    if Config.options.notify.enabled then
-      if vim.notify ~= require("noice.source.notify").notify then
-        log.error([[`vim.notify` has been overwritten by another plugin?
-Either disable the other plugin or set `config.notify.enabled = false`]])
-      else
-        log.ok("`vim.notify` is set to **Noice**")
-      end
-    else
-      if opts.checkhealth then
-        log.warn("Noice `vim.notify` is disabled")
-      end
-    end
 
-    if Config.options.lsp.hover.enabled then
-      if vim.lsp.handlers["textDocument/hover"] ~= Lsp.hover then
-        log.error([[`vim.lsp.handlers["textDocument/hover"]` has been overwritten by another plugin?
-Disable the other plugin or set `config.lsp.hover.enabled = false`]])
-      else
-        log.ok([[`vim.lsp.handlers["textDocument/hover"]` is handled by **Noice**]])
-      end
-    else
-      if opts.checkhealth then
-        log.warn([[`vim.lsp.handlers["textDocument/hover"]` is not handled by **Noice**]])
-      end
-    end
+    ---@type {opt:string[], opt_str?:string, handler:fun(), handler_str:string}
+    local checks = {
+      {
+        opt = "notify",
+        enabled = Config.options.notify.enabled,
+        handler = vim.notify,
+        handler_str = "vim.notify",
+      },
+      {
+        opt = "lsp.hover",
+        enabled = Config.options.lsp.hover.enabled,
+        handler = vim.lsp.handlers["textDocument/hover"],
+        handler_str = 'vim.lsp.handlers["textDocument/hover"]',
+      },
+      {
+        opt = "lsp.signature",
+        enabled = Config.options.lsp.signature.enabled,
+        handler = vim.lsp.handlers["textDocument/signatureHelp"],
+        handler_str = 'vim.lsp.handlers["textDocument/signatureHelp"]',
+      },
+      {
+        opt = "lsp.message",
+        enabled = Config.options.lsp.message,
+        handler = vim.lsp.handlers["window/showMessage"],
+        handler_str = 'vim.lsp.handlers["window/showMessage"]',
+      },
+      {
+        opt = 'lsp.override["vim.lsp.util.convert_input_to_markdown_lines"]',
+        enabled = Config.options.lsp.override["vim.lsp.util.convert_input_to_markdown_lines"],
+        handler = vim.lsp.util.convert_input_to_markdown_lines,
+        handler_str = "vim.lsp.util.convert_input_to_markdown_lines",
+      },
+      {
+        opt = 'lsp.override["vim.lsp.util.stylize_markdown"]',
+        enabled = Config.options.lsp.override["vim.lsp.util.stylize_markdown"],
+        handler = vim.lsp.util.stylize_markdown,
+        handler_str = "vim.lsp.util.stylize_markdown",
+      },
+    }
 
-    if Config.options.lsp.signature.enabled then
-      if vim.lsp.handlers["textDocument/signatureHelp"] ~= Lsp.signature then
-        log.error([[`vim.lsp.handlers["textDocument/signatureHelp"]` has been overwritten by another plugin?
-Either disable the plugin, or set `config.lsp.signature.enabled = false`]])
-      else
-        log.ok([[`vim.lsp.handlers["textDocument/signatureHelp"]` is handled by **Noice**]])
-      end
-    else
-      if opts.checkhealth then
-        log.warn([[`vim.lsp.handlers["textDocument/signatureHelp"]` is not handled by **Noice**]])
-      end
-    end
+    local ok, mod = pcall(_G.require, "cmp.entry")
+    table.insert(checks, {
+      opt = 'lsp.override["cmp.entry.get_documentation"]',
+      enabled = Config.options.lsp.override["cmp.entry.get_documentation"],
+      handler = ok and mod.get_documentation,
+      handler_str = "cmp.entry.get_documentation",
+    })
 
-    if Config.options.lsp.message.enabled then
-      if vim.lsp.handlers["window/showMessage"] ~= Lsp.message then
-        log.error([[`vim.lsp.handlers["window/showMessage"]` has been overwritten by another plugin?]])
-      else
-        log.ok([[`vim.lsp.handlers["window/showMessage"]` is handled by **Noice**]])
-      end
-    else
-      if opts.checkhealth then
-        log.warn([[`vim.lsp.handlers["window/showMessage"]` is not handled by **Noice**]])
+    for _, check in ipairs(checks) do
+      if check.handler then
+        if check.enabled then
+          local source = M.get_source(check.handler)
+          if source.plugin ~= "noice.nvim" then
+            log.error(([[`%s` has been overwritten by another plugin?
+
+Either disable the other plugin or set `config.%s.enabled = false` in your **Noice** config.
+  - plugin: %s
+  - file: %s
+  - line: %s]]):format(check.handler_str, check.opt, source.plugin, source.source, source.line))
+          else
+            log.ok(("`%s` is set to **Noice**"):format(check.handler_str))
+          end
+        elseif opts.checkhealth then
+          log.warn("`" .. check.handler_str .. "` is not configured to be handled by **Noice**")
+        end
       end
     end
   end
 
   return true
 end
+
+function M.get_source(fn)
+  local info = debug.getinfo(fn, "S")
+  local source = info.source:sub(2)
+  ---@class FunSource
+  local ret = {
+    line = info.linedefined,
+    source = source,
+    plugin = "unknown",
+  }
+  if source:find("/runtime/lua/") then
+    ret.plugin = "nvim"
+  else
+    local opt = source:match("/pack/[^%/]-/opt/([^%/]-)/")
+    local start = source:match("/pack/[^%/]-/start/([^%/]-)/")
+    ret.plugin = opt or start or "unknown"
+  end
+  return ret
+end
+M.check({ checkhealth = false })
 
 M.checker = Util.interval(1000, function()
   if Config.is_running() then
