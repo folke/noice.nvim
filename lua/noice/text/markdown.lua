@@ -17,6 +17,15 @@ function M.is_empty(line)
   return line and line:find("^%s*$")
 end
 
+---@param text string
+function M.html_entities(text)
+  local entities = { nbsp = "", lt = "<", gt = ">", amp = "&", quot = '"' }
+  for entity, char in pairs(entities) do
+    text = text:gsub("&" .. entity .. ";", char)
+  end
+  return text
+end
+
 function M.trim(lines)
   local ret = {}
   local l = 1
@@ -45,6 +54,7 @@ end
 ---@param message NoiceMessage
 ---@param text string
 function M.format(message, text)
+  text = M.html_entities(text)
   local lines = vim.split(vim.trim(text), "\n")
   lines = M.trim(lines)
 
