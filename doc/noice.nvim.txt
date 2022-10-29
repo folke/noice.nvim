@@ -680,6 +680,23 @@ You can also use `Lua` equivalents.
   You can add custom commands with `config.commands`
 
 
+LSP HOVER DOC SCROLLING ~
+
+>
+      vim.keymap.set("n", "<c-f>", function()
+        if not require("noice.source.lsp").scroll(4) then
+          return "<c-f>"
+        end
+      end, { silent = true, expr = true })
+    
+      vim.keymap.set("n", "<c-b>", function()
+        if not require("noice.source.lsp").scroll(-4) then
+          return "<c-b>"
+        end
+      end, { silent = true, expr = true })
+<
+
+
 HIGHLIGHT GROUPS                                 *noice.nvim-highlight-groups*
 
 Click to see all highlight groups
