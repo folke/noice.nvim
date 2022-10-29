@@ -197,6 +197,7 @@ function View:set_win_options(win)
   if self._opts.win_options then
     require("nui.utils")._.set_win_options(win, self._opts.win_options)
   end
+  vim.api.nvim_win_set_cursor(win, { 1, 0 })
 end
 
 ---@param buf number buffer number
