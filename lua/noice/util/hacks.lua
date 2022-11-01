@@ -254,10 +254,22 @@ function M.fix_cmp()
 end
 
 function M.cmdline_force_redraw()
-  if vim.api.nvim_get_mode().mode == "c" and vim.fn.getcmdline():find("s/") then
-    -- HACK: this will trigger redraw during substitue
-    vim.api.nvim_input("<space><bs>")
+  if vim.api.nvim_get_mode().mode ~= "c" then return end
+
+  local cmdline = vim.fn.getcmdline()
+  if cmdline:find("s/.") == nil then return end
+
+  local ignored_commands = {
+    "e",  "w",  "x",     "r",  "sav", "sp",    "mk",   "vie", "sv",   "vs", "tabe", "tabnew",
+    "cf", "cg", "caddf", "lf", "lg",  "laddf", "diff", "ped", "redi", "so", "up",   "vi", "fin"
+  }
+  for _, value in ipairs(ignored_commands) do
+    -- returning here prevents messing with autocompletion for paths
+    if cmdline:find("^" .. value) then return end
   end
+
+  -- HACK: this will trigger redraw while typing a substitution command (s/.../.../)
+  vim.api.nvim_input("<space><bs>")
 end
 
 M._guicursor = nil
