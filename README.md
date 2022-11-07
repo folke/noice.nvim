@@ -31,6 +31,9 @@ Check this [tracking issue](https://github.com/folke/noice.nvim/issues/6) for a 
 - [nui.nvim](https://github.com/MunifTanjim/nui.nvim): used for proper rendering and multiple views
 - [nvim-notify](https://github.com/rcarriga/nvim-notify): notification view _**(optional)**_
 - a [Nerd Font](https://www.nerdfonts.com/) **(optional)**
+- [nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter/) **(optional, but highly recommended)**
+  used for highlighting the cmdline and lsp docs. Make sure to install the parsers for
+  `vim`, `regex`, `lua`, `bash`, `markdown` and `markdown_inline`
 
 ## 📦 Installation
 
@@ -53,6 +56,8 @@ use({
     }
 })
 ```
+
+It's a good idea to run `:checkhealth noice` after installing to check for common issues.
 
 <details><summary>vim-plug</summary>
 
