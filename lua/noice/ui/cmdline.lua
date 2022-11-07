@@ -183,7 +183,7 @@ function M.on_render(_, buf, line, byte)
     local cursor = byte - M.last():length() + M.last().state.pos
     vim.api.nvim_win_set_cursor(win, { 1, cursor })
     vim.api.nvim_win_call(win, function()
-      vim.cmd([[silent! normal! ze]])
+      vim.cmd([[noautocmd silent! normal! ze]])
     end)
 
     local pos = vim.fn.screenpos(win, line, cmdline_start)
