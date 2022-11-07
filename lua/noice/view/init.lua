@@ -203,6 +203,9 @@ end
 ---@param buf number buffer number
 ---@param opts? {offset: number, highlight: boolean, messages?: NoiceMessage[]} line number (1-indexed), if `highlight`, then only highlight
 function View:render(buf, opts)
+  if not Config.is_running() then
+    return
+  end
   opts = opts or {}
   local linenr = opts.offset or 1
 
