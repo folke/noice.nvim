@@ -179,6 +179,13 @@ function M.on_render(_, buf, line, byte)
     -- FIXME: check with cmp
     -- FIXME: state.pos?
     local cmdline_start = byte - (M.last():length() - M.last().offset)
+
+    local cursor = byte - M.last():length() + M.last().state.pos
+    vim.api.nvim_win_set_cursor(win, { 1, cursor })
+    vim.api.nvim_win_call(win, function()
+      vim.cmd([[silent! normal! ze]])
+    end)
+
     local pos = vim.fn.screenpos(win, line, cmdline_start)
     M.position = {
       buf = buf,
