@@ -29,6 +29,7 @@ end
 ---@class NoiceConfigViews: table<string, NoiceViewOptions>
 M.defaults = {
   popupmenu = {
+    relative = "editor",
     zindex = 65,
     position = "auto", -- when auto, then it will be positioned to the cmdline or cursor
     size = {
