@@ -89,7 +89,8 @@ end
 
 ---@param messages NoiceMessage[]
 ---@param render? notify.RenderFun
-function NotifyView:notify_render(messages, render)
+---@param content? string
+function NotifyView:notify_render(messages, render, content)
   ---@param config notify.Config
   return function(buf, notif, hl, config)
     -- run notify view
@@ -98,22 +99,29 @@ function NotifyView:notify_render(messages, render)
     Util.tag(buf, "notify")
 
     ---@type string[]
-    local buf_lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
-    local offset = #buf_lines - self:height(messages) + 1
+    local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
 
-    -- do our rendering
-    self:render(buf, { offset = offset, highlight = true, messages = messages })
+    local text = table.concat(lines, "\n")
+    local idx = content and text:find(content, 1, true) or nil
+
+    if idx then
+      -- we found the offset of the content as a string
+      local offset = #vim.split(text:sub(1, idx - 1), "\n")
+      -- do our rendering
+      self:render(buf, { offset = offset, highlight = true, messages = messages })
+      -- in case we didn't find the offset, we won't highlight anything
+    end
 
     -- resize notification
     local win = vim.fn.bufwinid(buf)
     if win ~= -1 then
       ---@type number
       local width = config.minimum_width()
-      for _, line in pairs(buf_lines) do
+      for _, line in pairs(lines) do
         width = math.max(width, vim.str_utfindex(line))
       end
       width = math.min(config.max_width() or 1000, width)
-      local height = math.min(config.max_height() or 1000, #buf_lines)
+      local height = math.min(config.max_height() or 1000, #lines)
       Util.win_apply_config(win, { width = width, height = height })
     end
   end
@@ -147,7 +155,7 @@ function NotifyView:_notify(msg)
       end
       self.win = nil
     end,
-    render = Util.protect(self:notify_render(msg.messages, self._opts.render)),
+    render = Util.protect(self:notify_render(msg.messages, self._opts.render, msg.content)),
   }
 
   if msg.opts then
