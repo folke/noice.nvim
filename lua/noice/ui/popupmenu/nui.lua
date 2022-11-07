@@ -65,12 +65,6 @@ function M.format_kind(item)
 end
 
 ---@param state Popupmenu
----@param prefix? string
-function M.format(state, prefix) end
-
-function M.update_layout() end
-
----@param state Popupmenu
 function M.opts(state)
   local is_cmdline = state.grid == -1
 
