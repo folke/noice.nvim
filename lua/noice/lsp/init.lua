@@ -82,7 +82,7 @@ function M.setup()
       contents = contents or {}
       local ret = Format.format_markdown(input)
       vim.list_extend(contents, ret)
-      return ret
+      return contents
     end
   end
 
