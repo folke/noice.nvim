@@ -79,12 +79,12 @@ function M.normalize_popup_options(opts)
   -- relative, position, size
   _.normalize_layout_options(opts)
 
-  if opts.position and opts.position.row and type(opts.position.row) == "number" and opts.position.row < 0 then
-    opts.position.row = vim.go.lines + opts.position.row
-  end
-  if opts.position and opts.position.col and type(opts.position.col) == "number" and opts.position.col < 0 then
-    opts.position.col = vim.go.columns + opts.position.col
-  end
+  -- if opts.position and opts.position.row and type(opts.position.row) == "number" and opts.position.row < 0 then
+  --   opts.position.row = vim.go.lines + opts.position.row
+  -- end
+  -- if opts.position and opts.position.col and type(opts.position.col) == "number" and opts.position.col < 0 then
+  --   opts.position.col = vim.go.columns + opts.position.col
+  -- end
 
   -- border
   local border = opts.border
@@ -202,6 +202,14 @@ function M.get_layout(dim, _opts)
       end
     end
   elseif opts.type == "popup" then
+    if size.width == "auto" then
+      size.width = minmax(size.min_width, size.max_width, dim.width)
+      dim.width = size.width
+    end
+    if size.height == "auto" then
+      size.height = minmax(size.min_height, size.max_height, dim.height)
+      dim.height = size.height
+    end
     if position and not (opts.relative and opts.relative.type == "cursor") then
       if type(position.col) == "number" and position.col < 0 then
         position.col = vim.o.columns + position.col - dim.width
@@ -209,12 +217,6 @@ function M.get_layout(dim, _opts)
       if type(position.row) == "number" and position.row < 0 then
         position.row = vim.o.lines + position.row - dim.height
       end
-    end
-    if size.width == "auto" then
-      size.width = minmax(size.min_width, size.max_width, dim.width)
-    end
-    if size.height == "auto" then
-      size.height = minmax(size.min_height, size.max_height, dim.height)
     end
   end
 
