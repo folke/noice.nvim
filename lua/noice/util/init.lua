@@ -1,6 +1,7 @@
 local require = require("noice.util.lazy")
 
 local Hacks = require("noice.util.hacks")
+local Config = require("noice.config")
 
 local M = {}
 
@@ -49,7 +50,7 @@ function M.tag(buf, tag)
     vim.api.nvim_buf_set_option(buf, "filetype", "noice")
   end
 
-  if vim.api.nvim_buf_get_name(buf) == "" then
+  if Config.options.debug and vim.api.nvim_buf_get_name(buf) == "" then
     local path = "noice://" .. buf .. "/" .. tag
     local params = {}
     if ft ~= "" and ft ~= "noice" then
