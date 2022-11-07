@@ -53,19 +53,30 @@ function M.progress(_, msg, info)
       message.opts.progress.percentage = 100
     end
     vim.defer_fn(function()
-      M.update()
-      Router.update()
-      Manager.remove(message)
-      M._progress[id] = nil
+      M.close(id)
     end, 100)
   end
 
   M.update()
 end
 
+function M.close(id)
+  local message = M._progress[id]
+  if message then
+    M.update()
+    Router.update()
+    Manager.remove(message)
+    M._progress[id] = nil
+  end
+end
+
 function M._update()
   if not vim.tbl_isempty(M._progress) then
-    for _, message in pairs(M._progress) do
+    for id, message in pairs(M._progress) do
+      local client = vim.lsp.get_active_clients({ id = message.opts.progress.client_id })[1]
+      if not client then
+        M.close(id)
+      end
       if message.opts.progress.kind == "end" then
         Manager.add(Format.format(message, Config.options.lsp.progress.format_done))
       else
