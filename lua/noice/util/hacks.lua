@@ -255,7 +255,7 @@ function M.fix_cmp()
 end
 
 function M.cmdline_force_redraw()
-  if vim.api.nvim_get_mode().mode == "c" and vim.fn.getcmdline():find("s/") then
+  if vim.fn.pumvisible() == 0 and vim.api.nvim_get_mode().mode == "c" and vim.fn.getcmdline():find("s/") then
     -- HACK: this will trigger redraw during substitue
     vim.api.nvim_input("<space><bs>")
   end
