@@ -79,13 +79,6 @@ function M.normalize_popup_options(opts)
   -- relative, position, size
   _.normalize_layout_options(opts)
 
-  -- if opts.position and opts.position.row and type(opts.position.row) == "number" and opts.position.row < 0 then
-  --   opts.position.row = vim.go.lines + opts.position.row
-  -- end
-  -- if opts.position and opts.position.col and type(opts.position.col) == "number" and opts.position.col < 0 then
-  --   opts.position.col = vim.go.columns + opts.position.col
-  -- end
-
   -- border
   local border = opts.border
   if type(border) == "string" then
