@@ -40,6 +40,7 @@ function NuiView:update_options()
       filetype = "noice",
     },
     win_options = {
+      wrap = false,
       foldenable = false,
       scrolloff = 0,
       sidescrolloff = 0,
