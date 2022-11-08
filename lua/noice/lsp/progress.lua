@@ -35,11 +35,16 @@ function M.progress(_, msg, info)
 
   local message = M._progress[id]
   if not message then
+    local client = vim.lsp.get_active_clients({ id = info.client_id })[1]
+    -- should not happen, but it does for some reason
+    if not client then
+      return
+    end
     message = Message("lsp", "progress")
     message.opts.progress = {
       client_id = info.client_id,
       ---@type string
-      client = vim.lsp.get_active_clients({ id = info.client_id })[1].name,
+      client = client and client.name or ("lsp-" .. info.client_id),
     }
     -- message.once = true
     M._progress[id] = message
