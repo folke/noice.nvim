@@ -26,34 +26,13 @@ local defaults = {
 ---@class NotifyView: NoiceView
 ---@field win? number
 ---@field buf? number
----@field notif table<NotifyInstance, notify.Record>
+---@field notif notify.Record
 ---@field super NoiceView
 ---@diagnostic disable-next-line: undefined-field
 local NotifyView = View:extend("NotifyView")
 
----@return NotifyInstance
-function NotifyView.instance()
-  if Util.is_blocking() then
-    if not NotifyView._instant_notify then
-      NotifyView._instant_notify = require("notify").instance({
-        stages = "static",
-      }, true)
-    end
-    return NotifyView._instant_notify
-  end
-  return require("notify")
-end
-
 function NotifyView.dismiss()
   require("notify").dismiss({ pending = true, silent = true })
-  if NotifyView._instant_notify then
-    NotifyView._instant_notify.dismiss({ pending = true, silent = true })
-  end
-end
-
-function NotifyView:init(opts)
-  NotifyView.super.init(self, opts)
-  self.notif = {}
 end
 
 function NotifyView:is_available()
@@ -71,7 +50,7 @@ function NotifyView:plain()
 end
 
 ---@param config notify.Config
----@param render? notify.RenderFun
+---@param render? notify.RenderFun|string
 ---@return notify.RenderFun
 function NotifyView:get_render(config, render)
   ---@type string|notify.RenderFun
@@ -88,7 +67,7 @@ function NotifyView:get_render(config, render)
 end
 
 ---@param messages NoiceMessage[]
----@param render? notify.RenderFun
+---@param render? notify.RenderFun|string
 ---@param content? string
 function NotifyView:notify_render(messages, render, content)
   ---@param config notify.Config
@@ -133,12 +112,11 @@ end
 function NotifyView:_notify(msg)
   local level = self._opts.level or msg.level
 
-  local instance = NotifyView.instance()
-
   local opts = {
     title = msg.title or self._opts.title,
+    animate = not Util.is_blocking(),
     timeout = self._opts.timeout,
-    replace = self._opts.replace and self.notif[instance],
+    replace = self._opts.replace and self.notif,
     keep = function()
       return Util.is_blocking()
     end,
@@ -149,7 +127,7 @@ function NotifyView:_notify(msg)
       end
     end,
     on_close = function()
-      self.notif[instance] = nil
+      self.notif = nil
       for _, m in ipairs(msg.messages) do
         m.opts.notify_id = nil
       end
@@ -173,8 +151,8 @@ function NotifyView:_notify(msg)
     content = nil
   end
 
-  local id = instance.notify(content, level, opts)
-  self.notif[instance] = id
+  local id = require("notify")(content, level, opts)
+  self.notif = id
   for _, m in ipairs(msg.messages) do
     m.opts.notify_id = id
   end

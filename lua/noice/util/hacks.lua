@@ -18,7 +18,6 @@ function M.enable()
   M.reset_augroup()
   M.fix_incsearch()
   M.fix_input()
-  M.fix_notify()
   M.fix_nohlsearch()
   M.fix_redraw()
   M.fix_cmp()
@@ -189,32 +188,6 @@ function M.fix_input()
     vim.fn.getcharstr = getcharstr
     vim.fn.inputlist = inputlist
   end)
-end
-
--- Allow nvim-notify to behave inside instant events
-function M.fix_notify()
-  vim.schedule(Util.protect(function()
-    if pcall(_G.require, "notify") then
-      local NotifyService = require("notify.service")
-      ---@type NotificationService
-      local meta = getmetatable(NotifyService(require("notify")._config()))
-      local push = meta.push
-      meta.push = function(self, notif)
-        ---@type buffer
-        local buf = push(self, notif)
-
-        -- run animator and re-render instantly when inside instant events
-        if Util.is_blocking() then
-          pcall(self._animator.render, self._animator, self._pending, 1 / self._fps)
-          self._buffers[notif.id]:render()
-        end
-        return buf
-      end
-      table.insert(M._disable, function()
-        meta.push = push
-      end)
-    end
-  end))
 end
 
 -- Fixes cmp cmdline position

@@ -222,7 +222,7 @@ end
 ---@param ... any
 function M.notify(msg, level, ...)
   if M.module_exists("notify") then
-    require("noice.view.backend.notify").instance().notify(msg:format(...), level, {
+    require("notify").notify(msg:format(...), level, {
       title = "noice.nvim",
       on_open = function(win)
         vim.api.nvim_win_set_option(win, "conceallevel", 3)
