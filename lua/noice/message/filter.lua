@@ -21,6 +21,7 @@ local M = {}
 ---@field max_length? integer
 ---@field find? string
 ---@field error? boolean
+---@field has? boolean
 ---@field warning? boolean
 ---@field mode? string
 ---@field blocking? boolean
@@ -31,6 +32,10 @@ M.filters = {
   cleared = function(message, cleared)
     ---@cast message NoiceMessage
     return cleared == not Manager.has(message)
+  end,
+  has = function(message, has)
+    ---@cast message NoiceMessage
+    return has == Manager.has(message, { history = true })
   end,
   mode = function(_, mode)
     return vim.api.nvim_get_mode().mode:find(mode)
