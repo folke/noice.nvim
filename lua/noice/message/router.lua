@@ -71,6 +71,29 @@ function M.check_redraw()
   end
 end
 
+function M.view_stats()
+  ---@type table<NoiceView, boolean>
+  local views = {}
+  for _, route in ipairs(M._routes) do
+    if route.view then
+      views[route.view] = true
+    end
+  end
+
+  local ret = {}
+
+  -- remove deleted messages and new messages from the views
+  for view, _ in pairs(views) do
+    if #view._messages > 0 then
+      if not ret[view._opts.view] then
+        ret[view._opts.view] = 0
+      end
+      ret[view._opts.view] = ret[view._opts.view] + #view._messages
+    end
+  end
+  return ret
+end
+
 function M.update()
   -- only update on changes
   if M._tick == Manager.tick() then

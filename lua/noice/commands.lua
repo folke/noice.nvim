@@ -67,6 +67,11 @@ function M.setup()
       message:set(vim.inspect(Config.options))
       Manager.add(message)
     end,
+    viewstats = function()
+      local message = Message("noice", "debug")
+      message:set(vim.inspect(require("noice.message.router").view_stats()))
+      Manager.add(message)
+    end,
   }
 
   for name, command in pairs(Config.options.commands) do
