@@ -5,7 +5,8 @@
         "nui.nvim",
         "nvim-cmp",
         "nvim-notify",
-        "telescope.nvim"
+        "telescope.nvim",
+        "plenary.nvim"
       ]
     }
   },

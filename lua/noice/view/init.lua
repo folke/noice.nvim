@@ -60,12 +60,13 @@ function View.get_view(view, opts)
   end
 
   local mod = require("noice.view.backend." .. opts.backend)
+  local init_opts = vim.deepcopy(opts)
   ---@type NoiceView
   local ret = mod(opts)
   if not ret:is_available() and opts.fallback then
     return View.get_view(opts.fallback, opts_orig)
   end
-  table.insert(View._views, { view = ret, opts = vim.deepcopy(opts) })
+  table.insert(View._views, { view = ret, opts = init_opts })
   return ret
 end
 
