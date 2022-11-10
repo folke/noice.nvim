@@ -4,7 +4,6 @@ local Message = require("noice.message")
 local Manager = require("noice.message.manager")
 local Router = require("noice.message.router")
 local Util = require("noice.util")
-local Msg = require("noice.ui.msg")
 
 local M = {}
 
@@ -60,7 +59,6 @@ function M.notify(msg, level, opts)
     message.opts.is_nil = true
   end
 
-  Msg.check_clear()
   Manager.add(message)
   if Util.is_blocking() then
     Router.update()

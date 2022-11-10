@@ -11,7 +11,6 @@ local Manager = require("noice.message.manager")
 ---@field opts? NoiceRouteOptions|NoiceViewOptions
 
 ---@class NoiceRouteOptions
----@field history boolean
 ---@field stop boolean
 ---@field skip boolean
 
@@ -27,6 +26,7 @@ M._tick = 0
 M._need_redraw = false
 ---@type fun()|Interval?
 M._updater = nil
+M._updating = false
 
 function M.enable()
   if not M._updater then
@@ -95,64 +95,80 @@ function M.view_stats()
 end
 
 function M.update()
+  if M._updating then
+    return
+  end
+
   -- only update on changes
   if M._tick == Manager.tick() then
     M.check_redraw()
     return
   end
 
+  M._updating = true
+
   Util.stats.track("router.update")
 
-  ---@type table<NoiceView,NoiceMessage[]>
+  ---@type table<NoiceView,boolean>
   local updates = {}
-  ---@type table<NoiceView,NoiceViewOptions>
-  local updates_opts = {}
 
-  local updated = 0
-  local messages = Manager.get(nil, { sort = true })
+  ---@type table<NoiceView, boolean>
+  local views = {}
   for _, route in ipairs(M._routes) do
-    local route_message_opts = route.opts.history and { history = true, sort = true } or { messages = messages }
-    local route_messages = Manager.get(route.filter, route_message_opts)
-
-    if not route.opts.skip then
-      updates[route.view] = updates[route.view] or {}
-      if #route_messages > 0 then
-        updates_opts[route.view] = vim.tbl_deep_extend("force", updates_opts[route.view] or {}, route.opts)
-      end
-      vim.list_extend(updates[route.view], route_messages)
-    end
-
-    if route.opts.stop ~= false and route.opts.history ~= true then
-      messages = vim.tbl_filter(
-        ---@param me NoiceMessage
-        function(me)
-          return not vim.tbl_contains(route_messages, me)
-        end,
-        messages
-      )
+    if route.view then
+      views[route.view] = true
     end
   end
 
-  for view, view_messages in pairs(updates) do
-    view._route_opts = updates_opts[view]
-    updated = updated + (view:display(view_messages) and 1 or 0)
-    for _, m in ipairs(view_messages) do
-      if m.once then
-        Manager.clear({ message = m })
+  local messages = Manager.get(nil, { sort = true })
+
+  -- remove deleted messages and new messages from the views
+  for view, _ in pairs(views) do
+    local count = #view._messages
+    view._messages = Manager.get({
+      -- remove any deleted messages
+      has = true,
+      -- remove messages that we are adding
+      ["not"] = {
+        message = messages,
+      },
+    }, { messages = view._messages })
+    if #view._messages ~= count then
+      updates[view] = true
+    end
+  end
+
+  -- add messages
+  for _, message in ipairs(messages) do
+    for _, route in ipairs(M._routes) do
+      if message:is(route.filter) then
+        if not route.opts.skip then
+          route.view:push(message)
+          route.view._route_opts = vim.tbl_deep_extend("force", route.view._route_opts or {}, route.opts or {})
+          updates[route.view] = true
+        end
+        if route.opts.stop ~= false then
+          break
+        end
       end
     end
+  end
+
+  Manager.clear()
+
+  for view, _ in pairs(updates) do
+    view:display()
   end
 
   M._tick = Manager.tick()
 
-  if updated > 0 then
+  if not vim.tbl_isempty(updates) then
     Util.stats.track("router.update.updated")
     M._need_redraw = true
   end
 
   M.check_redraw()
-
-  return updated
+  M._updating = false
 end
 
 return M

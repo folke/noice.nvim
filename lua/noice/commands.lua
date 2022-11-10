@@ -18,14 +18,14 @@ M.commands = {}
 function M.command(command)
   return function()
     local view = View.get_view(command.view, command.opts)
-    view:display(Manager.get(
+    view:set(Manager.get(
       command.filter,
       vim.tbl_deep_extend("force", {
         history = true,
         sort = true,
       }, command.filter_opts or {})
     ))
-    view:show()
+    view:display()
   end
 end
 
@@ -84,11 +84,11 @@ function M.setup()
   end, {
     nargs = "?",
     desc = "Noice",
-    complete = function(f, line, ...)
+    complete = function(_, line)
       if line:match("^%s*Noice %w+ ") then
         return {}
       end
-      local prefix = line:match("^%s*Noice (%w*)")
+      local prefix = line:match("^%s*Noice (%w*)") or ""
       return vim.tbl_filter(function(key)
         return key:find(prefix) == 1
       end, vim.tbl_keys(M.commands))

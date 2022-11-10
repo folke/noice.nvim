@@ -143,6 +143,7 @@ function NotifySendView:show()
       })
     end
   end
+  self:clear()
 
   for _, msg in ipairs(todo) do
     self:_notify(msg)

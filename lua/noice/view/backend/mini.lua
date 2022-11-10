@@ -68,6 +68,7 @@ function MiniView:show()
     self.active[message.id] = message
     self:autohide(message.id)
   end
+  self:clear()
   self:update()
 end
 
@@ -85,7 +86,8 @@ function MiniView:update()
       return ret
     end
   )
-  self.view:display(active, { dirty = true })
+  self.view:set(active)
+  self.view:display()
 end
 
 function MiniView:hide() end
