@@ -89,6 +89,11 @@ end
 
 function View:update_options() end
 
+---@param message NoiceMessage
+function View:push(message)
+  -- FIXME:
+end
+
 function View:check_options()
   ---@type NoiceViewOptions
   local old = vim.deepcopy(self._opts)
