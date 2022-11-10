@@ -45,6 +45,10 @@ function M.setup()
   end
 end
 
+function M.scroll(delta)
+  return require("noice.lsp.docs").scroll(delta)
+end
+
 function M.hover()
   ---@diagnostic disable-next-line: missing-parameter
   local params = vim.lsp.util.make_position_params()
