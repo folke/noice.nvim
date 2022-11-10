@@ -22,6 +22,7 @@ local function NoiceStatus(name)
     return Manager.get(filter, {
       count = 1,
       sort = true,
+      history = true,
     })[1]
   end
   ---@class NoiceStatus
