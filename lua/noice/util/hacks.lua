@@ -234,6 +234,7 @@ function M.cmdline_force_redraw()
   end
 end
 
+---@type string?
 M._guicursor = nil
 function M.hide_cursor()
   if M._guicursor == nil then
@@ -245,7 +246,12 @@ end
 
 function M.show_cursor()
   if M._guicursor then
-    vim.go.guicursor = M._guicursor
+    -- we need to reset all first and then wait for some time before resetting the guicursor. See #114
+    vim.go.guicursor = "a:"
+    vim.defer_fn(function()
+      vim.go.guicursor = M._guicursor
+      M._guicursor = nil
+    end, 100)
   end
 end
 
