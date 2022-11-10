@@ -11,7 +11,6 @@ local _id = 0
 ---@field event NoiceEvent
 ---@field ctime number
 ---@field mtime number
----@field once? boolean
 ---@field tick number
 ---@field level? NotifyLevel
 ---@field kind? NoiceKind

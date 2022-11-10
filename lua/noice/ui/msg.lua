@@ -41,7 +41,6 @@ M.kinds = {
 
 ---@type NoiceMessage
 M.last = nil
-M.clear = false
 ---@type NoiceMessage[]
 M._messages = {}
 
@@ -64,7 +63,6 @@ end
 ---@param kind MsgKind
 ---@param content NoiceContent[]
 function M.on_show(event, kind, content, replace_last)
-  M.check_clear()
   if kind == M.kinds.return_prompt then
     return M.on_return_prompt()
   elseif kind == M.kinds.confirm or kind == M.kinds.confirm_sub then
@@ -80,7 +78,16 @@ function M.on_show(event, kind, content, replace_last)
     M.last = nil
   end
 
-  local message = Message(event, kind, content)
+  local message
+  if kind == M.kinds.search_count then
+    message = M.get(event, kind)
+    Hacks.fix_nohlsearch(message)
+  else
+    message = Message(event, kind)
+  end
+
+  message:set(content)
+
   message:trim_empty_lines()
   if M.is_error(kind) then
     message.level = "error"
@@ -88,27 +95,14 @@ function M.on_show(event, kind, content, replace_last)
     message.level = "warn"
   end
 
-  if kind == M.kinds.search_count then
-    Hacks.fix_nohlsearch()
-  end
-
   M.last = message
 
   Manager.add(message)
 end
 
-function M.check_clear()
-  if M.clear then
-    Manager.clear({ event = "msg_show" })
-    M.clear = false
-  end
-end
-
 function M.on_clear()
   State.clear("msg_show")
-  M.check_clear()
   M.last = nil
-  M.clear = true
 end
 
 -- mode like recording...
@@ -143,7 +137,6 @@ function M.on_confirm(event, kind, content)
     message:append(" ")
   end
   message:append(" ", "NoiceCursor")
-  message.once = true
   Manager.add(message)
   vim.schedule(function()
     Manager.remove(message)

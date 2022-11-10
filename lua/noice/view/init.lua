@@ -89,6 +89,27 @@ end
 
 function View:update_options() end
 
+---@param messages NoiceMessage|NoiceMessage[]
+---@param opts? {format?: boolean}
+function View:push(messages, opts)
+  opts = opts or {}
+
+  messages = vim.tbl_islist(messages) and messages or { messages }
+  ---@cast messages NoiceMessage[]
+
+  for _, message in ipairs(messages) do
+    if opts.format ~= false then
+      message = Format.format(message, self._opts.format)
+    end
+    table.insert(self._messages, message)
+  end
+end
+
+function View:clear()
+  self._messages = {}
+  self._route_opts = {}
+end
+
 function View:check_options()
   ---@type NoiceViewOptions
   local old = vim.deepcopy(self._opts)
@@ -100,52 +121,26 @@ function View:check_options()
 end
 
 ---@param messages NoiceMessage[]
----@param opts? {dirty?:boolean, format?: boolean}
-function View:display(messages, opts)
+---@param opts? {format?: boolean}
+function View:set(messages, opts)
   opts = opts or {}
-  local dirty = (#messages ~= #self._messages) or opts.dirty
-  for _, m in ipairs(messages) do
-    if m.tick > self._tick then
-      self._tick = m.tick
-      dirty = true
-    end
-  end
-
-  if dirty then
-    if opts.format == false then
-      self._messages = messages
-    else
-      self:format(messages)
-    end
-    if #self._messages > 0 then
-      self:check_options()
-
-      Util.try(self.show, self)
-
-      self._visible = true
-    else
-      self._visible = false
-      self:hide()
-    end
-    return true
-  end
-  return false
+  self:clear()
+  self:push(messages, opts)
 end
 
----@param messages NoiceMessage[]
-function View:format(messages)
-  self._messages = vim.tbl_map(
-    ---@param message NoiceMessage
-    function(message)
-      return require("noice.text.format").format(message, self._opts.format)
-    end,
-    messages
-  )
+function View:display()
+  if #self._messages > 0 then
+    Format.align(self._messages, self._opts.align)
+    self:check_options()
 
-  local width = self:width()
-  for _, message in ipairs(self._messages) do
-    Format.align(message, width, self._opts.align)
+    Util.try(self.show, self)
+
+    self._visible = true
+  else
+    self._visible = false
+    self:hide()
   end
+  return true
 end
 
 ---@param old NoiceViewOptions

@@ -185,6 +185,7 @@ function NuiView:hide()
 
     Util.protect(function()
       if self._nui and not self._visible then
+        self:clear()
         self._nui:hide()
         self._scroll:hide()
       end

@@ -10,7 +10,7 @@ local M = {}
 ---@class NoiceFilter
 ---@field event? NoiceEvent|NoiceEvent[]
 ---@field kind? NoiceKind|NoiceKind[]
----@field message? NoiceMessage
+---@field message? NoiceMessage|NoiceMessage[]
 ---@field any? NoiceFilter[]
 ---@field not? NoiceFilter
 ---@field min_height? integer
@@ -21,6 +21,7 @@ local M = {}
 ---@field max_length? integer
 ---@field find? string
 ---@field error? boolean
+---@field has? boolean
 ---@field warning? boolean
 ---@field mode? string
 ---@field blocking? boolean
@@ -31,6 +32,10 @@ M.filters = {
   cleared = function(message, cleared)
     ---@cast message NoiceMessage
     return cleared == not Manager.has(message)
+  end,
+  has = function(message, has)
+    ---@cast message NoiceMessage
+    return has == Manager.has(message, { history = true })
   end,
   mode = function(_, mode)
     return vim.api.nvim_get_mode().mode:find(mode)
@@ -50,7 +55,14 @@ M.filters = {
   end,
   message = function(message, other)
     ---@cast message NoiceMessage
-    return other.id == message.id
+    other = vim.tbl_islist(other) and other or { other }
+    ---@cast other NoiceMessage[]
+    for _, m in ipairs(other) do
+      if m.id == message.id then
+        return true
+      end
+    end
+    return false
   end,
   error = function(message, error)
     ---@cast message NoiceMessage
