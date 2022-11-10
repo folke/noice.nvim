@@ -117,16 +117,36 @@ end
 
 ---@alias NoiceAlign "center" | "left" | "right" | "message-center" | "message-left" | "message-right" | "line-center" | "line-left" | "line-right"
 
+---@param messages NoiceMessage[]
+---@param align? NoiceAlign
+function M.align(messages, align)
+  local width = 0
+  for _, m in ipairs(messages) do
+    for _, line in ipairs(m._lines) do
+      ---@diagnostic disable-next-line: undefined-field
+      if line._texts[1] and line._texts[1].padding then
+        table.remove(line._texts, 1)
+      end
+    end
+    width = math.max(width, m:width())
+  end
+
+  for _, m in ipairs(messages) do
+    M._align(m, width, align)
+  end
+end
+
 ---@param message NoiceMessage
 ---@param width integer
 ---@param align? NoiceAlign
-function M.align(message, width, align)
+function M._align(message, width, align)
   if align == nil or align == "left" then
     return
   end
 
   local align_object = "message"
 
+  ---@type string, string
   local ao, a = align:match("^(.-)%-(.-)$")
   if a then
     align = a
@@ -138,8 +158,12 @@ function M.align(message, width, align)
     if w < width then
       if align == "right" then
         table.insert(line._texts, 1, NuiText(string.rep(" ", width - w)))
+        ---@diagnostic disable-next-line: no-unknown
+        line._texts[1].padding = true
       elseif align == "center" then
         table.insert(line._texts, 1, NuiText(string.rep(" ", math.floor((width - w) / 2 + 0.5))))
+        ---@diagnostic disable-next-line: no-unknown
+        line._texts[1].padding = true
       end
     end
   end
