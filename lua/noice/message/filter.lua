@@ -10,7 +10,7 @@ local M = {}
 ---@class NoiceFilter
 ---@field event? NoiceEvent|NoiceEvent[]
 ---@field kind? NoiceKind|NoiceKind[]
----@field message? NoiceMessage
+---@field message? NoiceMessage|NoiceMessage[]
 ---@field any? NoiceFilter[]
 ---@field not? NoiceFilter
 ---@field min_height? integer
@@ -55,7 +55,14 @@ M.filters = {
   end,
   message = function(message, other)
     ---@cast message NoiceMessage
-    return other.id == message.id
+    other = vim.tbl_islist(other) and other or { other }
+    ---@cast other NoiceMessage[]
+    for _, m in ipairs(other) do
+      if m.id == message.id then
+        return true
+      end
+    end
+    return false
   end,
   error = function(message, error)
     ---@cast message NoiceMessage

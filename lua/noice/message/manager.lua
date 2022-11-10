@@ -31,7 +31,7 @@ end
 ---@param opts? { history: boolean } # defaults to `{ history = false }`
 function M.has(message, opts)
   opts = opts or {}
-  return (opts.history and M._history or M._messages)[message.id]
+  return (opts.history and M._history or M._messages)[message.id] ~= nil
 end
 
 ---@param message NoiceMessage
