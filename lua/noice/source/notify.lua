@@ -54,7 +54,6 @@ function M.notify(msg, level, opts)
   local message = Message("notify", level, msg)
   message.opts = opts or {}
   message.level = level
-  message.once = true
 
   if msg == nil then
     -- special case for some destinations like nvim-notify

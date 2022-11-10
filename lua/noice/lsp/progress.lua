@@ -46,7 +46,6 @@ function M.progress(_, msg, info)
       ---@type string
       client = client and client.name or ("lsp-" .. info.client_id),
     }
-    -- message.once = true
     M._progress[id] = message
   end
 

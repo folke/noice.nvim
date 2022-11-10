@@ -33,7 +33,6 @@ function M.on_message(_, result, ctx)
       message.level = level
     end
   end
-  message.once = true
   Manager.add(message)
 end
 
