@@ -250,10 +250,9 @@ function M.show_cursor()
   if M._guicursor then
     -- we need to reset all first and then wait for some time before resetting the guicursor. See #114
     vim.go.guicursor = "a:"
-    vim.defer_fn(function()
-      vim.go.guicursor = M._guicursor
-      M._guicursor = nil
-    end, 100)
+    vim.cmd.redrawstatus()
+    vim.go.guicursor = M._guicursor
+    M._guicursor = nil
   end
 end
 
