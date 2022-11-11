@@ -217,7 +217,7 @@ function M.fix_cmp()
       local pos = Api.get_cmdline_position()
       if pos then
         local col = vim.fn.getcmdpos() - Cmdline.last().offset
-        return { pos.screenpos.row, pos.screenpos.col +  col }
+        return { pos.screenpos.row, pos.screenpos.col + col }
       end
     end
     return get_screen_cursor()
