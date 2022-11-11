@@ -72,14 +72,8 @@ function M.check_redraw()
 end
 
 function M.view_stats()
-  ---@type table<NoiceView, boolean>
-  local views = {}
-  for _, route in ipairs(M._routes) do
-    if route.view then
-      views[route.view] = true
-    end
-  end
-
+  local views = M.get_views()
+  ---@type table<string,number>
   local ret = {}
 
   -- remove deleted messages and new messages from the views
@@ -92,6 +86,17 @@ function M.view_stats()
     end
   end
   return ret
+end
+
+function M.get_views()
+  ---@type table<NoiceView, boolean>
+  local views = {}
+  for _, route in ipairs(M._routes) do
+    if route.view then
+      views[route.view] = true
+    end
+  end
+  return views
 end
 
 function M.update()
@@ -112,15 +117,8 @@ function M.update()
   ---@type table<NoiceView,boolean>
   local updates = {}
 
-  ---@type table<NoiceView, boolean>
-  local views = {}
-  for _, route in ipairs(M._routes) do
-    if route.view then
-      views[route.view] = true
-    end
-  end
-
   local messages = Manager.get(nil, { sort = true })
+  local views = M.get_views()
 
   -- remove deleted messages and new messages from the views
   for view, _ in pairs(views) do
