@@ -147,7 +147,6 @@ function NuiView:create()
     padding = Util.nui.normalize_padding(self._opts.border),
   })
   self._scroll:mount()
-  -- NOTE: this is needed, to make sure the border is rendered properly during blocking events
   self._loading = false
 end
 
@@ -186,7 +185,7 @@ function NuiView:hide()
     Util.protect(function()
       if self._nui and not self._visible then
         self:clear()
-        self._nui:hide()
+        self._nui:unmount()
         self._scroll:hide()
       end
     end, {
