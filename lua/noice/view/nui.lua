@@ -127,6 +127,18 @@ function NuiView:create()
   local opts = vim.deepcopy(self._opts)
   self._nui = self._opts.type == "split" and require("nui.split")(opts) or require("nui.popup")(opts)
 
+  self:mount()
+  self:update_layout()
+  self._scroll = Scrollbar({
+    winnr = self._nui.winid,
+    padding = Util.nui.normalize_padding(self._opts.border),
+  })
+  self._scroll:mount()
+  self._loading = false
+end
+
+function NuiView:mount()
+  self._nui:mount()
   if self._opts.close and self._opts.close.events then
     self._nui:on(self._opts.close.events, function()
       self:hide()
@@ -138,16 +150,6 @@ function NuiView:create()
       self:hide()
     end, { remap = false, nowait = true })
   end
-
-  self._nui:mount()
-
-  self:update_layout()
-  self._scroll = Scrollbar({
-    winnr = self._nui.winid,
-    padding = Util.nui.normalize_padding(self._opts.border),
-  })
-  self._scroll:mount()
-  self._loading = false
 end
 
 ---@param old NoiceNuiOptions
@@ -259,7 +261,7 @@ function NuiView:show()
   end
 
   if not self._nui._.mounted then
-    self._nui:mount()
+    self:mount()
   end
 
   vim.bo[self._nui.bufnr].modifiable = true
