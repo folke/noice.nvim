@@ -169,6 +169,9 @@ function M.defaults()
         ["{%S-}"] = "@parameter",
       },
     },
+    hacks = {
+      cmp_popup_row_offset = 0,
+    },
     health = {
       checker = true, -- Disable if you don't want health checks to run
     },
