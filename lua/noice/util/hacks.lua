@@ -3,6 +3,7 @@ local require = require("noice.util.lazy")
 local Util = require("noice.util")
 local Router = require("noice.message.router")
 local Api = require("noice.api")
+local Cmdline = require("noice.ui.cmdline")
 
 -- HACK: a bunch of hacks to make Noice behave
 local M = {}
@@ -215,7 +216,8 @@ function M.fix_cmp()
     if api.is_cmdline_mode() then
       local pos = Api.get_cmdline_position()
       if pos then
-        return { pos.screenpos.row, pos.screenpos.col + vim.fn.getcmdpos() - 1 }
+        local col = vim.fn.getcmdpos() - Cmdline.last().offset
+        return { pos.screenpos.row, pos.screenpos.col +  col }
       end
     end
     return get_screen_cursor()
