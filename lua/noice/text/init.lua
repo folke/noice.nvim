@@ -57,14 +57,15 @@ function NoiceText:highlight(bufnr, ns_id, linenr, byte_start)
   end
 
   if self.extmark.lang then
-    if self.extmark.lang == "markdown" then
-      Markdown.keys(bufnr)
-    end
     local range = { linenr - self.extmark.lines, 0, linenr, byte_start - 1 }
     if Treesitter.has_lang(self.extmark.lang) then
       Treesitter.highlight(bufnr, ns_id, range, self.extmark.lang)
     else
       Syntax.highlight(bufnr, ns_id, range, self.extmark.lang)
+    end
+    if self.extmark.lang == "markdown" then
+      Markdown.keys(bufnr)
+      Markdown.conceal_escape_characters(bufnr, ns_id, range)
     end
     return
   end

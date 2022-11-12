@@ -30,6 +30,35 @@ function M.html_entities(text)
   return text
 end
 
+--- test\_foo
+---@param buf buffer
+---@param range number[]
+function M.conceal_escape_characters(buf, ns, range)
+  local chars = "\\`*_{}[]()#+-.!"
+  local regex = "\\["
+  for i = 1, #chars do
+    regex = regex .. "%" .. chars:sub(i, i)
+  end
+  regex = regex .. "]"
+  for i = 1, #chars do
+    local char = chars:sub(i, i)
+    assert(("\\" .. char):find(regex) == 1)
+  end
+
+  local lines = vim.api.nvim_buf_get_lines(buf, range[1], range[3] + 1, false)
+
+  for l, line in ipairs(lines) do
+    local c = line:find(regex)
+    while c do
+      vim.api.nvim_buf_set_extmark(buf, ns, range[1] + l - 1, c - 1, {
+        end_col = c,
+        conceal = "",
+      })
+      c = line:find(regex, c + 1)
+    end
+  end
+end
+
 ---@param text string
 function M.parse(text)
   text = M.html_entities(text)
@@ -132,13 +161,17 @@ function M.format(message, text)
 
   local md_lines = 0
 
+  local function emit_md()
+    if md_lines > 0 then
+      message:append(NoiceText.syntax("markdown", md_lines))
+      md_lines = 0
+    end
+  end
+
   for l = 1, #blocks do
     local block = blocks[l]
     if block.code then
-      if md_lines > 0 then
-        message:append(NoiceText.syntax("markdown", md_lines))
-        md_lines = 0
-      end
+      emit_md()
       message:newline()
       ---@cast block MarkdownCodeBlock
       for c, line in ipairs(block.code) do
@@ -154,10 +187,6 @@ function M.format(message, text)
       message:newline()
       if M.is_rule(block.line) then
         M.horizontal_line(message)
-        if md_lines > 0 then
-          message:append(NoiceText.syntax("markdown", md_lines))
-          md_lines = 0
-        end
       else
         message:append(block.line)
         for _, t in ipairs(M.get_highlights(block.line)) do
@@ -167,10 +196,7 @@ function M.format(message, text)
       end
     end
   end
-  if md_lines > 0 then
-    message:append(NoiceText.syntax("markdown", md_lines))
-    md_lines = 0
-  end
+  emit_md()
 end
 
 function M.keys(buf)
