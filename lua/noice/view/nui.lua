@@ -274,9 +274,9 @@ function NuiView:show()
   if not self._nui.winid then
     return
   end
-  self:set_win_options(self._nui.winid)
   self:tag()
   if not self._visible then
+    self:set_win_options(self._nui.winid)
     self:update_layout()
     self:smart_move()
   end
