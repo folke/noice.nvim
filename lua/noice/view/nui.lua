@@ -188,7 +188,9 @@ function NuiView:hide()
       if self._nui and not self._visible then
         self:clear()
         self._nui:unmount()
-        self._scroll:hide()
+        if self._scroll then
+          self._scroll:hide()
+        end
       end
     end, {
       finally = function()
