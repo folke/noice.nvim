@@ -209,10 +209,6 @@ function View:render(buf, opts)
     require("nui.utils")._.set_buf_options(buf, self._opts.buf_options)
   end
 
-  if self._opts.lang == "markdown" then
-    Markdown.keys(buf)
-  end
-
   if self._opts.lang and not vim.b[buf].ts_highlight then
     if not pcall(vim.treesitter.start, buf, self._opts.lang) then
       vim.bo[buf].syntax = self._opts.lang

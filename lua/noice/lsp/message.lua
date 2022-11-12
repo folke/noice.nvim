@@ -22,6 +22,7 @@ end
 
 ---@param result ShowMessageParams
 function M.on_message(_, result, ctx)
+  ---@type number
   local client_id = ctx.client_id
   local client = vim.lsp.get_client_by_id(client_id)
   local client_name = client and client.name or string.format("lsp id=%d", client_id)

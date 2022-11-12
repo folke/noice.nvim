@@ -81,7 +81,7 @@ function M.on_show(event, kind, content, replace_last)
   local message
   if kind == M.kinds.search_count then
     message = M.get(event, kind)
-    Hacks.fix_nohlsearch(message)
+    Hacks.fix_nohlsearch()
   else
     message = Message(event, kind)
   end

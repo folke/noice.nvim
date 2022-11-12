@@ -3,10 +3,14 @@ local require = require("noice.util.lazy")
 local NoiceText = require("noice.text")
 local Config = require("noice.config")
 
+---@alias MarkdownBlock {line:string}
+---@alias MarkdownCodeBlock {code:string[], lang:string}
+---@alias Markdown (MarkdownBlock|MarkdownCodeBlock)[]
+
 local M = {}
 
 function M.is_rule(line)
-  return line and line:find("^[%*%-_][%*%-_][%*%-_]+$")
+  return line and line:find("^%s*[%*%-_][%*%-_][%*%-_]+%s*$")
 end
 
 function M.is_code_block(line)
@@ -26,81 +30,146 @@ function M.html_entities(text)
   return text
 end
 
-function M.trim(lines)
+---@param text string
+function M.parse(text)
+  text = M.html_entities(text)
+
+  ---@type Markdown
   local ret = {}
+
+  local lines = vim.split(text, "\n")
+
   local l = 1
+
+  local function eat_nl()
+    while M.is_empty(lines[l + 1]) do
+      l = l + 1
+    end
+  end
+
   while l <= #lines do
     local line = lines[l]
     if M.is_empty(line) then
-      while M.is_empty(lines[l + 1]) do
+      local is_start = l == 1
+      eat_nl()
+      local is_end = l == #lines
+      if not (M.is_code_block(lines[l + 1]) or M.is_rule(lines[l + 1]) or is_start or is_end) then
+        table.insert(ret, { line = "" })
+      end
+    elseif M.is_code_block(line) then
+      ---@type string
+      local lang = line:match("```(%S+)") or "text"
+      local block = { lang = lang, code = {} }
+      while lines[l + 1] and not M.is_code_block(lines[l + 1]) do
+        table.insert(block.code, lines[l + 1])
         l = l + 1
       end
-      if not (M.is_code_block(lines[l + 1]) or M.is_rule(lines[l + 1])) then
-        table.insert(ret, line)
+
+      local prev = ret[#ret]
+      if prev and not M.is_rule(prev.line) then
+        table.insert(ret, { line = "" })
       end
-    elseif M.is_code_block(line) or M.is_rule(line) then
-      table.insert(ret, line)
-      while M.is_empty(lines[l + 1]) do
-        l = l + 1
-      end
+
+      table.insert(ret, block)
+      l = l + 1
+      eat_nl()
+    elseif M.is_rule(line) then
+      table.insert(ret, { line = "---" })
+      eat_nl()
     else
-      table.insert(ret, line)
+      local prev = ret[#ret]
+      if prev and prev.code then
+        table.insert(ret, { line = "" })
+      end
+      table.insert(ret, { line = line })
     end
     l = l + 1
+  end
+
+  return ret
+end
+
+function M.get_highlights(line)
+  ---@type NoiceText[]
+  local ret = {}
+  for pattern, hl_group in pairs(Config.options.markdown.highlights) do
+    local from = 1
+    while from do
+      ---@type number, string?
+      local to, match
+      ---@type number, number, string?
+      from, to, match = line:find(pattern, from)
+      if match then
+        ---@type number, number
+        from, to = line:find(match, from)
+      end
+      if from then
+        table.insert(
+          ret,
+          NoiceText("", {
+            hl_group = hl_group,
+            col = from - 1,
+            length = to - from + 1,
+            -- priority = 120,
+          })
+        )
+      end
+      from = to and to + 1 or nil
+    end
   end
   return ret
 end
 
 ---@param message NoiceMessage
 ---@param text string
+--```lua
+--local a = 1
+--local b = true
+--```
+--foo tex
 function M.format(message, text)
-  text = M.html_entities(text)
-  local lines = vim.split(vim.trim(text), "\n")
-  lines = M.trim(lines)
+  local blocks = M.parse(text)
 
-  for l, line in ipairs(lines) do
-    local prev = lines[l - 1]
-    local next = lines[l + 1]
+  local md_lines = 0
 
-    if M.is_rule(line) and M.is_code_block(prev) then
-      -- add the rule on top of the end of the code block
-      M.horizontal_line(message)
-    elseif
-      M.is_rule(line) and M.is_code_block(next)
-      -- will be taken care of at the next iteration
-    then
-    else
-      if l ~= 1 then
-        message:newline()
+  for l = 1, #blocks do
+    local block = blocks[l]
+    if block.code then
+      if md_lines > 0 then
+        message:append(NoiceText.syntax("markdown", md_lines))
+        md_lines = 0
       end
-      if M.is_code_block(line) and M.is_rule(prev) and not M.is_code_block(lines[l - 2]) then
-        M.horizontal_line(message)
-      end
-      -- Make the horizontal ruler extend the whole window width
-      if M.is_rule(line) then
-        M.horizontal_line(message)
-      else
+      message:newline()
+      ---@cast block MarkdownCodeBlock
+      for c, line in ipairs(block.code) do
         message:append(line)
-        for pattern, hl_group in pairs(Config.options.markdown.highlights) do
-          local from = 1
-          while from do
-            local to, match
-            from, to, match = line:find(pattern, from)
-            if match then
-              from, to = line:find(match, from)
-            end
-            if from then
-              message:append(NoiceText("", {
-                hl_group = hl_group,
-                col = from - 1,
-                length = to - from + 1,
-              }))
-            end
-            from = to and to + 1 or nil
-          end
+        if c == #block.code then
+          message:append(NoiceText.syntax(block.lang, #block.code))
+        else
+          message:newline()
         end
       end
+    else
+      ---@cast block MarkdownBlock
+      message:newline()
+      if M.is_rule(block.line) then
+        M.horizontal_line(message)
+        if md_lines > 0 then
+          message:append(NoiceText.syntax("markdown", md_lines))
+          md_lines = 0
+        end
+      else
+        message:append(block.line)
+        for _, t in ipairs(M.get_highlights(block.line)) do
+          message:append(t)
+        end
+        md_lines = md_lines + 1
+      end
     end
+  end
+  if md_lines > 0 then
+    message:append(NoiceText.syntax("markdown", md_lines))
+    md_lines = 0
   end
 end
 

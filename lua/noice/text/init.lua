@@ -1,6 +1,9 @@
 local require = require("noice.util.lazy")
 
 local NuiText = require("nui.text")
+local Treesitter = require("noice.text.treesitter")
+local Syntax = require("noice.text.syntax")
+local Markdown = require("noice.text.markdown")
 
 ---@class NoiceExtmark
 ---@field col? number
@@ -9,6 +12,8 @@ local NuiText = require("nui.text")
 ---@field hl_group? string
 ---@field virt_self_win_col? number
 ---@field relative? boolean
+---@field lang? string
+---@field lines? number
 
 ---@class NoiceText: NuiText
 ---@field super NuiText
@@ -34,6 +39,13 @@ function NoiceText.cursor(col)
   })
 end
 
+function NoiceText.syntax(lang, lines)
+  return NoiceText("", {
+    lang = lang,
+    lines = lines,
+  })
+end
+
 ---@param bufnr number buffer number
 ---@param ns_id number namespace id
 ---@param linenr number line number (1-indexed)
@@ -43,6 +55,20 @@ function NoiceText:highlight(bufnr, ns_id, linenr, byte_start)
   if not self.extmark then
     return
   end
+
+  if self.extmark.lang then
+    if self.extmark.lang == "markdown" then
+      Markdown.keys(bufnr)
+    end
+    local range = { linenr - self.extmark.lines, 0, linenr, byte_start - 1 }
+    if Treesitter.has_lang(self.extmark.lang) then
+      Treesitter.highlight(bufnr, ns_id, range, self.extmark.lang)
+    else
+      Syntax.highlight(bufnr, ns_id, range, self.extmark.lang)
+    end
+    return
+  end
+
   local byte_start_orig = byte_start
 
   ---@type NoiceExtmark

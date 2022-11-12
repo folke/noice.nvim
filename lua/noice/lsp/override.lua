@@ -34,11 +34,6 @@ function M.setup()
       Markdown.format(message, text)
       message:render(buf, Config.ns)
       Markdown.keys(buf)
-      if not vim.b[buf].ts_highlight then
-        if not pcall(vim.treesitter.start, buf, "markdown") then
-          vim.bo[buf].syntax = "markdown"
-        end
-      end
       return vim.api.nvim_buf_get_lines(buf, 0, -1, false)
     end
   end

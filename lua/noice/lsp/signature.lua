@@ -172,26 +172,30 @@ function M:format_active_parameter(sig, param)
   end
 end
 
+--- dddd
+-- function M:format_signature(boo) end
+
 ---@param sig SignatureInformation
+---@overload fun() # goooo
 function M:format_signature(sig_index, sig)
   if sig_index ~= 1 then
-    self.message:append("\n\n")
-    self.message:append(sig)
-  end
-  self.message:append("```" .. (self.ft or ""))
-  if sig_index ~= 1 then
+    self.message:newline()
+    self.message:newline()
     Markdown.horizontal_line(self.message)
+    self.message:newline()
   end
-  self.message:newline()
+
+  local count = self.message:height()
   self.message:append(sig.label)
+  self.message:append(NoiceText.syntax(self.ft, self.message:height() - count))
   local param = self:active_parameter(sig_index)
   if param then
     self:format_active_parameter(sig, param)
   end
-  self.message:append("\n```")
+  self.message:newline()
+
   if sig.documentation then
     Markdown.horizontal_line(self.message)
-    self.message:newline()
     Format.format(self.message, sig.documentation)
   end
 end
