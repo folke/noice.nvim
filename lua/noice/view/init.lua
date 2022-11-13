@@ -58,9 +58,9 @@ function View.get_view(view, opts)
     end
   end
 
+  ---@type NoiceView
   local mod = require("noice.view.backend." .. opts.backend)
   local init_opts = vim.deepcopy(opts)
-  ---@type NoiceView
   local ret = mod(opts)
   if not ret:is_available() and opts.fallback then
     return View.get_view(opts.fallback, opts_orig)
@@ -194,12 +194,19 @@ function View:set_win_options(win)
   if self._opts.win_options then
     require("nui.utils")._.set_win_options(win, self._opts.win_options)
   end
-  vim.schedule(function()
-    vim.api.nvim_win_set_cursor(win, { 1, 0 })
-    vim.api.nvim_win_call(win, function()
-      vim.cmd([[noautocmd silent! normal! zt]])
+  -- reset cursor on show
+  vim.api.nvim_win_set_cursor(win, { 1, 0 })
+  if self._opts.type == "split" then
+    vim.schedule(function()
+      -- this is needed to make the nui split behave with vim.go.splitkeep
+      if win and vim.api.nvim_win_is_valid(win) then
+        vim.api.nvim_win_set_cursor(win, { 1, 0 })
+        vim.api.nvim_win_call(win, function()
+          vim.cmd([[noautocmd silent! normal! zt]])
+        end)
+      end
     end)
-  end)
+  end
 end
 
 ---@param buf number buffer number
