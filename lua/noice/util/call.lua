@@ -40,6 +40,10 @@ end
 ---@param opts? CallOptions
 ---@return F
 function M.protect(fn, opts)
+  if not fn then
+    local trace = debug.traceback()
+    Util.panic("nil passed to noice.util.call.protect. This should not happen.\n%s", trace)
+  end
   local self = setmetatable({}, M)
   self._opts = vim.tbl_deep_extend("force", defaults, opts or {})
   self._fn = fn
