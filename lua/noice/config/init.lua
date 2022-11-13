@@ -48,6 +48,13 @@ function M.defaults()
       -- Icons for completion item kinds (see defaults at noice.config.icons.kinds)
       kind_icons = {}, -- set to `false` to disable icons
     },
+    -- default options for require('noice').redirect
+    -- see the section on Command Redirection
+    ---@type NoiceRouteConfig
+    redirect = {
+      view = "popup",
+      filter = { event = "msg_show" },
+    },
     -- You can add any custom commands below that will be available with `:Noice command`
     ---@type table<string, NoiceCommand>
     commands = {
