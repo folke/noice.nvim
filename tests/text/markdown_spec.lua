@@ -2,12 +2,31 @@ local Markdown = require("noice.text.markdown")
 
 local M = {}
 
+local ns = vim.api.nvim_create_namespace("noice_test")
+
 function M.test()
   describe("markdown", function()
     it("parse", function()
       for _, test in ipairs(M.tests) do
         assert.same(test.output, Markdown.parse(test.input))
       end
+    end)
+
+    it("conceal escape characters", function()
+      local chars = "\\`*_{}[]()#+-.!"
+      local buf = vim.api.nvim_create_buf(false, true)
+
+      ---@type string[]
+      local lines = {}
+      for i = 1, #chars do
+        local char = chars:sub(i, i)
+        table.insert(lines, "\\" .. char)
+      end
+      vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
+
+      Markdown.conceal_escape_characters(buf, ns, { 0, 0, #lines - 1, 1 })
+      local extmarks = vim.api.nvim_buf_get_extmarks(buf, ns, 0, -1, {})
+      assert.equal(chars:len(), #extmarks)
     end)
   end)
 end

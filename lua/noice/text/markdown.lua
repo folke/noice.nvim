@@ -40,10 +40,6 @@ function M.conceal_escape_characters(buf, ns, range)
     regex = regex .. "%" .. chars:sub(i, i)
   end
   regex = regex .. "]"
-  for i = 1, #chars do
-    local char = chars:sub(i, i)
-    assert(("\\" .. char):find(regex) == 1)
-  end
 
   local lines = vim.api.nvim_buf_get_lines(buf, range[1], range[3] + 1, false)
 
