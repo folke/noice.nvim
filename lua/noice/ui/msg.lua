@@ -103,6 +103,8 @@ end
 function M.on_clear()
   State.clear("msg_show")
   M.last = nil
+  local message = M.get(M.events.show, M.kinds.search_count)
+  Manager.remove(message)
 end
 
 -- mode like recording...

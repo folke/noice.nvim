@@ -40,13 +40,13 @@ end
 -- Clears search count and stops timer when hlsearch==0
 function M.fix_nohlsearch()
   M.fix_nohlsearch = Util.interval(30, function()
-    if vim.v.hlsearch == 0 then
+    if vim.o.hlsearch and vim.v.hlsearch == 0 then
       local m = require("noice.ui.msg").get("msg_show", "search_count")
       require("noice.message.manager").remove(m)
     end
   end, {
     enabled = function()
-      return vim.v.hlsearch == 1
+      return vim.o.hlsearch and vim.v.hlsearch == 1
     end,
   })
   M.fix_nohlsearch()
