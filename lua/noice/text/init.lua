@@ -39,9 +39,11 @@ function NoiceText.cursor(col)
   })
 end
 
-function NoiceText.syntax(lang, lines)
+---@param col? number
+function NoiceText.syntax(lang, lines, col)
   return NoiceText("", {
     lang = lang,
+    col = col,
     lines = lines,
   })
 end
@@ -58,6 +60,9 @@ function NoiceText:highlight(bufnr, ns_id, linenr, byte_start)
 
   if self.extmark.lang then
     local range = { linenr - self.extmark.lines, 0, linenr, byte_start }
+    if self.extmark.col then
+      range[2] = byte_start + self.extmark.col - 1
+    end
     if Treesitter.has_lang(self.extmark.lang) then
       Treesitter.highlight(bufnr, ns_id, range, self.extmark.lang)
     else
