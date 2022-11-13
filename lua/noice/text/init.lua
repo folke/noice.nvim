@@ -57,7 +57,7 @@ function NoiceText:highlight(bufnr, ns_id, linenr, byte_start)
   end
 
   if self.extmark.lang then
-    local range = { linenr - self.extmark.lines, 0, linenr, byte_start - 1 }
+    local range = { linenr - self.extmark.lines, 0, linenr, byte_start }
     if Treesitter.has_lang(self.extmark.lang) then
       Treesitter.highlight(bufnr, ns_id, range, self.extmark.lang)
     else
