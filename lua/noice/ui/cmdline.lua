@@ -22,6 +22,9 @@ M.events = {
   block_hide = "cmdline_block_hide",
 }
 
+---@type NoiceCmdline?
+M.active = nil
+
 ---@alias NoiceCmdlineFormatter fun(cmdline: NoiceCmdline): {icon?:string, offset?:number, view?:NoiceViewOptions}
 
 ---@class CmdlineState
@@ -72,6 +75,7 @@ function Cmdline:get_format()
   end
   local line = self.state.firstc .. self:get()
 
+  ---@type table<string, CmdlineFormat>
   local formats = vim.tbl_values(vim.tbl_filter(function(f)
     return f.pattern
   end, Config.options.cmdline.format))
@@ -95,7 +99,8 @@ function Cmdline:get_format()
 end
 
 ---@param message NoiceMessage
-function Cmdline:format(message)
+---@param text_only? boolean
+function Cmdline:format(message, text_only)
   local format = self:get_format()
 
   if format.icon then
@@ -103,7 +108,9 @@ function Cmdline:format(message)
     message:append(" ")
   end
 
-  message.kind = format.kind
+  if not text_only then
+    message.kind = format.kind
+  end
 
   -- FIXME: prompt
   if self.state.prompt ~= "" then
@@ -114,11 +121,19 @@ function Cmdline:format(message)
     message:append(self.state.firstc)
   end
 
-  message:append(self:get():sub(self.offset))
+  local cmd = self:get():sub(self.offset)
 
-  local cursor = NoiceText.cursor(-self:length() + self.state.pos)
-  cursor.on_render = M.on_render
-  message:append(cursor)
+  message:append(cmd)
+
+  if format.lang then
+    message:append(NoiceText.syntax(format.lang, 1, -vim.fn.strlen(cmd)))
+  end
+
+  if not text_only then
+    local cursor = NoiceText.cursor(-self:length() + self.state.pos)
+    cursor.on_render = M.on_render
+    message:append(cursor)
+  end
 end
 
 function Cmdline:width()
@@ -144,6 +159,7 @@ function M.on_show(event, content, pos, firstc, prompt, indent, level)
   })
   local last = M.cmdlines[level] and M.cmdlines[level].state
   if not vim.deep_equal(c.state, last) then
+    M.active = c
     M.cmdlines[level] = c
     M.update()
   end
@@ -152,6 +168,12 @@ end
 function M.on_hide(_, level)
   if M.cmdlines[level] then
     M.cmdlines[level] = nil
+    local active = M.active
+    vim.defer_fn(function()
+      if M.active == active then
+        M.active = nil
+      end
+    end, 100)
     M.update()
   end
 end

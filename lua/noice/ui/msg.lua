@@ -4,6 +4,7 @@ local Manager = require("noice.message.manager")
 local Message = require("noice.message")
 local Hacks = require("noice.util.hacks")
 local State = require("noice.ui.state")
+local Cmdline = require("noice.ui.cmdline")
 
 local M = {}
 
@@ -84,6 +85,7 @@ function M.on_show(event, kind, content, replace_last)
     Hacks.fix_nohlsearch()
   else
     message = Message(event, kind)
+    message.cmdline = Cmdline.active
   end
 
   message:set(content)

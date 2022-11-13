@@ -76,6 +76,10 @@ M.defaults = {
       wrap = true,
     },
   },
+  cmdline_output = {
+    format = "details",
+    view = "split",
+  },
   messages = {
     view = "split",
     enter = true,

@@ -8,7 +8,7 @@ local Object = require("nui.object")
 ---@alias NoiceContent string|NoiceChunk|NuiLine|NuiText|NoiceBlock
 
 ---@class NoiceBlock
----@field private _lines NuiLine[]
+---@field _lines NuiLine[]
 ---@overload fun(content?: NoiceContent|NoiceContent[], highlight?: string|table): NoiceBlock
 local Block = Object("Block")
 

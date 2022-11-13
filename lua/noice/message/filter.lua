@@ -8,24 +8,25 @@ local M = {}
 ---@alias NoiceFilterFun fun(message: NoiceMessage, ...): boolean
 
 ---@class NoiceFilter
----@field event? NoiceEvent|NoiceEvent[]
----@field kind? NoiceKind|NoiceKind[]
----@field message? NoiceMessage|NoiceMessage[]
 ---@field any? NoiceFilter[]
----@field not? NoiceFilter
----@field min_height? integer
----@field max_height? integer
----@field min_width? integer
----@field max_width? integer
----@field min_length? integer
----@field max_length? integer
----@field find? string
----@field error? boolean
----@field has? boolean
----@field warning? boolean
----@field mode? string
 ---@field blocking? boolean
 ---@field cleared? boolean
+---@field cmdline? string|boolean
+---@field error? boolean
+---@field event? NoiceEvent|NoiceEvent[]
+---@field find? string
+---@field has? boolean
+---@field kind? NoiceKind|NoiceKind[]
+---@field max_height? integer
+---@field max_length? integer
+---@field max_width? integer
+---@field message? NoiceMessage|NoiceMessage[]
+---@field min_height? integer
+---@field min_length? integer
+---@field min_width? integer
+---@field mode? string
+---@field not? NoiceFilter
+---@field warning? boolean
 
 -----@type table<string, NoiceFilterFun>
 M.filters = {
@@ -52,6 +53,18 @@ M.filters = {
     ---@cast message NoiceMessage
     kind = type(kind) == "table" and kind or { kind }
     return vim.tbl_contains(kind, message.kind)
+  end,
+  cmdline = function(message, cmdline)
+    ---@cast message NoiceMessage
+    ---@cast cmdline string|boolean
+    if type(cmdline) == "boolean" then
+      return (message.cmdline ~= nil) == cmdline
+    end
+    if message.cmdline then
+      local str = message.cmdline.state.firstc .. message.cmdline:get()
+      return str:find(cmdline)
+    end
+    return false
   end,
   message = function(message, other)
     ---@cast message NoiceMessage
