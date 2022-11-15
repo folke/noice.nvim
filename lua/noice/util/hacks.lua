@@ -242,7 +242,12 @@ function M.hide_cursor()
   if M._guicursor == nil then
     M._guicursor = vim.go.guicursor
   end
-  vim.go.guicursor = "a:NoiceHiddenCursor/NoiceHiddenCursor"
+  -- schedule this, since otherwise Neovide crashes
+  vim.schedule(function()
+    if M._guicursor then
+      vim.go.guicursor = "a:NoiceHiddenCursor"
+    end
+  end)
   M._disable.guicursor = M.show_cursor
 end
 
