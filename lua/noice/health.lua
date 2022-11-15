@@ -71,6 +71,26 @@ function M.check(opts)
     log.ok("Not running inside **Neovide**")
   end
 
+  local uis = vim.api.nvim_list_uis()
+  for _, ui in ipairs(uis) do
+    local ok = true
+    for _, ext in ipairs({ "ext_multigrid", "ext_cmdline", "ext_popupmenu", "ext_messages" }) do
+      if ui[ext] then
+        ok = false
+        log.error(
+          "You're using a GUI that uses " .. ext .. ". Noice can't work when the GUI has " .. ext .. " enabled."
+        )
+      end
+    end
+    if ok then
+      if ui.chan == 0 then
+        log.ok("You're not using a GUI")
+      else
+        log.ok("You're using a GUI that should work ok")
+      end
+    end
+  end
+
   if vim.go.lazyredraw then
     if not Config.is_running() then
       log.warn(
