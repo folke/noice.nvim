@@ -155,6 +155,7 @@ M.defaults = {
   mini = {
     backend = "mini",
     relative = "editor",
+    focusable = false,
     align = "message-right",
     timeout = 2000,
     reverse = true,
