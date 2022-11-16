@@ -1,4 +1,7 @@
----@diagnostic disable: undefined-global
+local require = require("noice.util.lazy")
+
+local ffi = require("noice.util.ffi")
+
 local M = {}
 
 ---@class HLAttrs
@@ -9,23 +12,7 @@ local M = {}
 ---@field hl_blend number
 
 function M.setup()
-  local ffi = require("ffi")
-  local ok, err = pcall(
-    ffi.cdef,
-    [[typedef int32_t RgbValue;
-      typedef struct attr_entry {
-        int16_t rgb_ae_attr, cterm_ae_attr;
-        RgbValue rgb_fg_color, rgb_bg_color, rgb_sp_color;
-        int cterm_fg_color, cterm_bg_color;
-        int hl_blend;
-      } HlAttrs;
-      HlAttrs syn_attr2entry(int attr);]]
-  )
-  ---@diagnostic disable-next-line: need-check-nil
-  if not ok and not err:find("redefine") then
-    error(err)
-  end
-  M.attr2entry = ffi.C.syn_attr2entry --[[@as fun(attr: number): HLAttrs]]
+  M.attr2entry = ffi.syn_attr2entry --[[@as fun(attr: number): HLAttrs]]
 
   vim.api.nvim_create_autocmd("ColorScheme", {
     pattern = "*",
