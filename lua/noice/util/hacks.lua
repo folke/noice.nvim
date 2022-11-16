@@ -229,9 +229,13 @@ function M.fix_cmp()
   end)
 end
 
+local was_in_cmdline = false
 function M.cmdline_force_redraw()
   local ffi = require("noice.util.ffi")
-  if ffi.cmdpreview then
+  local pos = vim.fn.getcmdpos()
+  local in_cmdline = pos < #vim.fn.getcmdline() + 1
+  if ffi.cmdpreview and (in_cmdline or was_in_cmdline) then
+    was_in_cmdline = in_cmdline
     -- HACK: this will trigger redraw during substitute and cmdpreview,
     -- but when moving the cursor, the screen will be cleared until
     -- a new character is entered
