@@ -112,6 +112,7 @@ function M.on_attach(buf, client)
 end
 
 function M.check(buf, chars, encoding)
+  encoding = encoding or "utf-16"
   return Util.debounce(Config.options.lsp.signature.auto_open.throttle, function(_event)
     if vim.api.nvim_get_current_buf() ~= buf then
       return
