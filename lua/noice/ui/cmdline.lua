@@ -196,6 +196,7 @@ M.position = nil
 ---@param line number
 ---@param byte number
 function M.on_render(_, buf, line, byte)
+  Hacks.cmdline_force_redraw()
   local win = vim.fn.bufwinid(buf)
   if win ~= -1 then
     -- FIXME: check with cmp
@@ -236,7 +237,6 @@ function M.update()
   if cmdline then
     cmdline:format(M.message)
     Hacks.hide_cursor()
-    Hacks.cmdline_force_redraw()
     Manager.add(M.message)
   else
     Manager.remove(M.message)

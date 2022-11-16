@@ -16,9 +16,11 @@ function M.setup()
       } HlAttrs;
       HlAttrs syn_attr2entry(int attr);
       void update_screen();
+      bool cmdpreview;
     ]]
   )
-  if not ok then
+  ---@diagnostic disable-next-line: need-check-nil
+  if not ok and not err:find("redefine") then
     error(err)
   end
   C = ffi.C

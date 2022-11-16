@@ -230,9 +230,12 @@ function M.fix_cmp()
 end
 
 function M.cmdline_force_redraw()
-  if vim.fn.pumvisible() == 0 and vim.api.nvim_get_mode().mode == "c" and vim.fn.getcmdline():find("s/") then
-    -- HACK: this will trigger redraw during substitue
-    vim.api.nvim_input("<space><bs>")
+  local ffi = require("noice.util.ffi")
+  if ffi.cmdpreview then
+    -- HACK: this will trigger redraw during substitute and cmdpreview,
+    -- but when moving the cursor, the screen will be cleared until
+    -- a new character is entered
+    ffi.update_screen()
   end
 end
 
