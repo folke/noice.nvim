@@ -206,6 +206,7 @@ function M.defaults()
     format = {}, --- @see section on formatting
     debug = false,
     log = vim.fn.stdpath("state") .. "/noice.log",
+    log_max_size = 1024 * 1024 * 2, -- 10MB
   }
   return defaults
 end
@@ -236,6 +237,8 @@ function M.setup(options)
     },
   }, options)
 
+  M.truncate_log()
+
   require("noice.config.preset").setup()
 
   if M.options.popupmenu.kind_icons == false then
@@ -255,6 +258,13 @@ function M.setup(options)
 
   require("noice.lsp").setup()
   M._running = true
+end
+
+function M.truncate_log()
+  local stat = vim.loop.fs_stat(M.options.log)
+  if stat and stat.size > M.options.log_max_size then
+    io.open(M.options.log, "w+"):close()
+  end
 end
 
 ---@param opts NoiceConfig
