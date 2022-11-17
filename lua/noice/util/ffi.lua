@@ -1,13 +1,14 @@
 local M = {}
 
----@type ffi.namespace*
-local C = nil
-
-function M.setup()
-  local ffi = require("ffi")
-  local ok, err = pcall(
-    ffi.cdef,
-    [[typedef int32_t RgbValue;
+---@return ffi.namespace*
+function M.load()
+  -- Put in a global var to make sure we dont reload
+  -- when plugin reloaders do their thing
+  if not _G.noice_C then
+    local ffi = require("ffi")
+    local ok, err = pcall(
+      ffi.cdef,
+      [[typedef int32_t RgbValue;
       typedef struct attr_entry {
         int16_t rgb_ae_attr, cterm_ae_attr;
         RgbValue rgb_fg_color, rgb_bg_color, rgb_sp_color;
@@ -18,25 +19,21 @@ function M.setup()
       void update_screen();
       bool cmdpreview;
     ]]
-  )
-  ---@diagnostic disable-next-line: need-check-nil
-  if not ok and not err:find("redefine") then
-    error(err)
+    )
+    ---@diagnostic disable-next-line: need-check-nil
+    if not ok then
+      error(err)
+    end
+    _G.noice_C = ffi.C
   end
-  C = ffi.C
+  return _G.noice_C
 end
 
 return setmetatable(M, {
   __index = function(_, key)
-    if not C then
-      M.setup()
-    end
-    return C[key]
+    return M.load()[key]
   end,
   __newindex = function(_, k, v)
-    if not C then
-      M.setup()
-    end
-    C[k] = v
+    M.load()[k] = v
   end,
 })
