@@ -36,7 +36,7 @@ end
 function M.format_abbr(item, prefix)
   local text = item.abbr or item.word
   if prefix and text:lower():find(prefix:lower(), 1, true) == 1 then
-    item.text:append(prefix, "NoicePopupmenuMatch")
+    item.text:append(text:sub(1, #prefix), "NoicePopupmenuMatch")
     item.text:append(text:sub(#prefix + 1), "NoiceCompletionItemWord")
   else
     item.text:append(text, "NoiceCompletionItemWord")
