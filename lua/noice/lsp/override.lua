@@ -11,8 +11,19 @@ function M.setup()
   if Config.options.lsp.override["cmp.entry.get_documentation"] then
     require("cmp.entry").get_documentation = function(self)
       local item = self:get_completion_item()
+      local filetype = self.context.filetype
+      local docs = {}
+      if item.detail and item.detail ~= '' then
+        table.insert(docs, {
+          kind = 'markdown',
+          value = ("```%s\n%s\n```"):format(filetype, item.detail),
+        })
+      end
       if item.documentation then
-        return Format.format_markdown(item.documentation)
+        table.insert(docs, item.documentation)
+      end
+      if not vim.tbl_isempty(docs) then
+        return Format.format_markdown(docs)
       end
       return {}
     end
