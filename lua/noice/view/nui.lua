@@ -174,7 +174,11 @@ function NuiView:reset(old, new)
       self._nui = nil
       self._visible = false
     elseif layout then
-      self:update_layout()
+      if not pcall(self.update_layout, self) then
+        self._nui:unmount()
+        self._nui = nil
+        self._visible = false
+      end
     end
   end
 end
