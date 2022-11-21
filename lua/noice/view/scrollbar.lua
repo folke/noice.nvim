@@ -104,6 +104,11 @@ function Scrollbar:update()
     self:show()
   end
 
+  if not (vim.api.nvim_win_is_valid(self.bar.winnr) and vim.api.nvim_win_is_valid(self.thumb.winnr)) then
+    self:hide()
+    self:show()
+  end
+
   local zindex = vim.api.nvim_win_get_config(self.winnr).zindex or 50
 
   Util.win_apply_config(self.bar.winnr, {
@@ -137,6 +142,7 @@ function Scrollbar:_open_win(opts)
     bufnr = bufnr,
     winnr = vim.api.nvim_open_win(bufnr, false, {
       relative = "editor",
+      focusable = false,
       width = 1,
       height = 1,
       row = 0,

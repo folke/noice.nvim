@@ -126,7 +126,7 @@ function M.debug(message, opts)
     vim.tbl_filter(
       ---@param t string
       function(t)
-        return t
+        return t ~= nil
       end,
       debug
     ),
@@ -152,6 +152,14 @@ end
 ---@param opts NoiceFormatOptions.spinner
 function M.spinner(message, opts)
   message:append(require("noice.util.spinners").spin(opts.name), opts.hl_group)
+end
+
+---@param message NoiceMessage
+---@param _opts NoiceFormatOptions.cmdline
+function M.cmdline(message, _opts)
+  if message.cmdline then
+    message.cmdline:format(message, true)
+  end
 end
 
 ---@param message NoiceMessage

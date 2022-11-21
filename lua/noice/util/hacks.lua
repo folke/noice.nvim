@@ -40,13 +40,13 @@ end
 -- Clears search count and stops timer when hlsearch==0
 function M.fix_nohlsearch()
   M.fix_nohlsearch = Util.interval(30, function()
-    if vim.v.hlsearch == 0 then
+    if vim.o.hlsearch and vim.v.hlsearch == 0 then
       local m = require("noice.ui.msg").get("msg_show", "search_count")
       require("noice.message.manager").remove(m)
     end
   end, {
     enabled = function()
-      return vim.v.hlsearch == 1
+      return vim.o.hlsearch and vim.v.hlsearch == 1
     end,
   })
   M.fix_nohlsearch()
@@ -230,10 +230,17 @@ function M.fix_cmp()
   end)
 end
 
+local was_in_cmdline = false
 function M.cmdline_force_redraw()
-  if vim.fn.pumvisible() == 0 and vim.api.nvim_get_mode().mode == "c" and vim.fn.getcmdline():find("s/") then
-    -- HACK: this will trigger redraw during substitue
-    vim.api.nvim_input("<space><bs>")
+  local ffi = require("noice.util.ffi")
+  local pos = vim.fn.getcmdpos()
+  local in_cmdline = pos < #vim.fn.getcmdline() + 1
+  if ffi.cmdpreview and (in_cmdline or was_in_cmdline) then
+    was_in_cmdline = in_cmdline
+    -- HACK: this will trigger redraw during substitute and cmdpreview,
+    -- but when moving the cursor, the screen will be cleared until
+    -- a new character is entered
+    ffi.update_screen()
   end
 end
 
@@ -243,17 +250,28 @@ function M.hide_cursor()
   if M._guicursor == nil then
     M._guicursor = vim.go.guicursor
   end
-  vim.go.guicursor = "a:NoiceHiddenCursor/NoiceHiddenCursor"
+  -- schedule this, since otherwise Neovide crashes
+  vim.schedule(function()
+    if M._guicursor then
+      vim.go.guicursor = "a:NoiceHiddenCursor"
+    end
+  end)
   M._disable.guicursor = M.show_cursor
 end
 
 function M.show_cursor()
   if M._guicursor then
-    -- we need to reset all first and then wait for some time before resetting the guicursor. See #114
-    vim.go.guicursor = "a:"
-    vim.cmd.redrawstatus()
-    vim.go.guicursor = M._guicursor
-    M._guicursor = nil
+    if vim.v.exiting == vim.NIL then
+      vim.schedule(function()
+        if M._guicursor and vim.v.exiting == vim.NIL then
+          -- we need to reset all first and then wait for some time before resetting the guicursor. See #114
+          vim.go.guicursor = "a:"
+          vim.cmd.redrawstatus()
+          vim.go.guicursor = M._guicursor
+          M._guicursor = nil
+        end
+      end)
+    end
   end
 end
 

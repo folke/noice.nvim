@@ -5,7 +5,6 @@ local ConfigViews = require("noice.config.views")
 local Util = require("noice.util")
 local Object = require("nui.object")
 local Format = require("noice.text.format")
-local Markdown = require("noice.text.markdown")
 
 ---@class NoiceViewBaseOptions
 ---@field buf_options? table<string,any>
@@ -59,9 +58,9 @@ function View.get_view(view, opts)
     end
   end
 
+  ---@type NoiceView
   local mod = require("noice.view.backend." .. opts.backend)
   local init_opts = vim.deepcopy(opts)
-  ---@type NoiceView
   local ret = mod(opts)
   if not ret:is_available() and opts.fallback then
     return View.get_view(opts.fallback, opts_orig)
@@ -138,8 +137,10 @@ function View:display()
 
     self._visible = true
   else
+    if self._visible then
+      self:hide()
+    end
     self._visible = false
-    self:hide()
   end
   return true
 end
@@ -188,12 +189,24 @@ function View:content()
 end
 
 function View:set_win_options(win)
-  vim.api.nvim_win_set_option(win, "winbar", "")
-  vim.api.nvim_win_set_option(win, "foldenable", false)
+  vim.wo[win].winbar = ""
+  vim.wo[win].foldenable = false
   if self._opts.win_options then
     require("nui.utils")._.set_win_options(win, self._opts.win_options)
   end
+  -- reset cursor on show
   vim.api.nvim_win_set_cursor(win, { 1, 0 })
+  if self._opts.type == "split" then
+    vim.schedule(function()
+      -- this is needed to make the nui split behave with vim.go.splitkeep
+      if win and vim.api.nvim_win_is_valid(win) then
+        vim.api.nvim_win_set_cursor(win, { 1, 0 })
+        vim.api.nvim_win_call(win, function()
+          vim.cmd([[noautocmd silent! normal! zt]])
+        end)
+      end
+    end)
+  end
 end
 
 ---@param buf number buffer number
@@ -209,10 +222,6 @@ function View:render(buf, opts)
     require("nui.utils")._.set_buf_options(buf, self._opts.buf_options)
   end
 
-  if self._opts.lang == "markdown" then
-    Markdown.keys(buf)
-  end
-
   if self._opts.lang and not vim.b[buf].ts_highlight then
     if not pcall(vim.treesitter.start, buf, self._opts.lang) then
       vim.bo[buf].syntax = self._opts.lang
@@ -221,6 +230,13 @@ function View:render(buf, opts)
 
   vim.api.nvim_buf_clear_namespace(buf, Config.ns, linenr - 1, -1)
   vim.b[buf].messages = {}
+
+  ---@type number?
+  local win = vim.fn.bufwinid(buf)
+  if win == -1 then
+    win = nil
+  end
+  local cursor = win and vim.api.nvim_win_get_cursor(win)
 
   if not opts.highlight then
     vim.api.nvim_buf_set_lines(buf, linenr - 1, -1, false, {})
@@ -233,6 +249,11 @@ function View:render(buf, opts)
       m:render(buf, Config.ns, linenr)
     end
     linenr = linenr + m:height()
+  end
+
+  if cursor then
+    -- restore cursor
+    pcall(vim.api.nvim_win_set_cursor, win, cursor)
   end
 end
 

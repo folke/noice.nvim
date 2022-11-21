@@ -11,6 +11,7 @@ M.builtin = {
     { "{kind}", before = { ".", hl_group = "NoiceFormatKind" } },
     " ",
     "{title} ",
+    "{cmdline} ",
     "{message}",
   },
   telescope = {
@@ -55,6 +56,8 @@ M.defaults = {
   debug = {
     enabled = true,
   },
+  ---@class NoiceFormatOptions.cmdline
+  cmdline = {},
   ---@class NoiceFormatOptions.level
   level = {
     hl_group = {

@@ -76,6 +76,10 @@ M.defaults = {
       wrap = true,
     },
   },
+  cmdline_output = {
+    format = "details",
+    view = "split",
+  },
   messages = {
     view = "split",
     enter = true,
@@ -154,6 +158,7 @@ M.defaults = {
     align = "message-right",
     timeout = 2000,
     reverse = true,
+    focusable = false,
     position = {
       row = -1,
       col = "100%",

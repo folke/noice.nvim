@@ -100,8 +100,7 @@ M.presets = {
     routes = {
       {
         filter = { event = "msg_show", min_height = 20 },
-        view = "split",
-        opts = { enter = true },
+        view = "cmdline_output",
       },
     },
   },
@@ -118,6 +117,14 @@ M.presets = {
             position = { row = -3, col = 0 },
           },
         },
+      },
+    },
+  },
+  cmdline_output_to_split = {
+    routes = {
+      {
+        view = "cmdline_output",
+        filter = { cmdline = "^:" },
       },
     },
   },

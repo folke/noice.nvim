@@ -1,4 +1,4 @@
-*noice.nvim.txt*         For NVIM v0.5.0         Last change: 2022 November 11
+*noice.nvim.txt*         For NVIM v0.5.0         Last change: 2022 November 21
 
 ==============================================================================
 Table of Contents                               *noice.nvim-table-of-contents*
@@ -74,7 +74,9 @@ Install the plugin with your preferred package manager:
     use({
       "folke/noice.nvim",
       config = function()
-        require("noice").setup()
+        require("noice").setup({
+            -- add any options here
+        })
       end,
       requires = {
         -- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
@@ -84,6 +86,30 @@ Install the plugin with your preferred package manager:
         --   If not available, we use `mini` as the fallback
         "rcarriga/nvim-notify",
         }
+    })
+<
+
+
+Suggested setup:
+
+>
+    require("noice").setup({
+      lsp = {
+        -- override markdown rendering so that cmp and other plugins use Treesitter
+        override = {
+          ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
+          ["vim.lsp.util.stylize_markdown"] = true,
+          ["cmp.entry.get_documentation"] = true,
+        },
+      },
+      -- you can enable a preset for easier configuration
+      presets = {
+        bottom_search = true, -- use a classic bottom cmdline for search
+        command_palette = true, -- position the cmdline and popupmenu together
+        long_message_to_split = true, -- long messages will be sent to a split
+        inc_rename = false, -- enables an input dialog for inc-rename.nvim
+        lsp_doc_border = false, -- add a border to hover docs and signature help
+      },
     })
 <
 
@@ -151,6 +177,13 @@ for configuration recipes.
         ---@type NoicePopupmenuItemKind|false
         -- Icons for completion item kinds (see defaults at noice.config.icons.kinds)
         kind_icons = {}, -- set to `false` to disable icons
+      },
+      -- default options for require('noice').redirect
+      -- see the section on Command Redirection
+      ---@type NoiceRouteConfig
+      redirect = {
+        view = "popup",
+        filter = { event = "msg_show" },
       },
       -- You can add any custom commands below that will be available with `:Noice command`
       ---@type table<string, NoiceCommand>
@@ -327,23 +360,25 @@ FILTERS                                                   *noice.nvim-filters*
 
 **Noice** uses filters to route messages to specific views.
 
-│     Name     │           Type           │                                Description                                 │
-│**cleared**   │boolean                   │checks if the message is cleared, meaning it’s in the history             │
-│**mode**      │string                    │checks if vim.api.nvim_get_mode() contains the given mode                   │
-│**blocking**  │boolean                   │are we in blocking mode?                                                    │
-│**event**     │string or string[]        │any of the events from ext_messages or cmdline. See |:h ui-messages|        │
-│**kind**      │string or string[]        │any of the kinds from ext_messages. See |:h ui-messages|                    │
-│**error**     │boolean                   │all error-like kinds from ext_messages                                      │
-│**warning**   │boolean                   │all warning-like kinds from ext_messages                                    │
-│**find**      │string                    │uses lua string.find to match the pattern                                   │
-│**min_height**│number                    │minimum height of the message                                               │
-│**max_height**│number                    │maximum height of the message                                               │
-│**min_width** │number                    │minimum width of the message                                                │
-│**max_width** │number                    │maximum width of the message                                                │
-│**min_length**│number                    │minimum length of the message (total width of all the lines)                │
-│**max_length**│number                    │maximum length of the message (total width of all the lines)                │
-│**not**       │filter                    │checks wether the filter matches or not                                     │
-│**any**       │filter[]                  │checks that at least one of the filters matches                             │
+│     Name     │           Type           │                                               Description                                               │
+│**any**       │filter[]                  │checks that at least one of the filters matches                                                          │
+│**blocking**  │boolean                   │are we in blocking mode?                                                                                 │
+│**cleared**   │boolean                   │checks if the message is cleared, meaning it’s in the history                                          │
+│**cmdline**   │boolean or string         │checks if the message was generated by executing a cmdline. When string, then it is used as a pattern    │
+│**error**     │boolean                   │all error-like kinds from ext_messages                                                                   │
+│**event**     │string or string[]        │any of the events from ext_messages or cmdline. See |:h ui-messages|                                     │
+│**find**      │string                    │uses lua string.find to match the pattern                                                                │
+│**has**       │boolean                   │checks if the message is exists, meaning it’s in the history                                           │
+│**kind**      │string or string[]        │any of the kinds from ext_messages. See |:h ui-messages|                                                 │
+│**max_height**│number                    │maximum height of the message                                                                            │
+│**max_length**│number                    │maximum length of the message (total width of all the lines)                                             │
+│**max_width** │number                    │maximum width of the message                                                                             │
+│**min_height**│number                    │minimum height of the message                                                                            │
+│**min_length**│number                    │minimum length of the message (total width of all the lines)                                             │
+│**min_width** │number                    │minimum width of the message                                                                             │
+│**mode**      │string                    │checks if vim.api.nvim_get_mode() contains the given mode                                                │
+│**not**       │filter                    │checks wether the filter matches or not                                                                  │
+│**warning**   │boolean                   │all warning-like kinds from ext_messages                                                                 │
 
 
 Example:
@@ -368,20 +403,25 @@ VIEWS                                                       *noice.nvim-views*
 - **notify**: powered by nvim-notify <https://github.com/rcarriga/nvim-notify>
 - **virtualtext**: shows the message as virtualtext (for example for `search_count`)
 - **mini**: similar to notifier.nvim <https://github.com/vigoux/notifier.nvim> & fidget.nvim <https://github.com/j-hui/fidget.nvim>
+- **notify_send**: generate a desktop notification
 
 
 A **View** (`config.views`) is a combination of a `backend` and options.
 **Noice** comes with the following built-in views with sane defaults:
 
-│      View       │  Backend   │                                   Description                                    │
-│**notify**       │notify      │_nvim-notify_ with level=true, replace=true, merge=true                           │
-│**split**        │split       │horizontal split                                                                  │
-│**vsplit**       │split       │vertical split                                                                    │
-│**popup**        │popup       │simple popup                                                                      │
-│**mini**         │mini        │minimal view, by default bottom right, right-aligned                              │
-│**cmdline**      │popup       │bottom line, similar to the classic cmdline                                       │
-│**cmdline_popup**│popup       │fancy cmdline popup, with different styles according to the cmdline mode          │
-│**popupmenu**    │nui.menu    │special view with the options used to render the popupmenu when backend is **nui**│
+│       View       │  Backend   │                                   Description                                    │
+│**notify**        │notify      │_nvim-notify_ with level=nil, replace=false, merge=false                          │
+│**split**         │split       │horizontal split                                                                  │
+│**vsplit**        │split       │vertical split                                                                    │
+│**popup**         │popup       │simple popup                                                                      │
+│**mini**          │mini        │minimal view, by default bottom right, right-aligned                              │
+│**cmdline**       │popup       │bottom line, similar to the classic cmdline                                       │
+│**cmdline_popup** │popup       │fancy cmdline popup, with different styles according to the cmdline mode          │
+│**cmdline_output**│split       │split used by config.presets.cmdline_output_to_split                              │
+│**messages**      │split       │split used for :messages                                                          │
+│**confirm**       │popup       │popup used for confirm events                                                     │
+│**hover**         │popup       │popup used for lsp signature help and hover                                       │
+│**popupmenu**     │nui.menu    │special view with the options used to render the popupmenu when backend is **nui**│
 
 
 Please refer to noice.config.views
@@ -480,11 +520,11 @@ String or can also be a table like:
 
 NOTIFY OPTIONS ~
 
-│  Option   │       Type       │ Default  │                                                              Description                                                              │
-│**title**  │string            │nil       │title to be used for the notification. Uses Message.title if available.                                                                │
-│**replace**│boolean           │true      │when true, messages routing to the same notify instance will replace existing messages instead of pushing a new notification every time│
-│**merge**  │boolean           │true      │Merge messages into one Notification or create separate notifications                                                                  │
-│**level**  │number\|string    │"info"    │notification level. Uses Message.level if available.                                                                                   │
+│  Option   │       Type       │     Default      │                                                              Description                                                              │
+│**title**  │string            │"Notification"    │title to be used for the notification. Uses Message.title if available.                                                                │
+│**replace**│boolean           │false             │when true, messages routing to the same notify instance will replace existing messages instead of pushing a new notification every time│
+│**merge**  │boolean           │false             │Merge messages into one Notification or create separate notifications                                                                  │
+│**level**  │number\|string    │nil               │notification level. Uses Message.level if available.                                                                                   │
 
 
 VIRTUAL TEXT OPTIONS ~
@@ -509,6 +549,10 @@ defaults, please refer to config.format
 - **date**: formatted date with optional date format string
 - **message**: message content itself with optional `hl_group` to override message highlights
 - **confirm**: only useful for `confirm` messages. Will format the choices as buttons.
+- **cmdline**: will render the cmdline in the message that generated the message.
+- **progress**: progress bar used by lsp progress
+- **spinner**: spinners used by lsp progress
+- **data**: render any custom data from `Message.opts`. Useful in combination with the opts passed to `vim.notify`
 
 
 Formatters are used in `format` definitions. **Noice** includes the following
@@ -525,13 +569,16 @@ built-in formats:
         "{level} ",
         "{date} ",
         "{event}",
-        { "{kind}", before = { ".", hl_group = "Comment" } },
+        { "{kind}", before = { ".", hl_group = "NoiceFormatKind" } },
         " ",
         "{title} ",
+        "{cmdline} ",
         "{message}",
       },
       telescope = ..., -- formatter used to display telescope results
       telescope_preview = ..., -- formatter used to preview telescope results
+      lsp_progress = ..., -- formatter used by lsp progress
+      lsp_progress_done = ..., -- formatter used by lsp progress
     }
 <
 
@@ -691,6 +738,37 @@ You can also use `Lua` equivalents.
 
 
   You can add custom commands with `config.commands`
+
+
+COMMAND REDIRECTION ~
+
+Sometimes it’s useful to redirect the messages generated by a command or
+function to a different view. That can be easily achieved with command
+redirection.
+
+The redirect API can taken an optional `routes` parameter, which defaults to
+`{config.redirect}`.
+
+>
+    -- redirect ":hi"
+    require("noice").redirect("hi")
+    
+    -- redirect some function
+    require("noice").redirect(function()
+      print("test")
+    end)
+<
+
+
+Adding the following keymap, will redirect the active cmdline when pressing
+`<S-Enter>`. The cmdline stays open, so you can change the command and execute
+it again. When exiting the cmdline, the popup window will be focused.
+
+>
+    vim.keymap.set("c", "<S-Enter>", function()
+        require("noice").redirect(vim.fn.getcmdline())
+        end, { desc = "Redirect Cmdline" })
+<
 
 
 LSP HOVER DOC SCROLLING ~

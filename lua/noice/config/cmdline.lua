@@ -25,9 +25,9 @@ function M.setup()
         kind = kind,
         icon_hl_group = "Noice" .. hl_group_icon,
         view = Config.options.cmdline.view,
+        lang = format.lang or format.ft,
         opts = {
           ---@diagnostic disable-next-line: undefined-field
-          lang = format.lang or format.ft,
           border = {
             text = {
               top = format.title or (" " .. kind_cc .. " "),

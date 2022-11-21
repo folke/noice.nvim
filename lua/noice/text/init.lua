@@ -1,6 +1,9 @@
 local require = require("noice.util.lazy")
 
 local NuiText = require("nui.text")
+local Treesitter = require("noice.text.treesitter")
+local Syntax = require("noice.text.syntax")
+local Markdown = require("noice.text.markdown")
 
 ---@class NoiceExtmark
 ---@field col? number
@@ -9,6 +12,8 @@ local NuiText = require("nui.text")
 ---@field hl_group? string
 ---@field virt_self_win_col? number
 ---@field relative? boolean
+---@field lang? string
+---@field lines? number
 
 ---@class NoiceText: NuiText
 ---@field super NuiText
@@ -34,6 +39,15 @@ function NoiceText.cursor(col)
   })
 end
 
+---@param col? number
+function NoiceText.syntax(lang, lines, col)
+  return NoiceText("", {
+    lang = lang,
+    col = col,
+    lines = lines,
+  })
+end
+
 ---@param bufnr number buffer number
 ---@param ns_id number namespace id
 ---@param linenr number line number (1-indexed)
@@ -43,6 +57,24 @@ function NoiceText:highlight(bufnr, ns_id, linenr, byte_start)
   if not self.extmark then
     return
   end
+
+  if self.extmark.lang then
+    local range = { linenr - self.extmark.lines, 0, linenr, byte_start }
+    if self.extmark.col then
+      range[2] = byte_start + self.extmark.col - 1
+    end
+    if Treesitter.has_lang(self.extmark.lang) then
+      Treesitter.highlight(bufnr, ns_id, range, self.extmark.lang)
+    else
+      Syntax.highlight(bufnr, ns_id, range, self.extmark.lang)
+    end
+    if self.extmark.lang == "markdown" then
+      Markdown.keys(bufnr)
+      Markdown.conceal_escape_characters(bufnr, ns_id, range)
+    end
+    return
+  end
+
   local byte_start_orig = byte_start
 
   ---@type NoiceExtmark

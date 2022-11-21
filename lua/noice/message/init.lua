@@ -14,6 +14,7 @@ local _id = 0
 ---@field tick number
 ---@field level? NotifyLevel
 ---@field kind? NoiceKind
+---@field cmdline? NoiceCmdline
 ---@field _debug? boolean
 ---@field opts table<string, any>
 ---@overload fun(event: NoiceEvent, kind?: NoiceKind, content?: NoiceContent|NoiceContent[]): NoiceMessage

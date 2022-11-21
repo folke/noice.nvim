@@ -127,6 +127,18 @@ function NuiView:create()
   local opts = vim.deepcopy(self._opts)
   self._nui = self._opts.type == "split" and require("nui.split")(opts) or require("nui.popup")(opts)
 
+  self:mount()
+  self:update_layout()
+  self._scroll = Scrollbar({
+    winnr = self._nui.winid,
+    padding = Util.nui.normalize_padding(self._opts.border),
+  })
+  self._scroll:mount()
+  self._loading = false
+end
+
+function NuiView:mount()
+  self._nui:mount()
   if self._opts.close and self._opts.close.events then
     self._nui:on(self._opts.close.events, function()
       self:hide()
@@ -138,17 +150,6 @@ function NuiView:create()
       self:hide()
     end, { remap = false, nowait = true })
   end
-
-  self._nui:mount()
-
-  self:update_layout()
-  self._scroll = Scrollbar({
-    winnr = self._nui.winid,
-    padding = Util.nui.normalize_padding(self._opts.border),
-  })
-  self._scroll:mount()
-  -- NOTE: this is needed, to make sure the border is rendered properly during blocking events
-  self._loading = false
 end
 
 ---@param old NoiceNuiOptions
@@ -173,7 +174,11 @@ function NuiView:reset(old, new)
       self._nui = nil
       self._visible = false
     elseif layout then
-      self:update_layout()
+      if not pcall(self.update_layout, self) then
+        self._nui:unmount()
+        self._nui = nil
+        self._visible = false
+      end
     end
   end
 end
@@ -186,8 +191,10 @@ function NuiView:hide()
     Util.protect(function()
       if self._nui and not self._visible then
         self:clear()
-        self._nui:hide()
-        self._scroll:hide()
+        self._nui:unmount()
+        if self._scroll then
+          self._scroll:hide()
+        end
       end
     end, {
       finally = function()
@@ -260,7 +267,7 @@ function NuiView:show()
   end
 
   if not self._nui._.mounted then
-    self._nui:mount()
+    self:mount()
   end
 
   vim.bo[self._nui.bufnr].modifiable = true
@@ -271,9 +278,9 @@ function NuiView:show()
   if not self._nui.winid then
     return
   end
-  self:set_win_options(self._nui.winid)
   self:tag()
   if not self._visible then
+    self:set_win_options(self._nui.winid)
     self:update_layout()
     self:smart_move()
   end

@@ -8,7 +8,7 @@ local Object = require("nui.object")
 ---@alias NoiceContent string|NoiceChunk|NuiLine|NuiText|NoiceBlock
 
 ---@class NoiceBlock
----@field private _lines NuiLine[]
+---@field _lines NuiLine[]
 ---@overload fun(content?: NoiceContent|NoiceContent[], highlight?: string|table): NoiceBlock
 local Block = Object("Block")
 
@@ -156,7 +156,8 @@ function Block:append(contents, highlight)
       -- Handle newlines
       ---@type number|string|table, string
       local attr_id, text = unpack(content)
-      text = text:gsub("\r", "")
+      text = text:gsub("\r\n", "\n")
+
       ---@type string|table|nil
       local hl_group
       if type(attr_id) == "number" then
@@ -169,6 +170,16 @@ function Block:append(contents, highlight)
         local nl = text:find("\n")
         if nl then
           local str = text:sub(1, nl - 1)
+
+          -- handle carriage returns. They overwrite the line from the first character
+          if str:find("\r") then
+            local parts = vim.split(str, "\r", { plain = true })
+            str = ""
+            for _, p in ipairs(parts) do
+              str = p .. str:sub(p:len() + 1)
+            end
+          end
+
           self:_append(str, hl_group)
           self:newline()
           text = text:sub(nl + 1)
