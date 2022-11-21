@@ -142,6 +142,7 @@ function Scrollbar:_open_win(opts)
     bufnr = bufnr,
     winnr = vim.api.nvim_open_win(bufnr, false, {
       relative = "editor",
+      focusable = false,
       width = 1,
       height = 1,
       row = 0,
