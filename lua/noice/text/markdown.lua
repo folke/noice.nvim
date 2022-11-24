@@ -214,6 +214,9 @@ function M.keys(buf)
           if from and col >= from and col <= to then
             return handler(url)
           end
+          if from then
+            from = to + 1
+          end
         end
       end
       vim.api.nvim_feedkeys(lhs, "n", false)
