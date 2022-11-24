@@ -26,6 +26,7 @@ function M.defaults()
         filter = { pattern = "^:%s*!", icon = "$", lang = "bash" },
         lua = { pattern = "^:%s*lua%s+", icon = "", lang = "lua" },
         help = { pattern = "^:%s*he?l?p?%s+", icon = "" },
+        calculator = { pattern = "^=", icon = "", lang = "vimnormal" },
         input = {}, -- Used by input()
         -- lua = false, -- to disable a format, set to `false`
       },
