@@ -193,39 +193,34 @@ end
 
 -- Fixes cmp cmdline position
 function M.fix_cmp()
-  if not Util.module_exists("cmp.utils.api") then
-    -- cmp not availablle
-    return
-  end
-
-  local api = require("cmp.utils.api")
-
-  local get_cursor = api.get_cursor
-  api.get_cursor = function()
-    if api.is_cmdline_mode() then
-      local pos = Api.get_cmdline_position()
-      if pos then
-        return { pos.bufpos.row, vim.fn.getcmdpos() - 1 }
+  M.on_module("cmp.utils.api", function(api)
+    local get_cursor = api.get_cursor
+    api.get_cursor = function()
+      if api.is_cmdline_mode() then
+        local pos = Api.get_cmdline_position()
+        if pos then
+          return { pos.bufpos.row, vim.fn.getcmdpos() - 1 }
+        end
       end
+      return get_cursor()
     end
-    return get_cursor()
-  end
 
-  local get_screen_cursor = api.get_screen_cursor
-  api.get_screen_cursor = function()
-    if api.is_cmdline_mode() then
-      local pos = Api.get_cmdline_position()
-      if pos then
-        local col = vim.fn.getcmdpos() - Cmdline.last().offset
-        return { pos.screenpos.row, pos.screenpos.col + col }
+    local get_screen_cursor = api.get_screen_cursor
+    api.get_screen_cursor = function()
+      if api.is_cmdline_mode() then
+        local pos = Api.get_cmdline_position()
+        if pos then
+          local col = vim.fn.getcmdpos() - Cmdline.last().offset
+          return { pos.screenpos.row, pos.screenpos.col + col }
+        end
       end
+      return get_screen_cursor()
     end
-    return get_screen_cursor()
-  end
 
-  table.insert(M._disable, function()
-    api.get_cursor = get_cursor
-    api.get_screen_cursor = get_screen_cursor
+    table.insert(M._disable, function()
+      api.get_cursor = get_cursor
+      api.get_screen_cursor = get_screen_cursor
+    end)
   end)
 end
 
@@ -270,6 +265,25 @@ function M.show_cursor()
           M._guicursor = nil
         end
       end)
+    end
+  end
+end
+
+---@param fn fun(mod)
+function M.on_module(module, fn)
+  if package.loaded[module] then
+    return fn(package.loaded[module])
+  end
+  package.preload[module] = function()
+    for l, loader in pairs(package.loaders) do
+      if l > 1 then
+        local ret = loader(module)
+        if ret then
+          local mod = ret()
+          fn(mod)
+          return mod
+        end
+      end
     end
   end
 end

@@ -180,13 +180,15 @@ function M.check(opts)
       },
     }
 
-    local ok, mod = pcall(_G.require, "cmp.entry")
-    table.insert(checks, {
-      opt = 'lsp.override["cmp.entry.get_documentation"]',
-      enabled = Config.options.lsp.override["cmp.entry.get_documentation"],
-      handler = ok and mod.get_documentation,
-      handler_str = "cmp.entry.get_documentation",
-    })
+    if package.loaded["cmp.entry"] then
+      local mod = package.loaded["cmp.entry"]
+      table.insert(checks, {
+        opt = 'lsp.override["cmp.entry.get_documentation"]',
+        enabled = Config.options.lsp.override["cmp.entry.get_documentation"],
+        handler = mod.get_documentation,
+        handler_str = "cmp.entry.get_documentation",
+      })
+    end
 
     for _, check in ipairs(checks) do
       if check.handler then

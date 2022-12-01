@@ -4,13 +4,14 @@ local Markdown = require("noice.text.markdown")
 local Config = require("noice.config")
 local Format = require("noice.lsp.format")
 local Message = require("noice.message")
+local Hacks = require("noice.util.hacks")
 
 local M = {}
 
 function M.setup()
   if Config.options.lsp.override["cmp.entry.get_documentation"] then
-    pcall(function()
-      require("cmp.entry").get_documentation = function(self)
+    Hacks.on_module("cmp.entry", function(mod)
+      mod.get_documentation = function(self)
         local item = self:get_completion_item()
         if item.documentation then
           return Format.format_markdown(item.documentation)
