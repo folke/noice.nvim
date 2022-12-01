@@ -278,7 +278,7 @@ function M.on_module(module, fn)
     for l, loader in pairs(package.loaders) do
       if l > 1 then
         local ret = loader(module)
-        if ret then
+        if type(ret) == "function" then
           local mod = ret()
           fn(mod)
           return mod
