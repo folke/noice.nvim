@@ -142,6 +142,10 @@ function M.get_views()
 end
 
 function M.update()
+  if vim.v.exiting ~= vim.NIL then
+    return
+  end
+
   if M._updating then
     return
   end
