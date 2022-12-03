@@ -57,6 +57,8 @@ end
 
 ---@param text string
 function M.parse(text)
+  ---@type string
+  text = text:gsub("</?pre>", "```")
   text = M.html_entities(text)
 
   ---@type Markdown
