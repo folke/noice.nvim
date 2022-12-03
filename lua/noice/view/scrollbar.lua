@@ -67,15 +67,17 @@ end
 function Scrollbar:hide()
   if self.visible then
     self.visible = false
-    if self.bar then
-      pcall(vim.api.nvim_buf_delete, self.bar.bufnr, { force = true })
-      pcall(vim.api.nvim_win_close, self.bar.winnr, true)
+    local bar = self.bar
+    if bar then
+      pcall(vim.api.nvim_buf_delete, bar.bufnr, { force = true })
+      pcall(vim.api.nvim_win_close, bar.winnr, true)
       self.bar = nil
     end
 
-    if self.thumb then
-      pcall(vim.api.nvim_buf_delete, self.thumb.bufnr, { force = true })
-      pcall(vim.api.nvim_win_close, self.thumb.winnr, true)
+    local thumb = self.thumb
+    if thumb then
+      pcall(vim.api.nvim_buf_delete, thumb.bufnr, { force = true })
+      pcall(vim.api.nvim_win_close, thumb.winnr, true)
       self.thumb = nil
     end
   end
