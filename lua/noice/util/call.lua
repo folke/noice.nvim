@@ -123,8 +123,8 @@ function M:format(err, stack)
 end
 
 function M:notify(err)
+  local msg = self:format(err, Config.options.debug)
   vim.schedule(function()
-    local msg = self:format(err, Config.options.debug)
     if not pcall(Util.error, msg) then
       vim.notify(msg, vim.log.levels.ERROR, { title = "noice.nvim" })
     end
