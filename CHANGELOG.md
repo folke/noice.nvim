@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.4.2](https://github.com/folke/noice.nvim/compare/v1.4.1...v1.4.2) (2022-12-16)
+
+
+### Bug Fixes
+
+* **debug:** calculate stacktrace outisde of vim schedule to make it useful ([a5de1ca](https://github.com/folke/noice.nvim/commit/a5de1ca0eaecd21fd33a0a191d1a0b9dd97cb54a))
+* **debug:** only concat debug info that is a string ([78ec5c6](https://github.com/folke/noice.nvim/commit/78ec5c6eefb9b61056a8545ded33b99f7a9a9f72))
+* **nui:** remove border text when style is `nil`, `"none"`, or `"shadow"` ([d85a4d0](https://github.com/folke/noice.nvim/commit/d85a4d01774b5649dbcda8526a26f201dff5ade4))
+* **nui:** remove padding when border is `shadow` ([1515007](https://github.com/folke/noice.nvim/commit/151500759722c12fb6a3931c5243d68f01af007a))
+
 ## [1.4.1](https://github.com/folke/noice.nvim/compare/v1.4.0...v1.4.1) (2022-12-03)
 
 
