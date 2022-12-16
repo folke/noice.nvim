@@ -126,7 +126,7 @@ function M.debug(message, opts)
     vim.tbl_filter(
       ---@param t string
       function(t)
-        return t ~= nil
+        return type(t) == "string"
       end,
       debug
     ),
