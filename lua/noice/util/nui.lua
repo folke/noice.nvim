@@ -94,9 +94,6 @@ function M.normalize_popup_options(opts)
   if opts.border and (not opts.border.style or opts.border.style == "none" or opts.border.style == "shadow") then
     opts.border.text = nil
   end
-  if opts.border and opts.border.style == "shadow" then
-    opts.border.padding = nil
-  end
   return opts
 end
 
