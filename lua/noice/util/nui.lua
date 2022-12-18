@@ -136,7 +136,7 @@ function M.normalize_padding(opts)
         left = opts.padding[2],
         right = opts.padding[2],
       }
-    elseif #opts.padding == 2 then
+    elseif #opts.padding == 4 then
       return {
         top = opts.padding[1],
         right = opts.padding[2],
