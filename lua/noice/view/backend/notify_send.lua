@@ -52,7 +52,7 @@ end
 ---@param level? NotifyLevel|number
 function NotifySendView:get_urgency(level)
   if level then
-    local l = type(level) == "number" and level or vim.log.levels[level:lower()]
+    local l = type(level) == "number" and level or vim.log.levels[level:lower()] or vim.log.levels.INFO
     if l <= 1 then
       return "low"
     end
