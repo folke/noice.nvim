@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.5.0](https://github.com/folke/noice.nvim/compare/v1.4.2...v1.5.0) (2022-12-21)
+
+
+### Features
+
+* added `Filter.cond` to conditionally use a route ([29a2e05](https://github.com/folke/noice.nvim/commit/29a2e052d2653443716a8eece89300e9b36b5f2a))
+* **format:** allow `config.format.level.icons` to be false. Fixes [#274](https://github.com/folke/noice.nvim/issues/274) ([aa68eb6](https://github.com/folke/noice.nvim/commit/aa68eb6f83c48df41bab8ae36623e5af3f224c66))
+
+
+### Bug Fixes
+
+* correctly apply padding based on four numbers ([c9c1fbd](https://github.com/folke/noice.nvim/commit/c9c1fbd605388badcfa62c0b7f58d184f19e1484))
+* **nui:** removed work-around for padding and border style shadow ([4f34d33](https://github.com/folke/noice.nvim/commit/4f34d33fc3dc0d6f4da9b4b8c63b9714fd4eea79))
+
 ## [1.4.2](https://github.com/folke/noice.nvim/compare/v1.4.1...v1.4.2) (2022-12-16)
 
 
