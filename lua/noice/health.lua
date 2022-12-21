@@ -117,25 +117,18 @@ function M.check(opts)
       )
     end
 
-    local ok, ts = pcall(_G.require, "nvim-treesitter.parsers")
-
-    if ok then
-      log.ok("**treesitter-nvim** is installed")
-      for _, ft in ipairs({ "vim", "regex", "lua", "bash", "markdown", "markdown_inline" }) do
-        if ts.has_parser(ft) then
-          log.ok("**TreeSitter " .. ft .. "** parser is installed")
-        else
-          log.warn(
-            "**TreeSitter "
-              .. ft
-              .. "** parser is not installed. Highlighting of the cmdline for "
-              .. ft
-              .. " might be broken"
-          )
-        end
+    for _, lang in ipairs({ "vim", "regex", "lua", "bash", "markdown", "markdown_inline" }) do
+      if pcall(vim.treesitter.language.require_language, lang) then
+        log.ok("**TreeSitter " .. lang .. "** parser is installed")
+      else
+        log.warn(
+          "**TreeSitter "
+            .. lang
+            .. "** parser is not installed. Highlighting of the cmdline for "
+            .. lang
+            .. " might be broken"
+        )
       end
-    else
-      log.warn("**treesitter-nvim** not installed. Highlighting of the cmdline might be wrong")
     end
   end
 
