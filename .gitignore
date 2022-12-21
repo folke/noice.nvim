@@ -3,3 +3,4 @@ tt.lua
 noice.log
 debug
 .tests
+.repro
