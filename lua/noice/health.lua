@@ -117,9 +117,9 @@ function M.check(opts)
       )
     end
 
-    local _, ts = pcall(require, "nvim-treesitter.parsers")
+    local ok, ts = pcall(_G.require, "nvim-treesitter.parsers")
 
-    if ts then
+    if ok then
       log.ok("**treesitter-nvim** is installed")
       for _, ft in ipairs({ "vim", "regex", "lua", "bash", "markdown", "markdown_inline" }) do
         if ts.has_parser(ft) then
