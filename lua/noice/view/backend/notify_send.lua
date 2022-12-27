@@ -96,13 +96,18 @@ function NotifySendView:_notify(msg)
   local out = ""
   local err = ""
 
-  vim.loop.spawn(
+  local proc
+  proc = vim.loop.spawn(
     "notify-send",
     {
       stdio = { nil, stdout, stderr },
       args = args,
     },
     vim.schedule_wrap(function(code, _signal) -- on exit
+      stdout:close()
+      stderr:close()
+      proc:close()
+
       if code ~= 0 then
         return Util.error("notify-send failed: %s", err)
       else
