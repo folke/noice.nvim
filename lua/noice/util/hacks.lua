@@ -193,23 +193,17 @@ end
 
 -- Fixes cmp cmdline position
 function M.fix_cmp()
-  if not Util.module_exists("cmp.utils.api") then
-    -- cmp not availablle
-    return
-  end
-
-  local api = require("cmp.utils.api")
-
-  local get_cursor = api.get_cursor
-  api.get_cursor = function()
-    if api.is_cmdline_mode() then
-      local pos = Api.get_cmdline_position()
-      if pos then
-        return { pos.bufpos.row, vim.fn.getcmdpos() - 1 }
+  M.on_module("cmp.utils.api", function(api)
+    local get_cursor = api.get_cursor
+    api.get_cursor = function()
+      if api.is_cmdline_mode() then
+        local pos = Api.get_cmdline_position()
+        if pos then
+          return { pos.bufpos.row, vim.fn.getcmdpos() - 1 }
+        end
       end
+      return get_cursor()
     end
-    return get_cursor()
-  end
 
   local get_screen_cursor = api.get_screen_cursor
   api.get_screen_cursor = function()
@@ -220,13 +214,13 @@ function M.fix_cmp()
         local cmp_popup_row_offset = require("noice.config").options.hacks.cmp_popup_row_offset
         return { pos.screenpos.row + cmp_popup_row_offset, pos.screenpos.col + col }
       end
+      return get_screen_cursor()
     end
-    return get_screen_cursor()
-  end
 
-  table.insert(M._disable, function()
-    api.get_cursor = get_cursor
-    api.get_screen_cursor = get_screen_cursor
+    table.insert(M._disable, function()
+      api.get_cursor = get_cursor
+      api.get_screen_cursor = get_screen_cursor
+    end)
   end)
 end
 
@@ -271,6 +265,25 @@ function M.show_cursor()
           M._guicursor = nil
         end
       end)
+    end
+  end
+end
+
+---@param fn fun(mod)
+function M.on_module(module, fn)
+  if package.loaded[module] then
+    return fn(package.loaded[module])
+  end
+
+  package.preload[module] = function()
+    package.preload[module] = nil
+    for _, loader in pairs(package.loaders) do
+      local ret = loader(module)
+      if type(ret) == "function" then
+        local mod = ret()
+        fn(mod)
+        return mod
+      end
     end
   end
 end

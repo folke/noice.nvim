@@ -27,6 +27,7 @@ local M = {}
 ---@field mode? string
 ---@field not? NoiceFilter
 ---@field warning? boolean
+---@field cond? fun(message:NoiceMessage):boolean
 
 -----@type table<string, NoiceFilterFun>
 M.filters = {
@@ -37,6 +38,9 @@ M.filters = {
   has = function(message, has)
     ---@cast message NoiceMessage
     return has == Manager.has(message, { history = true })
+  end,
+  cond = function(message, cond)
+    return cond(message)
   end,
   mode = function(_, mode)
     return vim.api.nvim_get_mode().mode:find(mode)

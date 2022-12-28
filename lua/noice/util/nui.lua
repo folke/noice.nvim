@@ -91,7 +91,7 @@ function M.normalize_popup_options(opts)
   end
 
   -- fix border text
-  if opts.border and opts.border.style == "none" then
+  if opts.border and (not opts.border.style or opts.border.style == "none" or opts.border.style == "shadow") then
     opts.border.text = nil
   end
   return opts
@@ -136,7 +136,7 @@ function M.normalize_padding(opts)
         left = opts.padding[2],
         right = opts.padding[2],
       }
-    elseif #opts.padding == 2 then
+    elseif #opts.padding == 4 then
       return {
         top = opts.padding[1],
         right = opts.padding[2],

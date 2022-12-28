@@ -39,6 +39,8 @@ M.defaults = {
       -- min_width = 10,
     },
     win_options = {
+      cursorline = true,
+      cursorlineopt = "line",
       winhighlight = {
         Normal = "NoicePopupmenu", -- change to NormalFloat to make it look like other floats
         FloatBorder = "NoicePopupmenuBorder", -- border highlight

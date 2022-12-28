@@ -117,25 +117,18 @@ function M.check(opts)
       )
     end
 
-    local _, ts = pcall(require, "nvim-treesitter.parsers")
-
-    if ts then
-      log.ok("**treesitter-nvim** is installed")
-      for _, ft in ipairs({ "vim", "regex", "lua", "bash", "markdown", "markdown_inline" }) do
-        if ts.has_parser(ft) then
-          log.ok("**TreeSitter " .. ft .. "** parser is installed")
-        else
-          log.warn(
-            "**TreeSitter "
-              .. ft
-              .. "** parser is not installed. Highlighting of the cmdline for "
-              .. ft
-              .. " might be broken"
-          )
-        end
+    for _, lang in ipairs({ "vim", "regex", "lua", "bash", "markdown", "markdown_inline" }) do
+      if pcall(vim.treesitter.language.require_language, lang) then
+        log.ok("**TreeSitter " .. lang .. "** parser is installed")
+      else
+        log.warn(
+          "**TreeSitter "
+            .. lang
+            .. "** parser is not installed. Highlighting of the cmdline for "
+            .. lang
+            .. " might be broken"
+        )
       end
-    else
-      log.warn("**treesitter-nvim** not installed. Highlighting of the cmdline might be wrong")
     end
   end
 
@@ -180,13 +173,15 @@ function M.check(opts)
       },
     }
 
-    local ok, mod = pcall(_G.require, "cmp.entry")
-    table.insert(checks, {
-      opt = 'lsp.override["cmp.entry.get_documentation"]',
-      enabled = Config.options.lsp.override["cmp.entry.get_documentation"],
-      handler = ok and mod.get_documentation,
-      handler_str = "cmp.entry.get_documentation",
-    })
+    if package.loaded["cmp.entry"] then
+      local mod = package.loaded["cmp.entry"]
+      table.insert(checks, {
+        opt = 'lsp.override["cmp.entry.get_documentation"]',
+        enabled = Config.options.lsp.override["cmp.entry.get_documentation"],
+        handler = mod.get_documentation,
+        handler_str = "cmp.entry.get_documentation",
+      })
+    end
 
     for _, check in ipairs(checks) do
       if check.handler then

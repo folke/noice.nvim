@@ -73,7 +73,7 @@ end
 function M.level(message, opts)
   if message.level then
     local str = message.level:sub(1, 1):upper() .. message.level:sub(2)
-    if opts.icons[message.level] then
+    if opts.icons and opts.icons[message.level] then
       str = opts.icons[message.level] .. " " .. str
     end
     message:append(" " .. str .. " ", opts.hl_group[message.level])
@@ -126,7 +126,7 @@ function M.debug(message, opts)
     vim.tbl_filter(
       ---@param t string
       function(t)
-        return t ~= nil
+        return type(t) == "string"
       end,
       debug
     ),

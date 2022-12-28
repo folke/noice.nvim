@@ -57,6 +57,8 @@ end
 
 ---@param text string
 function M.parse(text)
+  ---@type string
+  text = text:gsub("</?pre>", "```")
   text = M.html_entities(text)
 
   ---@type Markdown
@@ -213,6 +215,9 @@ function M.keys(buf)
           from, to, url = line:find(pattern, from)
           if from and col >= from and col <= to then
             return handler(url)
+          end
+          if from then
+            from = to + 1
           end
         end
       end
