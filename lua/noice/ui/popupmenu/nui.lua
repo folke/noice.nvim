@@ -164,6 +164,9 @@ function M.show(state)
     if padding.right then
       item.text:append(string.rep(" ", padding.right))
     end
+    for _, t in ipairs(item.text._texts) do
+      t._content = t._content:gsub("[\n\r]+", " ")
+    end
   end
 
   opts = vim.tbl_deep_extend(
