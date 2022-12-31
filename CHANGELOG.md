@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.5.1](https://github.com/folke/noice.nvim/compare/v1.5.0...v1.5.1) (2022-12-31)
+
+
+### Bug Fixes
+
+* dont error in checkhealth if nvim-treesitter is not installed ([044767a](https://github.com/folke/noice.nvim/commit/044767a01d38208c32d97b0214cce66c41e8f7c8))
+* **health:** dont use nvim-treesitter to check if a lang exists ([585d24e](https://github.com/folke/noice.nvim/commit/585d24ec6e3fb4288414f864cfe2de7d025e8216))
+* **notify_send:** properly close file descriptors from spwaning notifysend ([f5132fa](https://github.com/folke/noice.nvim/commit/f5132fa6eb71e96d9f0cd7148b186b324b142d15))
+* **nui:** dont trigger autocmds when doing zt ([d176765](https://github.com/folke/noice.nvim/commit/d176765ceabae9a12bf09a5c785d3dcb3859e1b6))
+* **popupmenu:** replace any newlines by space. Fixes [#265](https://github.com/folke/noice.nvim/issues/265) ([5199089](https://github.com/folke/noice.nvim/commit/51990892e1dd5ee1a1444b1cf3ccf0aca377e0c4))
+* **treesitter:** dont allow recursive injections. Fixes [#286](https://github.com/folke/noice.nvim/issues/286) ([a31b41a](https://github.com/folke/noice.nvim/commit/a31b41a739731988fc30a48a3099586a884bdf61))
+
 ## [1.5.0](https://github.com/folke/noice.nvim/compare/v1.4.2...v1.5.0) (2022-12-21)
 
 
