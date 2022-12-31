@@ -20,8 +20,7 @@ function M.highlight_markdown(buf, injections)
 end
 
 function M.has_lang(lang)
-  local language = require("vim.treesitter.language")
-  return pcall(language.require_language, lang) == true
+  return vim.treesitter.language.require_language(lang, nil, true)
 end
 
 --- Highlights a region of the buffer with a given language
@@ -34,14 +33,13 @@ function M.highlight(buf, ns, range, lang)
   buf = (buf == 0 or buf == nil) and vim.api.nvim_get_current_buf() or buf
   vim.fn.bufload(buf)
 
-  -- vim.api.nvim_buf_clear_namespace(buf, ns, range[1], range[3] + 1)
-
-  local language = require("vim.treesitter.language")
-  language.require_language(lang)
+  vim.treesitter.language.require_language(lang)
 
   -- we can't use a cached parser here since that could interfer with the existing parser of the buffer
   local LanguageTree = require("vim.treesitter.languagetree")
-  local parser = LanguageTree.new(buf, lang)
+  local opts = { injections = { [lang] = "" } }
+  local parser = LanguageTree.new(buf, lang, opts)
+
   parser:set_included_regions({ { range } })
   parser:parse()
 
