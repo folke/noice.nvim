@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.5.2](https://github.com/folke/noice.nvim/compare/v1.5.1...v1.5.2) (2023-01-01)
+
+
+### Bug Fixes
+
+* **treesitter:** only disable injections for php and html ([0e1bf11](https://github.com/folke/noice.nvim/commit/0e1bf11d46054b8ab04eb62b53c5ac81b44f14df))
+
 ## [1.5.1](https://github.com/folke/noice.nvim/compare/v1.5.0...v1.5.1) (2022-12-31)
 
 
