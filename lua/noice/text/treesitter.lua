@@ -37,7 +37,7 @@ function M.highlight(buf, ns, range, lang)
 
   -- we can't use a cached parser here since that could interfer with the existing parser of the buffer
   local LanguageTree = require("vim.treesitter.languagetree")
-  local opts = { injections = { [lang] = "" } }
+  local opts = { injections = { php = "", html = "" } }
   local parser = LanguageTree.new(buf, lang, opts)
 
   parser:set_included_regions({ { range } })
