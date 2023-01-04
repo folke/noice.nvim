@@ -1,6 +1,6 @@
-doc/tags
-tt.lua
-noice.log
-debug
+tt.*
 .tests
+doc/tags
+debug
 .repro
+foo.*
