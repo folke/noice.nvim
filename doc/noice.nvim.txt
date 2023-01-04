@@ -1,4 +1,4 @@
-*noice.nvim.txt*          For NVIM v0.8.0         Last change: 2023 January 01
+*noice.nvim.txt*        For Neovim >= 0.8.0       Last change: 2023 January 04
 
 ==============================================================================
 Table of Contents                               *noice.nvim-table-of-contents*
@@ -69,7 +69,7 @@ INSTALLATION                                         *noice.nvim-installation*
 
 Install the plugin with your preferred package manager:
 
->
+>lua
     -- Packer
     use({
       "folke/noice.nvim",
@@ -92,7 +92,7 @@ Install the plugin with your preferred package manager:
 
 Suggested setup:
 
->
+>lua
     require("noice").setup({
       lsp = {
         -- override markdown rendering so that cmp and other plugins use Treesitter
@@ -119,7 +119,7 @@ common issues.
 
 vim-plug
 
->
+>vim
     " vim-plug
     call plugbegin()
       Plug 'folke/noice.nvim'
@@ -137,7 +137,7 @@ CONFIGURATION                                       *noice.nvim-configuration*
 Check the wiki <https://github.com/folke/noice.nvim/wiki/Configuration-Recipes>
 for configuration recipes.
 
->
+>lua
     {
       cmdline = {
         enabled = true, -- enables the Noice cmdline UI
@@ -340,7 +340,7 @@ for configuration recipes.
 
 If you don’t want to use a Nerd Font, you can replace the icons with Unicode symbols.
 
->
+>lua
       require("noice").setup({
         cmdline = {
           format = {
@@ -383,7 +383,7 @@ FILTERS                                                   *noice.nvim-filters*
 
 Example:
 
->
+>lua
     -- all messages over 10 lines, excluding echo and search_count
     local filter = {
       event = "msg_show",
@@ -432,7 +432,7 @@ them in custom routes.
 
 Example:
 
->
+>lua
     -- override the default split view to always enter the split when it opens
     require("noice").setup({
         views = {
@@ -500,7 +500,7 @@ win_options.winhighlight ~
 
 String or can also be a table like:
 
->
+>lua
     {
       win_options = {
         winhighlight = {
@@ -558,7 +558,7 @@ defaults, please refer to config.format
 Formatters are used in `format` definitions. **Noice** includes the following
 built-in formats:
 
->
+>lua
     {
       -- default format
       default = { "{level} ", "{title} ", "{message}" },
@@ -616,7 +616,7 @@ prepended to the default routes.
 
 Example
 
->
+>lua
     -- skip search_count messages instead of showing them as virtual text
     require("noice").setup({
       routes = {
@@ -667,7 +667,7 @@ Statusline components have the following methods:
 
 Example of configuring <a href="https://github.com/nvim-lualine/lualine.nvim">lualine.nvim</a>
 
->
+>lua
     require("lualine").setup({
       sections = {
         lualine_x = {
@@ -703,7 +703,7 @@ telescope`, or register the extension and use `:Telescope noice`. The results
 panel is formatted using `config.format.formatters.telescope`. The preview is
 formatted with `config.format.formatters.telescope_preview`
 
->
+>lua
     require("telescope").load_extension("noice")
 <
 
@@ -725,7 +725,7 @@ Alternatively, all commands also exist as a full name like `:NoiceLast`,
 
 You can also use `Lua` equivalents.
 
->
+>lua
     vim.keymap.set("n", "<leader>nl", function()
       require("noice").cmd("last")
     end)
@@ -749,7 +749,7 @@ redirection.
 The redirect API can taken an optional `routes` parameter, which defaults to
 `{config.redirect}`.
 
->
+>lua
     -- redirect ":hi"
     require("noice").redirect("hi")
     
@@ -764,7 +764,7 @@ Adding the following keymap, will redirect the active cmdline when pressing
 `<S-Enter>`. The cmdline stays open, so you can change the command and execute
 it again. When exiting the cmdline, the popup window will be focused.
 
->
+>lua
     vim.keymap.set("c", "<S-Enter>", function()
         require("noice").redirect(vim.fn.getcmdline())
         end, { desc = "Redirect Cmdline" })
@@ -773,7 +773,7 @@ it again. When exiting the cmdline, the popup window will be focused.
 
 LSP HOVER DOC SCROLLING ~
 
->
+>lua
       vim.keymap.set("n", "<c-f>", function()
         if not require("noice.lsp").scroll(4) then
           return "<c-f>"
