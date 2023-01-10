@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.6.0](https://github.com/folke/noice.nvim/compare/v1.5.2...v1.6.0) (2023-01-10)
+
+
+### Features
+
+* show warning when running with TUI rework ([cf2231b](https://github.com/folke/noice.nvim/commit/cf2231bfb691b3b58d2685f48da11596cec1cfa3))
+
 ## [1.5.2](https://github.com/folke/noice.nvim/compare/v1.5.1...v1.5.2) (2023-01-01)
 
 
