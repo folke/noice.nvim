@@ -13,7 +13,7 @@ function M.setup(opts)
   local ui = vim.api.nvim_list_uis()[1]
   if ui and ui.chan == 1 and ui.ext_termcolors then
     vim.notify(
-      [[noice.nvim is currently unstable on nightly. For more details,
+      [[**noice.nvim** is currently unstable on nightly. For more details,
 see https://github.com/folke/noice.nvim/issues/298
 ]],
       vim.log.levels.WARN,
