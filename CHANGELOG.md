@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.6.1](https://github.com/folke/noice.nvim/compare/v1.6.0...v1.6.1) (2023-01-10)
+
+
+### Bug Fixes
+
+* show unstable message after loading noice ([2613a16](https://github.com/folke/noice.nvim/commit/2613a16b5009acbf2adabb34b029b1c4c57101e3))
+
 ## [1.6.0](https://github.com/folke/noice.nvim/compare/v1.5.2...v1.6.0) (2023-01-10)
 
 
