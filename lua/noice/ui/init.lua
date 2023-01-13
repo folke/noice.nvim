@@ -70,8 +70,8 @@ function M.enable()
   local stack_level = 0
 
   ---@diagnostic disable-next-line: redundant-parameter
-  vim.ui_attach(Config.ns, options, function(event, ...)
-    local handler = M.get_handler(event, ...)
+  vim.ui_attach(Config.ns, options, function(event, kind, ...)
+    local handler = M.get_handler(event, kind, ...)
 
     if not handler then
       return
@@ -84,13 +84,18 @@ function M.enable()
     stack_level = stack_level + 1
 
     local tick = Manager.tick()
-    safe_handle(handler, event, ...)
+    safe_handle(handler, event, kind, ...)
 
     -- check if we need to update the ui
     if Manager.tick() > tick then
-      -- Util.debug(vim.inspect({ event, tick, ... }))
+      -- Util.debug(vim.inspect({ event, tick, kind, ... }))
       if Util.is_blocking() then
-        Util.try(Router.update)
+        if event ~= "msg_show" then
+          Util.try(Router.update)
+        elseif kind == "confirm" then
+          M.disable()
+          vim.schedule(M.enable)
+        end
       end
     else
       local widget = M.parse_event(event)
