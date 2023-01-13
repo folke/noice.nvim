@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.6.2](https://github.com/folke/noice.nvim/compare/v1.6.1...v1.6.2) (2023-01-13)
+
+
+### Bug Fixes
+
+* **ui_attach:** dont update router during `ext_messages` and disable/enable Noice during confirm. [#298](https://github.com/folke/noice.nvim/issues/298) ([a4cbc0f](https://github.com/folke/noice.nvim/commit/a4cbc0f0cebdaa9529a749f4463aedc5a2cdcf1b))
+
 ## [1.6.1](https://github.com/folke/noice.nvim/compare/v1.6.0...v1.6.1) (2023-01-10)
 
 
