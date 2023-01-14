@@ -104,6 +104,14 @@ function M.enable()
     stack_level = stack_level - 1
   end)
 
+  vim.api.nvim_create_autocmd("SwapExists", {
+    group = vim.api.nvim_create_augroup("noice-swap-exists", { clear = true }),
+    callback = function()
+      Util.try(Router.update)
+    end,
+  })
+end
+
 function M.redirect()
   M.disable()
   Router.echo_pending()
