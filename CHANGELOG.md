@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.7.0](https://github.com/folke/noice.nvim/compare/v1.6.2...v1.7.0) (2023-01-14)
+
+
+### Features
+
+* **ui:** added hybrid messages functionality, but not needed for now ([addc0a2](https://github.com/folke/noice.nvim/commit/addc0a2521ce666a1f546f9a04574a63a858c6a5))
+
+
+### Bug Fixes
+
+* **swap:** additionally check for updates when a swap file was found ([1165d3e](https://github.com/folke/noice.nvim/commit/1165d3e727bdd226eefffcc801d563bcb30e71c4))
+* **ui:** work-around for segfaults in TUI. Fixes [#298](https://github.com/folke/noice.nvim/issues/298) ([176ec31](https://github.com/folke/noice.nvim/commit/176ec31026ec4baf64638fba1a180701257380f1))
+
 ## [1.6.2](https://github.com/folke/noice.nvim/compare/v1.6.1...v1.6.2) (2023-01-13)
 
 
