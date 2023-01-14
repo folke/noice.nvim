@@ -145,7 +145,7 @@ end
 ---@see https://github.com/neovim/neovim/issues/20311
 M.before_input = false
 function M.fix_input()
-  local function wrap(fn, skip)
+  local function wrap(fn, skip, redirect)
     return function(...)
       if skip and skip(...) then
         return fn(...)
@@ -157,10 +157,20 @@ function M.fix_input()
       M.before_input = true
       Router.update()
 
-      M.hide_cursor()
+      if redirect then
+        require("noice.ui").redirect()
+      end
+
+      if not redirect then
+        M.hide_cursor()
+      end
+
       ---@type boolean, any
       local ok, ret = pcall(fn, ...)
-      M.show_cursor()
+
+      if not redirect then
+        M.show_cursor()
+      end
 
       -- clear any message right after input
       Manager.clear({ event = "msg_show", kind = { "echo", "echomsg", "" } })
@@ -179,15 +189,18 @@ function M.fix_input()
   local getchar = vim.fn.getchar
   local getcharstr = vim.fn.getcharstr
   local inputlist = vim.fn.inputlist
+  -- local confirm = vim.fn.confirm
 
   vim.fn.getchar = wrap(vim.fn.getchar, skip)
   vim.fn.getcharstr = wrap(vim.fn.getcharstr, skip)
-  vim.fn.inputlist = wrap(vim.fn.inputlist)
+  vim.fn.inputlist = wrap(vim.fn.inputlist, nil)
+  -- vim.fn.confirm = wrap(vim.fn.confirm, nil)
 
   table.insert(M._disable, function()
     vim.fn.getchar = getchar
     vim.fn.getcharstr = getcharstr
     vim.fn.inputlist = inputlist
+    -- vim.fn.confirm = confirm
   end)
 end
 

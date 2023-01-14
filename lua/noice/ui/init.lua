@@ -103,12 +103,17 @@ function M.enable()
     end
     stack_level = stack_level - 1
   end)
+
+function M.redirect()
+  M.disable()
+  Router.echo_pending()
+  vim.schedule(M.enable)
 end
 
 function M.disable()
   if M._attached then
-    vim.ui_detach(Config.ns)
     M._attached = false
+    vim.ui_detach(Config.ns)
   end
 end
 

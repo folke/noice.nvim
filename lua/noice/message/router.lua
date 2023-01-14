@@ -215,4 +215,22 @@ function M.update()
   M._updating = false
 end
 
+function M.echo_pending()
+  local messages = Manager.get({ event = "msg_show" }, { sort = true })
+  local chunks = {}
+  for _, message in ipairs(messages) do
+    for _, line in ipairs(message._lines) do
+      ---@param t NuiText
+      local chunk = vim.tbl_map(function(t)
+        return { t:content(), t.extmark.hl_group }
+      end, line._texts)
+      vim.list_extend(chunks, chunk)
+    end
+  end
+  chunks[#chunks + 1] = { "foobar", "Normal" }
+  -- vim.opt.cmdheight = 10
+  -- vim.opt.more = false
+  vim.api.nvim_echo(chunks, true, {})
+end
+
 return M
