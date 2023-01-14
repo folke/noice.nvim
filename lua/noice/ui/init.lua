@@ -4,6 +4,7 @@ local Config = require("noice.config")
 local Util = require("noice.util")
 local Router = require("noice.message.router")
 local Manager = require("noice.message.manager")
+local Hacks = require("noice.util.hacks")
 
 ---@alias NoiceEvent MsgEvent|CmdlineEvent|NotifyEvent|LspEvent
 ---@alias NoiceKind MsgKind|NotifyLevel|LspKind
@@ -90,18 +91,21 @@ function M.enable()
     if Manager.tick() > tick then
       -- Util.debug(vim.inspect({ event, tick, kind, ... }))
       if Util.is_blocking() then
-        if event ~= "msg_show" then
-          Util.try(Router.update)
-        elseif kind == "confirm" then
-          M.disable()
-          vim.schedule(M.enable)
-        end
+        -- if event ~= "msg_show" then
+        Util.try(Router.update)
+        -- end
       end
     else
       local widget = M.parse_event(event)
       Util.stats.track(widget .. ".skipped")
     end
     stack_level = stack_level - 1
+
+    -- work-around for segfaults with TUI rework
+    -- this will block other uis from processing this message (being TUI) again
+    -- Will be false for GUI so that they can still prcess the message as well
+    local ui = vim.api.nvim_list_uis()[1]
+    return ui and ui.chan == 1 and ui.ext_termcolors
   end)
 
   vim.api.nvim_create_autocmd("SwapExists", {
