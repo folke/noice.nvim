@@ -266,6 +266,10 @@ function NuiView:is_mounted()
     self._nui.winid = nil
   end
 
+  if self._nui and self._nui._.mounted and not self._nui.bufnr then
+    self._nui._.mounted = false
+  end
+
   return self._nui and self._nui._.mounted and self._nui.bufnr
 end
 
