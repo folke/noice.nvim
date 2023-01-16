@@ -258,7 +258,15 @@ function NuiView:update_layout()
 end
 
 function NuiView:is_mounted()
-  return self._nui and self._nui._.mounted and self._nui.bufnr and vim.api.nvim_buf_is_valid(self._nui.bufnr)
+  if self._nui and self._nui.bufnr and not vim.api.nvim_buf_is_valid(self._nui.bufnr) then
+    self._nui.bufnr = nil
+  end
+
+  if self._nui and self._nui.winid and not vim.api.nvim_win_is_valid(self._nui.winid) then
+    self._nui.winid = nil
+  end
+
+  return self._nui and self._nui._.mounted and self._nui.bufnr
 end
 
 function NuiView:show()
