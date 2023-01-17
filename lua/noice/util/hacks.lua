@@ -268,9 +268,9 @@ end
 
 function M.show_cursor()
   if M._guicursor then
-    if vim.v.exiting == vim.NIL then
+    if not Util.is_exiting() then
       vim.schedule(function()
-        if M._guicursor and vim.v.exiting == vim.NIL then
+        if M._guicursor and not Util.is_exiting() then
           -- we need to reset all first and then wait for some time before resetting the guicursor. See #114
           vim.go.guicursor = "a:"
           vim.cmd.redrawstatus()

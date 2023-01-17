@@ -142,7 +142,7 @@ function M.get_views()
 end
 
 function M.update()
-  if vim.v.exiting ~= vim.NIL then
+  if Util.is_exiting() then
     return
   end
 

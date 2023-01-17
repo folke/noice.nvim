@@ -88,6 +88,9 @@ function M.interval(ms, fn, opts)
   local T = {}
 
   function T.keep()
+    if M.is_exiting() then
+      return false
+    end
     return opts.enabled == nil or opts.enabled()
   end
 
@@ -300,6 +303,10 @@ function M.read_file(file)
   local data = fd:read("*a")
   fd:close()
   return data
+end
+
+function M.is_exiting()
+  return vim.v.exiting ~= vim.NIL
 end
 
 function M.write_file(file, data)

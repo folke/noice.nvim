@@ -72,6 +72,10 @@ function M.enable()
 
   ---@diagnostic disable-next-line: redundant-parameter
   vim.ui_attach(Config.ns, options, function(event, kind, ...)
+    if Util.is_exiting() then
+      return true
+    end
+
     local handler = M.get_handler(event, kind, ...)
 
     if not handler then
