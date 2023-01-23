@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.7.1](https://github.com/folke/noice.nvim/compare/v1.7.0...v1.7.1) (2023-01-23)
+
+
+### Bug Fixes
+
+* **nui:** make sure nui recreates buffer and window when needed ([3e6dfd8](https://github.com/folke/noice.nvim/commit/3e6dfd8bb00d98399704a020ab7892234ce80fdb))
+* **nui:** mount if buffer is no longer valid ([71d7b5c](https://github.com/folke/noice.nvim/commit/71d7b5cf8f24b9bdc425934c36cfda784fcd10f2))
+* **nui:** set mounted=false if buffer is no longer valid ([3353a7a](https://github.com/folke/noice.nvim/commit/3353a7ab4bae6c22f61fd646c10e336b4582f0ea))
+
+
+### Performance Improvements
+
+* make noice a bit more robust when exiting to prevent possible delays on exit ([35e3664](https://github.com/folke/noice.nvim/commit/35e3664297096d8e24ca17f590bc793482f5182d))
+
 ## [1.7.0](https://github.com/folke/noice.nvim/compare/v1.6.2...v1.7.0) (2023-01-14)
 
 
