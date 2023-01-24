@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.8.0](https://github.com/folke/noice.nvim/compare/v1.7.1...v1.8.0) (2023-01-24)
+
+
+### Features
+
+* added deactivate ([bf216e0](https://github.com/folke/noice.nvim/commit/bf216e017979f8be712b1ada62736a58e75b0fe3))
+
+
+### Bug Fixes
+
+* Allow mapping &lt;esc&gt; ([#329](https://github.com/folke/noice.nvim/issues/329)) ([b7e9054](https://github.com/folke/noice.nvim/commit/b7e9054b02b5958db8bb5ad7675e92bfb5a8e903))
+
 ## [1.7.1](https://github.com/folke/noice.nvim/compare/v1.7.0...v1.7.1) (2023-01-23)
 
 
