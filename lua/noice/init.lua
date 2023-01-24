@@ -46,6 +46,8 @@ function M.disable()
   require("noice.util.hacks").disable()
 end
 
+M.deactivate = M.disable
+
 function M.cmd(name)
   require("noice.commands").cmd(name)
 end
