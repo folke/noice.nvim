@@ -1,4 +1,4 @@
-*noice.nvim.txt*        For Neovim >= 0.8.0       Last change: 2023 January 25
+*noice.nvim.txt*        For Neovim >= 0.8.0       Last change: 2023 January 29
 
 ==============================================================================
 Table of Contents                               *noice.nvim-table-of-contents*
@@ -774,13 +774,13 @@ it again. When exiting the cmdline, the popup window will be focused.
 LSP HOVER DOC SCROLLING ~
 
 >lua
-      vim.keymap.set("n", "<c-f>", function()
+      vim.keymap.set({"n", "i", "s"}, "<c-f>", function()
         if not require("noice.lsp").scroll(4) then
           return "<c-f>"
         end
       end, { silent = true, expr = true })
     
-      vim.keymap.set("n", "<c-b>", function()
+      vim.keymap.set({"n", "i", "s"}, "<c-b>", function()
         if not require("noice.lsp").scroll(-4) then
           return "<c-b>"
         end
