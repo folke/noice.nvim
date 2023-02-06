@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.8.1](https://github.com/folke/noice.nvim/compare/v1.8.0...v1.8.1) (2023-02-06)
+
+
+### Bug Fixes
+
+* **ui:** cmdline is always blocking. Fixes [#347](https://github.com/folke/noice.nvim/issues/347) ([6702d97](https://github.com/folke/noice.nvim/commit/6702d97d3c37c3a363ffc7c890578109f82f9f20))
+
 ## [1.8.0](https://github.com/folke/noice.nvim/compare/v1.7.1...v1.8.0) (2023-01-24)
 
 
