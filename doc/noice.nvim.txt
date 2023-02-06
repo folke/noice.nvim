@@ -1,4 +1,4 @@
-*noice.nvim.txt*        For Neovim >= 0.8.0       Last change: 2023 January 29
+*noice.nvim.txt*       For Neovim >= 0.8.0       Last change: 2023 February 06
 
 ==============================================================================
 Table of Contents                               *noice.nvim-table-of-contents*
