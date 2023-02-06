@@ -93,7 +93,7 @@ function M.enable()
 
     -- check if we need to update the ui
     if Manager.tick() > tick then
-      -- Util.debug(vim.inspect({ event, tick, kind, ... }))
+      -- Util.debug(vim.inspect({ event, Util.is_blocking(), tick, kind, ... }))
       if Util.is_blocking() then
         -- if event ~= "msg_show" then
         Util.try(Router.update)

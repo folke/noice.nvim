@@ -200,6 +200,7 @@ function M.is_blocking(opts)
     or opts.mode and blocking_mode and ("mode:" .. mode.mode)
     or opts.input and Hacks.before_input and "input"
     or opts.redraw and Hacks.inside_redraw and "redraw"
+    or #require("noice.ui.cmdline").cmdlines > 0 and "cmdline"
     or nil
   return reason ~= nil, reason
 end
