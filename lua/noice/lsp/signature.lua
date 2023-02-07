@@ -43,6 +43,14 @@ function M.setup()
   vim.lsp.handlers["textDocument/signatureHelp"] = M.on_signature
 
   if Config.options.lsp.signature.auto_open.enabled then
+    -- attach to existing buffers
+    for _, client in ipairs(vim.lsp.get_active_clients()) do
+      for _, buf in ipairs(vim.lsp.get_buffers_by_client_id(client.id)) do
+        M.on_attach(buf, client)
+      end
+    end
+
+    -- attach to new buffers
     vim.api.nvim_create_autocmd("LspAttach", {
       group = vim.api.nvim_create_augroup("noice_lsp_signature", { clear = true }),
       callback = function(args)
