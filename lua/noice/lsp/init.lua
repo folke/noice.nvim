@@ -61,4 +61,10 @@ function M.signature()
   vim.lsp.buf_request(0, "textDocument/signatureHelp", params, require("noice.lsp.signature").on_signature)
 end
 
+function M.diagnostic()
+  ---@diagnostic disable-next-line: missing-parameter
+  local params = vim.lsp.util.make_position_params()
+  vim.lsp.buf_request(0, "textDocument/publishDiagnostics", params, require("noice.lsp.diagnostic").open_float)
+end
+
 return M
