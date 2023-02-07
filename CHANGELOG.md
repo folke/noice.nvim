@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.8.2](https://github.com/folke/noice.nvim/compare/v1.8.1...v1.8.2) (2023-02-07)
+
+
+### Bug Fixes
+
+* **signature:** when loading, attach to existing lsp clients. Fixes [#342](https://github.com/folke/noice.nvim/issues/342) ([f69f1a5](https://github.com/folke/noice.nvim/commit/f69f1a577615a5a6527f133df0aa40e596bd1707))
+
 ## [1.8.1](https://github.com/folke/noice.nvim/compare/v1.8.0...v1.8.1) (2023-02-06)
 
 
