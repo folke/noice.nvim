@@ -96,6 +96,25 @@ call plug#end()
 lua require("noice").setup()
 
 ```
+</details>
+
+<details><summary>lazy.nvim</summary>
+
+```lua
+-- lazy.nvim
+{
+  "folke/noice.nvim",
+  config = function()
+    require("noice").setup({
+      -- add any options here
+    })
+  end,
+  dependencies = {
+    { "MunifTanjim/nui.nvim" },
+    { "rcarriga/nvim-notify" },
+  },
+}
+```
 
 </details>
 
