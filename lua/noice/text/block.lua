@@ -28,7 +28,7 @@ end
 function Block:content()
   return table.concat(
     vim.tbl_map(
-      ---@param line NuiLine
+    ---@param line NuiLine
       function(line)
         return line:content()
       end,
@@ -69,7 +69,7 @@ function Block:highlight(bufnr, ns_id, linenr_start)
   self:_fix_extmarks()
   linenr_start = linenr_start or 1
   Highlight.update()
-  for _, line in ipairs(self._lines) do
+  for _, line in ipairs(self._lines[#self._lines]) do
     line:highlight(bufnr, ns_id, linenr_start)
     linenr_start = linenr_start + 1
   end
