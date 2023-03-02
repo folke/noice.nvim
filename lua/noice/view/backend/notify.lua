@@ -3,6 +3,7 @@ local require = require("noice.util.lazy")
 local Util = require("noice.util")
 local View = require("noice.view")
 local Manager = require("noice.message.manager")
+local NuiText = require("nui.text")
 
 ---@class NoiceNotifyOptions
 ---@field title string
@@ -85,7 +86,18 @@ function NotifyView:notify_render(messages, render, content)
 
     if idx then
       -- we found the offset of the content as a string
-      local offset = #vim.split(text:sub(1, idx - 1), "\n")
+      local before = text:sub(1, idx - 1)
+      local offset = #vim.split(before, "\n")
+      local offset_col = #before:match("[^\n]*$")
+
+      -- in case the content starts in the middle of the line,
+      -- we need to add a fake prefix to the first line of the first message
+      -- see #375
+      if offset_col > 0 then
+        messages = vim.deepcopy(messages)
+        table.insert(messages[1]._lines[1]._texts, 1, NuiText(string.rep(" ", offset_col)))
+      end
+
       -- do our rendering
       self:render(buf, { offset = offset, highlight = true, messages = messages })
       -- in case we didn't find the offset, we won't highlight anything
