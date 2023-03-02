@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.8.3](https://github.com/folke/noice.nvim/compare/v1.8.2...v1.8.3) (2023-03-02)
+
+
+### Bug Fixes
+
+* **notify:** take col offsets into account for nvim-notify renderers. Fixes [#375](https://github.com/folke/noice.nvim/issues/375) ([20596d9](https://github.com/folke/noice.nvim/commit/20596d96551605f7462f5722198b188e4047b605))
+
 ## [1.8.2](https://github.com/folke/noice.nvim/compare/v1.8.1...v1.8.2) (2023-02-07)
 
 
