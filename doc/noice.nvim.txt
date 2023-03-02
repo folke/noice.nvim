@@ -1,35 +1,31 @@
-*noice.nvim.txt*       For Neovim >= 0.8.0       Last change: 2023 February 07
+*noice.nvim.txt*         For Neovim >= 0.8.0        Last change: 2023 March 02
 
 ==============================================================================
 Table of Contents                               *noice.nvim-table-of-contents*
 
-1. Noice _(Nice, Noise, Notice)_    |noice.nvim-noice-_(nice,-noise,-notice)_|
-  - Features                                             |noice.nvim-features|
-  - Status                                                 |noice.nvim-status|
-  - Requirements                                     |noice.nvim-requirements|
-  - Installation                                     |noice.nvim-installation|
-  - Configuration                                   |noice.nvim-configuration|
-  - Filters                                               |noice.nvim-filters|
-  - Views                                                   |noice.nvim-views|
-  - Formatting                                         |noice.nvim-formatting|
-  - Routes                                                 |noice.nvim-routes|
-  - Statusline Components                   |noice.nvim-statusline-components|
-  - Telescope                                           |noice.nvim-telescope|
-  - Usage                                                   |noice.nvim-usage|
-  - Highlight Groups                             |noice.nvim-highlight-groups|
+1. Noice (Nice, Noise, Notice)        |noice.nvim-noice-(nice,-noise,-notice)|
+  - Features                 |noice.nvim-noice-(nice,-noise,-notice)-features|
+  - Status                     |noice.nvim-noice-(nice,-noise,-notice)-status|
+  - Requirements         |noice.nvim-noice-(nice,-noise,-notice)-requirements|
+  - Installation         |noice.nvim-noice-(nice,-noise,-notice)-installation|
+  - Configuration       |noice.nvim-noice-(nice,-noise,-notice)-configuration|
+  - Filters                   |noice.nvim-noice-(nice,-noise,-notice)-filters|
+  - Views                       |noice.nvim-noice-(nice,-noise,-notice)-views|
+  - Formatting             |noice.nvim-noice-(nice,-noise,-notice)-formatting|
+  - Routes                     |noice.nvim-noice-(nice,-noise,-notice)-routes|
+  - Statusline Components|noice.nvim-noice-(nice,-noise,-notice)-statusline-components|
+  - Telescope               |noice.nvim-noice-(nice,-noise,-notice)-telescope|
+  - Usage                       |noice.nvim-noice-(nice,-noise,-notice)-usage|
+  - Highlight Groups |noice.nvim-noice-(nice,-noise,-notice)-highlight-groups|
 
 ==============================================================================
-1. Noice _(Nice, Noise, Notice)_    *noice.nvim-noice-_(nice,-noise,-notice)_*
+1. Noice (Nice, Noise, Notice)        *noice.nvim-noice-(nice,-noise,-notice)*
 
 Highly experimental plugin that completely replaces the UI for `messages`,
 `cmdline` and the `popupmenu`.
 
-<div class="figure">
-<img src="https://user-images.githubusercontent.com/292349/193263220-791847b2-516c-4f23-9802-31dd6bec5f6a.png" title="fig:"/>
-<p class="caption">image</p>
-</div>
 
-FEATURES                                                 *noice.nvim-features*
+FEATURES                     *noice.nvim-noice-(nice,-noise,-notice)-features*
 
 
 - fully **configurable views** like nvim-notify <https://github.com/rcarriga/nvim-notify>,
@@ -46,26 +42,27 @@ FEATURES                                                 *noice.nvim-features*
 - open message history in telescope.nvim <https://github.com/nvim-telescope/telescope.nvim>
 
 
-STATUS                                                     *noice.nvim-status*
+STATUS                         *noice.nvim-noice-(nice,-noise,-notice)-status*
 
 **Noice** is using the new experimental `vim.ui_attach` API, so issues are to
 be expected. It is highly recommended to use Neovim nightly, since a bunch of
 issues have already been fixed upstream. Check this tracking issue
 <https://github.com/folke/noice.nvim/issues/6> for a list of known issues.
 
-REQUIREMENTS                                         *noice.nvim-requirements*
+
+REQUIREMENTS             *noice.nvim-noice-(nice,-noise,-notice)-requirements*
 
 
-- Neovim >= 0.8.0 **_(nightly highly recommended)_**
-- nui.nvim <https://github.com/MunifTanjim/nui.nvim>: used for proper rendering and multiple views
-- nvim-notify <https://github.com/rcarriga/nvim-notify>: notification view _**(optional)**_
-- a Nerd Font <https://www.nerdfonts.com/> **_(optional)_**
-- nvim-treesitter <https://github.com/nvim-treesitter/nvim-treesitter/> **_(optional, but highly recommended)_**
+- Neovim >= 0.8.0 **(nightly highly recommended)**
+- nui.nvim <https://github.com/MunifTanjim/nui.nvim>used for proper rendering and multiple views
+- nvim-notify <https://github.com/rcarriga/nvim-notify>notification view _(optional)_
+- a Nerd Font <https://www.nerdfonts.com/> **(optional)**
+- nvim-treesitter <https://github.com/nvim-treesitter/nvim-treesitter/> **(optional, but highly recommended)**
     used for highlighting the cmdline and lsp docs. Make sure to install the parsers for
     `vim`, `regex`, `lua`, `bash`, `markdown` and `markdown_inline`
 
 
-INSTALLATION                                         *noice.nvim-installation*
+INSTALLATION             *noice.nvim-noice-(nice,-noise,-notice)-installation*
 
 Install the plugin with your preferred package manager:
 
@@ -88,7 +85,6 @@ Install the plugin with your preferred package manager:
         }
     })
 <
-
 
 Suggested setup:
 
@@ -113,11 +109,10 @@ Suggested setup:
     })
 <
 
-
 It’s a good idea to run `:checkhealth noice` after installing to check for
 common issues.
 
-vim-plug
+vim-plug ~
 
 >vim
     " vim-plug
@@ -130,7 +125,7 @@ vim-plug
 <
 
 
-CONFIGURATION                                       *noice.nvim-configuration*
+CONFIGURATION           *noice.nvim-noice-(nice,-noise,-notice)-configuration*
 
 **noice.nvim** comes with the following defaults:
 
@@ -337,8 +332,7 @@ for configuration recipes.
     }
 <
 
-
-If you don’t want to use a Nerd Font, you can replace the icons with Unicode symbols.
+If you don’t want to use a Nerd Font, you can replace the icons with Unicode symbols. ~
 
 >lua
       require("noice").setup({
@@ -356,32 +350,58 @@ If you don’t want to use a Nerd Font, you can replace the icons with Unicode s
 <
 
 
-FILTERS                                                   *noice.nvim-filters*
+FILTERS                       *noice.nvim-noice-(nice,-noise,-notice)-filters*
 
 **Noice** uses filters to route messages to specific views.
 
-│     Name     │           Type           │                                               Description                                               │
-│**any**       │filter[]                  │checks that at least one of the filters matches                                                          │
-│**blocking**  │boolean                   │are we in blocking mode?                                                                                 │
-│**cleared**   │boolean                   │checks if the message is cleared, meaning it’s in the history                                          │
-│**cmdline**   │boolean or string         │checks if the message was generated by executing a cmdline. When string, then it is used as a pattern    │
-│**error**     │boolean                   │all error-like kinds from ext_messages                                                                   │
-│**event**     │string or string[]        │any of the events from ext_messages or cmdline. See |:h ui-messages|                                     │
-│**find**      │string                    │uses lua string.find to match the pattern                                                                │
-│**has**       │boolean                   │checks if the message is exists, meaning it’s in the history                                           │
-│**kind**      │string or string[]        │any of the kinds from ext_messages. See |:h ui-messages|                                                 │
-│**max_height**│number                    │maximum height of the message                                                                            │
-│**max_length**│number                    │maximum length of the message (total width of all the lines)                                             │
-│**max_width** │number                    │maximum width of the message                                                                             │
-│**min_height**│number                    │minimum height of the message                                                                            │
-│**min_length**│number                    │minimum length of the message (total width of all the lines)                                             │
-│**min_width** │number                    │minimum width of the message                                                                             │
-│**mode**      │string                    │checks if vim.api.nvim_get_mode() contains the given mode                                                │
-│**not**       │filter                    │checks wether the filter matches or not                                                                  │
-│**warning**   │boolean                   │all warning-like kinds from ext_messages                                                                 │
+  ------------------------------------------------------------------------------
+  Name         Type       Description
+  ------------ ---------- ------------------------------------------------------
+  any          filter[]   checks that at least one of the filters matches
 
+  blocking     boolean    are we in blocking mode?
 
-Example:
+  cleared      boolean    checks if the message is cleared, meaning it’s in the
+                          history
+
+  cmdline      boolean or checks if the message was generated by executing a
+               string     cmdline. When string, then it is used as a pattern
+
+  error        boolean    all error-like kinds from ext_messages
+
+  event        string or  any of the events from ext_messages or cmdline. See :h
+               string[]   ui-messages
+
+  find         string     uses lua string.find to match the pattern
+
+  has          boolean    checks if the message is exists, meaning it’s in the
+                          history
+
+  kind         string or  any of the kinds from ext_messages. See :h ui-messages
+               string[]   
+
+  max_height   number     maximum height of the message
+
+  max_length   number     maximum length of the message (total width of all the
+                          lines)
+
+  max_width    number     maximum width of the message
+
+  min_height   number     minimum height of the message
+
+  min_length   number     minimum length of the message (total width of all the
+                          lines)
+
+  min_width    number     minimum width of the message
+
+  mode         string     checks if vim.api.nvim_get_mode() contains the given
+                          mode
+
+  not          filter     checks wether the filter matches or not
+
+  warning      boolean    all warning-like kinds from ext_messages
+  ------------------------------------------------------------------------------
+Example: ~
 
 >lua
     -- all messages over 10 lines, excluding echo and search_count
@@ -393,44 +413,58 @@ Example:
 <
 
 
-VIEWS                                                       *noice.nvim-views*
+VIEWS                           *noice.nvim-noice-(nice,-noise,-notice)-views*
 
 **Noice** comes with the following built-in backends:
 
 
-- **popup**: powered by nui.nvim <https://github.com/MunifTanjim/nui.nvim>
-- **split**: powered by nui.nvim <https://github.com/MunifTanjim/nui.nvim>
-- **notify**: powered by nvim-notify <https://github.com/rcarriga/nvim-notify>
-- **virtualtext**: shows the message as virtualtext (for example for `search_count`)
-- **mini**: similar to notifier.nvim <https://github.com/vigoux/notifier.nvim> & fidget.nvim <https://github.com/j-hui/fidget.nvim>
-- **notify_send**: generate a desktop notification
-
+- **popup**powered by nui.nvim <https://github.com/MunifTanjim/nui.nvim>
+- **split**powered by nui.nvim <https://github.com/MunifTanjim/nui.nvim>
+- **notify**powered by nvim-notify <https://github.com/rcarriga/nvim-notify>
+- **virtualtext**shows the message as virtualtext (for example for `search_count`)
+- **mini**similar to notifier.nvim <https://github.com/vigoux/notifier.nvim> & fidget.nvim <https://github.com/j-hui/fidget.nvim>
+- **notify_send**generate a desktop notification
 
 A **View** (`config.views`) is a combination of a `backend` and options.
 **Noice** comes with the following built-in views with sane defaults:
 
-│       View       │  Backend   │                                   Description                                    │
-│**notify**        │notify      │_nvim-notify_ with level=nil, replace=false, merge=false                          │
-│**split**         │split       │horizontal split                                                                  │
-│**vsplit**        │split       │vertical split                                                                    │
-│**popup**         │popup       │simple popup                                                                      │
-│**mini**          │mini        │minimal view, by default bottom right, right-aligned                              │
-│**cmdline**       │popup       │bottom line, similar to the classic cmdline                                       │
-│**cmdline_popup** │popup       │fancy cmdline popup, with different styles according to the cmdline mode          │
-│**cmdline_output**│split       │split used by config.presets.cmdline_output_to_split                              │
-│**messages**      │split       │split used for :messages                                                          │
-│**confirm**       │popup       │popup used for confirm events                                                     │
-│**hover**         │popup       │popup used for lsp signature help and hover                                       │
-│**popupmenu**     │nui.menu    │special view with the options used to render the popupmenu when backend is **nui**│
+  --------------------------------------------------------------------------------
+  View             Backend    Description
+  ---------------- ---------- ----------------------------------------------------
+  notify           notify     nvim-notify with level=nil, replace=false,
+                              merge=false
 
+  split            split      horizontal split
 
+  vsplit           split      vertical split
+
+  popup            popup      simple popup
+
+  mini             mini       minimal view, by default bottom right, right-aligned
+
+  cmdline          popup      bottom line, similar to the classic cmdline
+
+  cmdline_popup    popup      fancy cmdline popup, with different styles according
+                              to the cmdline mode
+
+  cmdline_output   split      split used by config.presets.cmdline_output_to_split
+
+  messages         split      split used for :messages
+
+  confirm          popup      popup used for confirm events
+
+  hover            popup      popup used for lsp signature help and hover
+
+  popupmenu        nui.menu   special view with the options used to render the
+                              popupmenu when backend is nui
+  --------------------------------------------------------------------------------
 Please refer to noice.config.views
 <https://github.com/folke/noice.nvim/blob/main/lua/noice/config/views.lua> to
 see the options. Any options passed to existing views in `config.views`, will
 override those options only. You can configure completely new views and use
 them in custom routes.
 
-Example:
+Example: ~
 
 >lua
     -- override the default split view to always enter the split when it opens
@@ -444,9 +478,7 @@ Example:
 <
 
 
-
   All built-in Noice views have the filetype `noice`
-
 
 NUI OPTIONS ~
 
@@ -454,51 +486,7 @@ See the Nui documentation for Popup
 <https://github.com/MunifTanjim/nui.nvim/tree/main/lua/nui/popup> and Split
 <https://github.com/MunifTanjim/nui.nvim/tree/main/lua/nui/split>.
 
-<table>
-
-<tr>
-
-<td>
-
-Option
-
-</td>
-
-<td>
-
-Description
-
-</td>
-
-</tr>
-
-<tr>
-
-<td>
-
-size, position ~
-
-</td>
-
-<td>
-
-Size, position and their constituents can additionally be specified as "auto" ~, to use the message height and width.
-
-</td>
-
-</tr>
-
-<tr>
-
-<td>
-
-win_options.winhighlight ~
-
-</td>
-
-<td>
-
-String or can also be a table like:
+OptionDescriptionsize, positionSize, position and their constituents can additionally be specified as "auto", to use the message height and width.win_options.winhighlightString or can also be a table like:
 
 >lua
     {
@@ -512,27 +500,31 @@ String or can also be a table like:
 <
 
 
-</td>
-
-</tr>
-
-</table>
-
 NOTIFY OPTIONS ~
 
-│  Option   │       Type       │     Default      │                                                              Description                                                              │
-│**title**  │string            │"Notification"    │title to be used for the notification. Uses Message.title if available.                                                                │
-│**replace**│boolean           │false             │when true, messages routing to the same notify instance will replace existing messages instead of pushing a new notification every time│
-│**merge**  │boolean           │false             │Merge messages into one Notification or create separate notifications                                                                  │
-│**level**  │number\|string    │nil               │notification level. Uses Message.level if available.                                                                                   │
+  -------------------------------------------------------------------------------------------------
+  Option    Type             Default          Description
+  --------- ---------------- ---------------- -----------------------------------------------------
+  title     string           "Notification"   title to be used for the notification. Uses
+                                              Message.title if available.
 
+  replace   boolean          false            when true, messages routing to the same notify
+                                              instance will replace existing messages instead of
+                                              pushing a new notification every time
+
+  merge     boolean          false            Merge messages into one Notification or create
+                                              separate notifications
+
+  level     number\|string   nil              notification level. Uses Message.level if available.
+  -------------------------------------------------------------------------------------------------
 
 VIRTUAL TEXT OPTIONS ~
 
 Right now there’s only an option to set the `hl_group` used to render the
 virtual text.
 
-FORMATTING                                             *noice.nvim-formatting*
+
+FORMATTING                 *noice.nvim-noice-(nice,-noise,-notice)-formatting*
 
 Formatting options can be specified with `config.format`. For a list of the
 defaults, please refer to config.format
@@ -541,19 +533,18 @@ defaults, please refer to config.format
 **Noice** includes the following formatters:
 
 
-- **level**: message level with optional `icon` and `hl_group` per level
-- **text**: any text with optional `hl_group`
-- **title**: message title with optional `hl_group`
-- **event**: message event with optional `hl_group`
-- **kind**: message kind with optional `hl_group`
-- **date**: formatted date with optional date format string
-- **message**: message content itself with optional `hl_group` to override message highlights
-- **confirm**: only useful for `confirm` messages. Will format the choices as buttons.
-- **cmdline**: will render the cmdline in the message that generated the message.
-- **progress**: progress bar used by lsp progress
-- **spinner**: spinners used by lsp progress
-- **data**: render any custom data from `Message.opts`. Useful in combination with the opts passed to `vim.notify`
-
+- **level**message level with optional `icon` and `hl_group` per level
+- **text**any text with optional `hl_group`
+- **title**message title with optional `hl_group`
+- **event**message event with optional `hl_group`
+- **kind**message kind with optional `hl_group`
+- **date**formatted date with optional date format string
+- **message**message content itself with optional `hl_group` to override message highlights
+- **confirm**only useful for `confirm` messages. Will format the choices as buttons.
+- **cmdline**will render the cmdline in the message that generated the message.
+- **progress**progress bar used by lsp progress
+- **spinner**spinners used by lsp progress
+- **data**render any custom data from `Message.opts`. Useful in combination with the opts passed to `vim.notify`
 
 Formatters are used in `format` definitions. **Noice** includes the following
 built-in formats:
@@ -582,7 +573,6 @@ built-in formats:
     }
 <
 
-
 Text before/after the formatter or in the before/after options, will only be
 rendered if the formatter itself rendered something.
 
@@ -592,29 +582,34 @@ formats), or a table with a custom format definition.
 To align text, you can use the `align` option for a view. Can be `center`,
 `left` or `right`.
 
-ROUTES                                                     *noice.nvim-routes*
+
+ROUTES                         *noice.nvim-noice-(nice,-noise,-notice)-routes*
 
 A **route** has a `filter`, `view` and optional `opts` attribute.
 
 
-- **view**: one of the views (built-in or custom)
+- **view**one of the views (built-in or custom)
 - **filter** a filter for messages matching this route
-- **opts**: options for the view and the route
-
+- **opts**options for the view and the route
 
 Route options can be any of the view options above, or one of:
 
-│ Option │   Type    │ Default │                                                                             Description                                                                              │
-│**skip**│boolean    │false    │messages matching this filter will be skipped and not shown in any views                                                                                              │
-│**stop**│boolean    │true     │When false and a route matches the filter, then other routes can still process the message too. Useful if you want certain messages to be shown in multiple views.    │
+  ------------------------------------------------------------------------------------------
+  Option   Type      Default   Description
+  -------- --------- --------- -------------------------------------------------------------
+  skip     boolean   false     messages matching this filter will be skipped and not shown
+                               in any views
 
-
+  stop     boolean   true      When false and a route matches the filter, then other routes
+                               can still process the message too. Useful if you want certain
+                               messages to be shown in multiple views.
+  ------------------------------------------------------------------------------------------
 Please refer to noice.config.routes
 <https://github.com/folke/noice.nvim/blob/main/lua/noice/config/routes.lua> for
 an overview of the default routes. **Routes** passed to `setup()` will be
 prepended to the default routes.
 
-Example
+Example ~
 
 >lua
     -- skip search_count messages instead of showing them as virtual text
@@ -639,17 +634,16 @@ Example
 <
 
 
-STATUSLINE COMPONENTS                       *noice.nvim-statusline-components*
+STATUSLINE COMPONENTS*noice.nvim-noice-(nice,-noise,-notice)-statusline-components*
 
 **Noice** comes with the following statusline components:
 
 
 - **ruler**
-- **message**: last line of the last message (`event=show_msg`)
-- **command**: `showcmd`
-- **mode**: `showmode` (recordin messages)
-- **search**: search count messages
-
+- **message**last line of the last message (`event=show_msg`)
+- **command**`showcmd`
+- **mode**`showmode` (@recording messages)
+- **search**search count messages
 
 See noice.config.status
 <https://github.com/folke/noice.nvim/blob/main/lua/noice/config/status.lua> for
@@ -660,12 +654,11 @@ You can add custom statusline components in setup under the `status` key.
 Statusline components have the following methods:
 
 
-- **get**: gets the content of the message **without** highlights
-- **get_hl**: gets the content of the message **with** highlights
-- **has**: checks if the component is available
+- **get**gets the content of the message **without** highlights
+- **get_hl**gets the content of the message **with** highlights
+- **has**checks if the component is available
 
-
-Example of configuring <a href="https://github.com/nvim-lualine/lualine.nvim">lualine.nvim</a>
+Example of configuring lualine.nvim ~
 
 >lua
     require("lualine").setup({
@@ -696,7 +689,7 @@ Example of configuring <a href="https://github.com/nvim-lualine/lualine.nvim">lu
 <
 
 
-TELESCOPE                                               *noice.nvim-telescope*
+TELESCOPE                   *noice.nvim-noice-(nice,-noise,-notice)-telescope*
 
 In order to use **Noice** in **Telescope**, you can either do `:Noice
 telescope`, or register the extension and use `:Telescope noice`. The results
@@ -708,7 +701,7 @@ formatted with `config.format.formatters.telescope_preview`
 <
 
 
-USAGE                                                       *noice.nvim-usage*
+USAGE                           *noice.nvim-noice-(nice,-noise,-notice)-usage*
 
 
 - `:Noice` or `:Noice history` shows the message history
@@ -718,7 +711,6 @@ USAGE                                                       *noice.nvim-usage*
 - `:Noice enable` enables **Noice**
 - `:Noice stats` shows debugging stats
 - `:Noice telescope` opens message history in Telescope
-
 
 Alternatively, all commands also exist as a full name like `:NoiceLast`,
 `:NoiceDisable`.
@@ -736,9 +728,7 @@ You can also use `Lua` equivalents.
 <
 
 
-
   You can add custom commands with `config.commands`
-
 
 COMMAND REDIRECTION ~
 
@@ -758,7 +748,6 @@ The redirect API can taken an optional `routes` parameter, which defaults to
       print("test")
     end)
 <
-
 
 Adding the following keymap, will redirect the active cmdline when pressing
 `<S-Enter>`. The cmdline stays open, so you can change the command and execute
@@ -788,89 +777,173 @@ LSP HOVER DOC SCROLLING ~
 <
 
 
-HIGHLIGHT GROUPS                                 *noice.nvim-highlight-groups*
+HIGHLIGHT GROUPS     *noice.nvim-noice-(nice,-noise,-notice)-highlight-groups*
 
-Click to see all highlight groups
+Click to see all highlight groups ~
 
-│           Highlight Group            │         Default Group          │                    Description                     │
-│**NoiceCmdline**                      │_MsgArea_                       │Normal for the classic cmdline area at the bottom”│
-│**NoiceCmdlineIcon**                  │_DiagnosticSignInfo_            │Cmdline icon                                        │
-│**NoiceCmdlineIconCmdline**           │_NoiceCmdlineIcon_              │                                                    │
-│**NoiceCmdlineIconFilter**            │_NoiceCmdlineIcon_              │                                                    │
-│**NoiceCmdlineIconHelp**              │_NoiceCmdlineIcon_              │                                                    │
-│**NoiceCmdlineIconIncRename**         │_NoiceCmdlineIcon_              │                                                    │
-│**NoiceCmdlineIconInput**             │_NoiceCmdlineIcon_              │                                                    │
-│**NoiceCmdlineIconLua**               │_NoiceCmdlineIcon_              │                                                    │
-│**NoiceCmdlineIconSearch**            │_DiagnosticSignWarn_            │Cmdline search icon (/ and ?)                       │
-│**NoiceCmdlinePopup**                 │_Normal_                        │Normal for the cmdline popup                        │
-│**NoiceCmdlinePopupBorder**           │_DiagnosticSignInfo_            │Cmdline popup border                                │
-│**NoiceCmdlinePopupBorderCmdline**    │_NoiceCmdlinePopupBorder_       │                                                    │
-│**NoiceCmdlinePopupBorderFilter**     │_NoiceCmdlinePopupBorder_       │                                                    │
-│**NoiceCmdlinePopupBorderHelp**       │_NoiceCmdlinePopupBorder_       │                                                    │
-│**NoiceCmdlinePopupBorderIncRename**  │_NoiceCmdlinePopupBorder_       │                                                    │
-│**NoiceCmdlinePopupBorderInput**      │_NoiceCmdlinePopupBorder_       │                                                    │
-│**NoiceCmdlinePopupBorderLua**        │_NoiceCmdlinePopupBorder_       │                                                    │
-│**NoiceCmdlinePopupBorderSearch**     │_DiagnosticSignWarn_            │Cmdline popup border for search                     │
-│**NoiceCmdlinePrompt**                │_Title_                         │prompt for input()                                  │
-│**NoiceCompletionItemKindClass**      │_NoiceCompletionItemKindDefault_│                                                    │
-│**NoiceCompletionItemKindColor**      │_NoiceCompletionItemKindDefault_│                                                    │
-│**NoiceCompletionItemKindConstant**   │_NoiceCompletionItemKindDefault_│                                                    │
-│**NoiceCompletionItemKindConstructor**│_NoiceCompletionItemKindDefault_│                                                    │
-│**NoiceCompletionItemKindDefault**    │_Special_                       │                                                    │
-│**NoiceCompletionItemKindEnum**       │_NoiceCompletionItemKindDefault_│                                                    │
-│**NoiceCompletionItemKindEnumMember** │_NoiceCompletionItemKindDefault_│                                                    │
-│**NoiceCompletionItemKindField**      │_NoiceCompletionItemKindDefault_│                                                    │
-│**NoiceCompletionItemKindFile**       │_NoiceCompletionItemKindDefault_│                                                    │
-│**NoiceCompletionItemKindFolder**     │_NoiceCompletionItemKindDefault_│                                                    │
-│**NoiceCompletionItemKindFunction**   │_NoiceCompletionItemKindDefault_│                                                    │
-│**NoiceCompletionItemKindInterface**  │_NoiceCompletionItemKindDefault_│                                                    │
-│**NoiceCompletionItemKindKeyword**    │_NoiceCompletionItemKindDefault_│                                                    │
-│**NoiceCompletionItemKindMethod**     │_NoiceCompletionItemKindDefault_│                                                    │
-│**NoiceCompletionItemKindModule**     │_NoiceCompletionItemKindDefault_│                                                    │
-│**NoiceCompletionItemKindProperty**   │_NoiceCompletionItemKindDefault_│                                                    │
-│**NoiceCompletionItemKindSnippet**    │_NoiceCompletionItemKindDefault_│                                                    │
-│**NoiceCompletionItemKindStruct**     │_NoiceCompletionItemKindDefault_│                                                    │
-│**NoiceCompletionItemKindText**       │_NoiceCompletionItemKindDefault_│                                                    │
-│**NoiceCompletionItemKindUnit**       │_NoiceCompletionItemKindDefault_│                                                    │
-│**NoiceCompletionItemKindValue**      │_NoiceCompletionItemKindDefault_│                                                    │
-│**NoiceCompletionItemKindVariable**   │_NoiceCompletionItemKindDefault_│                                                    │
-│**NoiceCompletionItemMenu**           │_none_                          │Normal for the popupmenu                            │
-│**NoiceCompletionItemWord**           │_none_                          │Normal for the popupmenu                            │
-│**NoiceConfirm**                      │_Normal_                        │Normal for the confirm view                         │
-│**NoiceConfirmBorder**                │_DiagnosticSignInfo_            │Border for the confirm view                         │
-│**NoiceCursor**                       │_Cursor_                        │Fake Cursor                                         │
-│**NoiceFormatConfirm**                │_CursorLine_                    │                                                    │
-│**NoiceFormatConfirmDefault**         │_Visual_                        │                                                    │
-│**NoiceFormatDate**                   │_Special_                       │                                                    │
-│**NoiceFormatEvent**                  │_NonText_                       │                                                    │
-│**NoiceFormatKind**                   │_NonText_                       │                                                    │
-│**NoiceFormatLevelDebug**             │_NonText_                       │                                                    │
-│**NoiceFormatLevelError**             │_DiagnosticVirtualTextError_    │                                                    │
-│**NoiceFormatLevelInfo**              │_DiagnosticVirtualTextInfo_     │                                                    │
-│**NoiceFormatLevelOff**               │_NonText_                       │                                                    │
-│**NoiceFormatLevelTrace**             │_NonText_                       │                                                    │
-│**NoiceFormatLevelWarn**              │_DiagnosticVirtualTextWarn_     │                                                    │
-│**NoiceFormatProgressDone**           │_Search_                        │Progress bar done                                   │
-│**NoiceFormatProgressTodo**           │_CursorLine_                    │progress bar todo                                   │
-│**NoiceFormatTitle**                  │_Title_                         │                                                    │
-│**NoiceLspProgressClient**            │_Title_                         │Lsp progress client name                            │
-│**NoiceLspProgressSpinner**           │_Constant_                      │Lsp progress spinner                                │
-│**NoiceLspProgressTitle**             │_NonText_                       │Lsp progress title                                  │
-│**NoiceMini**                         │_MsgArea_                       │Normal for mini view                                │
-│**NoicePopup**                        │_NormalFloat_                   │Normal for popup views                              │
-│**NoicePopupBorder**                  │_FloatBorder_                   │Border for popup views                              │
-│**NoicePopupmenu**                    │_Pmenu_                         │Normal for the popupmenu                            │
-│**NoicePopupmenuBorder**              │_FloatBorder_                   │Popupmenu border                                    │
-│**NoicePopupmenuMatch**               │_Special_                       │Part of the item that matches the input             │
-│**NoicePopupmenuSelected**            │_PmenuSel_                      │Selected item in the popupmenu                      │
-│**NoiceScrollbar**                    │_PmenuSbar_                     │Normal for scrollbar                                │
-│**NoiceScrollbarThumb**               │_PmenuThumb_                    │Scrollbar thumb                                     │
-│**NoiceSplit**                        │_NormalFloat_                   │Normal for split views                              │
-│**NoiceSplitBorder**                  │_FloatBorder_                   │Border for split views                              │
-│**NoiceVirtualText**                  │_DiagnosticVirtualTextInfo_     │Default hl group for virtualtext views              │
+  ---------------------------------------------------------------------------------------------------
+  Highlight Group                      Default Group                    Description
+  ------------------------------------ -------------------------------- -----------------------------
+  NoiceCmdline                         MsgArea                          Normal for the classic
+                                                                        cmdline area at the bottom”
 
+  NoiceCmdlineIcon                     DiagnosticSignInfo               Cmdline icon
 
+  NoiceCmdlineIconCmdline              NoiceCmdlineIcon                 
 
+  NoiceCmdlineIconFilter               NoiceCmdlineIcon                 
+
+  NoiceCmdlineIconHelp                 NoiceCmdlineIcon                 
+
+  NoiceCmdlineIconIncRename            NoiceCmdlineIcon                 
+
+  NoiceCmdlineIconInput                NoiceCmdlineIcon                 
+
+  NoiceCmdlineIconLua                  NoiceCmdlineIcon                 
+
+  NoiceCmdlineIconSearch               DiagnosticSignWarn               Cmdline search icon (/ and ?)
+
+  NoiceCmdlinePopup                    Normal                           Normal for the cmdline popup
+
+  NoiceCmdlinePopupBorder              DiagnosticSignInfo               Cmdline popup border
+
+  NoiceCmdlinePopupBorderCmdline       NoiceCmdlinePopupBorder          
+
+  NoiceCmdlinePopupBorderFilter        NoiceCmdlinePopupBorder          
+
+  NoiceCmdlinePopupBorderHelp          NoiceCmdlinePopupBorder          
+
+  NoiceCmdlinePopupBorderIncRename     NoiceCmdlinePopupBorder          
+
+  NoiceCmdlinePopupBorderInput         NoiceCmdlinePopupBorder          
+
+  NoiceCmdlinePopupBorderLua           NoiceCmdlinePopupBorder          
+
+  NoiceCmdlinePopupBorderSearch        DiagnosticSignWarn               Cmdline popup border for
+                                                                        search
+
+  NoiceCmdlinePrompt                   Title                            prompt for input()
+
+  NoiceCompletionItemKindClass         NoiceCompletionItemKindDefault   
+
+  NoiceCompletionItemKindColor         NoiceCompletionItemKindDefault   
+
+  NoiceCompletionItemKindConstant      NoiceCompletionItemKindDefault   
+
+  NoiceCompletionItemKindConstructor   NoiceCompletionItemKindDefault   
+
+  NoiceCompletionItemKindDefault       Special                          
+
+  NoiceCompletionItemKindEnum          NoiceCompletionItemKindDefault   
+
+  NoiceCompletionItemKindEnumMember    NoiceCompletionItemKindDefault   
+
+  NoiceCompletionItemKindField         NoiceCompletionItemKindDefault   
+
+  NoiceCompletionItemKindFile          NoiceCompletionItemKindDefault   
+
+  NoiceCompletionItemKindFolder        NoiceCompletionItemKindDefault   
+
+  NoiceCompletionItemKindFunction      NoiceCompletionItemKindDefault   
+
+  NoiceCompletionItemKindInterface     NoiceCompletionItemKindDefault   
+
+  NoiceCompletionItemKindKeyword       NoiceCompletionItemKindDefault   
+
+  NoiceCompletionItemKindMethod        NoiceCompletionItemKindDefault   
+
+  NoiceCompletionItemKindModule        NoiceCompletionItemKindDefault   
+
+  NoiceCompletionItemKindProperty      NoiceCompletionItemKindDefault   
+
+  NoiceCompletionItemKindSnippet       NoiceCompletionItemKindDefault   
+
+  NoiceCompletionItemKindStruct        NoiceCompletionItemKindDefault   
+
+  NoiceCompletionItemKindText          NoiceCompletionItemKindDefault   
+
+  NoiceCompletionItemKindUnit          NoiceCompletionItemKindDefault   
+
+  NoiceCompletionItemKindValue         NoiceCompletionItemKindDefault   
+
+  NoiceCompletionItemKindVariable      NoiceCompletionItemKindDefault   
+
+  NoiceCompletionItemMenu              none                             Normal for the popupmenu
+
+  NoiceCompletionItemWord              none                             Normal for the popupmenu
+
+  NoiceConfirm                         Normal                           Normal for the confirm view
+
+  NoiceConfirmBorder                   DiagnosticSignInfo               Border for the confirm view
+
+  NoiceCursor                          Cursor                           Fake Cursor
+
+  NoiceFormatConfirm                   CursorLine                       
+
+  NoiceFormatConfirmDefault            Visual                           
+
+  NoiceFormatDate                      Special                          
+
+  NoiceFormatEvent                     NonText                          
+
+  NoiceFormatKind                      NonText                          
+
+  NoiceFormatLevelDebug                NonText                          
+
+  NoiceFormatLevelError                DiagnosticVirtualTextError       
+
+  NoiceFormatLevelInfo                 DiagnosticVirtualTextInfo        
+
+  NoiceFormatLevelOff                  NonText                          
+
+  NoiceFormatLevelTrace                NonText                          
+
+  NoiceFormatLevelWarn                 DiagnosticVirtualTextWarn        
+
+  NoiceFormatProgressDone              Search                           Progress bar done
+
+  NoiceFormatProgressTodo              CursorLine                       progress bar todo
+
+  NoiceFormatTitle                     Title                            
+
+  NoiceLspProgressClient               Title                            Lsp progress client name
+
+  NoiceLspProgressSpinner              Constant                         Lsp progress spinner
+
+  NoiceLspProgressTitle                NonText                          Lsp progress title
+
+  NoiceMini                            MsgArea                          Normal for mini view
+
+  NoicePopup                           NormalFloat                      Normal for popup views
+
+  NoicePopupBorder                     FloatBorder                      Border for popup views
+
+  NoicePopupmenu                       Pmenu                            Normal for the popupmenu
+
+  NoicePopupmenuBorder                 FloatBorder                      Popupmenu border
+
+  NoicePopupmenuMatch                  Special                          Part of the item that matches
+                                                                        the input
+
+  NoicePopupmenuSelected               PmenuSel                         Selected item in the
+                                                                        popupmenu
+
+  NoiceScrollbar                       PmenuSbar                        Normal for scrollbar
+
+  NoiceScrollbarThumb                  PmenuThumb                       Scrollbar thumb
+
+  NoiceSplit                           NormalFloat                      Normal for split views
+
+  NoiceSplitBorder                     FloatBorder                      Border for split views
+
+  NoiceVirtualText                     DiagnosticVirtualTextInfo        Default hl group for
+                                                                        virtualtext views
+  ---------------------------------------------------------------------------------------------------
+==============================================================================
+2. Links                                                    *noice.nvim-links*
+
+1. *image*: https://user-images.githubusercontent.com/292349/193263220-791847b2-516c-4f23-9802-31dd6bec5f6a.png
+2. *@recording*: 
 
 Generated by panvimdoc <https://github.com/kdheepak/panvimdoc>
 
