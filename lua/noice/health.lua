@@ -156,7 +156,7 @@ function M.check(opts)
       },
       {
         opt = "lsp.message",
-        enabled = Config.options.lsp.message,
+        enabled = Config.options.lsp.message.enabled,
         handler = vim.lsp.handlers["window/showMessage"],
         handler_str = 'vim.lsp.handlers["window/showMessage"]',
       },
