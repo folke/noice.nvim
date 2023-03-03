@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.9.0](https://github.com/folke/noice.nvim/compare/v1.8.3...v1.9.0) (2023-03-03)
+
+
+### Features
+
+* **lsp:** fallback to buffer filetype for code blocks without lang. Fixes [#378](https://github.com/folke/noice.nvim/issues/378) ([cab2c80](https://github.com/folke/noice.nvim/commit/cab2c80497388735c9795f496a36e76bc5c7c4bf))
+
+
+### Bug Fixes
+
+* **treesitter:** use the new treesitter ft to lang API if availble. Fixes [#378](https://github.com/folke/noice.nvim/issues/378) ([36d141b](https://github.com/folke/noice.nvim/commit/36d141bd5852b10e32058e259982182b9e5e8060))
+
 ## [1.8.3](https://github.com/folke/noice.nvim/compare/v1.8.2...v1.8.3) (2023-03-02)
 
 
