@@ -56,7 +56,9 @@ function M.conceal_escape_characters(buf, ns, range)
 end
 
 ---@param text string
-function M.parse(text)
+---@param opts? MarkdownFormatOptions
+function M.parse(text, opts)
+  opts = opts or {}
   ---@type string
   text = text:gsub("</?pre>", "```")
   text = M.html_entities(text)
@@ -85,7 +87,7 @@ function M.parse(text)
       end
     elseif M.is_code_block(line) then
       ---@type string
-      local lang = line:match("```(%S+)") or "text"
+      local lang = line:match("```(%S+)") or opts.ft or "text"
       local block = { lang = lang, code = {} }
       while lines[l + 1] and not M.is_code_block(lines[l + 1]) do
         table.insert(block.code, lines[l + 1])
@@ -147,15 +149,20 @@ function M.get_highlights(line)
   return ret
 end
 
+---@alias MarkdownFormatOptions {ft?: string}
+
 ---@param message NoiceMessage
 ---@param text string
+---@param opts? MarkdownFormatOptions
 --```lua
 --local a = 1
 --local b = true
 --```
 --foo tex
-function M.format(message, text)
-  local blocks = M.parse(text)
+function M.format(message, text, opts)
+  opts = opts or {}
+
+  local blocks = M.parse(text, opts)
 
   local md_lines = 0
 

@@ -39,9 +39,10 @@ end
 -- Formats the content and adds it to the message
 ---@param contents MarkupContents Markup content
 ---@param message NoiceMessage Noice message
-function M.format(message, contents)
+---@param opts? MarkdownFormatOptions
+function M.format(message, contents, opts)
   local text = table.concat(M.format_markdown(contents), "\n")
-  Markdown.format(message, text)
+  Markdown.format(message, text, opts)
   return message
 end
 

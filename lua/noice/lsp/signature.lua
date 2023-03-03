@@ -205,7 +205,7 @@ function M:format_signature(sig_index, sig)
 
   if sig.documentation then
     Markdown.horizontal_line(self.message)
-    Format.format(self.message, sig.documentation)
+    Format.format(self.message, sig.documentation, { ft = self.ft })
   end
 end
 
