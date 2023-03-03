@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.9.1](https://github.com/folke/noice.nvim/compare/v1.9.0...v1.9.1) (2023-03-03)
+
+
+### Bug Fixes
+
+* **health:** correctly check if lsp.message is enabled ([#381](https://github.com/folke/noice.nvim/issues/381)) ([1ff6b10](https://github.com/folke/noice.nvim/commit/1ff6b10471590331cc1585ad64f084f19cd4bcb7))
+
 ## [1.9.0](https://github.com/folke/noice.nvim/compare/v1.8.3...v1.9.0) (2023-03-03)
 
 
