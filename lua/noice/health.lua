@@ -3,6 +3,7 @@ local require = require("noice.util.lazy")
 local Util = require("noice.util")
 local Config = require("noice.config")
 local Lsp = require("noice.lsp")
+local Treesitter = require("noice.text.treesitter")
 
 local M = {}
 
@@ -118,7 +119,7 @@ function M.check(opts)
     end
 
     for _, lang in ipairs({ "vim", "regex", "lua", "bash", "markdown", "markdown_inline" }) do
-      if pcall(vim.treesitter.language.require_language, lang) then
+      if Treesitter.has_lang(lang) then
         log.ok("**TreeSitter " .. lang .. "** parser is installed")
       else
         log.warn(

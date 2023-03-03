@@ -19,7 +19,14 @@ function M.highlight_markdown(buf, injections)
   parser:parse()
 end
 
+function M.get_lang(ft)
+  return vim.treesitter.language.get_lang and vim.treesitter.language.get_lang(ft) or ft
+end
+
 function M.has_lang(lang)
+  if vim.treesitter.language.get_lang then
+    return vim.treesitter.language.get_lang(lang) ~= nil
+  end
   return vim.treesitter.language.require_language(lang, nil, true)
 end
 
@@ -30,10 +37,10 @@ end
 ---@param lang string treesitter language
 -- luacheck: no redefined
 function M.highlight(buf, ns, range, lang)
+  lang = M.get_lang(lang)
+
   buf = (buf == 0 or buf == nil) and vim.api.nvim_get_current_buf() or buf
   vim.fn.bufload(buf)
-
-  vim.treesitter.language.require_language(lang)
 
   -- we can't use a cached parser here since that could interfer with the existing parser of the buffer
   local LanguageTree = require("vim.treesitter.languagetree")
