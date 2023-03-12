@@ -21,6 +21,9 @@ function M.is_empty(line)
   return line and line:find("^%s*$")
 end
 
+-- TODO:: upstream to treesitter
+-- ((backslash_escape) @conceal (#set! conceal "_") (#contains? @conceal "\_"))
+
 ---@param text string
 function M.html_entities(text)
   local entities = { nbsp = "", lt = "<", gt = ">", amp = "&", quot = '"' }
