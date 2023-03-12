@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.9.2](https://github.com/folke/noice.nvim/compare/v1.9.1...v1.9.2) (2023-03-12)
+
+
+### Bug Fixes
+
+* **cmdline:** make sure cursor is always visible ([2f0a427](https://github.com/folke/noice.nvim/commit/2f0a42701b4aa65b55fff8f32878d9adc7e7ac77))
+* **config:** allow overriding options set by presets ([5a1bf17](https://github.com/folke/noice.nvim/commit/5a1bf1707f592fefff4cb3da903b17369e088cc1))
+* **config:** correctly set the presets ([e5cb84f](https://github.com/folke/noice.nvim/commit/e5cb84f1ed524f850fa92e3a256e830ed07fadee))
+
 ## [1.9.1](https://github.com/folke/noice.nvim/compare/v1.9.0...v1.9.1) (2023-03-03)
 
 
