@@ -8,8 +8,8 @@ local Config = require("noice.config")
 
 local M = {}
 
-function M.setup()
-  for name, preset in pairs(Config.options.presets) do
+function M.setup(options)
+  for name, preset in pairs(options.presets or {}) do
     if preset ~= false then
       M.load(name, preset)
     end

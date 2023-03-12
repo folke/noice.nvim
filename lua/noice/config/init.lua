@@ -240,7 +240,7 @@ function M.setup(options)
 
   M.truncate_log()
 
-  require("noice.config.preset").setup()
+  require("noice.config.preset").setup(options)
 
   M.options = vim.tbl_deep_extend("force", M.options, options)
 
