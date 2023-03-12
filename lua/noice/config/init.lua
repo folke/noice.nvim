@@ -236,11 +236,13 @@ function M.setup(options)
     popupmenu = {
       kind_icons = require("noice.config.icons").kinds,
     },
-  }, options)
+  })
 
   M.truncate_log()
 
   require("noice.config.preset").setup()
+
+  M.options = vim.tbl_deep_extend("force", M.options, options)
 
   if M.options.popupmenu.kind_icons == false then
     M.options.popupmenu.kind_icons = {}
