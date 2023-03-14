@@ -204,13 +204,13 @@ function M.on_render(_, buf, line, byte)
     local cmdline_start = byte - (M.last():length() - M.last().offset)
 
     local cursor = byte - M.last():length() + M.last().state.pos
-    vim.api.nvim_win_set_cursor(win, { 1, cursor })
-
     vim.schedule(function()
       if vim.api.nvim_win_is_valid(win) then
         vim.api.nvim_win_set_cursor(win, { 1, cursor })
         vim.api.nvim_win_call(win, function()
-          vim.cmd([[noautocmd silent! normal! ze]])
+          local width = vim.api.nvim_win_get_width(win)
+          local leftcol = math.max(cursor - width + 1, 0)
+          vim.fn.winrestview({ leftcol = leftcol })
         end)
       end
     end)
