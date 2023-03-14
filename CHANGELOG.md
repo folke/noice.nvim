@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.9.3](https://github.com/folke/noice.nvim/compare/v1.9.2...v1.9.3) (2023-03-14)
+
+
+### Bug Fixes
+
+* **cmdline:** dont use normal commands so ModeChanged will trigger correctly. Fixes [#390](https://github.com/folke/noice.nvim/issues/390) ([fa7b6a1](https://github.com/folke/noice.nvim/commit/fa7b6a18c5cdc23961038bc56b93495efcd0f5c7))
+
 ## [1.9.2](https://github.com/folke/noice.nvim/compare/v1.9.1...v1.9.2) (2023-03-12)
 
 
