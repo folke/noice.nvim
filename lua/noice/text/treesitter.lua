@@ -25,7 +25,8 @@ end
 
 function M.has_lang(lang)
   if vim.treesitter.language.get_lang then
-    return vim.treesitter.language.get_lang(lang) ~= nil
+    lang = vim.treesitter.language.get_lang(lang) or lang
+    return pcall(vim.treesitter.language.add, lang)
   end
   return vim.treesitter.language.require_language(lang, nil, true)
 end
