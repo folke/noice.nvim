@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.9.4](https://github.com/folke/noice.nvim/compare/v1.9.3...v1.9.4) (2023-03-15)
+
+
+### Bug Fixes
+
+* **markdown:** better check to see if a ts parser is available. Fixes [#397](https://github.com/folke/noice.nvim/issues/397) ([d60bee1](https://github.com/folke/noice.nvim/commit/d60bee1b85af1882768af80385bc2500d495feba))
+* **markdown:** strip "\r" chars ([4d2801b](https://github.com/folke/noice.nvim/commit/4d2801babc4026229c58f0c77a20ff5b7b4c0d07))
+
 ## [1.9.3](https://github.com/folke/noice.nvim/compare/v1.9.2...v1.9.3) (2023-03-14)
 
 
