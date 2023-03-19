@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.9.5](https://github.com/folke/noice.nvim/compare/v1.9.4...v1.9.5) (2023-03-19)
+
+
+### Bug Fixes
+
+* **views:** dont highlight CurSearch for some views. Fixes [#399](https://github.com/folke/noice.nvim/issues/399) ([0c493e5](https://github.com/folke/noice.nvim/commit/0c493e5d243c39adf3d6ce7683a16e610cc44e0a))
+
 ## [1.9.4](https://github.com/folke/noice.nvim/compare/v1.9.3...v1.9.4) (2023-03-15)
 
 
