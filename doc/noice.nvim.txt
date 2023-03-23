@@ -1,4 +1,4 @@
-*noice.nvim.txt*         For Neovim >= 0.8.0        Last change: 2023 March 19
+*noice.nvim.txt*         For Neovim >= 0.8.0        Last change: 2023 March 23
 
 ==============================================================================
 Table of Contents                               *noice.nvim-table-of-contents*
@@ -149,7 +149,7 @@ for configuration recipes.
           search_down = { kind = "search", pattern = "^/", icon = " ", lang = "regex" },
           search_up = { kind = "search", pattern = "^%?", icon = " ", lang = "regex" },
           filter = { pattern = "^:%s!", icon = "$", lang = "bash" },
-          lua = { pattern = "^:%slua%s+", icon = "", lang = "lua" },
+          lua = { pattern = { "^:%slua%s+", "^:%slua%s=%s", "^:%s=%s" }, icon = "", lang = "lua" },
           help = { pattern = "^:%she?l?p?%s+", icon = "" },
           input = {}, -- Used by input()
           -- lua = false, -- to disable a format, set to `false`
