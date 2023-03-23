@@ -38,7 +38,7 @@ M.active = nil
 
 ---@class CmdlineFormat
 ---@field kind string
----@field pattern? string
+---@field pattern? string|string[]
 ---@field view string
 ---@field conceal? boolean
 ---@field icon? string
@@ -75,21 +75,30 @@ function Cmdline:get_format()
   end
   local line = self.state.firstc .. self:get()
 
-  ---@type table<string, CmdlineFormat>
-  local formats = vim.tbl_values(vim.tbl_filter(function(f)
-    return f.pattern
-  end, Config.options.cmdline.format))
-  table.sort(formats, function(a, b)
-    return #a.pattern > #b.pattern
-  end)
+  ---@type {offset:number, format: CmdlineFormat}[]
+  local ret = {}
 
-  for _, format in pairs(formats) do
-    local from, to = line:find(format.pattern)
-    -- if match and cmdline pos is visible
-    if from and self.state.pos >= to - 1 then
-      self.offset = format.conceal and to or 0
-      return format
+  for _, format in pairs(Config.options.cmdline.format) do
+    local patterns = type(format.pattern) == "table" and format.pattern or { format.pattern }
+    ---@cast patterns string[]
+    for _, pattern in ipairs(patterns) do
+      local from, to = line:find(pattern)
+      -- if match and cmdline pos is visible
+      if from and self.state.pos >= to - 1 then
+        ret[#ret + 1] = {
+          offset = format.conceal and to or 0,
+          format = format,
+        }
+      end
     end
+  end
+  table.sort(ret, function(a, b)
+    return a.offset > b.offset
+  end)
+  local format = ret[1]
+  if format then
+    self.offset = format.offset
+    return format.format
   end
   self.offset = 0
   return {
