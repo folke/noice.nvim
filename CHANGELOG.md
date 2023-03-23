@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.10.0](https://github.com/folke/noice.nvim/compare/v1.9.5...v1.10.0) (2023-03-23)
+
+
+### Features
+
+* **cmdline:** added cmdline support for `:lua=` and `:=` ([acfa513](https://github.com/folke/noice.nvim/commit/acfa5133da31a35ec24fca0757ad1c85edc4c585))
+
 ## [1.9.5](https://github.com/folke/noice.nvim/compare/v1.9.4...v1.9.5) (2023-03-19)
 
 
