@@ -56,7 +56,7 @@ function M.highlight(buf, ns, range, lang)
       return
     end
 
-    local highlighter_query = vim.treesitter.query.get_query(tree:lang(), "highlights")
+    local highlighter_query = vim.treesitter.query.get(tree:lang(), "highlights")
 
     -- Some injected languages may not have highlight queries.
     if not highlighter_query then
