@@ -28,6 +28,7 @@ function M.has_lang(lang)
     lang = vim.treesitter.language.get_lang(lang) or lang
     return pcall(vim.treesitter.language.add, lang)
   end
+  ---@diagnostic disable-next-line: deprecated
   return vim.treesitter.language.require_language(lang, nil, true)
 end
 
@@ -56,7 +57,9 @@ function M.highlight(buf, ns, range, lang)
       return
     end
 
-    local highlighter_query = vim.treesitter.query.get_query(tree:lang(), "highlights")
+    local highlighter_query = vim.treesitter.query.get and vim.treesitter.query.get(tree:lang(), "highlights")
+      ---@diagnostic disable-next-line: deprecated
+      or vim.treesitter.query.get_query(tree:lang(), "highlights")
 
     -- Some injected languages may not have highlight queries.
     if not highlighter_query then
