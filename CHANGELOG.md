@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.10.1](https://github.com/folke/noice.nvim/compare/v1.10.0...v1.10.1) (2023-03-24)
+
+
+### Bug Fixes
+
+* **treesitter:** deprecated call. Fixes [#408](https://github.com/folke/noice.nvim/issues/408) ([1ded575](https://github.com/folke/noice.nvim/commit/1ded575928752861558a729fcbbd1e6e53c76652))
+
 ## [1.10.0](https://github.com/folke/noice.nvim/compare/v1.9.5...v1.10.0) (2023-03-23)
 
 
