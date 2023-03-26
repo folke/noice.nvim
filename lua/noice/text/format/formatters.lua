@@ -117,7 +117,7 @@ function M.debug(message, opts)
   end
   local blocking, reason = Util.is_blocking()
   local debug = {
-    message:is({ cleared = true }) and "" or "",
+    message:is({ cleared = true }) and " " or " ",
     "#" .. message.id,
     message.event .. (message.kind and message.kind ~= "" and ("." .. message.kind) or ""),
     blocking and "⚡ " .. reason,

@@ -68,7 +68,7 @@ M.defaults = {
       error = "NoiceFormatLevelError",
       off = "NoiceFormatLevelOff",
     },
-    icons = { error = " ", warn = " ", info = " " },
+    icons = { error = " ", warn = " ", info = " " },
   },
   ---@class NoiceFormatOptions.progress
   progress = {
