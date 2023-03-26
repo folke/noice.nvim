@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.10.2](https://github.com/folke/noice.nvim/compare/v1.10.1...v1.10.2) (2023-03-26)
+
+
+### Bug Fixes
+
+* **icons:** removed all obsolete icons thanks to nerdfix ([cf6a194](https://github.com/folke/noice.nvim/commit/cf6a194f9280cda1fdcc36d271fccd4a24082df3))
+
 ## [1.10.1](https://github.com/folke/noice.nvim/compare/v1.10.0...v1.10.1) (2023-03-24)
 
 
