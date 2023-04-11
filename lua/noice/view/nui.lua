@@ -58,6 +58,8 @@ function NuiView:update_options()
         self._opts.anchor = Util.nui.anchor(width, height)
         if self._opts.anchor:find("S") and row then
           self._opts.position.row = -row + 1
+        elseif self._opts.anchor:find("N") and row then
+          self._opts.position.row = row + 2
         end
         if self._opts.anchor:find("E") and col then
           self._opts.position.col = -col
