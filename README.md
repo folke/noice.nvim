@@ -1,3 +1,9 @@
+## Changes:
+
+1. Add better "N" scaling in `lua/noice/view/nui.lua` (lines 61-62)
+
+2. Prioritize "S" anchor in `lua/noice/util/nui.lua` (lines 222-226)
+
 # 💥 Noice _(Nice, Noise, Notice)_
 
 Highly experimental plugin that completely replaces the UI for `messages`, `cmdline` and the `popupmenu`.
