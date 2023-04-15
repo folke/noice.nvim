@@ -219,12 +219,11 @@ end
 function M.anchor(width, height)
   local anchor = ""
   local lines_above = vim.fn.screenrow() - 1
-  local lines_below = vim.fn.winheight(0) - lines_above
 
-  if height < lines_below then
-    anchor = anchor .. "N"
-  else
+  if height < lines_above then
     anchor = anchor .. "S"
+  else
+    anchor = anchor .. "N"
   end
 
   if vim.go.columns - vim.fn.screencol() > width then
