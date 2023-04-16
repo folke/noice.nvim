@@ -3,6 +3,7 @@ local require = require("noice.util.lazy")
 local Format = require("noice.lsp.format")
 local Util = require("noice.util")
 local Docs = require("noice.lsp.docs")
+local Config = require("noice.config")
 
 local M = {}
 
@@ -12,7 +13,9 @@ end
 
 function M.on_hover(_, result, ctx)
   if not (result and result.contents) then
-    vim.notify("No information available")
+    if Config.options.lsp.hover.silent ~= true then
+      vim.notify("No information available")
+    end
     return
   end
 
@@ -21,7 +24,9 @@ function M.on_hover(_, result, ctx)
   if not message:focus() then
     Format.format(message, result.contents, { ft = vim.bo[ctx.bufnr].filetype })
     if message:is_empty() then
-      vim.notify("No information available")
+      if Config.options.lsp.hover.silent ~= true then
+        vim.notify("No information available")
+      end
       return
     end
     Docs.show(message)

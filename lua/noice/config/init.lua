@@ -128,6 +128,7 @@ function M.defaults()
       },
       hover = {
         enabled = true,
+        silent = false, -- set to true to not show a message if hover is not available
         view = nil, -- when nil, use defaults from documentation
         ---@type NoiceViewOptions
         opts = {}, -- merged with defaults from documentation
