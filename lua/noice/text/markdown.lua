@@ -58,12 +58,13 @@ function M.conceal_escape_characters(buf, ns, range)
   end
 end
 
+-- This is a <code>test</code> **booo**
 ---@param text string
 ---@param opts? MarkdownFormatOptions
 function M.parse(text, opts)
   opts = opts or {}
   ---@type string
-  text = text:gsub("</?pre>", "```"):gsub("\r", "")
+  text = text:gsub("</?pre>", "```"):gsub("\r", ""):gsub("</?code>", "`")
   text = M.html_entities(text)
 
   ---@type Markdown
