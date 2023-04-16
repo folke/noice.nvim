@@ -64,7 +64,8 @@ end
 function M.parse(text, opts)
   opts = opts or {}
   ---@type string
-  text = text:gsub("</?pre>", "```"):gsub("\r", ""):gsub("</?code>", "`")
+  text = text:gsub("</?pre>", "```"):gsub("\r", "")
+  -- text = text:gsub("</?code>", "`")
   text = M.html_entities(text)
 
   ---@type Markdown
