@@ -172,6 +172,7 @@ function M.confirm(message, opts, input)
   for l, line in ipairs(input._lines) do
     if l ~= #input._lines then
       message:append(line)
+      message:newline()
     end
   end
   message:trim_empty_lines()
