@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.12.0](https://github.com/folke/noice.nvim/compare/v1.11.0...v1.12.0) (2023-04-16)
+
+
+### Features
+
+* added `Noice dismiss` to hide all visible messages. Fixes [#417](https://github.com/folke/noice.nvim/issues/417) ([a32bc89](https://github.com/folke/noice.nvim/commit/a32bc892aadb26668fd0161962ae4eccb1bf5854))
+
 ## [1.11.0](https://github.com/folke/noice.nvim/compare/v1.10.2...v1.11.0) (2023-04-16)
 
 
