@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.11.0](https://github.com/folke/noice.nvim/compare/v1.10.2...v1.11.0) (2023-04-16)
+
+
+### Features
+
+* **lsp:** added config.lsp.hover.silent. Fixes [#412](https://github.com/folke/noice.nvim/issues/412) ([e2a53cf](https://github.com/folke/noice.nvim/commit/e2a53cf946d88d87cd0123711afce5ddad047b7b))
+* **signature:** added signature param docs. Fixes [#421](https://github.com/folke/noice.nvim/issues/421) ([e76ae13](https://github.com/folke/noice.nvim/commit/e76ae13dd272dc23d0154b93172d445aeabad8f1))
+
+
+### Bug Fixes
+
+* **confirm:** keep newlines in confirm message. Fixes [#422](https://github.com/folke/noice.nvim/issues/422) ([051111f](https://github.com/folke/noice.nvim/commit/051111f98d7128c833eaa32423426829981b2aa3))
+* **markdown:** replace `&lt;code&gt;`. Fixes [#424](https://github.com/folke/noice.nvim/issues/424) ([38fb652](https://github.com/folke/noice.nvim/commit/38fb652d0a95780d20a551a6ec44b01226476c99))
+* **markdown:** revert ([d767be9](https://github.com/folke/noice.nvim/commit/d767be960e8660b19595ccff2dad6abd7aae2d4a))
+
 ## [1.10.2](https://github.com/folke/noice.nvim/compare/v1.10.1...v1.10.2) (2023-03-26)
 
 
