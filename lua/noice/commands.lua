@@ -5,6 +5,7 @@ local Manager = require("noice.message.manager")
 local Config = require("noice.config")
 local Util = require("noice.util")
 local Message = require("noice.message")
+local Router = require("noice.message.router")
 
 ---@class NoiceCommand: NoiceRouteConfig
 ---@field filter_opts NoiceMessageOpts
@@ -41,6 +42,9 @@ function M.setup()
   M.commands = {
     debug = function()
       Config.options.debug = not Config.options.debug
+    end,
+    dismiss = function()
+      Router.dismiss()
     end,
     log = function()
       vim.cmd.edit(Config.options.log)

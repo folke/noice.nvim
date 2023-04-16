@@ -628,6 +628,7 @@ require("telescope").load_extension("noice")
 
 - `:Noice` or `:Noice history` shows the message history
 - `:Noice last` shows the last message in a popup
+- `:Noice dismiss` dismiss all visible messages
 - `:Noice errors` shows the error messages in a split. Last errors on top
 - `:Noice disable` disables **Noice**
 - `:Noice enable` enables **Noice**

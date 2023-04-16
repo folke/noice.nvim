@@ -141,6 +141,16 @@ function M.get_views()
   return views
 end
 
+function M.dismiss()
+  Manager.clear()
+  local views = M.get_views()
+  for view, _ in pairs(views) do
+    view:dismiss()
+    view:display()
+  end
+  M.update()
+end
+
 function M.update()
   if Util.is_exiting() then
     return

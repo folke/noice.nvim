@@ -110,6 +110,10 @@ function View:clear()
   self._route_opts = {}
 end
 
+function View:dismiss()
+  self:clear()
+end
+
 function View:check_options()
   ---@type NoiceViewOptions
   local old = vim.deepcopy(self._opts)

@@ -72,6 +72,12 @@ function MiniView:show()
   self:update()
 end
 
+function MiniView:dismiss()
+  self:clear()
+  self.active = {}
+  self:update()
+end
+
 function MiniView:update()
   local active = vim.tbl_values(self.active)
   table.sort(
