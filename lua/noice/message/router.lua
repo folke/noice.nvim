@@ -38,6 +38,7 @@ end
 function M.disable()
   if M._updater then
     M._updater.stop()
+    M._updater = nil
     Manager.clear()
     M.update()
   end
