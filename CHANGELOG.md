@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.12.1](https://github.com/folke/noice.nvim/compare/v1.12.0...v1.12.1) (2023-04-17)
+
+
+### Bug Fixes
+
+* **router:** properly disable updater when disabling Noice. Fixes [#423](https://github.com/folke/noice.nvim/issues/423) ([3bed83b](https://github.com/folke/noice.nvim/commit/3bed83b4d2e4fce03a27071c39be0d9e04313332))
+
 ## [1.12.0](https://github.com/folke/noice.nvim/compare/v1.11.0...v1.12.0) (2023-04-16)
 
 
