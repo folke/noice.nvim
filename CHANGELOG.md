@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.12.2](https://github.com/folke/noice.nvim/compare/v1.12.1...v1.12.2) (2023-04-18)
+
+
+### Bug Fixes
+
+* **signature:** nil check for parameter label. Fixes [#435](https://github.com/folke/noice.nvim/issues/435) ([9d778e7](https://github.com/folke/noice.nvim/commit/9d778e7ce29c519ca0285b054e7c3b679bc9d3b9))
+* **signature:** support label offsets ([9649d9f](https://github.com/folke/noice.nvim/commit/9649d9fd4d8fa8a8654e1e9c293718ae8d62e73b))
+
 ## [1.12.1](https://github.com/folke/noice.nvim/compare/v1.12.0...v1.12.1) (2023-04-17)
 
 
