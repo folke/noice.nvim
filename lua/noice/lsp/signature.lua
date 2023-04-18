@@ -218,7 +218,12 @@ function M:format_signature(sig_index, sig)
     for _, p in ipairs(sig.parameters) do
       if p.documentation then
         local pdoc = table.concat(Format.format_markdown(p.documentation or ""), "\n")
-        lines[#lines + 1] = "- " .. "`" .. p.label .. "`" .. " " .. pdoc
+        local line = { "-" }
+        if p.label then
+          line[#line + 1] = "`" .. p.label .. "`"
+        end
+        line[#line + 1] = pdoc
+        lines[#lines + 1] = table.concat(line, " ")
       end
     end
   end
