@@ -220,7 +220,12 @@ function M:format_signature(sig_index, sig)
         local pdoc = table.concat(Format.format_markdown(p.documentation or ""), "\n")
         local line = { "-" }
         if p.label then
-          line[#line + 1] = "`" .. p.label .. "`"
+          local label = p.label
+          if type(label) == "table" then
+            label = sig.label:sub(label[1] + 1, label[2])
+          end
+
+          line[#line + 1] = "`[" .. label .. "]`"
         end
         line[#line + 1] = pdoc
         lines[#lines + 1] = table.concat(line, " ")
