@@ -13,19 +13,19 @@ M.log = {
   ---@class NoiceHealthLog
   checkhealth = {
     start = function(msg)
-      vim.health.report_start(msg or "noice.nvim")
+      vim.health.start(msg or "noice.nvim")
     end,
     info = function(msg, ...)
-      vim.health.report_info(msg:format(...))
+      vim.health.info(msg:format(...))
     end,
     ok = function(msg, ...)
-      vim.health.report_ok(msg:format(...))
+      vim.health.ok(msg:format(...))
     end,
     warn = function(msg, ...)
-      vim.health.report_warn(msg:format(...))
+      vim.health.warn(msg:format(...))
     end,
     error = function(msg, ...)
-      vim.health.report_error(msg:format(...))
+      vim.health.error(msg:format(...))
     end,
   },
   ---@type NoiceHealthLog
