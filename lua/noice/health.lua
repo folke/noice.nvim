@@ -5,6 +5,11 @@ local Config = require("noice.config")
 local Lsp = require("noice.lsp")
 local Treesitter = require("noice.text.treesitter")
 
+local start = vim.health.start or vim.health.report_start
+local ok = vim.health.ok or vim.health.report_ok
+local warn = vim.health.warn or vim.health.report_warn
+local error = vim.health.error or vim.health.report_error
+
 local M = {}
 
 M.checks = {}
@@ -13,19 +18,19 @@ M.log = {
   ---@class NoiceHealthLog
   checkhealth = {
     start = function(msg)
-      vim.health.start(msg or "noice.nvim")
+      start(msg or "noice.nvim")
     end,
     info = function(msg, ...)
-      vim.health.info(msg:format(...))
+      info(msg:format(...))
     end,
     ok = function(msg, ...)
-      vim.health.ok(msg:format(...))
+      ok(msg:format(...))
     end,
     warn = function(msg, ...)
-      vim.health.warn(msg:format(...))
+      warn(msg:format(...))
     end,
     error = function(msg, ...)
-      vim.health.error(msg:format(...))
+      error(msg:format(...))
     end,
   },
   ---@type NoiceHealthLog
