@@ -150,10 +150,10 @@ function M:active_parameter(sig_index)
     return
   end
   local sig = self.signatures[sig_index]
-  if sig.activeParameter and sig.parameters[sig.activeParameter + 1] then
+  if sig.activeParameter and sig.parameters and sig.parameters[sig.activeParameter + 1] then
     return sig.parameters[sig.activeParameter + 1]
   end
-  if self.activeParameter and sig.parameters[self.activeParameter + 1] then
+  if self.activeParameter and sig.parameters and sig.parameters[self.activeParameter + 1] then
     return sig.parameters[self.activeParameter + 1]
   end
   return sig.parameters and sig.parameters[1] or nil
