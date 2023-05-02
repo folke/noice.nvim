@@ -26,7 +26,7 @@ end
 
 ---@param text string
 function M.html_entities(text)
-  local entities = { nbsp = "", lt = "<", gt = ">", amp = "&", quot = '"' }
+  local entities = { nbsp = "", lt = "<", gt = ">", amp = "&", quot = '"', apos = "'", ensp = " ", emsp = " " }
   for entity, char in pairs(entities) do
     text = text:gsub("&" .. entity .. ";", char)
   end

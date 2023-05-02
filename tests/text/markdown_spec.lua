@@ -172,5 +172,24 @@ local b
       { code = { "local b" }, lang = "text" },
     },
   },
+  {
+    input = [[
+
+1 &lt; 2
+3 &gt; 2
+&quot;quoted&quot;
+&apos;apos&apos;
+&ensp;&emsp;indented
+&amp;
+    ]],
+    output = {
+      { line = "1 < 2" },
+      { line = "3 > 2" },
+      { line = '"quoted"' },
+      { line = "'apos'" },
+      { line = "  indented" },
+      { line = "&" },
+    },
+  },
 }
 M.test()
