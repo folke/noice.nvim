@@ -6,6 +6,7 @@ local Menu = require("nui.menu")
 local Api = require("noice.api")
 local NuiLine = require("nui.line")
 local Scrollbar = require("noice.view.scrollbar")
+local Highlights = require("noice.config.highlights")
 
 local M = {}
 ---@type NuiMenu|NuiTree
@@ -54,7 +55,8 @@ end
 ---@param item CompleteItem
 function M.format_kind(item)
   if item.kind and item.kind ~= "" then
-    local hl_group = "NoiceCompletionItemKind" .. item.kind
+    local hl_group = "CompletionItemKind" .. item.kind
+    hl_group = Highlights.defaults[hl_group] and ("Noice" .. hl_group) or "NoiceCompletionItemKindDefault"
     local icon = Config.options.popupmenu.kind_icons[item.kind]
     item.text:append(" ")
     if icon then
