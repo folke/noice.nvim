@@ -37,7 +37,7 @@ end
 ---@param buf buffer
 ---@param range number[]
 function M.conceal_escape_characters(buf, ns, range)
-  local chars = "\\`*_{}[]()#+-.!"
+  local chars = "\\`*_{}[]()#+-.!/"
   local regex = "\\["
   for i = 1, #chars do
     regex = regex .. "%" .. chars:sub(i, i)
