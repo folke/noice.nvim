@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.12.4](https://github.com/folke/noice.nvim/compare/v1.12.3...v1.12.4) (2023-05-07)
+
+
+### Bug Fixes
+
+* **lsp:** add non-nil guard to setup function ([#454](https://github.com/folke/noice.nvim/issues/454)) ([4524216](https://github.com/folke/noice.nvim/commit/4524216d7484c7b183ca1f654d8e66dff28a5680))
+* **markdown:** conceal escaping forward slashes. Fixes [#455](https://github.com/folke/noice.nvim/issues/455) ([a7246aa](https://github.com/folke/noice.nvim/commit/a7246aa99fde34fb9d5e13c62c83ac7226514d67))
+
 ## [1.12.3](https://github.com/folke/noice.nvim/compare/v1.12.2...v1.12.3) (2023-05-04)
 
 
