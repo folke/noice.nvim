@@ -54,7 +54,9 @@ function M.setup()
     vim.api.nvim_create_autocmd("LspAttach", {
       group = vim.api.nvim_create_augroup("noice_lsp_signature", { clear = true }),
       callback = function(args)
-        M.on_attach(args.buf, vim.lsp.get_client_by_id(args.data.client_id))
+        if args.data ~= nil then
+          M.on_attach(args.buf, vim.lsp.get_client_by_id(args.data.client_id))
+        end
       end,
     })
   end
