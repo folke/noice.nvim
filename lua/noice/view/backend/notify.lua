@@ -153,6 +153,9 @@ function NotifyView:_notify(msg)
     if type(msg.opts.replace) == "table" then
       local m = Manager.get_by_id(msg.opts.replace.id)
       opts.replace = m and m.opts.notify_id or nil
+    elseif type(msg.opts.replace) == "number" then
+      local m = Manager.get_by_id(msg.opts.replace)
+      opts.replace = m and m.opts.notify_id or nil
     end
   end
 
