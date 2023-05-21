@@ -1,4 +1,4 @@
-*noice.nvim.txt*          For Neovim >= 0.8.0         Last change: 2023 May 10
+*noice.nvim.txt*          For Neovim >= 0.8.0         Last change: 2023 May 21
 
 ==============================================================================
 Table of Contents                               *noice.nvim-table-of-contents*
@@ -27,7 +27,6 @@ Highly experimental plugin that completely replaces the UI for `messages`,
 
 FEATURES                     *noice.nvim-noice-(nice,-noise,-notice)-features*
 
-
 - fully **configurable views** like nvim-notify <https://github.com/rcarriga/nvim-notify>,
     splits, popups, virtual text, ..
 - use **filters** to **route messages** to different views
@@ -51,7 +50,6 @@ issues have already been fixed upstream. Check this tracking issue
 
 
 REQUIREMENTS             *noice.nvim-noice-(nice,-noise,-notice)-requirements*
-
 
 - Neovim >= 0.8.0 **(nightly highly recommended)**
 - nui.nvim <https://github.com/MunifTanjim/nui.nvim>used for proper rendering and multiple views
@@ -418,7 +416,6 @@ VIEWS                           *noice.nvim-noice-(nice,-noise,-notice)-views*
 
 **Noice** comes with the following built-in backends:
 
-
 - **popup**powered by nui.nvim <https://github.com/MunifTanjim/nui.nvim>
 - **split**powered by nui.nvim <https://github.com/MunifTanjim/nui.nvim>
 - **notify**powered by nvim-notify <https://github.com/rcarriga/nvim-notify>
@@ -533,7 +530,6 @@ defaults, please refer to config.format
 
 **Noice** includes the following formatters:
 
-
 - **level**message level with optional `icon` and `hl_group` per level
 - **text**any text with optional `hl_group`
 - **title**message title with optional `hl_group`
@@ -588,7 +584,6 @@ ROUTES                         *noice.nvim-noice-(nice,-noise,-notice)-routes*
 
 A **route** has a `filter`, `view` and optional `opts` attribute.
 
-
 - **view**one of the views (built-in or custom)
 - **filter** a filter for messages matching this route
 - **opts**options for the view and the route
@@ -639,7 +634,6 @@ STATUSLINE COMPONENTS*noice.nvim-noice-(nice,-noise,-notice)-statusline-componen
 
 **Noice** comes with the following statusline components:
 
-
 - **ruler**
 - **message**last line of the last message (`event=show_msg`)
 - **command**`showcmd`
@@ -653,7 +647,6 @@ the default config.
 You can add custom statusline components in setup under the `status` key.
 
 Statusline components have the following methods:
-
 
 - **get**gets the content of the message **without** highlights
 - **get_hl**gets the content of the message **with** highlights
@@ -703,7 +696,6 @@ formatted with `config.format.formatters.telescope_preview`
 
 
 USAGE                           *noice.nvim-noice-(nice,-noise,-notice)-usage*
-
 
 - `:Noice` or `:Noice history` shows the message history
 - `:Noice last` shows the last message in a popup
