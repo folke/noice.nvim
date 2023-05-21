@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.13.0](https://github.com/folke/noice.nvim/compare/v1.12.4...v1.13.0) (2023-05-21)
+
+
+### Features
+
+* **cmp:** incude item.detail when it's not part of item.documentation ([c2a745a](https://github.com/folke/noice.nvim/commit/c2a745a26ae562f1faecbf6177ac53377d2658d5))
+
+
+### Bug Fixes
+
+* **notify:** nvim-notify replace can be an id or a record ([a9cc87b](https://github.com/folke/noice.nvim/commit/a9cc87b14e18bc3717746b45d79157c0adb43a4d))
+
+
+### Performance Improvements
+
+* cache highlighter queries ([b4eb215](https://github.com/folke/noice.nvim/commit/b4eb2155f3347377eb0c14458755ce7b7966cdb7))
+
 ## [1.12.4](https://github.com/folke/noice.nvim/compare/v1.12.3...v1.12.4) (2023-05-07)
 
 
