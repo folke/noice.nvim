@@ -1,5 +1,6 @@
 ---@diagnostic disable: invisible
 local M = {}
+M.queries = {}
 
 ---@param buf buffer
 ---@param injections table<string, number[][][]>
@@ -17,6 +18,13 @@ function M.highlight_markdown(buf, injections)
   end
   parser:invalidate()
   parser:parse()
+end
+
+function M.get_query(lang)
+  if not M.queries[lang] then
+    M.queries[lang] = vim.treesitter.query.get(lang, "highlights") or vim.treesitter.query.get_query(lang, "highlights")
+  end
+  return M.queries[lang]
 end
 
 function M.get_lang(ft)
@@ -56,10 +64,7 @@ function M.highlight(buf, ns, range, lang)
     if not tstree then
       return
     end
-
-    local highlighter_query = vim.treesitter.query.get and vim.treesitter.query.get(tree:lang(), "highlights")
-      ---@diagnostic disable-next-line: deprecated
-      or vim.treesitter.query.get_query(tree:lang(), "highlights")
+    local highlighter_query = M.get_query(tree:lang())
 
     -- Some injected languages may not have highlight queries.
     if not highlighter_query then
