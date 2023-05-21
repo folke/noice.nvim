@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.13.1](https://github.com/folke/noice.nvim/compare/v1.13.0...v1.13.1) (2023-05-21)
+
+
+### Bug Fixes
+
+* support older Neovim versions ([4a1ec5e](https://github.com/folke/noice.nvim/commit/4a1ec5ec0b163a365d7593d93450676b9cbcbebd))
+
 ## [1.13.0](https://github.com/folke/noice.nvim/compare/v1.12.4...v1.13.0) (2023-05-21)
 
 
