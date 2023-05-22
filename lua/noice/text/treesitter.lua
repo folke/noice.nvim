@@ -51,7 +51,7 @@ function M.highlight(buf, ns, range, lang)
   lang = M.get_lang(lang)
 
   buf = (buf == 0 or buf == nil) and vim.api.nvim_get_current_buf() or buf
-  vim.fn.bufload(buf)
+  -- vim.fn.bufload(buf)
 
   -- we can't use a cached parser here since that could interfer with the existing parser of the buffer
   local LanguageTree = require("vim.treesitter.languagetree")
