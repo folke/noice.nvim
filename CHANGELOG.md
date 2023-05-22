@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.13.2](https://github.com/folke/noice.nvim/compare/v1.13.1...v1.13.2) (2023-05-22)
+
+
+### Bug Fixes
+
+* **treesitter:** ignore weird invalid end_col errors. Fixes [#473](https://github.com/folke/noice.nvim/issues/473) ([7e2692b](https://github.com/folke/noice.nvim/commit/7e2692b0c461da182a54ff2af4a35aea2bf8ea5c))
+
+
+### Performance Improvements
+
+* don't bufload when highlighting a buffer ([8df4cbd](https://github.com/folke/noice.nvim/commit/8df4cbdae15a915d460828710bf9ff1befb3f12d))
+
 ## [1.13.1](https://github.com/folke/noice.nvim/compare/v1.13.0...v1.13.1) (2023-05-21)
 
 
