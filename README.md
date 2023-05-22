@@ -40,15 +40,14 @@ Check this [tracking issue](https://github.com/folke/noice.nvim/issues/6) for a 
 Install the plugin with your preferred package manager:
 
 ```lua
--- Packer
-use({
+-- lazy.nvim
+{
   "folke/noice.nvim",
-  config = function()
-    require("noice").setup({
-        -- add any options here
-    })
-  end,
-  requires = {
+  event = "VeryLazy",
+  opts = {
+    -- add any options here
+  },
+  dependencies = {
     -- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
     "MunifTanjim/nui.nvim",
     -- OPTIONAL:
@@ -56,7 +55,7 @@ use({
     --   If not available, we use `mini` as the fallback
     "rcarriga/nvim-notify",
     }
-})
+}
 ```
 
 Suggested setup:
