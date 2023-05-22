@@ -88,7 +88,7 @@ function M.highlight(buf, ns, range, lang)
       local is_spell = name == "spell"
 
       if hl and not is_spell then
-        vim.api.nvim_buf_set_extmark(buf, ns, start_row, start_col, {
+        pcall(vim.api.nvim_buf_set_extmark, buf, ns, start_row, start_col, {
           end_line = end_row,
           end_col = end_col,
           hl_group = hl,
