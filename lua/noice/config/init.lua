@@ -4,7 +4,7 @@ local Routes = require("noice.config.routes")
 
 local M = {}
 
-M.ns = vim.api.nvim_create_namespace("messages_highlights")
+M.ns = vim.api.nvim_create_namespace("noice")
 
 function M.defaults()
   ---@class NoiceConfig
