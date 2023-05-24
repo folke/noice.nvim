@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.13.3](https://github.com/folke/noice.nvim/compare/v1.13.2...v1.13.3) (2023-05-24)
+
+
+### Bug Fixes
+
+* **overrides:** noice was leaking extmarks for stylize_markdown ([9b148a1](https://github.com/folke/noice.nvim/commit/9b148a141df7fefc66705e2e7219d11536b99288))
+
 ## [1.13.2](https://github.com/folke/noice.nvim/compare/v1.13.1...v1.13.2) (2023-05-22)
 
 
