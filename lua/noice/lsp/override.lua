@@ -41,6 +41,7 @@ function M.setup()
 
   if Config.options.lsp.override["vim.lsp.util.stylize_markdown"] then
     vim.lsp.util.stylize_markdown = function(buf, contents, _opts)
+      vim.api.nvim_buf_clear_namespace(buf, Config.ns, 0, -1)
       local text = table.concat(contents, "\n")
       local message = Message("lsp")
       Markdown.format(message, text)
