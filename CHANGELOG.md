@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.13.4](https://github.com/folke/noice.nvim/compare/v1.13.3...v1.13.4) (2023-05-24)
+
+
+### Bug Fixes
+
+* **cmdline:** fixed a byte offset issue with the new virtual inline text ([a13a88f](https://github.com/folke/noice.nvim/commit/a13a88fb2016b6cfea8f56238566b345f537e47a))
+
 ## [1.13.3](https://github.com/folke/noice.nvim/compare/v1.13.2...v1.13.3) (2023-05-24)
 
 
