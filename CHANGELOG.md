@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.14.0](https://github.com/folke/noice.nvim/compare/v1.13.4...v1.14.0) (2023-05-25)
+
+
+### Features
+
+* **cmdline:** added support for FloatTitle and added proper default ([79c7059](https://github.com/folke/noice.nvim/commit/79c70594aefb4efecbce4528174fdd0227baaf3e))
+
 ## [1.13.4](https://github.com/folke/noice.nvim/compare/v1.13.3...v1.13.4) (2023-05-24)
 
 
