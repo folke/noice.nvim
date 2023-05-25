@@ -204,6 +204,7 @@ M.defaults = {
     win_options = {
       winhighlight = {
         Normal = "NoiceCmdlinePopup",
+        FloatTitle = "NoiceCmdlinePopupTitle",
         FloatBorder = "NoiceCmdlinePopupBorder",
         IncSearch = "",
         CurSearch = "",

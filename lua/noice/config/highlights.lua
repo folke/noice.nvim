@@ -14,6 +14,7 @@ M.defaults = {
   CmdlinePrompt = "Title", -- prompt for input()
   CmdlinePopup = "Normal", -- Normal for the cmdline popup
   CmdlinePopupBorder = "DiagnosticSignInfo", -- Cmdline popup border
+  CmdlinePopupTitle = "DiagnosticSignInfo", -- Cmdline popup border
   CmdlinePopupBorderSearch = "DiagnosticSignWarn", -- Cmdline popup border for search
   Confirm = "Normal", -- Normal for the confirm view
   ConfirmBorder = "DiagnosticSignInfo", -- Border for the confirm view
