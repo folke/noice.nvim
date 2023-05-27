@@ -1,6 +1,7 @@
 local require = require("noice.util.lazy")
 
 local Highlight = require("noice.text.highlight")
+local Util = require("noice.util")
 local NuiLine = require("nui.line")
 local Object = require("nui.object")
 
@@ -109,6 +110,15 @@ function Block:_append(content, highlight)
   if #self._lines == 0 then
     table.insert(self._lines, NuiLine())
   end
+  if type(content) == "string" and true then
+    -- handle carriage returns. They overwrite the line from the first character
+    local cr = content:match("^.*()[\r]")
+    if cr then
+      table.remove(self._lines)
+      table.insert(self._lines, NuiLine())
+      content = content:sub(cr + 1)
+    end
+  end
   return self._lines[#self._lines]:append(content, highlight)
 end
 
@@ -156,6 +166,8 @@ function Block:append(contents, highlight)
       -- Handle newlines
       ---@type number|string|table, string
       local attr_id, text = unpack(content)
+      -- msg_show messages can contain invalid \r characters
+      text = text:gsub("%^M", "\r")
       text = text:gsub("\r\n", "\n")
 
       ---@type string|table|nil
@@ -168,23 +180,12 @@ function Block:append(contents, highlight)
 
       while text ~= "" do
         local nl = text:find("\n")
+        local line = nl and text:sub(1, nl - 1) or text
+        self:_append(line, hl_group)
         if nl then
-          local str = text:sub(1, nl - 1)
-
-          -- handle carriage returns. They overwrite the line from the first character
-          if str:find("\r") then
-            local parts = vim.split(str, "\r", { plain = true })
-            str = ""
-            for _, p in ipairs(parts) do
-              str = p .. str:sub(p:len() + 1)
-            end
-          end
-
-          self:_append(str, hl_group)
           self:newline()
           text = text:sub(nl + 1)
         else
-          self:_append(text, hl_group)
           break
         end
       end
