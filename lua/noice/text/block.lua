@@ -109,6 +109,15 @@ function Block:_append(content, highlight)
   if #self._lines == 0 then
     table.insert(self._lines, NuiLine())
   end
+  if type(content) == "string" then
+    -- handle carriage returns. They overwrite the line from the first character
+    local cr = content:match("^.*()[\r^M]")
+    if cr then
+      table.remove(self._lines)
+      table.insert(self._lines, NuiLine())
+      content = content:sub(cr + 1)
+    end
+  end
   return self._lines[#self._lines]:append(content, highlight)
 end
 
@@ -156,7 +165,6 @@ function Block:append(contents, highlight)
       -- Handle newlines
       ---@type number|string|table, string
       local attr_id, text = unpack(content)
-      text = text:gsub("\r\n", "\n")
 
       ---@type string|table|nil
       local hl_group
@@ -170,16 +178,6 @@ function Block:append(contents, highlight)
         local nl = text:find("\n")
         if nl then
           local str = text:sub(1, nl - 1)
-
-          -- handle carriage returns. They overwrite the line from the first character
-          if str:find("\r") then
-            local parts = vim.split(str, "\r", { plain = true })
-            str = ""
-            for _, p in ipairs(parts) do
-              str = p .. str:sub(p:len() + 1)
-            end
-          end
-
           self:_append(str, hl_group)
           self:newline()
           text = text:sub(nl + 1)
