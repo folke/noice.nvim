@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.14.2](https://github.com/folke/noice.nvim/compare/v1.14.1...v1.14.2) (2023-05-27)
+
+
+### Bug Fixes
+
+* **block:** better deal with carriage return characters (take 2) ([ee24b36](https://github.com/folke/noice.nvim/commit/ee24b36743b18e53bdc6b49bbfa426fc18ea337a))
+* **text:** temp fixup for CRLF handling ([3e1400f](https://github.com/folke/noice.nvim/commit/3e1400f172cf67041f6845d86413de56fb90e685))
+
 ## [1.14.1](https://github.com/folke/noice.nvim/compare/v1.14.0...v1.14.1) (2023-05-27)
 
 
