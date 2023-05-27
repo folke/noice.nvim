@@ -165,6 +165,7 @@ function Block:append(contents, highlight)
       -- Handle newlines
       ---@type number|string|table, string
       local attr_id, text = unpack(content)
+      text = text:gsub("\r\n", "\n")
 
       ---@type string|table|nil
       local hl_group
