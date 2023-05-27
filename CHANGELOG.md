@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.14.1](https://github.com/folke/noice.nvim/compare/v1.14.0...v1.14.1) (2023-05-27)
+
+
+### Bug Fixes
+
+* **text:** better (correct) way of dealing with `\r` characters. Fixes [#483](https://github.com/folke/noice.nvim/issues/483) ([520a737](https://github.com/folke/noice.nvim/commit/520a73760030f1293bbee41b0dcd041f47d1ecae))
+
 ## [1.14.0](https://github.com/folke/noice.nvim/compare/v1.13.4...v1.14.0) (2023-05-25)
 
 
