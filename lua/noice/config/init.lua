@@ -106,6 +106,18 @@ function M.defaults()
       enabled = true,
       view = "notify",
     },
+    select = {
+      -- Overrides vim.ui.select with
+      enabled = true,
+      -- Set to false to disable icons, true to use `kind_icons` from popupmenu, or a dict of
+      -- icons.
+      kind_icons = true,
+      -- Maps incoming kinds to well-known kinds
+      kind_aliases = {
+        codeaction = "CodeAction",
+        quickfix = "QuickFix",
+      },
+    },
     lsp = {
       progress = {
         enabled = true,

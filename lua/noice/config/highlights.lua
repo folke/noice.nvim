@@ -26,6 +26,10 @@ M.defaults = {
   PopupmenuBorder = "FloatBorder", -- Popupmenu border
   PopupmenuMatch = "Special", -- Part of the item that matches the input
   PopupmenuSelected = "PmenuSel", -- Selected item in the popupmenu
+  Select = "Pmenu", -- Normal for the popupmenu
+  SelectBorder = "FloatBorder", -- Popupmenu border
+  SelectMatch = "Special", -- Part of the item that matches the input
+  SelectSelected = "PmenuSel", -- Selected item in the popupmenu
   Scrollbar = "PmenuSbar", -- Normal for scrollbar
   ScrollbarThumb = "PmenuThumb", -- Scrollbar thumb
   Split = "NormalFloat", -- Normal for split views
@@ -72,6 +76,10 @@ M.defaults = {
   CompletionItemKindFile = "NoiceCompletionItemKindDefault",
   CompletionItemKindVariable = "NoiceCompletionItemKindDefault",
   CompletionItemKindEnum = "NoiceCompletionItemKindDefault",
+  SelectItem = "none", -- Normal for the select
+  SelectItemKindDefault = "Special",
+  SelectItemKindCodeAction = "NoiceSelectItemKindDefault",
+  SelectItemKindQuickFix = "NoiceSelectItemKindDefault",
 }
 
 function M.add(hl_group, link)

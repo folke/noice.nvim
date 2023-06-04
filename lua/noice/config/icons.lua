@@ -23,6 +23,8 @@ M.kinds = {
   Unit = " ",
   Value = " ",
   Variable = " ",
+  CodeAction = "",
+  QuickFix = "",
 }
 
 return M

@@ -52,6 +52,35 @@ M.defaults = {
       padding = { 0, 1 },
     },
   },
+  select = {
+    relative = {
+      type = "cursor",
+    },
+    zindex = 65,
+    position = {
+      row = 1,
+      col = 0,
+    },
+    size = {
+      width = "auto",
+      height = "auto",
+      max_height = 20,
+      -- min_width = 10,
+    },
+    win_options = {
+      cursorline = true,
+      cursorlineopt = "line",
+      winhighlight = {
+        Normal = "NoiceSelect", -- change to NormalFloat to make it look like other floats
+        FloatBorder = "NoiceSelectBorder", -- border highlight
+        CursorLine = "NoiceSelectSelected", -- used for highlighting the selected item
+        PmenuMatch = "NoiceSelectMatch", -- used to highlight the part of the item that matches the input
+      },
+    },
+    border = {
+      padding = { 0, 1 },
+    },
+  },
   virtualtext = {
     backend = "virtualtext",
     format = { "{message}" },
