@@ -28,6 +28,7 @@ end
 ---| "circle"
 ---| "circleHalves"
 ---| "circleQuarters"
+---| "circleFull"
 ---| "clock"
 ---| "dots"
 ---| "dots10"
@@ -185,6 +186,10 @@ M.spinners = {
   circle = { frames = { "◡", "⊙", "◠" }, interval = 120 },
   circleHalves = { frames = { "◐", "◓", "◑", "◒" }, interval = 50 },
   circleQuarters = { frames = { "◴", "◷", "◶", "◵" }, interval = 120 },
+  circleFull = {
+    frames = { "", "󰪞", "󰪟", "󰪠", "󰪢", "󰪣", "󰪤", "󰪥" },
+    interval = 120,
+  },
   clock = {
     frames = {
       "🕛 ",
