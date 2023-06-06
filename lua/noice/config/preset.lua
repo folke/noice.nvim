@@ -75,7 +75,7 @@ M.presets = {
           height = "auto",
         },
       },
-      popupmenu = {
+      cmdline_popupmenu = {
         relative = "editor",
         position = {
           row = 6,
