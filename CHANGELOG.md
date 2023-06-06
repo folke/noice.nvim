@@ -1,5 +1,24 @@
 # Changelog
 
+## [1.15.0](https://github.com/folke/noice.nvim/compare/v1.14.2...v1.15.0) (2023-06-06)
+
+
+### Features
+
+* add `circleFull` spinner ([#495](https://github.com/folke/noice.nvim/issues/495)) ([5427398](https://github.com/folke/noice.nvim/commit/54273980749ceb4396501300bf4c86f3bb818f75))
+* **popupmenu:** allow different views for regular/cmdline popupmenu ([af706c4](https://github.com/folke/noice.nvim/commit/af706c4b443cf1c416ef7288ec3434f3f1ab6cf1))
+
+
+### Bug Fixes
+
+* **popupmenu:** always show the regular (non-cmdline) popupmenu near the cursor ([e3936cc](https://github.com/folke/noice.nvim/commit/e3936ccbbd32f6ce4a4f55a77ec556b116c0b928))
+* **preset:** palette now configures cmdline_popupmenu instead of popupmenu ([294097a](https://github.com/folke/noice.nvim/commit/294097a239ec943587e5707b678142c52a9b318e))
+
+
+### Performance Improvements
+
+* **popupmenu:** re-use existing nui menu for rendering the popupmenu ([fdd78c2](https://github.com/folke/noice.nvim/commit/fdd78c25f64482c4c92ca84ba9c5814a5aa2788e))
+
 ## [1.14.2](https://github.com/folke/noice.nvim/compare/v1.14.1...v1.14.2) (2023-05-27)
 
 
