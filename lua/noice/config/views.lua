@@ -52,6 +52,9 @@ M.defaults = {
       padding = { 0, 1 },
     },
   },
+  cmdline_popupmenu = {
+    view = "popupmenu",
+  },
   virtualtext = {
     backend = "virtualtext",
     format = { "{message}" },

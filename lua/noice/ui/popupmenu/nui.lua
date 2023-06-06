@@ -70,7 +70,9 @@ end
 function M.opts(state)
   local is_cmdline = state.grid == -1
 
-  local _opts = vim.deepcopy(Config.options.views.popupmenu or {})
+  local view = require("noice.config.views").get_options(is_cmdline and "cmdline_popupmenu" or "popupmenu")
+
+  local _opts = vim.deepcopy(view or {})
   _opts.enter = false
   _opts.type = "popup"
 
