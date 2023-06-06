@@ -125,7 +125,7 @@ end
 
 ---@param state Popupmenu
 function M.show(state)
-  M.on_hide()
+  -- M.on_hide()
   local is_cmdline = state.grid == -1
   local opts, padding = M.opts(state)
 
