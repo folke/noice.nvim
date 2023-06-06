@@ -85,8 +85,8 @@ function M.opts(state)
   }
 
   local position_auto = not opts.position or opts.position.col == "auto"
-  if position_auto then
-    if is_cmdline then
+  if is_cmdline then
+    if position_auto then
       -- Anchor to the cmdline
       local pos = Api.get_cmdline_position()
       if pos then
@@ -100,13 +100,15 @@ function M.opts(state)
           opts.anchor = "SW"
         end
       end
-    else
-      opts.relative = { type = "cursor" }
-      opts.position = {
-        row = 1,
-        col = -padding.left,
-      }
     end
+  else
+    opts.relative = { type = "cursor" }
+    local border = vim.tbl_get(opts, "border", "style")
+    local offset = (border == nil or border == "none") and 0 or 1
+    opts.position = {
+      row = 1 + offset,
+      col = -padding.left,
+    }
   end
 
   -- manage left/right padding on the line
