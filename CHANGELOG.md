@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.15.1](https://github.com/folke/noice.nvim/compare/v1.15.0...v1.15.1) (2023-06-10)
+
+
+### Bug Fixes
+
+* **nui:** nui broke noice. added a temporary work-around till the problem is solved ([4db3c8f](https://github.com/folke/noice.nvim/commit/4db3c8f14302273b842f73a8facf1999169c1e41))
+* **ui:** safer adding of winhl ([36b1935](https://github.com/folke/noice.nvim/commit/36b1935660988b4b6034ef9fb8454a1427990675))
+
 ## [1.15.0](https://github.com/folke/noice.nvim/compare/v1.14.2...v1.15.0) (2023-06-06)
 
 
