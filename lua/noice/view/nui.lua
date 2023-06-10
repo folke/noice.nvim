@@ -247,7 +247,10 @@ function NuiView:fix_border()
   then
     local winhl = vim.api.nvim_win_get_option(self._nui.border.winid, "winhighlight") or ""
     if not winhl:find("IncSearch") then
-      winhl = winhl .. ",Search:,Incsearch:"
+      local hl = vim.split(winhl, ",")
+      hl[#hl + 1] = "Search:"
+      hl[#hl + 1] = "IncSearch:"
+      winhl = table.concat(hl, ",")
       vim.api.nvim_win_set_option(self._nui.border.winid, "winhighlight", winhl)
     end
   end
