@@ -138,12 +138,6 @@ function NuiView:create()
 end
 
 function NuiView:mount()
-  -- HACK: nui no longer re-creates the border buffer on mount,
-  -- which breaks in a lot of different ways, so we do it ourselves
-  if not (self._nui.border.bufnr and vim.api.nvim_buf_is_valid(self._nui.border.bufnr)) then
-    self._nui.border.bufnr = vim.api.nvim_create_buf(false, true)
-  end
-
   self._nui:mount()
   if self._opts.close and self._opts.close.events then
     self._nui:on(self._opts.close.events, function()
