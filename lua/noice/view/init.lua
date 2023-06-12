@@ -193,10 +193,8 @@ function View:content()
 end
 
 function View:set_win_options(win)
-  vim.wo[win].winbar = ""
-  vim.wo[win].foldenable = false
   if self._opts.win_options then
-    require("nui.utils")._.set_win_options(win, self._opts.win_options)
+    Util.wo(win, self._opts.win_options)
   end
   -- reset cursor on show
   vim.api.nvim_win_set_cursor(win, { 1, 0 })

@@ -63,6 +63,18 @@ function M.tag(buf, tag)
   end
 end
 
+---@param win window
+---@param options table<string, any>
+function M.wo(win, options)
+  for k, v in pairs(options) do
+    if vim.api.nvim_set_option_value then
+      vim.api.nvim_set_option_value(k, v, { scope = "local", win = win })
+    else
+      vim.wo[win][k] = v
+    end
+  end
+end
+
 function M.debounce(ms, fn)
   local timer = vim.loop.new_timer()
   return function(...)

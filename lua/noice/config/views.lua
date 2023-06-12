@@ -39,6 +39,8 @@ M.defaults = {
       -- min_width = 10,
     },
     win_options = {
+      winbar = "",
+      foldenable = false,
       cursorline = true,
       cursorlineopt = "line",
       winhighlight = {
@@ -111,6 +113,8 @@ M.defaults = {
     },
     win_options = {
       winhighlight = { Normal = "NoicePopup", FloatBorder = "NoicePopupBorder" },
+      winbar = "",
+      foldenable = false,
     },
   },
   hover = {
@@ -176,6 +180,8 @@ M.defaults = {
     },
     zindex = 60,
     win_options = {
+      winbar = "",
+      foldenable = false,
       winblend = 30,
       winhighlight = {
         Normal = "NoiceMini",
@@ -213,6 +219,8 @@ M.defaults = {
         CurSearch = "",
         Search = "",
       },
+      winbar = "",
+      foldenable = false,
       cursorline = false,
     },
   },
@@ -241,6 +249,8 @@ M.defaults = {
         Normal = "NoiceConfirm",
         FloatBorder = "NoiceConfirmBorder",
       },
+      winbar = "",
+      foldenable = false,
     },
   },
 }
