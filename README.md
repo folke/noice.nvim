@@ -320,6 +320,25 @@ Check the [wiki](https://github.com/folke/noice.nvim/wiki/Configuration-Recipes)
         help = { icon = "?" },
       },
     },
+    format = {
+      level = {
+        icons = {
+          error = "✖",
+          warn = "▼",
+          info = "●",
+        },
+      },
+    },
+    popupmenu = {
+      kind_icons = false,
+    },
+    inc_rename = {
+      cmdline = {
+        format = {
+          IncRename = { icon = "⟳" }
+        },
+      },
+    },
   })
 ```
 
