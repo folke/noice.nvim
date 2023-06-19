@@ -50,6 +50,8 @@ function M.previewer()
   return previewers.new_buffer_previewer({
     title = "Message",
     define_preview = function(self, entry, _status)
+      vim.api.nvim_win_set_option(self.state.winid, "wrap", true)
+
       ---@type NoiceMessage
       local message = Format.format(entry.message, "telescope_preview")
       message:render(self.state.bufnr, Config.ns)
