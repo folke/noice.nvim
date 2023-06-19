@@ -344,6 +344,25 @@ If you don’t want to use a Nerd Font, you can replace the icons with Unicode s
             help = { icon = "?" },
           },
         },
+        format = {
+          level = {
+            icons = {
+              error = "",
+              warn = "",
+              info = "",
+            },
+          },
+        },
+        popupmenu = {
+          kind_icons = false,
+        },
+        inc_rename = {
+          cmdline = {
+            format = {
+              IncRename = { icon = "" }
+            },
+          },
+        },
       })
 <
 
