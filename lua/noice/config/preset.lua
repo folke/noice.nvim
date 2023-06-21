@@ -70,8 +70,8 @@ M.presets = {
           col = "50%",
         },
         size = {
-          min_width = 60,
-          width = "auto",
+          -- min_width = 60,
+          width = "80%",
           height = "auto",
         },
       },
