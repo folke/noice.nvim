@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.15.2](https://github.com/folke/noice.nvim/compare/v1.15.1...v1.15.2) (2023-06-22)
+
+
+### Bug Fixes
+
+* **telescope:** wrap text in telescope's previewer ([#514](https://github.com/folke/noice.nvim/issues/514)) ([a7f611e](https://github.com/folke/noice.nvim/commit/a7f611ef740a45b995d4a8e6d237643ac6ad0093))
+* **views:** don't override winbar and foldenable for every view ([a7d60f7](https://github.com/folke/noice.nvim/commit/a7d60f73b1325137b34c630bc0af76fa6598ba1f))
+* **views:** increase zindex for cmdline popup, popupmenu and confirm from 60 to 200 ([d71c1de](https://github.com/folke/noice.nvim/commit/d71c1deabf78db16262f5388fe12930fc16bd93e))
+
 ## [1.15.1](https://github.com/folke/noice.nvim/compare/v1.15.0...v1.15.1) (2023-06-10)
 
 
