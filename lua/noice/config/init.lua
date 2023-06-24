@@ -243,7 +243,9 @@ function M.setup(options)
 
   require("noice.config.preset").setup(options)
 
+  local routes = M.options.routes
   M.options = vim.tbl_deep_extend("force", M.options, options)
+  vim.list_extend(M.options.routes, routes)
 
   if M.options.popupmenu.kind_icons == false then
     M.options.popupmenu.kind_icons = {}
