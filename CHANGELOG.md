@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.15.3](https://github.com/folke/noice.nvim/compare/v1.15.2...v1.15.3) (2023-06-24)
+
+
+### Bug Fixes
+
+* **config:** properly deal with preset routes. Fixes [#517](https://github.com/folke/noice.nvim/issues/517) ([fea7f1c](https://github.com/folke/noice.nvim/commit/fea7f1cf15b04ec9b8dd071aa3510f693156ce59))
+
 ## [1.15.2](https://github.com/folke/noice.nvim/compare/v1.15.1...v1.15.2) (2023-06-22)
 
 
