@@ -146,7 +146,10 @@ function Scrollbar:_open_win(opts)
       relative = "editor",
       focusable = false,
       width = 1,
-      height = 1,
+      -- HACK: height should be >=2 in case of winbar, which is inherited from the parent window
+      -- Change back to 1 when the upstream issue is fixed.
+      -- See https://github.com/neovim/neovim/issues/19464
+      height = 2,
       row = 0,
       col = 0,
       style = "minimal",
