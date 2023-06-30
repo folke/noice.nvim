@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.15.4](https://github.com/folke/noice.nvim/compare/v1.15.3...v1.15.4) (2023-06-30)
+
+
+### Bug Fixes
+
+* progress use vim.lsp.get_client_by_id ([#529](https://github.com/folke/noice.nvim/issues/529)) ([397619d](https://github.com/folke/noice.nvim/commit/397619d5351d650e9879d18c9312a5add5729815))
+* workaround E36: Not enough room errors ([#522](https://github.com/folke/noice.nvim/issues/522)) ([f43775f](https://github.com/folke/noice.nvim/commit/f43775f0e427b0c7e9d30e6bc51fdebea6979b37))
+
 ## [1.15.3](https://github.com/folke/noice.nvim/compare/v1.15.2...v1.15.3) (2023-06-24)
 
 
