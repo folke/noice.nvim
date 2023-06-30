@@ -35,7 +35,7 @@ function M.progress(_, msg, info)
 
   local message = M._progress[id]
   if not message then
-    local client = vim.lsp.get_active_clients({ id = info.client_id })[1]
+    local client = vim.lsp.get_client_by_id(info.client_id)
     -- should not happen, but it does for some reason
     if not client then
       return
@@ -77,7 +77,7 @@ end
 function M._update()
   if not vim.tbl_isempty(M._progress) then
     for id, message in pairs(M._progress) do
-      local client = vim.lsp.get_active_clients({ id = message.opts.progress.client_id })[1]
+      local client = vim.lsp.get_client_by_id(message.opts.progress.client_id)
       if not client then
         M.close(id)
       end
