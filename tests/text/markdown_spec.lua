@@ -131,9 +131,27 @@ local b
   {
     input = [[
 
-   *** 
+   ***
 
     ```lua
+local a
+    ```
+
+    ---
+
+    ]],
+    output = {
+      { line = "---" },
+      { code = { "local a" }, lang = "lua" },
+      { line = "---" },
+    },
+  },
+  {
+    input = [[
+
+   ***
+
+    ```   lua
 local a
     ```
 

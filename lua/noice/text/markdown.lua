@@ -92,7 +92,7 @@ function M.parse(text, opts)
       end
     elseif M.is_code_block(line) then
       ---@type string
-      local lang = line:match("```(%S+)") or opts.ft or "text"
+      local lang = line:match("```%s*(%S+)") or opts.ft or "text"
       local block = { lang = lang, code = {} }
       while lines[l + 1] and not M.is_code_block(lines[l + 1]) do
         table.insert(block.code, lines[l + 1])
