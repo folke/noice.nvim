@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.15.5](https://github.com/folke/noice.nvim/compare/v1.15.4...v1.15.5) (2023-07-17)
+
+
+### Bug Fixes
+
+* **lsp:** allow whitespace info string in markdown ([#535](https://github.com/folke/noice.nvim/issues/535)) ([1343acc](https://github.com/folke/noice.nvim/commit/1343acc592c3f138d7ffb88f9b8be1c4969b30d3))
+* **ui:** dont propagate events handled by Noice to other uis. Fixes [#17](https://github.com/folke/noice.nvim/issues/17) ([1cff24c](https://github.com/folke/noice.nvim/commit/1cff24cabf1076916be1e83de16514be99827678))
+
 ## [1.15.4](https://github.com/folke/noice.nvim/compare/v1.15.3...v1.15.4) (2023-06-30)
 
 
