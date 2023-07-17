@@ -105,11 +105,8 @@ function M.enable()
     end
     stack_level = stack_level - 1
 
-    -- work-around for segfaults with TUI rework
-    -- this will block other uis from processing this message (being TUI) again
-    -- Will be false for GUI so that they can still prcess the message as well
-    local ui = vim.api.nvim_list_uis()[1]
-    return ui and ui.chan == 1 and ui.ext_termcolors
+    -- make sure only Noice handles these events
+    return true
   end)
 
   vim.api.nvim_create_autocmd("SwapExists", {
