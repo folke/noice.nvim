@@ -22,8 +22,7 @@ end
 
 function M.get_query(lang)
   if not M.queries[lang] then
-    M.queries[lang] = vim.treesitter.query.get and vim.treesitter.query.get(lang, "highlights")
-      or vim.treesitter.query.get_query(lang, "highlights")
+    M.queries[lang] = (vim.treesitter.query.get or vim.treesitter.query.get_query)(lang, "highlights")
   end
   return M.queries[lang]
 end
