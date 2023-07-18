@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.15.6](https://github.com/folke/noice.nvim/compare/v1.15.5...v1.15.6) (2023-07-18)
+
+
+### Bug Fixes
+
+* **treesitter:** fixed treesitter.query.get. Fixes [#539](https://github.com/folke/noice.nvim/issues/539) ([e91a31c](https://github.com/folke/noice.nvim/commit/e91a31c32c0eef6a338030ac51eaed14ac49ce2e))
+
 ## [1.15.5](https://github.com/folke/noice.nvim/compare/v1.15.4...v1.15.5) (2023-07-17)
 
 
