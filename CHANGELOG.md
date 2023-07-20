@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.15.7](https://github.com/folke/noice.nvim/compare/v1.15.6...v1.15.7) (2023-07-20)
+
+
+### Bug Fixes
+
+* **popupmenu:** properly close pmenu when cmdline window is open. Fixes [#542](https://github.com/folke/noice.nvim/issues/542) ([d19e5cb](https://github.com/folke/noice.nvim/commit/d19e5cb58e33c6d74e9005d1965d6e8ebd6b057b))
+
 ## [1.15.6](https://github.com/folke/noice.nvim/compare/v1.15.5...v1.15.6) (2023-07-18)
 
 
