@@ -242,14 +242,24 @@ function M.on_select(state)
 end
 
 function M.on_hide()
-  if M.menu then
-    M.menu:unmount()
-    M.menu = nil
-  end
-  if M.scroll then
-    M.scroll:unmount()
-    M.scroll = nil
-  end
+  Util.protect(function()
+    if M.menu then
+      M.menu:unmount()
+      M.menu = nil
+    end
+    if M.scroll then
+      M.scroll:unmount()
+      M.scroll = nil
+    end
+  end, {
+    finally = function()
+      if M.menu then
+        M.menu._.loading = false
+      end
+    end,
+    retry_on_E11 = true,
+    retry_on_E565 = true,
+  })()
 end
 
 return M
