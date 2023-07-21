@@ -71,12 +71,6 @@ function M.check(opts)
     end
   end
 
-  if vim.g.neovide then
-    log.warn("Noice may not work correctly with Neovide. Please see #17")
-  else
-    log.ok("Not running inside **Neovide**")
-  end
-
   local uis = vim.api.nvim_list_uis()
   for _, ui in ipairs(uis) do
     local ok = true
