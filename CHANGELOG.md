@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.15.8](https://github.com/folke/noice.nvim/compare/v1.15.7...v1.15.8) (2023-07-21)
+
+
+### Bug Fixes
+
+* remove old neovide compatibility warning ([#545](https://github.com/folke/noice.nvim/issues/545)) ([dfbe27c](https://github.com/folke/noice.nvim/commit/dfbe27cfafd6bcb5605dc6c6b82174c33fc9b09e))
+
 ## [1.15.7](https://github.com/folke/noice.nvim/compare/v1.15.6...v1.15.7) (2023-07-20)
 
 
