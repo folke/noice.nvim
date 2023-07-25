@@ -74,7 +74,7 @@ function M.check(opts)
   local uis = vim.api.nvim_list_uis()
   for _, ui in ipairs(uis) do
     local ok = true
-    for _, ext in ipairs({ "ext_multigrid", "ext_cmdline", "ext_popupmenu", "ext_messages" }) do
+    for _, ext in ipairs({ "ext_cmdline", "ext_popupmenu", "ext_messages" }) do
       if ui[ext] then
         ok = false
         log.error(
