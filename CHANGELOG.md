@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.15.9](https://github.com/folke/noice.nvim/compare/v1.15.8...v1.15.9) (2023-07-25)
+
+
+### Bug Fixes
+
+* **health:** allow running in GUIs with multigrid ([71a7591](https://github.com/folke/noice.nvim/commit/71a75913d680af9f1f26a2886518e390cd8f73e1))
+
 ## [1.15.8](https://github.com/folke/noice.nvim/compare/v1.15.7...v1.15.8) (2023-07-21)
 
 
