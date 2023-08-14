@@ -58,7 +58,7 @@ function M.highlight(buf, ns, range, lang)
   local parser = LanguageTree.new(buf, lang, opts)
 
   parser:set_included_regions({ { range } })
-  parser:parse()
+  parser:parse(true)
 
   parser:for_each_tree(function(tstree, tree)
     if not tstree then
