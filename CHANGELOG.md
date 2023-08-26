@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.15.10](https://github.com/folke/noice.nvim/compare/v1.15.9...v1.15.10) (2023-08-26)
+
+
+### Bug Fixes
+
+* **treesitter:** parse injections ([#571](https://github.com/folke/noice.nvim/issues/571)) ([3ec6e42](https://github.com/folke/noice.nvim/commit/3ec6e4221e9b80f914ed6774abb4e82d8f5c3b39))
+
 ## [1.15.9](https://github.com/folke/noice.nvim/compare/v1.15.8...v1.15.9) (2023-07-25)
 
 
