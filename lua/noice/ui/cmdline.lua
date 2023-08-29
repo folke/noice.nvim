@@ -86,7 +86,7 @@ function Cmdline:get_format()
       -- if match and cmdline pos is visible
       if from and self.state.pos >= to - 1 then
         ret[#ret + 1] = {
-          offset = format.conceal and to or 0,
+          offset = to or 0,
           format = format,
         }
       end
@@ -97,7 +97,7 @@ function Cmdline:get_format()
   end)
   local format = ret[1]
   if format then
-    self.offset = format.offset
+    self.offset = format.format.conceal and format.offset or 0
     return format.format
   end
   self.offset = 0
