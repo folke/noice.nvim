@@ -23,7 +23,7 @@ function M.load(name, preset)
     return Util.panic("Unknown preset " .. name)
   end
 
-  preset = vim.tbl_deep_extend("force", {}, M.presets[name], type(preset) == "table" and preset or {})
+  preset = vim.tbl_deep_extend("force", {}, M.presets[name] or {}, type(preset) == "table" and preset or {})
   ---@cast preset NoicePreset
 
   if preset.enabled == false then
