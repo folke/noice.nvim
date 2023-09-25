@@ -13,46 +13,32 @@ local M = {}
 M._progress = {}
 M._running = false
 
----@class ProgressBegin
----@field kind "begin"
----@field title string
----@field message? string
----@field percentage integer
-
----@class ProgressReport
----@field kind "report"
----@field message? string
----@field percentage integer
-
----@class ProgressEnd
----@field kind "end"
----@field message? string
-
----@param info {client_id: integer}
----@param msg {token: integer, value:ProgressBegin|ProgressReport|ProgressEnd}
-function M.progress(_, msg, info)
-  local id = info.client_id .. "." .. msg.token
+---@param data {client_id: integer, result: lsp.ProgressParams}
+function M.progress(data)
+  local client_id = data.client_id
+  local result = data.result
+  local id = client_id .. "." .. result.token
 
   local message = M._progress[id]
   if not message then
-    local client = vim.lsp.get_client_by_id(info.client_id)
+    local client = vim.lsp.get_client_by_id(client_id)
     -- should not happen, but it does for some reason
     if not client then
       return
     end
     message = Message("lsp", "progress")
     message.opts.progress = {
-      client_id = info.client_id,
+      client_id = client_id,
       ---@type string
-      client = client and client.name or ("lsp-" .. info.client_id),
+      client = client and client.name or ("lsp-" .. client_id),
     }
     M._progress[id] = message
   end
 
-  message.opts.progress = vim.tbl_deep_extend("force", message.opts.progress, msg.value)
+  message.opts.progress = vim.tbl_deep_extend("force", message.opts.progress, result.value)
   message.opts.progress.id = id
 
-  if msg.value.kind == "end" then
+  if result.value.kind == "end" then
     if message.opts.progress.percentage then
       message.opts.progress.percentage = 100
     end
@@ -101,13 +87,26 @@ function M.setup()
       return not vim.tbl_isempty(M._progress)
     end,
   })
-  local orig = vim.lsp.handlers["$/progress"]
-  vim.lsp.handlers["$/progress"] = function(...)
-    local args = vim.F.pack_len(...)
-    Util.try(function()
-      M.progress(vim.F.unpack_len(args))
-    end)
-    orig(...)
+
+  -- Neovim >= 0.10.0
+  local ok = pcall(vim.api.nvim_create_autocmd, "LspProgress", {
+    group = vim.api.nvim_create_augroup("noice_lsp_progress", { clear = true }),
+    callback = function(event)
+      M.progress(event.data)
+    end,
+  })
+
+  -- Neovim < 0.10.0
+  if not ok then
+    local orig = vim.lsp.handlers["$/progress"]
+    vim.lsp.handlers["$/progress"] = function(...)
+      local result = select(2, ...)
+      local ctx = select(3, ...)
+      Util.try(function()
+        M.progress({ client_id = ctx.client_id, result = result })
+      end)
+      orig(...)
+    end
   end
 end
 
