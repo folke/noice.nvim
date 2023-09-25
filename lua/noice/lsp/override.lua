@@ -16,14 +16,18 @@ function M.setup()
 
         local lines = item.documentation and Format.format_markdown(item.documentation) or {}
         local ret = table.concat(lines, "\n")
+        local detail = item.detail
+        if detail and type(detail) == "table" then
+          detail = table.concat(detail, "\n")
+        end
 
-        if item.detail and not ret:find(item.detail, 1, true) then
+        if detail and not ret:find(detail, 1, true) then
           local ft = self.context.filetype
           local dot_index = string.find(ft, "%.")
           if dot_index ~= nil then
             ft = string.sub(ft, 0, dot_index - 1)
           end
-          ret = ("```%s\n%s\n```\n%s"):format(ft, vim.trim(item.detail), ret)
+          ret = ("```%s\n%s\n```\n%s"):format(ft, vim.trim(detail), ret)
         end
         return vim.split(ret, "\n")
       end
