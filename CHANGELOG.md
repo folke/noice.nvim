@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.15.11](https://github.com/folke/noice.nvim/compare/v1.15.10...v1.15.11) (2023-09-25)
+
+
+### Bug Fixes
+
+* accept preset as a table ([#582](https://github.com/folke/noice.nvim/issues/582)) ([53d613c](https://github.com/folke/noice.nvim/commit/53d613cd0031e83987964947b1bad8b5047c9d0e))
+* check item.detail is type of table ([#595](https://github.com/folke/noice.nvim/issues/595)) ([3670766](https://github.com/folke/noice.nvim/commit/3670766b10fded979fcb00606801edc585a65f2a))
+* dont hide cursor on input. Fixes [#585](https://github.com/folke/noice.nvim/issues/585). Fixes [#566](https://github.com/folke/noice.nvim/issues/566) ([819a5bf](https://github.com/folke/noice.nvim/commit/819a5bf62fa31c893c9d0c6da17ef93a810a1e8c))
+* read conceal setting after sort ([#558](https://github.com/folke/noice.nvim/issues/558)) ([24c09cc](https://github.com/folke/noice.nvim/commit/24c09cc0263054cb3d8dedf2c54b570e655850f5))
+
 ## [1.15.10](https://github.com/folke/noice.nvim/compare/v1.15.9...v1.15.10) (2023-08-26)
 
 
