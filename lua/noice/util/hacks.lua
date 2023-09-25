@@ -145,7 +145,7 @@ end
 ---@see https://github.com/neovim/neovim/issues/20311
 M.before_input = false
 function M.fix_input()
-  local function wrap(fn, skip, redirect)
+  local function wrap(fn, skip)
     return function(...)
       if skip and skip(...) then
         return fn(...)
@@ -157,20 +157,8 @@ function M.fix_input()
       M.before_input = true
       Router.update()
 
-      if redirect then
-        require("noice.ui").redirect()
-      end
-
-      if not redirect then
-        M.hide_cursor()
-      end
-
       ---@type boolean, any
       local ok, ret = pcall(fn, ...)
-
-      if not redirect then
-        M.show_cursor()
-      end
 
       -- clear any message right after input
       Manager.clear({ event = "msg_show", kind = { "echo", "echomsg", "" } })
