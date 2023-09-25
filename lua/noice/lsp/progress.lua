@@ -87,12 +87,27 @@ function M.setup()
       return not vim.tbl_isempty(M._progress)
     end,
   })
-  vim.api.nvim_create_autocmd("LspProgress", {
+
+  -- Neovim >= 0.10.0
+  local ok = pcall(vim.api.nvim_create_autocmd, "LspProgress", {
     group = vim.api.nvim_create_augroup("noice_lsp_progress", { clear = true }),
     callback = function(event)
       M.progress(event.data)
     end,
   })
+
+  -- Neovim < 0.10.0
+  if not ok then
+    local orig = vim.lsp.handlers["$/progress"]
+    vim.lsp.handlers["$/progress"] = function(...)
+      local result = select(2, ...)
+      local ctx = select(3, ...)
+      Util.try(function()
+        M.progress({ client_id = ctx.client_id, result = result })
+      end)
+      orig(...)
+    end
+  end
 end
 
 return M
