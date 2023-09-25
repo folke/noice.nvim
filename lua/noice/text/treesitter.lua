@@ -1,27 +1,9 @@
----@diagnostic disable: invisible
 local M = {}
 M.queries = {}
 
----@param buf buffer
----@param injections table<string, number[][][]>
-function M.highlight_markdown(buf, injections)
-  local parser = vim.treesitter.get_parser(buf, "markdown")
-  local get_injections = parser._get_injections
-  parser._get_injections = function(self)
-    ---@type table<string, number[][][]>
-    local ret = get_injections(self)
-    for lang, regions in pairs(injections) do
-      ret[lang] = ret[lang] or {}
-      vim.list_extend(ret[lang], regions)
-    end
-    return ret
-  end
-  parser:invalidate()
-  parser:parse()
-end
-
 function M.get_query(lang)
   if not M.queries[lang] then
+    ---@diagnostic disable-next-line: deprecated
     M.queries[lang] = (vim.treesitter.query.get or vim.treesitter.query.get_query)(lang, "highlights")
   end
   return M.queries[lang]
@@ -41,7 +23,7 @@ function M.has_lang(lang)
 end
 
 --- Highlights a region of the buffer with a given language
----@param buf buffer buffer to highlight. Defaults to the current buffer if 0
+---@param buf integer? buffer to highlight. Defaults to the current buffer if 0
 ---@param ns number namespace for the highlights
 ---@param range {[1]:number, [2]:number, [3]: number, [4]: number} (table) Region to highlight {start_row, start_col, end_row, end_col}
 ---@param lang string treesitter language
@@ -50,13 +32,13 @@ function M.highlight(buf, ns, range, lang)
   lang = M.get_lang(lang)
 
   buf = (buf == 0 or buf == nil) and vim.api.nvim_get_current_buf() or buf
-  -- vim.fn.bufload(buf)
 
   -- we can't use a cached parser here since that could interfer with the existing parser of the buffer
   local LanguageTree = require("vim.treesitter.languagetree")
   local opts = { injections = { php = "", html = "" } }
-  local parser = LanguageTree.new(buf, lang, opts)
+  local parser = LanguageTree.new(buf --[[@as integer]], lang, opts)
 
+  ---@diagnostic disable-next-line: invisible
   parser:set_included_regions({ { range } })
   parser:parse(true)
 
@@ -73,7 +55,6 @@ function M.highlight(buf, ns, range, lang)
 
     local iter = highlighter_query:iter_captures(tstree:root(), buf, range[1], range[3])
 
-    ---@diagnostic disable-next-line: no-unknown
     for capture, node, metadata in iter do
       ---@type number, number, number, number
       local start_row, start_col, end_row, end_col = node:range()
