@@ -129,11 +129,13 @@ function NuiView:create()
 
   self:mount()
   self:update_layout()
-  self._scroll = Scrollbar({
-    winnr = self._nui.winid,
-    padding = Util.nui.normalize_padding(self._opts.border),
-  })
-  self._scroll:mount()
+  if not self._opts.hide_scrollbar then
+    self._scroll = Scrollbar({
+      winnr = self._nui.winid,
+      padding = Util.nui.normalize_padding(self._opts.border),
+    })
+    self._scroll:mount()
+  end
   self._loading = false
 end
 
@@ -304,8 +306,10 @@ function NuiView:show()
     self:smart_move()
   end
 
-  self._scroll.winnr = self._nui.winid
-  self._scroll:show()
+  if self._scroll then
+    self._scroll.winnr = self._nui.winid
+    self._scroll:show()
+  end
   self:fix_border()
   self:autohide()
 end
