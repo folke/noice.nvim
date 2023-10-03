@@ -1,4 +1,4 @@
-*noice.nvim.txt*       For Neovim >= 0.8.0      Last change: 2023 September 25
+*noice.nvim.txt*        For Neovim >= 0.8.0       Last change: 2023 October 03
 
 ==============================================================================
 Table of Contents                               *noice.nvim-table-of-contents*
@@ -515,7 +515,7 @@ OptionDescriptionsize, positionSize, position and their constituents can additio
     }
 <
 
-
+scrollbarSet to false to hide the scrollbar.
 NOTIFY OPTIONS ~
 
   -------------------------------------------------------------------------------------------------
@@ -793,12 +793,11 @@ HIGHLIGHT GROUPS     *noice.nvim-noice-(nice,-noise,-notice)-highlight-groups*
 
 Click to see all highlight groups ~
 
-  ---------------------------------------------------------------------------------------------
+  ---------------------------------------------------------------------------------------------------
   Highlight Group                      Default Group                    Description
-  ------------------------------------ -------------------------------- -----------------------
+  ------------------------------------ -------------------------------- -----------------------------
   NoiceCmdline                         MsgArea                          Normal for the classic
-                                                                        cmdline area at the
-                                                                        bottom”
+                                                                        cmdline area at the bottom”
 
   NoiceCmdlineIcon                     DiagnosticSignInfo               Cmdline icon
 
@@ -816,11 +815,9 @@ Click to see all highlight groups ~
 
   NoiceCmdlineIconLua                  NoiceCmdlineIcon                 
 
-  NoiceCmdlineIconSearch               DiagnosticSignWarn               Cmdline search icon (/
-                                                                        and ?)
+  NoiceCmdlineIconSearch               DiagnosticSignWarn               Cmdline search icon (/ and ?)
 
-  NoiceCmdlinePopup                    Normal                           Normal for the cmdline
-                                                                        popup
+  NoiceCmdlinePopup                    Normal                           Normal for the cmdline popup
 
   NoiceCmdlinePopupBorder              DiagnosticSignInfo               Cmdline popup border
 
@@ -838,8 +835,8 @@ Click to see all highlight groups ~
 
   NoiceCmdlinePopupBorderLua           NoiceCmdlinePopupBorder          
 
-  NoiceCmdlinePopupBorderSearch        DiagnosticSignWarn               Cmdline popup border
-                                                                        for search
+  NoiceCmdlinePopupBorderSearch        DiagnosticSignWarn               Cmdline popup border for
+                                                                        search
 
   NoiceCmdlinePopupTitle               DiagnosticSignInfo               Cmdline popup border
 
@@ -889,17 +886,13 @@ Click to see all highlight groups ~
 
   NoiceCompletionItemKindVariable      NoiceCompletionItemKindDefault   
 
-  NoiceCompletionItemMenu              none                             Normal for the
-                                                                        popupmenu
+  NoiceCompletionItemMenu              none                             Normal for the popupmenu
 
-  NoiceCompletionItemWord              none                             Normal for the
-                                                                        popupmenu
+  NoiceCompletionItemWord              none                             Normal for the popupmenu
 
-  NoiceConfirm                         Normal                           Normal for the confirm
-                                                                        view
+  NoiceConfirm                         Normal                           Normal for the confirm view
 
-  NoiceConfirmBorder                   DiagnosticSignInfo               Border for the confirm
-                                                                        view
+  NoiceConfirmBorder                   DiagnosticSignInfo               Border for the confirm view
 
   NoiceCursor                          Cursor                           Fake Cursor
 
@@ -931,8 +924,7 @@ Click to see all highlight groups ~
 
   NoiceFormatTitle                     Title                            
 
-  NoiceLspProgressClient               Title                            Lsp progress client
-                                                                        name
+  NoiceLspProgressClient               Title                            Lsp progress client name
 
   NoiceLspProgressSpinner              Constant                         Lsp progress spinner
 
@@ -944,13 +936,12 @@ Click to see all highlight groups ~
 
   NoicePopupBorder                     FloatBorder                      Border for popup views
 
-  NoicePopupmenu                       Pmenu                            Normal for the
-                                                                        popupmenu
+  NoicePopupmenu                       Pmenu                            Normal for the popupmenu
 
   NoicePopupmenuBorder                 FloatBorder                      Popupmenu border
 
-  NoicePopupmenuMatch                  Special                          Part of the item that
-                                                                        matches the input
+  NoicePopupmenuMatch                  Special                          Part of the item that matches
+                                                                        the input
 
   NoicePopupmenuSelected               PmenuSel                         Selected item in the
                                                                         popupmenu
@@ -965,7 +956,7 @@ Click to see all highlight groups ~
 
   NoiceVirtualText                     DiagnosticVirtualTextInfo        Default hl group for
                                                                         virtualtext views
-  ---------------------------------------------------------------------------------------------
+  ---------------------------------------------------------------------------------------------------
 ==============================================================================
 2. Links                                                    *noice.nvim-links*
 
