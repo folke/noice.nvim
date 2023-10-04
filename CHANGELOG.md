@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.16.0](https://github.com/folke/noice.nvim/compare/v1.15.11...v1.16.0) (2023-10-04)
+
+
+### Features
+
+* Support hide scrollbar for view ([#603](https://github.com/folke/noice.nvim/issues/603)) ([f700175](https://github.com/folke/noice.nvim/commit/f700175b91948e4f71cf73872cea364247cf2dbd))
+
+
+### Bug Fixes
+
+* **ui:** disable debug logging ([bfb0cdb](https://github.com/folke/noice.nvim/commit/bfb0cdb56cc3b2eb5f00b6c1747d04540d76799a))
+* **ui:** dont update on msg_ruler. Fixes [#588](https://github.com/folke/noice.nvim/issues/588) ([ec19fc0](https://github.com/folke/noice.nvim/commit/ec19fc0fd27fcfa8661d71bcfb61f6b84a6b7f98))
+
 ## [1.15.11](https://github.com/folke/noice.nvim/compare/v1.15.10...v1.15.11) (2023-09-25)
 
 
