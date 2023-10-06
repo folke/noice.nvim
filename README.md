@@ -335,7 +335,7 @@ Check the [wiki](https://github.com/folke/noice.nvim/wiki/Configuration-Recipes)
     inc_rename = {
       cmdline = {
         format = {
-          IncRename = { icon = "⟳" }
+          IncRename = { icon = "⟳" },
         },
       },
     },
@@ -379,7 +379,6 @@ local filter = {
   min_height = 10,
   ["not"] = { kind = { "search_count", "echo" } },
 }
-
 ```
 
 </details>
@@ -424,12 +423,12 @@ You can configure completely new views and use them in custom routes.
 ```lua
 -- override the default split view to always enter the split when it opens
 require("noice").setup({
-    views = {
-        split = {
-            enter = true
-          }
-      }
-  })
+  views = {
+    split = {
+      enter = true,
+    },
+  },
+})
 ```
 
 </details>
@@ -631,7 +630,6 @@ require("lualine").setup({
     },
   },
 })
-
 ```
 
 </details>
@@ -696,24 +694,24 @@ When exiting the cmdline, the popup window will be focused.
 
 ```lua
 vim.keymap.set("c", "<S-Enter>", function()
-    require("noice").redirect(vim.fn.getcmdline())
-    end, { desc = "Redirect Cmdline" })
+  require("noice").redirect(vim.fn.getcmdline())
+end, { desc = "Redirect Cmdline" })
 ```
 
 ### Lsp Hover Doc Scrolling
 
 ```lua
-  vim.keymap.set({"n", "i", "s"}, "<c-f>", function()
-    if not require("noice.lsp").scroll(4) then
-      return "<c-f>"
-    end
-  end, { silent = true, expr = true })
+vim.keymap.set({ "n", "i", "s" }, "<c-f>", function()
+  if not require("noice.lsp").scroll(4) then
+    return "<c-f>"
+  end
+end, { silent = true, expr = true })
 
-  vim.keymap.set({"n", "i", "s"}, "<c-b>", function()
-    if not require("noice.lsp").scroll(-4) then
-      return "<c-b>"
-    end
-  end, { silent = true, expr = true })
+vim.keymap.set({ "n", "i", "s" }, "<c-b>", function()
+  if not require("noice.lsp").scroll(-4) then
+    return "<c-b>"
+  end
+end, { silent = true, expr = true })
 ```
 
 ## 🌈 Highlight Groups
