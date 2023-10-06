@@ -1,4 +1,4 @@
-*noice.nvim.txt*        For Neovim >= 0.8.0       Last change: 2023 October 04
+*noice.nvim.txt*        For Neovim >= 0.8.0       Last change: 2023 October 06
 
 ==============================================================================
 Table of Contents                               *noice.nvim-table-of-contents*
@@ -359,7 +359,7 @@ If you don’t want to use a Nerd Font, you can replace the icons with Unicode s
         inc_rename = {
           cmdline = {
             format = {
-              IncRename = { icon = "⟳" }
+              IncRename = { icon = "⟳" },
             },
           },
         },
@@ -485,12 +485,12 @@ Example: ~
 >lua
     -- override the default split view to always enter the split when it opens
     require("noice").setup({
-        views = {
-            split = {
-                enter = true
-              }
-          }
-      })
+      views = {
+        split = {
+          enter = true,
+        },
+      },
+    })
 <
 
 
@@ -767,25 +767,25 @@ it again. When exiting the cmdline, the popup window will be focused.
 
 >lua
     vim.keymap.set("c", "<S-Enter>", function()
-        require("noice").redirect(vim.fn.getcmdline())
-        end, { desc = "Redirect Cmdline" })
+      require("noice").redirect(vim.fn.getcmdline())
+    end, { desc = "Redirect Cmdline" })
 <
 
 
 LSP HOVER DOC SCROLLING ~
 
 >lua
-      vim.keymap.set({"n", "i", "s"}, "<c-f>", function()
-        if not require("noice.lsp").scroll(4) then
-          return "<c-f>"
-        end
-      end, { silent = true, expr = true })
+    vim.keymap.set({ "n", "i", "s" }, "<c-f>", function()
+      if not require("noice.lsp").scroll(4) then
+        return "<c-f>"
+      end
+    end, { silent = true, expr = true })
     
-      vim.keymap.set({"n", "i", "s"}, "<c-b>", function()
-        if not require("noice.lsp").scroll(-4) then
-          return "<c-b>"
-        end
-      end, { silent = true, expr = true })
+    vim.keymap.set({ "n", "i", "s" }, "<c-b>", function()
+      if not require("noice.lsp").scroll(-4) then
+        return "<c-b>"
+      end
+    end, { silent = true, expr = true })
 <
 
 
