@@ -84,7 +84,7 @@ function M.enable()
 
     if stack_level > 50 then
       Util.panic("Event loop detected. Shutting down...")
-      return
+      return true
     end
     stack_level = stack_level + 1
 
@@ -93,8 +93,8 @@ function M.enable()
 
     -- check if we need to update the ui
     if Manager.tick() > tick then
-      -- Util.debug(vim.inspect({ event, Util.is_blocking(), tick, kind, ... }))
-      if Util.is_blocking() and event ~= "msg_ruler" then
+      -- Util.debug(vim.inspect({ event, stack_level, Util.is_blocking(), tick, kind, ... }))
+      if Util.is_blocking() and event ~= "msg_ruler" and kind ~= "search_count" then
         Util.try(Router.update)
       end
     else
