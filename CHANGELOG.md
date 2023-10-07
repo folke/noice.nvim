@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.16.1](https://github.com/folke/noice.nvim/compare/v1.16.0...v1.16.1) (2023-10-07)
+
+
+### Bug Fixes
+
+* **ui:** exclude search_count from realtime updates ([73caffa](https://github.com/folke/noice.nvim/commit/73caffa74550e98ae3f61520a4af526ac593609b))
+
 ## [1.16.0](https://github.com/folke/noice.nvim/compare/v1.15.11...v1.16.0) (2023-10-04)
 
 
