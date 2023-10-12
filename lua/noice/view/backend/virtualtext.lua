@@ -27,7 +27,7 @@ function VirtualText:show()
 end
 
 function VirtualText:hide()
-  if self.extmark then
+  if self.extmark and vim.api.nvim_buf_is_valid(self.buf) then
     vim.api.nvim_buf_del_extmark(self.buf, Config.ns, self.extmark)
   end
 end
