@@ -63,7 +63,8 @@ function M.setup()
 end
 
 function M.get_char(buf)
-  local win = vim.fn.bufwinid(buf)
+  local current_win = vim.api.nvim_get_current_win()
+  local win = buf == vim.api.nvim_win_get_buf(current_win) and current_win or vim.fn.bufwinid(buf)
   local cursor = vim.api.nvim_win_get_cursor(win == -1 and 0 or win)
   local row = cursor[1] - 1
   local col = cursor[2]
