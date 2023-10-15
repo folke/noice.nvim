@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.16.2](https://github.com/folke/noice.nvim/compare/v1.16.1...v1.16.2) (2023-10-15)
+
+
+### Bug Fixes
+
+* **cmdline:** better and safer way to trigger redraw during cmdpreview ([02ed6d4](https://github.com/folke/noice.nvim/commit/02ed6d4c0c1e4d21fc4e79bbe54961023ee9badb))
+* **signature:** show signature in correct window. Fixes [#593](https://github.com/folke/noice.nvim/issues/593) ([2f0993e](https://github.com/folke/noice.nvim/commit/2f0993ee97f98cacde179a1f431881b2758e2138))
+* **virtual:** extra check if buffer still valid that has virtual text extmark ([7ed897d](https://github.com/folke/noice.nvim/commit/7ed897d77d13eb4a9f4ab576f58db9bdda9af6ec))
+* **virtual:** remove extmark from correct buffer where it was set. Fixes [#464](https://github.com/folke/noice.nvim/issues/464) ([e5a4c7a](https://github.com/folke/noice.nvim/commit/e5a4c7a6ac3ef4c32f97a50c0b9b21e21c445c04))
+
 ## [1.16.1](https://github.com/folke/noice.nvim/compare/v1.16.0...v1.16.1) (2023-10-07)
 
 
