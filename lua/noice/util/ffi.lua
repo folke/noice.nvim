@@ -16,7 +16,6 @@ function M.load()
         int hl_blend;
       } HlAttrs;
       HlAttrs syn_attr2entry(int attr);
-      void update_screen();
       bool cmdpreview;
     ]]
     )
