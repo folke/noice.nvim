@@ -246,7 +246,7 @@ function M.scroll(win, delta)
   vim.defer_fn(function()
     vim.api.nvim_buf_call(buf, function()
       vim.api.nvim_command("noautocmd silent! normal! " .. top .. "zt")
-      vim.cmd([[do WinScrolled]])
+      vim.api.nvim_exec_autocmds("WinScrolled", { modeline = false })
     end)
   end, 0)
 end

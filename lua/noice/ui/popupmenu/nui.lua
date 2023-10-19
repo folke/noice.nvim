@@ -237,7 +237,7 @@ end
 function M.on_select(state)
   if M.menu and state.selected ~= -1 then
     vim.api.nvim_win_set_cursor(M.menu.winid, { state.selected + 1, 0 })
-    vim.cmd([[do WinScrolled]])
+    vim.api.nvim_exec_autocmds("WinScrolled", { modeline = false })
   end
 end
 
