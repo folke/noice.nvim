@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.16.3](https://github.com/folke/noice.nvim/compare/v1.16.2...v1.16.3) (2023-10-19)
+
+
+### Bug Fixes
+
+* use modeline=false for popupmenu scroll events. Fixes [#572](https://github.com/folke/noice.nvim/issues/572) ([1f087c2](https://github.com/folke/noice.nvim/commit/1f087c2495bbc824b556329eb389dfff8964e5a3))
+
 ## [1.16.2](https://github.com/folke/noice.nvim/compare/v1.16.1...v1.16.2) (2023-10-15)
 
 
