@@ -17,6 +17,7 @@ function M.load()
       } HlAttrs;
       HlAttrs syn_attr2entry(int attr);
       bool cmdpreview;
+      void setcursor_mayforce(bool force);
     ]]
     )
     ---@diagnostic disable-next-line: need-check-nil

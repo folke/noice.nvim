@@ -52,6 +52,11 @@ function M.fix_nohlsearch()
   M.fix_nohlsearch()
 end
 
+---@see https://github.com/neovim/neovim/issues/20793
+function M.draw_cursor()
+  require("noice.util.ffi").setcursor_mayforce(true)
+end
+
 ---@see https://github.com/neovim/neovim/issues/17810
 function M.fix_incsearch()
   ---@type integer|nil
@@ -150,6 +155,9 @@ function M.fix_input()
       if skip and skip(...) then
         return fn(...)
       end
+
+      -- make sure the cursor is drawn before blocking
+      M.draw_cursor()
 
       local Manager = require("noice.message.manager")
 
