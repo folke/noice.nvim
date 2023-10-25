@@ -67,7 +67,7 @@ function M.fix_incsearch()
     callback = function(event)
       if event.match == "/" or event.match == "?" then
         conceallevel = vim.wo.conceallevel
-        vim.wo.conceallevel = 0
+        vim.opt_local.conceallevel = 0
       end
     end,
   })
@@ -76,7 +76,7 @@ function M.fix_incsearch()
     group = M.group,
     callback = function(event)
       if conceallevel and (event.match == "/" or event.match == "?") then
-        vim.wo.conceallevel = conceallevel
+        vim.opt_local.conceallevel = conceallevel
         conceallevel = nil
       end
     end,
