@@ -414,7 +414,7 @@ FILTERS                       *noice.nvim-noice-(nice,-noise,-notice)-filters*
   mode         string     checks if vim.api.nvim_get_mode() contains the given
                           mode
 
-  not          filter     checks wether the filter matches or not
+  not          filter     checks whether the filter matches or not
 
   warning      boolean    all warning-like kinds from ext_messages
   ------------------------------------------------------------------------------
