@@ -233,13 +233,18 @@ function M.fix_cmp()
   end)
 end
 
+local redrawing = false
 function M.cmdline_force_redraw()
   if not require("noice.util.ffi").cmdpreview then
     return
   end
-
+  if redrawing then
+    return
+  end
+  redrawing = true
   vim.schedule(function()
     vim.cmd([[redraw!]])
+    redrawing = false
   end)
 end
 
