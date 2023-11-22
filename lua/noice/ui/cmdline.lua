@@ -201,11 +201,16 @@ end
 ---@field screenpos {row:number, col:number} (1-0)-indexed screen position of the cmdline
 M.position = nil
 
+local old_cmdline = nil
 ---@param buf number
 ---@param line number
 ---@param byte number
 function M.on_render(_, buf, line, byte)
-  Hacks.cmdline_force_redraw()
+   local cmdline = vim.fn.getcmdline()
+  if old_cmdline == cmdline then
+      Hacks.cmdline_force_redraw()
+   end
+   old_cmdline = cmdline
   local win = vim.fn.bufwinid(buf)
   if win ~= -1 then
     -- FIXME: check with cmp
