@@ -241,7 +241,9 @@ function M.cmdline_force_redraw()
   -- HACK: this will trigger redraw during substitute and cmdpreview,
   -- but when moving the cursor, the screen will be cleared until
   -- a new character is entered
-  vim.api.nvim_input(" <bs>")
+  local cmdline = vim.fn.getcmdline()
+  local pos = vim.fn.getcmdpos()
+  vim.api.nvim_input("<insert><left>" .. cmdline:sub(pos - 1, pos - 1) .. "<insert>")
 end
 
 ---@type string?
