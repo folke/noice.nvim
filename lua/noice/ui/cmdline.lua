@@ -156,7 +156,27 @@ end
 ---@type NoiceCmdline[]
 M.cmdlines = {}
 
+local mapping_has_cr = false
+vim.api.nvim_create_autocmd("CmdlineChanged", {
+  pattern = "*",
+  callback = function()
+    -- While a mapping is running we dont get cmdline_show only CmdlineChanged,
+    -- but when we get cmdline_show the typeahead is empty so we have to do the checking here
+    mapping_has_cr = vim.fn.getcharstr(1) == vim.api.nvim_replace_termcodes("<cr>", true, false, true)
+  end,
+})
+
+vim.api.nvim_create_autocmd("CmdlineLeave", {
+  pattern = "*",
+  callback = function()
+    mapping_has_cr = false
+  end,
+})
+
 function M.on_show(event, content, pos, firstc, prompt, indent, level)
+  if mapping_has_cr then
+    return
+  end
   local c = Cmdline({
     event = event,
     content = content,
