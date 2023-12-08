@@ -174,7 +174,6 @@ vim.api.nvim_create_autocmd("CmdlineLeave", {
 })
 
 function M.on_show(event, content, pos, firstc, prompt, indent, level)
-  -- cmdline_show gets called before CmdlineChanged in mappings
   if mapping_has_cr then
     return
   end
