@@ -13,18 +13,67 @@ local M = {}
 M._progress = {}
 M._running = false
 
----@param data {client_id: integer, result: lsp.ProgressParams}
+math.randomseed(os.time())
+local maxinteger = math.maxinteger or 9223372036854775807
+
+---@param title string
+---@param info string?
+---@param percentage integer?
+---@return string?
+function M.progress_without_lsp(title, info, percentage)
+  return M.progress({
+    client_id = nil, -- disable lsp check with this set to nil
+    client_name = title, -- title as fake lsp client name
+    result = {
+      -- generate random token with bit size about `63 * 2`, should be enough
+      token = math.random(maxinteger) .. "." .. math.random(maxinteger),
+      value = { percentage = percentage },
+    },
+  })
+end
+
+function M.progress_finish(id)
+  local message = M._progress[id]
+  if not message then
+    return
+  end
+
+  message.opts.progress.kind = "end"
+
+  if message.opts.progress.percentage then
+    message.opts.progress.percentage = 100
+  end
+
+  vim.defer_fn(function()
+    M.close(id)
+  end, 100)
+
+  M.update()
+end
+
+---@param data {client_id: integer?, client_name: string?, result: lsp.ProgressParams}
+---@return string?
 function M.progress(data)
   local client_id = data.client_id
+  local client = { name = data.client_name }
   local result = data.result
-  local id = client_id .. "." .. result.token
+
+  -- provide either client_id or client
+  local id = client_id or client.name
+  if id then
+    id = id .. "." .. result.token
+  else
+    return
+  end
 
   local message = M._progress[id]
   if not message then
-    local client = vim.lsp.get_client_by_id(client_id)
-    -- should not happen, but it does for some reason
-    if not client then
-      return
+    if client_id then
+      client = vim.lsp.get_client_by_id(client_id)
+      -- should not happen, but it does for some reason
+      if not client then
+        return
+      end
     end
     message = Message("lsp", "progress")
     message.opts.progress = {
@@ -48,6 +97,8 @@ function M.progress(data)
   end
 
   M.update()
+
+  return id
 end
 
 function M.close(id)
@@ -63,9 +114,11 @@ end
 function M._update()
   if not vim.tbl_isempty(M._progress) then
     for id, message in pairs(M._progress) do
-      local client = vim.lsp.get_client_by_id(message.opts.progress.client_id)
-      if not client then
-        M.close(id)
+      if message.opts.progress.client_id then
+        local client = vim.lsp.get_client_by_id(message.opts.progress.client_id)
+        if not client then
+          M.close(id)
+        end
       end
       if message.opts.progress.kind == "end" then
         Manager.add(Format.format(message, Config.options.lsp.progress.format_done))
