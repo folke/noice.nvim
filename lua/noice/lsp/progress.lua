@@ -16,18 +16,22 @@ M._running = false
 math.randomseed(os.time())
 local maxinteger = math.maxinteger or 9223372036854775807
 
----@param title string
----@param info string?
+---@param name string
+---@param title string?
 ---@param percentage integer?
 ---@return string?
-function M.progress_without_lsp(title, info, percentage)
+function M.progress_without_lsp(name, title, percentage)
   return M.progress({
     client_id = nil, -- disable lsp check with this set to nil
-    client_name = title, -- title as fake lsp client name
+    client_name = name, -- provide a fake lsp client name
     result = {
       -- generate random token with bit size about `63 * 2`, should be enough
       token = math.random(maxinteger) .. "." .. math.random(maxinteger),
-      value = { percentage = percentage },
+      value = {
+        kind = "begin",
+        title = title,
+        percentage = percentage,
+      },
     },
   })
 end
