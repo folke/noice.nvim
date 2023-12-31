@@ -31,6 +31,7 @@ end
 
 function MiniView:update_options()
   self._opts = vim.tbl_deep_extend("force", defaults, self._opts)
+  self._opts.position.row = self._opts.position.row - vim.o.cmdheight
 end
 
 ---@param message NoiceMessage
