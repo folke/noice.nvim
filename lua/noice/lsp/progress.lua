@@ -13,57 +13,80 @@ local M = {}
 M._progress = {}
 M._running = false
 
----@param name string
----@param title string?
----@param percentage integer?
+---@class lsp.ProgressParams
+---@field token integer|string	provided by the client or server
+---@field value MsgInfo			the progress data
+
+---@alias WorkDoneProgressKind 'begin'|'report'|'end'
+
+---@class MsgInfo
+---@field id string?					unique id associated with the message
+---@field kind WorkDoneProgressKind?	process message with respect to the kind
+---@field title string?					briefly inform about the progress operation
+---@field message string?				more detailed associated progress message
+---@field percentage integer?			progress percentage to display [0, 100]
+
+---@param name string the fake lsp client name
+---@param msg MsgInfo?
 ---@return string?
-function M.progress_without_lsp(name, title, percentage)
-  return M.progress({
-    client_id = nil, -- disable lsp check with this set to nil
-    client_name = name, -- provide a fake lsp client name
+function M.progress_msg(name, msg)
+  local msg_token = ""
+
+  if msg and msg.id then
+    if not (string.sub(msg.id, 1, #name) == name) then
+      return -- invalid msg.id
+    end
+    msg_token = string.sub(msg.id, #name + 2)
+  else
+    msg_token = os.time() .. "." .. math.random(1e8)
+  end
+
+  local msg_value = vim.tbl_deep_extend("force", {
+    id = name .. "." .. msg_token,
+    kind = "begin",
+  }, msg or {})
+
+  M.progress({
+    client_name = name,
     result = {
-      token = os.time() .. math.random(),
-      value = {
-        kind = "begin",
-        title = title,
-        percentage = percentage,
-      },
+      token = msg_token,
+      value = msg_value,
     },
   })
+
+  return msg_value.id
 end
 
-function M.progress_finish(id)
+---@param id string
+function M.progress_msg_end(id)
   local message = M._progress[id]
   if not message then
     return
   end
 
-  message.opts.progress.kind = "end"
-
-  if message.opts.progress.percentage then
-    message.opts.progress.percentage = 100
-  end
-
-  vim.defer_fn(function()
-    M.close(id)
-  end, 100)
-
-  M.update()
+  local msg = message.opts.progress
+  M.progress_msg(msg.client, {
+    id = id,
+    kind = "end",
+    title = msg.title,
+    message = msg.message,
+    percentage = msg.percentage,
+  })
 end
 
 ---@param data {client_id: integer?, client_name: string?, result: lsp.ProgressParams}
----@return string?
 function M.progress(data)
   local client_id = data.client_id
   local client = { name = data.client_name }
   local result = data.result
 
-  -- provide either client_id or client
-  local id = client_id or client.name
-  if id then
-    id = id .. "." .. result.token
-  else
-    return
+  -- provide either client_id or client_name(nonlsp, id will be present)
+  local id = result.value.id
+  if not id then
+    if not client_id then
+      return
+    end
+    id = client_id .. "." .. result.token
   end
 
   local message = M._progress[id]
@@ -97,8 +120,6 @@ function M.progress(data)
   end
 
   M.update()
-
-  return id
 end
 
 function M.close(id)
