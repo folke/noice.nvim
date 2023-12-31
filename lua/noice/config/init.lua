@@ -263,6 +263,9 @@ function M.setup(options)
     end,
   })
 
+  if M.options.cmdline.enabled then
+    vim.o.cmdheight = 0
+  end
   require("noice.lsp").setup()
   M._running = true
 end
