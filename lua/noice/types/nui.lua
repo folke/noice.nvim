@@ -34,6 +34,7 @@
 ---@field border? _.NuiBorder
 ---@field anchor? NuiAnchor|"auto"
 ---@field focusable boolean
+---@field scrollbar? boolean
 ---@field zindex? number
 
 ---@class NuiPopupOptions: NuiBaseOptions,_.NuiPopupOptions

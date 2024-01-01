@@ -221,10 +221,13 @@ function M.create(items, opts)
     Util.tag(M.menu.border.bufnr, "popupmenu.border")
   end
 
-  M.scroll = Scrollbar({
-    winnr = M.menu.winid,
-    padding = Util.nui.normalize_padding(opts.border),
-  })
+  if opts.scrollbar ~= false then
+    M.scroll = Scrollbar({
+      winnr = M.menu.winid,
+      padding = Util.nui.normalize_padding(opts.border),
+    })
+    M.scroll:mount()
+  end
   M.scroll:mount()
 end
 
