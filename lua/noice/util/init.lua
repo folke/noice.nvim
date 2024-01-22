@@ -43,11 +43,22 @@ function M.open(uri)
   end
 end
 
+---@param fn fun():any
+function M.ignore_events(fn)
+  local ei = vim.go.eventignore
+  vim.go.eventignore = "all"
+  local ret = fn()
+  vim.go.eventignore = ei
+  return ret
+end
+
 function M.tag(buf, tag)
-  local ft = vim.api.nvim_buf_get_option(buf, "filetype")
+  local ft = vim.bo[buf].filetype
 
   if ft == "" then
-    vim.api.nvim_buf_set_option(buf, "filetype", "noice")
+    M.ignore_events(function()
+      vim.bo[buf].filetype = "noice"
+    end)
   end
 
   if Config.options.debug and vim.api.nvim_buf_get_name(buf) == "" then

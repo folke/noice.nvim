@@ -221,7 +221,9 @@ function View:render(buf, opts)
   local linenr = opts.offset or 1
 
   if self._opts.buf_options then
-    require("nui.utils")._.set_buf_options(buf, self._opts.buf_options)
+    Util.ignore_events(function()
+      require("nui.utils")._.set_buf_options(buf, self._opts.buf_options)
+    end)
   end
 
   if self._opts.lang and not vim.b[buf].ts_highlight then
