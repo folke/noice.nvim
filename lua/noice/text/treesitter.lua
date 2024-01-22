@@ -33,7 +33,7 @@ function M.highlight(buf, ns, range, lang)
 
   buf = (buf == 0 or buf == nil) and vim.api.nvim_get_current_buf() or buf
 
-  -- we can't use a cached parser here since that could interfer with the existing parser of the buffer
+  -- we can't use a cached parser here since that could interfere with the existing parser of the buffer
   local LanguageTree = require("vim.treesitter.languagetree")
   local opts = { injections = { php = "", html = "" } }
   local parser = LanguageTree.new(buf --[[@as integer]], lang, opts)

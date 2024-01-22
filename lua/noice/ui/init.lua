@@ -39,7 +39,7 @@ function M.setup()
   ---@type table<string, boolean>
   local options = {}
   for ext, widget in pairs(widgets) do
-    -- only enable if configured and not enabeled in the GUI
+    -- only enable if configured and not enabled in the GUI
     if Config.options[ext].enabled and not ui_widgets[ext] then
       options["ext_" .. ext] = true
       M._handlers[widget] = _G.require("noice.ui." .. widget)

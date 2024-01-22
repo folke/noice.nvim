@@ -157,7 +157,7 @@ function Block:append(contents, highlight)
           -- first line should be appended to the existing line
           self:append(line)
         else
-          -- other lines are appened as new lines
+          -- other lines are appended as new lines
           table.insert(self._lines, line)
         end
       end
