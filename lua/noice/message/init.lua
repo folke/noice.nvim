@@ -65,7 +65,7 @@ function Message:focus()
   if win then
     vim.api.nvim_set_current_win(win)
     -- switch to normal mode
-	vim.cmd("stopinsert")
+    vim.cmd("stopinsert")
     return true
   end
 end

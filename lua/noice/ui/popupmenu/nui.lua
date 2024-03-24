@@ -97,6 +97,11 @@ function M.opts(state)
           row = pos.screenpos.row,
           col = pos.screenpos.col + state.col - padding.left,
         }
+        -- the padding might get the window below 0
+        if opts.position.col < 0 then
+          opts.position.col = 0
+        end
+
         if pos.screenpos.row == vim.go.lines then
           opts.position.row = opts.position.row - 1
           opts.anchor = "SW"
