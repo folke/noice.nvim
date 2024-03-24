@@ -39,7 +39,7 @@ function M.get_level(level)
 end
 
 ---@param msg string
----@param level number|string
+---@param level? number|string
 ---@param opts? table<string, any>
 function M.notify(msg, level, opts)
   if vim.in_fast_event() then
