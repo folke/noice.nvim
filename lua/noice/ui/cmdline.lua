@@ -111,6 +111,7 @@ end
 ---@param text_only? boolean
 function Cmdline:format(message, text_only)
   local format = self:get_format()
+  message.fix_cr = false
 
   if format.icon then
     message:append(NoiceText.virtual_text(format.icon, format.icon_hl_group))
