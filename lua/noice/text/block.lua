@@ -1,7 +1,6 @@
 local require = require("noice.util.lazy")
 
 local Highlight = require("noice.text.highlight")
-local Util = require("noice.util")
 local NuiLine = require("nui.line")
 local Object = require("nui.object")
 
@@ -10,7 +9,7 @@ local Object = require("nui.object")
 
 ---@class NoiceBlock
 ---@field _lines NuiLine[]
----@field is_cmdline boolean?
+---@field fix_cr boolean?
 ---@overload fun(content?: NoiceContent|NoiceContent[], highlight?: string|table): NoiceBlock
 local Block = Object("Block")
 
@@ -111,7 +110,7 @@ function Block:_append(content, highlight)
   if #self._lines == 0 then
     table.insert(self._lines, NuiLine())
   end
-  if type(content) == "string" and not self.is_cmdline then
+  if type(content) == "string" and self.fix_cr ~= false then
     -- handle carriage returns. They overwrite the line from the first character
     local cr = content:match("^.*()[\r]")
     if cr then
@@ -168,7 +167,7 @@ function Block:append(contents, highlight)
       ---@type number|string|table, string
       local attr_id, text = unpack(content)
       -- msg_show messages can contain invalid \r characters
-      if not self.is_cmdline then
+      if self.fix_cr ~= false then
         text = text:gsub("%^M", "\r")
         text = text:gsub("\r\n", "\n")
       end
