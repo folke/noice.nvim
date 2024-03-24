@@ -27,7 +27,7 @@ function M.on_message(_, result, ctx)
   local client = vim.lsp.get_client_by_id(client_id)
   local client_name = client and client.name or string.format("lsp id=%d", client_id)
 
-  local message = Message(M.event, "message", result.message)
+  local message = Message("lsp", "message", result.message)
   message.opts.title = "LSP Message (" .. client_name .. ")"
   for level, type in pairs(M.message_type) do
     if type == result.type then
