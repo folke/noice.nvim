@@ -1,5 +1,20 @@
 # Changelog
 
+## [2.0.1](https://github.com/folke/noice.nvim/compare/v2.0.0...v2.0.1) (2024-03-26)
+
+
+### Bug Fixes
+
+* **input:** don't filter ^M and &lt;cr&gt; for the command line ([#734](https://github.com/folke/noice.nvim/issues/734)) ([d29b26c](https://github.com/folke/noice.nvim/commit/d29b26c329558ee4bb2e7f3cc25078929ef89b2f))
+* lsp message view not effective ([#747](https://github.com/folke/noice.nvim/issues/747)) ([2640d39](https://github.com/folke/noice.nvim/commit/2640d3975d47156c412db6e974a1b1280ff46aab))
+* **popup:** don't make the window column go below negative 1 ([#737](https://github.com/folke/noice.nvim/issues/737)) ([01b2b53](https://github.com/folke/noice.nvim/commit/01b2b5316eb6986cc763e7b4f0f0e0f60d2a344b))
+
+
+### Performance Improvements
+
+* ignore events when setting buf options during render. Fixes [#694](https://github.com/folke/noice.nvim/issues/694) ([bf67d70](https://github.com/folke/noice.nvim/commit/bf67d70bd7265d075191e7812d8eb42b9791f737))
+* **lsp:** update lsp progress messages at most every 100ms ([9a9756d](https://github.com/folke/noice.nvim/commit/9a9756d6999abc016c087b9d3fcea3c9de99be98))
+
 ## [2.0.0](https://github.com/folke/noice.nvim/compare/v1.16.3...v2.0.0) (2023-10-25)
 
 
