@@ -79,7 +79,7 @@ function M.format(message, format, opts)
   format = format or "default"
 
   if type(format) == "string" then
-    format = vim.deepcopy(FormatConfig.builtin[format])
+    format = vim.deepcopy(opts[format] or FormatConfig.builtin[format])
   end
 
   -- use existing message, with a separate _lines array
