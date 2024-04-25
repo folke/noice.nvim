@@ -32,7 +32,7 @@ end
 return setmetatable(M, {
   __index = function(_, key)
     -- HACK: cmdpreview symbol is not available on Windows
-    if vim.fn.has("nvim-0.9.0") == 0 and key == "cmdpreview" then
+    if vim.fn.has("nvim-0.9.0") ~= 1 and key == "cmdpreview" and jit.os == "Windows" then
       return false
     end
     return M.load()[key]
