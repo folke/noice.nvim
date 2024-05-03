@@ -188,7 +188,13 @@ function M.update()
         message = messages,
       },
     }, { messages = view._messages })
-    if #view._messages ~= count or view._dirty then
+
+    -- retry errors only once
+    if view._errors > 1 then
+      view._errors = 0
+    end
+
+    if #view._messages ~= count or view._errors > 0 then
       updates[view] = true
     end
   end
@@ -214,7 +220,7 @@ function M.update()
   local dirty = false
   for view, _ in pairs(updates) do
     view:display()
-    if view._dirty then
+    if view._errors > 0 then
       dirty = true
     end
   end

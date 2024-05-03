@@ -26,7 +26,7 @@ local Format = require("noice.text.format")
 ---@field _route_opts NoiceViewOptions
 ---@field _visible boolean
 ---@field _instance "opts" | "view" | "backend"
----@field _dirty boolean?
+---@field _errors integer
 ---@overload fun(opts?: NoiceViewOptions): NoiceView
 local View = Object("NoiceView")
 
@@ -81,6 +81,7 @@ function View:init(opts)
   self._visible = false
   self._view_opts = vim.deepcopy(self._opts)
   self._instance = "opts"
+  self._errors = 0
   self:update_options()
 end
 
@@ -139,9 +140,9 @@ function View:display()
     self:check_options()
 
     Util.try(function()
-      self._dirty = true
+      self._errors = self._errors + 1
       self:show()
-      self._dirty = false
+      self._errors = 0
     end)
 
     self._visible = true
