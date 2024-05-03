@@ -17,11 +17,15 @@ end
 
 function M.enable()
   M.reset_augroup()
-  M.fix_incsearch()
   M.fix_input()
   M.fix_redraw()
   M.fix_cmp()
   M.fix_vim_sleuth()
+
+  -- Hacks for Neovim < 0.10
+  if vim.fn.has("nvim-0.10") == 0 then
+    M.fix_incsearch()
+  end
 end
 
 function M.fix_vim_sleuth()
