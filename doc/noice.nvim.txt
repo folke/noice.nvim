@@ -1,4 +1,4 @@
-*noice.nvim.txt*         For Neovim >= 0.8.0        Last change: 2024 March 26
+*noice.nvim.txt*          For Neovim >= 0.8.0         Last change: 2024 May 03
 
 ==============================================================================
 Table of Contents                               *noice.nvim-table-of-contents*
@@ -17,6 +17,7 @@ Table of Contents                               *noice.nvim-table-of-contents*
   - Telescope               |noice.nvim-noice-(nice,-noise,-notice)-telescope|
   - Usage                       |noice.nvim-noice-(nice,-noise,-notice)-usage|
   - Highlight Groups |noice.nvim-noice-(nice,-noise,-notice)-highlight-groups|
+2. Links                                                    |noice.nvim-links|
 
 ==============================================================================
 1. Noice (Nice, Noise, Notice)        *noice.nvim-noice-(nice,-noise,-notice)*
