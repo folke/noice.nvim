@@ -26,6 +26,7 @@ local Format = require("noice.text.format")
 ---@field _route_opts NoiceViewOptions
 ---@field _visible boolean
 ---@field _instance "opts" | "view" | "backend"
+---@field _dirty boolean?
 ---@overload fun(opts?: NoiceViewOptions): NoiceView
 local View = Object("NoiceView")
 
@@ -137,7 +138,11 @@ function View:display()
     Format.align(self._messages, self._opts.align)
     self:check_options()
 
-    Util.try(self.show, self)
+    Util.try(function()
+      self._dirty = true
+      self:show()
+      self._dirty = false
+    end)
 
     self._visible = true
   else

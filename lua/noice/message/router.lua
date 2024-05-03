@@ -188,7 +188,7 @@ function M.update()
         message = messages,
       },
     }, { messages = view._messages })
-    if #view._messages ~= count then
+    if #view._messages ~= count or view._dirty then
       updates[view] = true
     end
   end
@@ -211,11 +211,17 @@ function M.update()
 
   Manager.clear()
 
+  local dirty = false
   for view, _ in pairs(updates) do
     view:display()
+    if view._dirty then
+      dirty = true
+    end
   end
 
-  M._tick = Manager.tick()
+  if not dirty then
+    M._tick = Manager.tick()
+  end
 
   if not vim.tbl_isempty(updates) then
     Util.stats.track("router.update.updated")
