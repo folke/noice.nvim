@@ -58,7 +58,11 @@ end
 
 ---@see https://github.com/neovim/neovim/issues/20793
 function M.draw_cursor()
-  require("noice.util.ffi").setcursor_mayforce(true)
+  if vim.api.nvim__redraw then
+    vim.api.nvim__redraw({ cursor = true })
+  else
+    require("noice.util.ffi").setcursor_mayforce(true)
+  end
 end
 
 ---@see https://github.com/neovim/neovim/issues/17810
