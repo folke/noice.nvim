@@ -117,6 +117,7 @@ function M.defaults()
         format_done = "lsp_progress_done",
         throttle = 1000 / 10, -- frequency to update lsp progress message
         view = "mini",
+        excluded_clients = {}
       },
       override = {
         -- override the default lsp markdown formatter with Noice

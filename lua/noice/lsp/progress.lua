@@ -26,6 +26,9 @@ function M.progress(data)
     if not client then
       return
     end
+    if vim.tbl_contains(Config.options.lsp.progress.excluded_clients, client.name) then
+      return
+    end
     message = Message("lsp", "progress")
     message.opts.progress = {
       client_id = client_id,
