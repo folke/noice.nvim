@@ -16,7 +16,7 @@ M._running = false
 ---@param data {client_id: integer, result: lsp.ProgressParams}
 function M.progress(data)
   local client_id = data.client_id
-  local result = data.result
+  local result = data.params
   local id = client_id .. "." .. result.token
 
   local message = M._progress[id]
