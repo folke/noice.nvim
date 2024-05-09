@@ -13,11 +13,11 @@ local M = {}
 M._progress = {}
 M._running = false
 
----@param data {client_id: integer, result: lsp.ProgressParams}
+---@param data {client_id: integer, params: lsp.ProgressParams}
 function M.progress(data)
   local client_id = data.client_id
-  local result = data.result
-  local id = client_id .. "." .. result.token
+  local params = data.params or data.result  -- TODO: Remove data.result after nvim 0.10 release
+  local id = client_id .. "." .. params.token
 
   local message = M._progress[id]
   if not message then
@@ -35,10 +35,10 @@ function M.progress(data)
     M._progress[id] = message
   end
 
-  message.opts.progress = vim.tbl_deep_extend("force", message.opts.progress, result.value)
+  message.opts.progress = vim.tbl_deep_extend("force", message.opts.progress, params.value)
   message.opts.progress.id = id
 
-  if result.value.kind == "end" then
+  if params.value.kind == "end" then
     if message.opts.progress.percentage then
       message.opts.progress.percentage = 100
     end
@@ -100,10 +100,10 @@ function M.setup()
   if not ok then
     local orig = vim.lsp.handlers["$/progress"]
     vim.lsp.handlers["$/progress"] = function(...)
-      local result = select(2, ...)
+      local params = select(2, ...)
       local ctx = select(3, ...)
       Util.try(function()
-        M.progress({ client_id = ctx.client_id, result = result })
+        M.progress({ client_id = ctx.client_id, params = params })
       end)
       orig(...)
     end
