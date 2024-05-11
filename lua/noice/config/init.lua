@@ -221,6 +221,28 @@ function M.is_running()
   return M._running
 end
 
+function M.setup_filters(config, new_config, key)
+  if type(config) ~= "table" or type(new_config) ~= "table" then
+    return
+  end
+  if key == "filter" then
+    if new_config.clear_filters then
+      new_config.clear_filters = nil
+      -- Can't use `config = {}` because that would create a new array (instead of modifying the caller's `config`)
+      for k, _ in pairs(config) do
+        config[k] = nil
+      end
+      for k, v in pairs(new_config) do
+        config[k] = v
+      end
+    end
+    return
+  end
+  for k, _ in pairs(new_config) do
+    M.setup_filters(config[k], new_config[k], k)
+  end
+end
+
 function M.setup(options)
   options = options or {}
 
@@ -246,6 +268,7 @@ function M.setup(options)
   local routes = M.options.routes
   M.options = vim.tbl_deep_extend("force", M.options, options)
   vim.list_extend(M.options.routes, routes)
+  M.setup_filters(M.options, options)
 
   if M.options.popupmenu.kind_icons == false then
     M.options.popupmenu.kind_icons = {}
