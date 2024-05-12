@@ -12,6 +12,7 @@ local M = {}
 ---@type table<string, NoiceMessage>
 M._progress = {}
 M._running = false
+M._messages = 0
 
 ---@param data {client_id: integer, params: lsp.ProgressParams}
 function M.progress(data)
@@ -26,7 +27,7 @@ function M.progress(data)
     if not client then
       return
     end
-    if vim.tbl_contains(Config.options.lsp.progress.excluded_clients, client.name) then
+    if vim.tbl_contains(Config.options.lsp.progress.ignored_clients, client.name) then
       return
     end
     message = Message("lsp", "progress")
@@ -72,8 +73,12 @@ function M._update()
       end
       if message.opts.progress.kind == "end" then
         Manager.add(Format.format(message, Config.options.lsp.progress.format_done))
+        M._messages = M._messages - 1
       else
-        Manager.add(Format.format(message, Config.options.lsp.progress.format))
+        if M._messages < Config.options.lsp.progress.max_messages then
+          Manager.add(Format.format(message, Config.options.lsp.progress.format))
+        end
+        M._messages = M._messages + 1
       end
     end
     return

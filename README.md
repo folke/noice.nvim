@@ -211,9 +211,10 @@ Check the [wiki](https://github.com/folke/noice.nvim/wiki/Configuration-Recipes)
       format = "lsp_progress",
       --- @type NoiceFormat|string
       format_done = "lsp_progress_done",
-      throttle = 1000 / 30, -- frequency to update lsp progress message
+      throttle = 1000 / 30, -- Frequency to update lsp progress message
       view = "mini",
-      excluded_clients = {} -- list of LSP client names where progress should't be reported.
+      ignored_clients = {} -- List of LSP client names to be ignored
+      max_messages = 3, -- Maximum number of messages per client at any give time
     },
     override = {
       -- override the default lsp markdown formatter with Noice
