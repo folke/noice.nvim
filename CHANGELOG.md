@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.0.2](https://github.com/folke/noice.nvim/compare/v2.0.1...v2.0.2) (2024-05-09)
+
+
+### Bug Fixes
+
+* **cmdpreview:** read the variable `cmdpreview` in nvim-0.9+ on windows ([#774](https://github.com/folke/noice.nvim/issues/774)) ([a35003d](https://github.com/folke/noice.nvim/commit/a35003dbdd9c8d6d05aa47064de2b76ace872ec4))
+* disable incsearch hack for nightly (no longer needed) ([02d698a](https://github.com/folke/noice.nvim/commit/02d698ac0d294e2195429662d0d1cae6cd9a5621))
+* **progress:** Change LspProgress data field `result` to `params` ([#785](https://github.com/folke/noice.nvim/issues/785)) ([89de3b5](https://github.com/folke/noice.nvim/commit/89de3b56abee53783dca3500115891fb827669d6))
+* retry rendering only once to prevent rendering loops ([f4decbc](https://github.com/folke/noice.nvim/commit/f4decbc7a80229ccc9f86026b74bdcf0c39e38a7))
+* **router:** make sure we retry views that could not render due to E565. Fixes [#783](https://github.com/folke/noice.nvim/issues/783) ([6df3d8a](https://github.com/folke/noice.nvim/commit/6df3d8acea83b531deca29e18c64783a3eac106d))
+* use `vim.api.nvim__redraw` to update cursor on nightly instead of ffi. Fixes [#781](https://github.com/folke/noice.nvim/issues/781) ([37c8124](https://github.com/folke/noice.nvim/commit/37c8124ee8aac0614a7221c335a97db9ed5e40f3))
+
 ## [2.0.1](https://github.com/folke/noice.nvim/compare/v2.0.0...v2.0.1) (2024-03-26)
 
 
