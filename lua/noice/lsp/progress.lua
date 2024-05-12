@@ -12,7 +12,6 @@ local M = {}
 ---@type table<string, NoiceMessage>
 M._progress = {}
 M._running = false
-M._messages = 0
 
 ---@param data {client_id: integer, params: lsp.ProgressParams}
 function M.progress(data)
@@ -73,15 +72,9 @@ function M._update()
       end
       if message.opts.progress.kind == "end" then
         Manager.add(Format.format(message, Config.options.lsp.progress.format_done))
-        if Config.options.lsp.progress.max_messages ~= nil then
-          M._messages = M._messages - 1
-        end
       else
-        if Config.options.lsp.progress.max_messages == nil or M._messages < Config.options.lsp.progress.max_messages then
+        if Config.options.lsp.progress.max_messages == nil or #M._progress < Config.options.lsp.progress.max_messages then
           Manager.add(Format.format(message, Config.options.lsp.progress.format))
-          if Config.options.lsp.progress.max_messages ~= nil then
-            M._messages = M._messages + 1
-          end
         end
       end
     end
