@@ -73,9 +73,7 @@ function M._update()
       if message.opts.progress.kind == "end" then
         Manager.add(Format.format(message, Config.options.lsp.progress.format_done))
       else
-        if Config.options.lsp.progress.max_messages == nil or #M._progress < Config.options.lsp.progress.max_messages then
-          Manager.add(Format.format(message, Config.options.lsp.progress.format))
-        end
+        Manager.add(Format.format(message, Config.options.lsp.progress.format))
       end
     end
     return
