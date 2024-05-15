@@ -9,6 +9,17 @@ M.stats = require("noice.util.stats")
 M.call = require("noice.util.call")
 M.nui = require("noice.util.nui")
 
+function M.t(str)
+  return vim.api.nvim_replace_termcodes(str, true, true, true)
+end
+
+M.CR = M.t("<cr>")
+M.ESC = M.t("<esc>")
+M.BS = M.t("<bs>")
+M.EXIT = M.t("<C-\\><C-n>")
+M.LUA_CALLBACK = "\x80\253g"
+M.CMD = "\x80\253h"
+
 ---@generic F: fun()
 ---@param fn F
 ---@return F
