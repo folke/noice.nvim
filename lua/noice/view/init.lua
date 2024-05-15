@@ -134,16 +134,24 @@ function View:set(messages, opts)
   self:push(messages, opts)
 end
 
+-- Safely destroys any create windows and buffers.
+-- This is needed to properly re-create views in case of E565 errors
+function View:destroy() end
+
 function View:display()
   if #self._messages > 0 then
     Format.align(self._messages, self._opts.align)
     self:check_options()
 
-    Util.try(function()
+    Util.protect(function()
       self._errors = self._errors + 1
       self:show()
       self._errors = 0
-    end)
+    end, {
+      catch = function()
+        self:destroy()
+      end,
+    })()
 
     self._visible = true
   else

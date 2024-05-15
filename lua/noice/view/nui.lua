@@ -185,6 +185,26 @@ function NuiView:reset(old, new)
   end
 end
 
+-- Destroys any create windows and buffers with vim.schedule
+-- This is needed to properly re-create views in case of E565 errors
+function NuiView:destroy()
+  local nui = self._nui
+  local scroll = self._scroll
+  vim.schedule(function()
+    if nui then
+      nui._.loading = false
+      nui._.mounted = true
+      nui:unmount()
+    end
+    if scroll then
+      scroll:hide()
+    end
+  end)
+  self._nui = nil
+  self._scroll = nil
+  self._loading = false
+end
+
 function NuiView:hide()
   self._timer:stop()
   if self._nui then
