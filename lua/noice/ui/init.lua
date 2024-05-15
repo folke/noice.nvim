@@ -65,6 +65,10 @@ function M.enable()
     return
   end
 
+  if options.ext_messages then
+    require("noice.ui.msg").setup()
+  end
+
   local safe_handle = Util.protect(M.handle, { msg = "An error happened while handling a ui event" })
   M._attached = true
 

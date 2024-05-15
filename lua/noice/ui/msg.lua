@@ -45,6 +45,16 @@ M.last = nil
 ---@type NoiceMessage[]
 M._messages = {}
 
+function M.setup()
+  local hist = vim.trim(vim.api.nvim_cmd({ cmd = "messages" }, { output = true }))
+  if hist == "" then
+    return
+  end
+  local message = M.get(M.events.history_show)
+  message:set(hist)
+  Manager.add(message)
+end
+
 function M.is_error(kind)
   return vim.tbl_contains({ M.kinds.echoerr, M.kinds.lua_error, M.kinds.rpc_error, M.kinds.emsg }, kind)
 end
