@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.0.3](https://github.com/folke/noice.nvim/compare/v2.0.2...v2.0.3) (2024-05-15)
+
+
+### Bug Fixes
+
+* **hacks:** use feedkeys instead of input to force redraw ([dbf8d70](https://github.com/folke/noice.nvim/commit/dbf8d708a46c9d5a6c79f8fc77ac4ffa04d3f0d9))
+* **nui:** safely destroy any create window/buffers during E565 errors. Fixes command preview ([a0c6203](https://github.com/folke/noice.nvim/commit/a0c6203d551242322ac7995b26d4e320140e05b1))
+
 ## [2.0.2](https://github.com/folke/noice.nvim/compare/v2.0.1...v2.0.2) (2024-05-09)
 
 
