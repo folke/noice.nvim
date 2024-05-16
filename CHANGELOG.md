@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.1.1](https://github.com/folke/noice.nvim/compare/v2.1.0...v2.1.1) (2024-05-16)
+
+
+### Bug Fixes
+
+* fixed check on get_clients. Fixes [#806](https://github.com/folke/noice.nvim/issues/806) ([588471b](https://github.com/folke/noice.nvim/commit/588471bdf26d8fde3fa1672339339a18e1b8568a))
+
 ## [2.1.0](https://github.com/folke/noice.nvim/compare/v2.0.3...v2.1.0) (2024-05-16)
 
 
