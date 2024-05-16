@@ -241,15 +241,14 @@ function M.fix_cmp()
   end)
 end
 
+M.SPECIAL = "Þ"
 function M.cmdline_force_redraw()
   if not require("noice.util.ffi").cmdpreview then
     return
   end
 
-  -- HACK: this will trigger redraw during substitute and cmdpreview,
-  -- but when moving the cursor, the screen will be cleared until
-  -- a new character is entered
-  vim.api.nvim_feedkeys(" " .. Util.BS, "n", true)
+  -- HACK: this will trigger redraw during substitute and cmdpreview
+  vim.api.nvim_feedkeys(M.SPECIAL .. Util.BS, "n", true)
 end
 
 ---@type string?

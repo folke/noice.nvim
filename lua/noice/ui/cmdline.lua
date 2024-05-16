@@ -156,6 +156,7 @@ end
 
 ---@type NoiceCmdline[]
 M.cmdlines = {}
+M.skipped = false
 
 function M.on_show(event, content, pos, firstc, prompt, indent, level)
   local c = Cmdline({
@@ -167,6 +168,14 @@ function M.on_show(event, content, pos, firstc, prompt, indent, level)
     indent = indent,
     level = level,
   })
+
+  -- This was triggered by a force redraw, so skip it
+  if c:get():find(Hacks.SPECIAL, 1, true) then
+    M.skipped = true
+    return
+  end
+  M.skipped = false
+
   local last = M.cmdlines[level] and M.cmdlines[level].state
   if not vim.deep_equal(c.state, last) then
     M.active = c
@@ -189,7 +198,11 @@ function M.on_hide(_, level)
 end
 
 function M.on_pos(_, pos, level)
-  if M.cmdlines[level] and M.cmdlines[level].state.pos ~= pos then
+  if M.skipped then
+    return
+  end
+  local c = M.cmdlines[level]
+  if c and c.state.pos ~= pos then
     M.cmdlines[level].state.pos = pos
     M.update()
   end

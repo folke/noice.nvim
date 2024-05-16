@@ -18,6 +18,8 @@ M.ESC = M.t("<esc>")
 M.BS = M.t("<bs>")
 M.EXIT = M.t("<C-\\><C-n>")
 M.LUA_CALLBACK = "\x80\253g"
+M.RIGHT = M.t("<right>")
+M.LEFT = M.t("<left>")
 M.CMD = "\x80\253h"
 
 ---@generic F: fun()
@@ -324,6 +326,9 @@ function M.debug(data)
   local fd = io.open(file, "a+")
   if not fd then
     error(("Could not open file %s for writing"):format(file))
+  end
+  if type(data) ~= "string" then
+    data = vim.inspect(data)
   end
   fd:write(data .. "\n")
   fd:close()
