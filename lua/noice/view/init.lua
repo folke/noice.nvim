@@ -96,7 +96,7 @@ function View:update_options() end
 function View:push(messages, opts)
   opts = opts or {}
 
-  messages = vim.tbl_islist(messages) and messages or { messages }
+  messages = Util.islist(messages) and messages or { messages }
   ---@cast messages NoiceMessage[]
 
   for _, message in ipairs(messages) do

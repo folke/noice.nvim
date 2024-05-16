@@ -72,7 +72,7 @@ M.filters = {
   end,
   message = function(message, other)
     ---@cast message NoiceMessage
-    other = vim.tbl_islist(other) and other or { other }
+    other = Util.islist(other) and other or { other }
     ---@cast other NoiceMessage[]
     for _, m in ipairs(other) do
       if m.id == message.id then

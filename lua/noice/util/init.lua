@@ -5,6 +5,8 @@ local Config = require("noice.config")
 
 local M = {}
 
+M.islist = vim.islist or vim.tbl_islist
+
 M.stats = require("noice.util.stats")
 M.call = require("noice.util.call")
 M.nui = require("noice.util.nui")

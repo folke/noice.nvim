@@ -44,7 +44,7 @@ function M.setup()
 
   if Config.options.lsp.signature.auto_open.enabled then
     -- attach to existing buffers
-    for _, client in ipairs(vim.lsp.get_active_clients()) do
+    for _, client in ipairs(vim.lsp.get_clients() or vim.lsp.get_active_clients()) do
       for _, buf in ipairs(vim.lsp.get_buffers_by_client_id(client.id)) do
         M.on_attach(buf, client)
       end

@@ -192,6 +192,12 @@ Check the [wiki](https://github.com/folke/noice.nvim/wiki/Configuration-Recipes)
       filter = { error = true },
       filter_opts = { reverse = true },
     },
+    all = {
+      -- options for the message history that you get with `:Noice`
+      view = "split",
+      opts = { enter = true, format = "details" },
+      filter = {},
+    },
   },
   notify = {
     -- Noice can be used as `vim.notify` so you can route any notification like other messages

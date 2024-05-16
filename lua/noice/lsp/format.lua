@@ -1,4 +1,5 @@
 local require = require("noice.util.lazy")
+local Util = require("noice.util")
 
 local Markdown = require("noice.text.markdown")
 
@@ -11,7 +12,7 @@ local M = {}
 -- Formats the content and adds it to the message
 ---@param contents MarkupContents Markup content
 function M.format_markdown(contents)
-  if type(contents) ~= "table" or not vim.tbl_islist(contents) then
+  if type(contents) ~= "table" or not Util.islist(contents) then
     contents = { contents }
   end
 
@@ -26,7 +27,7 @@ function M.format_markdown(contents)
       table.insert(parts, content.value)
     elseif content.kind == "plaintext" then
       table.insert(parts, ("```\n%s\n```"):format(content.value))
-    elseif vim.tbl_islist(content) then
+    elseif Util.islist(content) then
       vim.list_extend(parts, M.format_markdown(content))
     else
       error("Unknown markup " .. vim.inspect(content))
