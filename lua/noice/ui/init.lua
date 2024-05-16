@@ -4,7 +4,6 @@ local Config = require("noice.config")
 local Util = require("noice.util")
 local Router = require("noice.message.router")
 local Manager = require("noice.message.manager")
-local Hacks = require("noice.util.hacks")
 
 ---@alias NoiceEvent MsgEvent|CmdlineEvent|NotifyEvent|LspEvent
 ---@alias NoiceKind MsgKind|NotifyLevel|LspKind
@@ -97,9 +96,8 @@ function M.enable()
 
     -- check if we need to update the ui
     if Manager.tick() > tick then
-      -- Util.debug(vim.inspect({ event, stack_level, Util.is_blocking(), tick, kind, ... }))
-      if Util.is_blocking() and event ~= "msg_ruler" and kind ~= "search_count" then
-        Util.try(Router.update)
+      do
+        -- Util.debug(vim.inspect({ event, stack_level, Util.is_blocking(), tick, kind, ... }))
       end
     else
       local widget = M.parse_event(event)
