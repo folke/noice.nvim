@@ -45,7 +45,14 @@ M.last = nil
 ---@type NoiceMessage[]
 M._messages = {}
 
+M._did_setup = false
+
 function M.setup()
+  if M._did_setup then
+    return
+  end
+  M._did_setup = true
+
   local hist = vim.trim(vim.api.nvim_cmd({ cmd = "messages" }, { output = true }))
   if hist == "" then
     return
