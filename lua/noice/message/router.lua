@@ -33,10 +33,14 @@ function M.enable()
     M._updater = Util.interval(Config.options.throttle, Util.protect(M.update))
   end
   M._updater()
-  -- vim.api.nvim_create_autocmd("SafeState", {
-  --   group = vim.api.nvim_create_augroup("NoiceRouter", { clear = true }),
-  --   callback = M.update,
-  -- })
+
+  local ok, err = pcall(vim.api.nvim_create_autocmd, "SafeState", {
+    group = vim.api.nvim_create_augroup("NoiceRouter", { clear = true }),
+    callback = M.update,
+  })
+  if not ok and Config.options.debug then
+    Util.error(err)
+  end
 end
 
 function M.disable()
