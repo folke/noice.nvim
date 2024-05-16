@@ -254,6 +254,16 @@ function M.fix_cmdpreview()
   })
 end
 
+M.SPECIAL = "Þ"
+function M.cmdline_force_redraw()
+  if not require("noice.util.ffi").cmdpreview then
+    return
+  end
+
+  -- HACK: this will trigger redraw during substitute and cmdpreview
+  vim.api.nvim_feedkeys(M.SPECIAL .. Util.BS, "n", true)
+end
+
 ---@type string?
 M._guicursor = nil
 function M.hide_cursor()
