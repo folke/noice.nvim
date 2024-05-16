@@ -96,8 +96,9 @@ function M.enable()
 
     -- check if we need to update the ui
     if Manager.tick() > tick then
-      do
-        -- Util.debug(vim.inspect({ event, stack_level, Util.is_blocking(), tick, kind, ... }))
+      -- Util.debug(vim.inspect({ event, stack_level, Util.is_blocking(), tick, kind, ... }))
+      if Util.is_blocking() and event ~= "msg_ruler" and kind ~= "search_count" then
+        Util.try(Router.update)
       end
     else
       local widget = M.parse_event(event)
