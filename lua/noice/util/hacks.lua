@@ -21,6 +21,7 @@ function M.enable()
   M.fix_redraw()
   M.fix_cmp()
   M.fix_vim_sleuth()
+  M.fix_cmdpreview()
 
   -- Hacks for Neovim < 0.10
   if vim.fn.has("nvim-0.10") == 0 then
@@ -241,14 +242,16 @@ function M.fix_cmp()
   end)
 end
 
-M.SPECIAL = "Þ"
-function M.cmdline_force_redraw()
-  if not require("noice.util.ffi").cmdpreview then
-    return
-  end
-
-  -- HACK: this will trigger redraw during substitute and cmdpreview
-  vim.api.nvim_feedkeys(M.SPECIAL .. Util.BS, "n", true)
+function M.fix_cmdpreview()
+  vim.api.nvim_create_autocmd("CmdlineChanged", {
+    group = M.group,
+    callback = function()
+      local ffi = require("noice.util.ffi")
+      ffi.cmdpreview = false
+      vim.cmd([[redraw]])
+      Util.try(require("noice.message.router").update)
+    end,
+  })
 end
 
 ---@type string?
