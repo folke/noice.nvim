@@ -57,7 +57,7 @@ function M.setup()
   if hist == "" then
     return
   end
-  local message = M.get(M.events.msg_show)
+  local message = M.get(M.events.show)
   message:set(hist)
   Manager.add(message)
 end
