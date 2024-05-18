@@ -219,7 +219,7 @@ M.position = nil
 ---@param line number
 ---@param byte number
 function M.on_render(_, buf, line, byte)
-  -- Hacks.cmdline_force_redraw()
+  Hacks.cmdline_force_redraw()
   local win = vim.fn.bufwinid(buf)
   if win ~= -1 then
     -- FIXME: check with cmp

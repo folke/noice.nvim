@@ -21,7 +21,7 @@ function M.enable()
   M.fix_redraw()
   M.fix_cmp()
   M.fix_vim_sleuth()
-  M.fix_cmdpreview()
+  -- M.fix_cmdpreview()
 
   -- Hacks for Neovim < 0.10
   if vim.fn.has("nvim-0.10") == 0 then
