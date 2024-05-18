@@ -96,8 +96,16 @@ function M.enable()
 
     -- check if we need to update the ui
     if Manager.tick() > tick then
-      -- Util.debug(vim.inspect({ event, stack_level, Util.is_blocking(), tick, kind, ... }))
-      if Util.is_blocking() and event ~= "msg_ruler" and kind ~= "search_count" then
+      Util.debug(function()
+        local _, blocking = Util.is_blocking()
+        return { event, "sl:" .. stack_level, "tick:" .. tick, blocking or false, kind }
+      end)
+      if
+        require("noice.util.ffi").textlock == 0
+        and Util.is_blocking()
+        and event ~= "msg_ruler"
+        and kind ~= "search_count"
+      then
         Util.try(Router.update)
       end
     else
