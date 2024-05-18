@@ -134,6 +134,13 @@ function View:set(messages, opts)
   self:push(messages, opts)
 end
 
+function View:debug(msg)
+  if Config.options.debug then
+    Util.debug(("[%s] %s"):format(self._opts.view, vim.inspect(msg)))
+    Util.debug(debug.traceback())
+  end
+end
+
 -- Safely destroys any create windows and buffers.
 -- This is needed to properly re-create views in case of E565 errors
 function View:destroy() end
@@ -148,7 +155,8 @@ function View:display()
       self:show()
       self._errors = 0
     end, {
-      catch = function()
+      catch = function(err)
+        self:debug(err)
         self:destroy()
       end,
     })()

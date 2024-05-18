@@ -323,14 +323,21 @@ function M.info(msg, ...)
   M.notify(msg, vim.log.levels.INFO, ...)
 end
 
+---@param data any
 function M.debug(data)
+  if not Config.options.debug then
+    return
+  end
+  if type(data) == "function" then
+    data = data()
+  end
+  if type(data) ~= "string" then
+    data = vim.inspect(data)
+  end
   local file = "./noice.log"
   local fd = io.open(file, "a+")
   if not fd then
     error(("Could not open file %s for writing"):format(file))
-  end
-  if type(data) ~= "string" then
-    data = vim.inspect(data)
   end
   fd:write(data .. "\n")
   fd:close()
