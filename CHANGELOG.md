@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.0.1](https://github.com/folke/noice.nvim/compare/v3.0.0...v3.0.1) (2024-05-18)
+
+
+### Bug Fixes
+
+* typo with hist messages. Fixes [#815](https://github.com/folke/noice.nvim/issues/815) ([a0a40d3](https://github.com/folke/noice.nvim/commit/a0a40d3e5fdb2eab005e2ee08c4af09c99fcb9a4))
+
 ## [3.0.0](https://github.com/folke/noice.nvim/compare/v2.1.1...v3.0.0) (2024-05-18)
 
 
