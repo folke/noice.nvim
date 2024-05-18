@@ -1,5 +1,24 @@
 # Changelog
 
+## [3.0.0](https://github.com/folke/noice.nvim/compare/v2.1.1...v3.0.0) (2024-05-18)
+
+
+### ⚠ BREAKING CHANGES
+
+* bump required Neovim version to >= 0.9
+
+### Features
+
+* bump required Neovim version to &gt;= 0.9 ([6c5290a](https://github.com/folke/noice.nvim/commit/6c5290ad947a97c34889debe59bafe771a9f9578))
+* **util:** better debug log ([217c684](https://github.com/folke/noice.nvim/commit/217c6848a6656c5e187d66a2b3caed9a9676d448))
+
+
+### Bug Fixes
+
+* **cmdline:** use other work-around for cmdpreview ([6a3721b](https://github.com/folke/noice.nvim/commit/6a3721b03dbeb10c3b1c47f63fdc2d77bb550550))
+* **msg:** add historical messages as a msg_show instead of history so it doesnt popup ([b9b4818](https://github.com/folke/noice.nvim/commit/b9b481864d0d91c7df539ecebb30a2235a3678da))
+* **ui:** dont try updating the ui during textlock ([4ef75a3](https://github.com/folke/noice.nvim/commit/4ef75a3c3893f9efcaf078e60280a9247b9876ff))
+
 ## [2.1.1](https://github.com/folke/noice.nvim/compare/v2.1.0...v2.1.1) (2024-05-16)
 
 
