@@ -58,16 +58,16 @@ function M.check(opts)
 
   log.start()
 
-  if vim.fn.has("nvim-0.8.0") ~= 1 then
-    log.error("Noice needs Neovim >= 0.8.0")
+  if vim.fn.has("nvim-0.9.0") ~= 1 then
+    log.error("Noice requires Neovim >= 0.9.0")
     -- require("noice.util").error("Noice needs Neovim >= 0.9.0 (nightly)")
     if not opts.checkhealth then
       return
     end
   else
-    log.ok("**Neovim** >= 0.8.0")
-    if opts.checkhealth and vim.fn.has("nvim-0.9.0") ~= 1 then
-      log.warn("**Neovim** 0.9.0 (nightly) is recommended, since it fixes some issues related to `vim.ui_attach`")
+    log.ok("**Neovim** >= 0.9.0")
+    if opts.checkhealth and vim.fn.has("nvim-0.10.0") ~= 1 then
+      log.warn("**Neovim** >= 0.10 is highly recommended, since it fixes some issues related to `vim.ui_attach`")
     end
   end
 
