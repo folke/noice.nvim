@@ -52,7 +52,7 @@ issues have already been fixed upstream. Check this tracking issue
 
 REQUIREMENTS             *noice.nvim-noice-(nice,-noise,-notice)-requirements*
 
-- Neovim >= 0.8.0 **(nightly highly recommended)**
+- Neovim >= 0.9.0 **(nightly highly recommended)**
 - nui.nvim <https://github.com/MunifTanjim/nui.nvim>used for proper rendering and multiple views
 - nvim-notify <https://github.com/rcarriga/nvim-notify>notification view _(optional)_
 - a Nerd Font <https://www.nerdfonts.com/> **(optional)**
