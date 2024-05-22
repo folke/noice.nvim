@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.0.2](https://github.com/folke/noice.nvim/compare/v3.0.1...v3.0.2) (2024-05-22)
+
+
+### Bug Fixes
+
+* **markdown:** keys when buf is invalid ([0dc97cb](https://github.com/folke/noice.nvim/commit/0dc97cb21edac79a1d575541c57a31a3e3bd5b88))
+
 ## [3.0.1](https://github.com/folke/noice.nvim/compare/v3.0.0...v3.0.1) (2024-05-18)
 
 
