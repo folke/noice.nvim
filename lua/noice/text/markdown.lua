@@ -210,6 +210,9 @@ function M.format(message, text, opts)
 end
 
 function M.keys(buf)
+  if not vim.api.nvim_buf_is_valid(buf) then
+    return
+  end
   if vim.b[buf].markdown_keys then
     return
   end
