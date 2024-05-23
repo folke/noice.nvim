@@ -29,9 +29,12 @@ function M.format_markdown(contents)
       table.insert(parts, ("```\n%s\n```"):format(content.value))
     elseif Util.islist(content) then
       vim.list_extend(parts, M.format_markdown(content))
+    elseif type(content) == "table" and next(content) == nil then
+      goto continue
     else
       error("Unknown markup " .. vim.inspect(content))
     end
+    ::continue::
   end
 
   return vim.split(table.concat(parts, "\n"), "\n")
