@@ -256,6 +256,10 @@ end
 
 M.SPECIAL = "Þ"
 function M.cmdline_force_redraw()
+  if vim.fn.has("nvim-0.11") == 1 then
+    -- no longer needed on nightly
+    return
+  end
   if not require("noice.util.ffi").cmdpreview then
     return
   end
