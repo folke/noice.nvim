@@ -1,5 +1,17 @@
 # Changelog
 
+## [4.0.0](https://github.com/folke/noice.nvim/compare/v3.0.2...v4.0.0) (2024-05-29)
+
+
+### ⚠ BREAKING CHANGES
+
+* remove cmdpreview hack for nigytly since it's no longer needed there. Update your Nightlies!!
+
+### Bug Fixes
+
+* **markdown:** ignore empty completion documentation tables ([#820](https://github.com/folke/noice.nvim/issues/820)) ([f119045](https://github.com/folke/noice.nvim/commit/f119045f38792ad5311e5f9be7a879e4c1a95fe0))
+* remove cmdpreview hack for nigytly since it's no longer needed there. Update your Nightlies!! ([49caf99](https://github.com/folke/noice.nvim/commit/49caf99d6253a43bf55ea055f7fba6c4eb78be20))
+
 ## [3.0.2](https://github.com/folke/noice.nvim/compare/v3.0.1...v3.0.2) (2024-05-22)
 
 
