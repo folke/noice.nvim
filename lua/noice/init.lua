@@ -53,6 +53,14 @@ function M.cmd(name)
 end
 
 function M.enable()
+  vim.api.nvim_create_autocmd("VimLeavePre", {
+    group = vim.api.nvim_create_augroup("NoiceVimLeavePre", { clear = true }),
+    callback = function()
+      if Config.is_running() then
+        pcall(M.disable)
+      end
+    end,
+  })
   Config._running = true
   if Config.options.notify.enabled then
     require("noice.source.notify").enable()

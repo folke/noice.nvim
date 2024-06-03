@@ -355,7 +355,7 @@ function M.read_file(file)
 end
 
 function M.is_exiting()
-  return vim.v.exiting ~= vim.NIL
+  return vim.v.exiting ~= vim.NIL or vim.v.dying ~= vim.NIL
 end
 
 function M.write_file(file, data)
