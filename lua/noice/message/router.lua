@@ -109,9 +109,12 @@ end
 
 function M.check_redraw()
   if Util.is_blocking() and M._need_redraw then
-    -- NOTE: set to false before actually calling redraw to prevent a loop with ui
-    M._need_redraw = false
-    Util.redraw()
+    -- don't do full redraw during search
+    if not (Util.is_search() and require("noice.ui.cmdline").real_cursor) then
+      -- NOTE: set to false before actually calling redraw to prevent a loop with ui
+      M._need_redraw = false
+      Util.redraw()
+    end
   end
 end
 

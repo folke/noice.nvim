@@ -217,6 +217,14 @@ function M._diff(a, b)
   return false
 end
 
+function M.is_search()
+  local cmdline = require("noice.ui.cmdline")
+  local c = cmdline.last()
+  if c and (c.state.firstc == "/" or c.state.firstc == "?") then
+    return true
+  end
+end
+
 ---@param opts? {blocking:boolean, mode:boolean, input:boolean, redraw:boolean}
 function M.is_blocking(opts)
   opts = vim.tbl_deep_extend("force", {
@@ -226,11 +234,6 @@ function M.is_blocking(opts)
     redraw = true,
   }, opts or {})
   local mode = vim.api.nvim_get_mode()
-
-  local c = require("noice.ui.cmdline").last()
-  if not mode.blocking and c and (c.state.firstc == "/" or c.state.firstc == "?") then
-    return false
-  end
 
   local blocking_mode = false
   for _, m in ipairs({ "ic", "ix", "c", "no", "r%?", "rm" }) do
