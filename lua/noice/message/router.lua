@@ -115,6 +115,7 @@ function M.check_redraw()
       M._need_redraw = false
       Util.redraw()
     end
+    require("noice.ui.cmdline").fix_cursor()
   end
 end
 

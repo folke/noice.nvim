@@ -17,6 +17,7 @@ local Markdown = require("noice.text.markdown")
 
 ---@class NoiceText: NuiText
 ---@field super NuiText
+---@field enabled? boolean
 ---@field on_render? fun(text: NoiceText, buf:number, line: number, byte:number, col:number)
 ---@overload fun(content:string, highlight?:string|NoiceExtmark):NoiceText
 ---@diagnostic disable-next-line: undefined-field
@@ -111,7 +112,9 @@ function NoiceText:highlight(bufnr, ns_id, linenr, byte_start)
     extmark.col = nil
   end
 
-  NoiceText.super.highlight(self, bufnr, ns_id, linenr, byte_start)
+  if self.enabled ~= false then
+    NoiceText.super.highlight(self, bufnr, ns_id, linenr, byte_start)
+  end
 
   if self.on_render then
     self.on_render(self, bufnr, linenr, byte_start_orig, col_start)

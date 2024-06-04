@@ -219,7 +219,7 @@ end
 
 function M.is_search()
   local cmdline = require("noice.ui.cmdline")
-  local c = cmdline.last()
+  local c = cmdline.active
   if c and (c.state.firstc == "/" or c.state.firstc == "?") then
     return true
   end
