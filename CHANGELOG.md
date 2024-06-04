@@ -1,5 +1,18 @@
 # Changelog
 
+## [4.0.1](https://github.com/folke/noice.nvim/compare/v4.0.0...v4.0.1) (2024-06-04)
+
+
+### Bug Fixes
+
+* **cmdline:** use real cursors on Neovim &gt;= 0.10 ([5b5fa91](https://github.com/folke/noice.nvim/commit/5b5fa91be6848583cbf824c69e67e26acf609ada))
+* disable noice on VimLeavePre so that the user can see exit errors ([31ec80c](https://github.com/folke/noice.nvim/commit/31ec80c99ee699ea4e90248c2e87e5a669be5e93))
+* fixup ([cfd7aa4](https://github.com/folke/noice.nvim/commit/cfd7aa4617024a9bd4f6409463c73f91a7f411b8))
+* fixup ([2bf0429](https://github.com/folke/noice.nvim/commit/2bf04290b32dc5b1a002a4888c95147bb91ec6f2))
+* reduce flickering when searching. See [#679](https://github.com/folke/noice.nvim/issues/679) ([4e1f9f1](https://github.com/folke/noice.nvim/commit/4e1f9f198226aea5b82a6df75e9913b49796cdda))
+* remove smart_move ([b6ae820](https://github.com/folke/noice.nvim/commit/b6ae820190dd166d6ebae408d65f2551e37c7bf2))
+* search IS blocking, but shouldnt trigger redraw. Fixes [#345](https://github.com/folke/noice.nvim/issues/345) ([b3f08e6](https://github.com/folke/noice.nvim/commit/b3f08e6cf0fd30847f299cc94707563920fd2139))
+
 ## [4.0.0](https://github.com/folke/noice.nvim/compare/v3.0.2...v4.0.0) (2024-05-29)
 
 
