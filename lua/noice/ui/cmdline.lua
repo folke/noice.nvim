@@ -219,6 +219,9 @@ end
 M.position = nil
 
 function M.fix_cursor()
+  if not M.position then
+    return
+  end
   local win = M.position.win
   local cursor = M.position.cursor
   if vim.api.nvim_win_is_valid(win) then
