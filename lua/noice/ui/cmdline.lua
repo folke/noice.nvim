@@ -38,6 +38,7 @@ M.real_cursor = vim.api.nvim__redraw ~= nil
 ---@field block table
 
 ---@class CmdlineFormat
+---@field name string
 ---@field kind string
 ---@field pattern? string|string[]
 ---@field view string
@@ -120,7 +121,7 @@ function Cmdline:format(message, text_only)
   end
 
   if not text_only then
-    message.kind = format.kind
+    message.kind = format.name
   end
 
   -- FIXME: prompt
