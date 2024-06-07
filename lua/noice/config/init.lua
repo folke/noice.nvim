@@ -254,6 +254,21 @@ function M.setup(options)
   require("noice.config.cmdline").setup()
 
   M.options.routes = Routes.get(M.options.routes)
+  -- NOTE: `M.options.routes` contains duplicates with the same `filter.kind` value.
+  --       The following workaround remove the redundant ones.
+  M.options.routes = vim.fn.filter(vim.deepcopy(M.options.routes), function(idx, item)
+    if item.filter.kind == "search" then
+      local format = M.options.cmdline.format
+      local preference = format.search_up.view
+      if preference ~= format.search_down.view then
+        preference = format.search_down.view -- prefer search_down.view
+      end
+      if preference ~= item.view then
+        return false
+      end
+    end
+    return true
+  end)
 
   require("noice.config.highlights").setup()
   vim.api.nvim_create_autocmd("ColorScheme", {
