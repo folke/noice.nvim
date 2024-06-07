@@ -283,12 +283,6 @@ Check the [wiki](https://github.com/folke/noice.nvim/wiki/Configuration-Recipes)
   health = {
     checker = true, -- Disable if you don't want health checks to run
   },
-  smart_move = {
-    -- noice tries to move out of the way of existing floating windows.
-    enabled = true, -- you can disable this behaviour here
-    -- add any filetypes here, that shouldn't trigger smart move.
-    excluded_filetypes = { "cmp_menu", "cmp_docs", "notify" },
-  },
   ---@type NoicePresets
   presets = {
     -- you can enable a preset by setting it to true, or a table that will override the preset config
