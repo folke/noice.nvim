@@ -9,6 +9,7 @@ local _id = 0
 ---@field super NoiceBlock
 ---@field id number
 ---@field event NoiceEvent
+---@field title? string
 ---@field ctime number
 ---@field mtime number
 ---@field tick number

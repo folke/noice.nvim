@@ -48,7 +48,19 @@ function NuiView:update_options()
     },
   }, self._opts, self:get_layout())
 
+  local title = {} ---@type string[]
+  for _, m in ipairs(self._messages) do
+    if m.title then
+      title[#title + 1] = m.title
+    end
+  end
+
   self._opts = Util.nui.normalize(self._opts)
+  if #title > 0 then
+    self._opts.border = self._opts.border or {}
+    self._opts.border.text = self._opts.border.text or {}
+    self._opts.border.text.top = table.concat(title, " | ")
+  end
   if self._opts.anchor == "auto" then
     if self._opts.type == "popup" and self._opts.size then
       local width = self._opts.size.width

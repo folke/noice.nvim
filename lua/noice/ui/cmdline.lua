@@ -124,9 +124,12 @@ function Cmdline:format(message, text_only)
     message.kind = format.name
   end
 
-  -- FIXME: prompt
   if self.state.prompt ~= "" then
-    message:append(self.state.prompt, "NoiceCmdlinePrompt")
+    if format.view == "cmdline_input" then
+      message.title = " " .. self.state.prompt:gsub("%s*:%s*$", "") .. " "
+    else
+      message:append(self.state.prompt, "NoiceCmdlinePrompt")
+    end
   end
 
   if not format.conceal then
