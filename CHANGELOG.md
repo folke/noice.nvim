@@ -1,5 +1,19 @@
 # Changelog
 
+## [4.1.0](https://github.com/folke/noice.nvim/compare/v4.0.1...v4.1.0) (2024-06-12)
+
+
+### Features
+
+* added integrations for fzf-lua ([1605be3](https://github.com/folke/noice.nvim/commit/1605be38bdaa94bc6891e7d310585a9cb16b9dcb))
+
+
+### Bug Fixes
+
+* **cmdline:** make sure search always uses correct view. Fixes [#841](https://github.com/folke/noice.nvim/issues/841) ([6a8a6de](https://github.com/folke/noice.nvim/commit/6a8a6de79223ac15d8ff5477358e343ae6a6ee51))
+* **cmdline:** separate cmdline input view ([07e8f9c](https://github.com/folke/noice.nvim/commit/07e8f9c7dfb01405f8b1173f1d3939b41753779d))
+* **fzf:** use --with-nth and skip message id in the display ([ac01164](https://github.com/folke/noice.nvim/commit/ac0116435e53c586a23302650dca73862a251108))
+
 ## [4.0.1](https://github.com/folke/noice.nvim/compare/v4.0.0...v4.0.1) (2024-06-04)
 
 
