@@ -30,6 +30,22 @@ M.builtin = {
     "\n",
     "{message}",
   },
+  fzf = {
+    "{level} ",
+    "{date} ",
+    "{title} ",
+    "{message}",
+  },
+  fzf_preview = {
+    "{level} ",
+    "{date} ",
+    "{event}",
+    { "{kind}", before = { ".", hl_group = "NoiceFormatKind" } },
+    "\n",
+    "{title}\n",
+    "\n",
+    "{message}",
+  },
   lsp_progress = {
     {
       "{progress} ",

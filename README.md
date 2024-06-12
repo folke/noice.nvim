@@ -17,7 +17,7 @@ Highly experimental plugin that completely replaces the UI for `messages`, `cmdl
 - 💻 fully customizable **cmdline** with icons
 - 💅 **syntax highlighting** for `vim` and `lua` on the **cmdline**
 - 🚥 **statusline** components
-- 🔭 open message history in [telescope.nvim](https://github.com/nvim-telescope/telescope.nvim)
+- 🔭 open message history in [telescope.nvim](https://github.com/nvim-telescope/telescope.nvim) or [fzf-lua](https://github.com/ibhagwan/fzf-lua)
 
 ## 🔥 Status
 
@@ -524,6 +524,8 @@ Formatters are used in `format` definitions. **Noice** includes the following bu
   },
   telescope = ..., -- formatter used to display telescope results
   telescope_preview = ..., -- formatter used to preview telescope results
+  fzf = ..., -- formatter used to display fzf results
+  fzf_preview = ..., -- formatter used to preview fzf results
   lsp_progress = ..., -- formatter used by lsp progress
   lsp_progress_done = ..., -- formatter used by lsp progress
 }
@@ -634,6 +636,11 @@ require("lualine").setup({
 
 </details>
 
+## 🔭 Pickers
+
+For convenience, you can do `:Noice pick`, which will open a picker with all the messages in the history,
+either with `telescope` or `fzf-lua`.
+
 ## 🔭 Telescope
 
 In order to use **Noice** in **Telescope**, you can either do `:Noice telescope`,
@@ -643,6 +650,11 @@ The results panel is formatted using `config.format.formatters.telescope`. The p
 ```lua
 require("telescope").load_extension("noice")
 ```
+
+## 🔭 Fzf Lua
+
+In order to use **Noice** in **FzfLua**, you can do `:Noice fzf`.
+The results panel is formatted using `config.format.formatters.fzf`. The preview is formatted with `config.format.formatters.telescope_fzf`
 
 ## 🚀 Usage
 

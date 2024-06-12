@@ -58,6 +58,18 @@ function M.setup()
     telescope = function()
       require("telescope").extensions.noice.noice({})
     end,
+    fzf = function()
+      require("noice.integrations.fzf").open({})
+    end,
+    pick = function()
+      if pcall(_G.require, "telescope.config") then
+        require("telescope").extensions.noice.noice({})
+      elseif pcall(_G.require, "fzf-lua") then
+        require("noice.integrations.fzf").open({})
+      else
+        Util.error("No picker available")
+      end
+    end,
     stats = function()
       Manager.add(Util.stats.message())
     end,
