@@ -3,21 +3,22 @@ local require = require("noice.util.lazy")
 local View = require("noice.view")
 local Util = require("noice.util")
 local Scrollbar = require("noice.view.scrollbar")
-local Config = require("noice.config")
+
+local uv = vim.uv or vim.loop
 
 ---@class NuiView: NoiceView
 ---@field _nui? NuiPopup|NuiSplit
 ---@field _loading? boolean
 ---@field super NoiceView
 ---@field _hider fun()
----@field _timeout_timer vim.loop.Timer
+---@field _timeout_timer uv_timer_t
 ---@field _scroll NoiceScrollbar
 ---@diagnostic disable-next-line: undefined-field
 local NuiView = View:extend("NuiView")
 
 function NuiView:init(opts)
   NuiView.super.init(self, opts)
-  self._timer = vim.loop.new_timer()
+  self._timer = uv.new_timer()
 end
 
 function NuiView:autohide()

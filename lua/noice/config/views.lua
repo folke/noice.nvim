@@ -225,6 +225,17 @@ M.defaults = {
       cursorline = false,
     },
   },
+  cmdline_input = {
+    view = "cmdline_popup",
+    relative = "cursor",
+    anchor = "auto",
+    position = { row = 2, col = 2 },
+    size = {
+      min_width = 20,
+      width = "auto",
+      height = "auto",
+    },
+  },
   confirm = {
     backend = "popup",
     relative = "editor",

@@ -27,7 +27,7 @@ function M.defaults()
         lua = { pattern = { "^:%s*lua%s+", "^:%s*lua%s*=%s*", "^:%s*=%s*" }, icon = "", lang = "lua" },
         help = { pattern = "^:%s*he?l?p?%s+", icon = "" },
         calculator = { pattern = "^=", icon = "", lang = "vimnormal" },
-        input = {}, -- Used by input()
+        input = { view = "cmdline_input" }, -- Used by input()
         -- lua = false, -- to disable a format, set to `false`
       },
     },
