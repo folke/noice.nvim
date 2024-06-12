@@ -14,7 +14,9 @@ Table of Contents                               *noice.nvim-table-of-contents*
   - Formatting             |noice.nvim-noice-(nice,-noise,-notice)-formatting|
   - Routes                     |noice.nvim-noice-(nice,-noise,-notice)-routes|
   - Statusline Components|noice.nvim-noice-(nice,-noise,-notice)-statusline-components|
+  - Pickers                   |noice.nvim-noice-(nice,-noise,-notice)-pickers|
   - Telescope               |noice.nvim-noice-(nice,-noise,-notice)-telescope|
+  - Fzf Lua                   |noice.nvim-noice-(nice,-noise,-notice)-fzf-lua|
   - Usage                       |noice.nvim-noice-(nice,-noise,-notice)-usage|
   - Highlight Groups |noice.nvim-noice-(nice,-noise,-notice)-highlight-groups|
 2. Links                                                    |noice.nvim-links|
@@ -39,7 +41,7 @@ FEATURES                     *noice.nvim-noice-(nice,-noise,-notice)-features*
 - fully customizable **cmdline** with icons
 - **syntax highlighting** for `vim` and `lua` on the **cmdline**
 - **statusline** components
-- open message history in telescope.nvim <https://github.com/nvim-telescope/telescope.nvim>
+- open message history in telescope.nvim <https://github.com/nvim-telescope/telescope.nvim> or fzf-lua <https://github.com/ibhagwan/fzf-lua>
 
 
 STATUS                         *noice.nvim-noice-(nice,-noise,-notice)-status*
@@ -584,6 +586,8 @@ built-in formats:
       },
       telescope = ..., -- formatter used to display telescope results
       telescope_preview = ..., -- formatter used to preview telescope results
+      fzf = ..., -- formatter used to display fzf results
+      fzf_preview = ..., -- formatter used to preview fzf results
       lsp_progress = ..., -- formatter used by lsp progress
       lsp_progress_done = ..., -- formatter used by lsp progress
     }
@@ -702,6 +706,12 @@ Example of configuring lualine.nvim ~
 <
 
 
+PICKERS                       *noice.nvim-noice-(nice,-noise,-notice)-pickers*
+
+For convenience, you can do `:Noice pick`, which will open a picker with all
+the messages in the history, either with `telescope` or `fzf-lua`.
+
+
 TELESCOPE                   *noice.nvim-noice-(nice,-noise,-notice)-telescope*
 
 In order to use **Noice** in **Telescope**, you can either do `:Noice
@@ -712,6 +722,13 @@ formatted with `config.format.formatters.telescope_preview`
 >lua
     require("telescope").load_extension("noice")
 <
+
+
+FZF LUA                       *noice.nvim-noice-(nice,-noise,-notice)-fzf-lua*
+
+In order to use **Noice** in **FzfLua**, you can do `:Noice fzf`. The results
+panel is formatted using `config.format.formatters.fzf`. The preview is
+formatted with `config.format.formatters.telescope_fzf`
 
 
 USAGE                           *noice.nvim-noice-(nice,-noise,-notice)-usage*
