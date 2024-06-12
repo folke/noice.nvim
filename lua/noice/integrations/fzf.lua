@@ -15,7 +15,7 @@ local M = {}
 function M.entry(message)
   message = Format.format(message, "fzf")
   local line = message._lines[1]
-  local hl = { message.id .. "" } ---@type string[]
+  local hl = { message.id .. " " } ---@type string[]
   for _, text in ipairs(line._texts) do
     ---@type string?
     local hl_group = text.extmark and text.extmark.hl_group
