@@ -255,8 +255,6 @@ function M.on_render(_, buf, line, byte)
 
     local cursor = byte - M.last():length() + M.last().state.pos
 
-    pcall(M.fix_cursor)
-
     local pos = vim.fn.screenpos(win, line, cmdline_start)
     M.position = {
       cursor = cursor,
@@ -271,6 +269,7 @@ function M.on_render(_, buf, line, byte)
         col = pos.col - 1,
       },
     }
+    pcall(M.fix_cursor)
   end
 end
 
