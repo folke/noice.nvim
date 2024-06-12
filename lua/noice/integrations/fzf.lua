@@ -15,13 +15,12 @@ local M = {}
 function M.entry(message)
   message = Format.format(message, "fzf")
   local line = message._lines[1]
-  local hl = {} ---@type string[]
+  local hl = { message.id .. "" } ---@type string[]
   for _, text in ipairs(line._texts) do
     ---@type string?
     local hl_group = text.extmark and text.extmark.hl_group
     hl[#hl + 1] = hl_group and fzf.utils.ansi_from_hl(hl_group, text:content()) or text:content()
   end
-  hl[#hl + 1] = fzf.utils.ansi_from_hl("Conceal", " [" .. message.id .. "]")
   return {
     message = message,
     ordinal = message:content(),
@@ -57,7 +56,7 @@ function M.previewer(messages)
   end
 
   function previewer:parse_entry(entry_str)
-    local id = tonumber(entry_str:match("%[(%d+)%]$"))
+    local id = tonumber(entry_str:match("^%d+"))
     local entry = messages[id]
     assert(entry, "No message found for entry: " .. entry_str)
     return entry
@@ -96,6 +95,7 @@ function M.open(opts)
     previewer = M.previewer(messages),
     fzf_opts = {
       ["--no-multi"] = "",
+      ["--with-nth"] = "2..",
     },
     actions = {
       default = function() end,
