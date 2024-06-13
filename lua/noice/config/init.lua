@@ -1,3 +1,4 @@
+---@diagnostic disable: missing-fields
 local require = require("noice.util.lazy")
 
 local Routes = require("noice.config.routes")

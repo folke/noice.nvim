@@ -20,6 +20,9 @@ function M.setup()
       local hl_group_border = "CmdlinePopupBorder" .. kind_cc
       Highlights.add(hl_group_border, "NoiceCmdlinePopupBorder")
 
+      local hl_group_title = "CmdlinePopupTitle" .. kind_cc
+      Highlights.add(hl_group_title, "Noice" .. hl_group_border)
+
       format = vim.tbl_deep_extend("force", {
         name = name,
         conceal = format.conceal ~= false,
@@ -37,6 +40,7 @@ function M.setup()
           win_options = {
             winhighlight = {
               FloatBorder = "Noice" .. hl_group_border,
+              FloatTitle = "Noice" .. hl_group_title,
             },
           },
         },
