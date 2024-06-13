@@ -1,5 +1,23 @@
 # Changelog
 
+## [4.2.0](https://github.com/folke/noice.nvim/compare/v4.1.0...v4.2.0) (2024-06-13)
+
+
+### Features
+
+* **cmdline:** icon for cmdline input ([d21d1d6](https://github.com/folke/noice.nvim/commit/d21d1d633762fe51efb6521ddd19942d40911c12))
+* **cmdline:** use cmdline prompt as title. Noice is now great for vim.ui.input out of the box ([4c1efad](https://github.com/folke/noice.nvim/commit/4c1efadccc5d4568e3abf0afdd3ee0c5c27b4be9))
+
+
+### Bug Fixes
+
+* **cmdline_input:** put in same position as cmdline_popup ([e55ce94](https://github.com/folke/noice.nvim/commit/e55ce94a1e4b1b5388e11965072e0cde129604bd))
+* **cmdline:** allow overriding title hl ([a5aa639](https://github.com/folke/noice.nvim/commit/a5aa639fb802391293585fca81ac10ecacc5e646))
+* **cmdline:** do fix_cursor **after** calculating cmdline position ([ba79352](https://github.com/folke/noice.nvim/commit/ba79352af1527283682fe7b7b049e6c7967cd037))
+* **cmdline:** reset title when needed ([edd14df](https://github.com/folke/noice.nvim/commit/edd14df3515b106202fd0def749c3f1206c3bd8c))
+* **fzf:** message id ([a9fa1a2](https://github.com/folke/noice.nvim/commit/a9fa1a2ace124fcb752e356b3c52e962c3dcb8b8))
+* **nui:** redo layout when border changes ([0327de8](https://github.com/folke/noice.nvim/commit/0327de8b300d81f778b77f9178dec6ba41a0a4af))
+
 ## [4.1.0](https://github.com/folke/noice.nvim/compare/v4.0.1...v4.1.0) (2024-06-12)
 
 
