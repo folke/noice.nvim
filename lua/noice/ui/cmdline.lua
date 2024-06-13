@@ -114,6 +114,7 @@ end
 function Cmdline:format(message, text_only)
   local format = self:get_format()
   message.fix_cr = false
+  message.title = nil
 
   if format.icon then
     message:append(NoiceText.virtual_text(format.icon, format.icon_hl_group))

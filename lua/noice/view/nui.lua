@@ -125,7 +125,7 @@ function NuiView:reset(old, new)
   if self._nui then
     local layout = false
     local diff = vim.tbl_filter(function(key)
-      if vim.tbl_contains({ "relative", "size", "position", "border" }, key) then
+      if vim.tbl_contains({ "relative", "size", "position" }, key) then
         layout = true
         return false
       end
