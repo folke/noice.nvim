@@ -116,7 +116,12 @@ function Cmdline:format(message, text_only)
   message.fix_cr = false
   message.title = nil
 
-  if format.icon then
+  local use_input = self.state.prompt ~= ""
+    and format.view == "cmdline_input"
+    and #self.state.prompt <= 60
+    and not self.state.prompt:find("\n")
+
+  if format.icon and (format.name ~= "input" or use_input) then
     message:append(NoiceText.virtual_text(format.icon, format.icon_hl_group))
     message:append(" ")
   end
@@ -126,7 +131,7 @@ function Cmdline:format(message, text_only)
   end
 
   if self.state.prompt ~= "" then
-    if format.view == "cmdline_input" then
+    if use_input then
       message.title = " " .. self.state.prompt:gsub("%s*:%s*$", "") .. " "
     else
       message:append(self.state.prompt, "NoiceCmdlinePrompt")
@@ -230,7 +235,8 @@ function M.fix_cursor()
   local win = M.position.win
   local cursor = M.position.cursor
   if vim.api.nvim_win_is_valid(win) then
-    vim.api.nvim_win_set_cursor(win, { 1, cursor })
+    local height = vim.api.nvim_buf_line_count(M.position.buf)
+    vim.api.nvim_win_set_cursor(win, { height, cursor })
     vim.api.nvim_win_call(win, function()
       local width = vim.api.nvim_win_get_width(win)
       local leftcol = math.max(cursor - width + 1, 0)
