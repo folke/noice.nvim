@@ -1,5 +1,12 @@
 # Changelog
 
+## [4.2.1](https://github.com/folke/noice.nvim/compare/v4.2.0...v4.2.1) (2024-06-15)
+
+
+### Bug Fixes
+
+* **cmdline:** only use cmdline_input for short prompts without newline. Fixes [#856](https://github.com/folke/noice.nvim/issues/856) ([d46c4ba](https://github.com/folke/noice.nvim/commit/d46c4ba67670037bc67af843b95314749caeebf8))
+
 ## [4.2.0](https://github.com/folke/noice.nvim/compare/v4.1.0...v4.2.0) (2024-06-13)
 
 
