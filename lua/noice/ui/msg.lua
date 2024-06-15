@@ -153,6 +153,10 @@ function M.on_confirm(event, kind, content)
   if State.skip(event, kind, content) then
     return
   end
+  local prev = Manager.get({ event = event, kind = kind }, { history = true })[1]
+  if prev then
+    Manager.remove(prev)
+  end
   local message = Message(event, kind, content)
   if not message:content():find("%s+$") then
     message:append(" ")
