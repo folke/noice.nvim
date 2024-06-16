@@ -1,5 +1,13 @@
 # Changelog
 
+## [4.2.2](https://github.com/folke/noice.nvim/compare/v4.2.1...v4.2.2) (2024-06-16)
+
+
+### Bug Fixes
+
+* **hover:** ignore invalid markup. Fixes [#819](https://github.com/folke/noice.nvim/issues/819) ([59e633f](https://github.com/folke/noice.nvim/commit/59e633ff95be85cf65ac5dc5ece2a89c2b6c403d))
+* **msg:** clear existing confirm messages. Fixes [#302](https://github.com/folke/noice.nvim/issues/302) ([d3d8329](https://github.com/folke/noice.nvim/commit/d3d83292c15cb8a72e1e421ddf5a0aac7812cb9c))
+
 ## [4.2.1](https://github.com/folke/noice.nvim/compare/v4.2.0...v4.2.1) (2024-06-15)
 
 
