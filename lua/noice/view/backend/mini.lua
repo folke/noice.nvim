@@ -31,6 +31,9 @@ end
 
 function MiniView:update_options()
   self._opts = vim.tbl_deep_extend("force", defaults, self._opts)
+  if self.view then
+    self.view:update_options()
+  end
 end
 
 ---@param message NoiceMessage
