@@ -236,17 +236,17 @@ function M.anchor(width, height)
 end
 
 function M.scroll(win, delta)
-  local info = vim.fn.getwininfo(win)[1] or {}
-  local top = info.topline or 1
-  local buf = vim.api.nvim_win_get_buf(win)
+  Util.wo(win, { scrolloff = 0 })
+  local view = vim.api.nvim_win_call(win, vim.fn.winsaveview)
+  local height = vim.api.nvim_win_get_height(win)
+  local top = view.topline
   top = top + delta
   top = math.max(top, 1)
-  top = math.min(top, M.win_buf_height(win) - info.height + 1)
+  top = math.min(top, M.win_buf_height(win) - height + 1)
 
   vim.defer_fn(function()
-    vim.api.nvim_buf_call(buf, function()
-      vim.api.nvim_command("noautocmd silent! normal! " .. top .. "zt")
-      vim.api.nvim_exec_autocmds("WinScrolled", { modeline = false })
+    vim.api.nvim_win_call(win, function()
+      vim.fn.winrestview({ topline = top, lnum = top })
     end)
   end, 0)
 end
