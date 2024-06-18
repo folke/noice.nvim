@@ -227,14 +227,10 @@ M.defaults = {
   },
   cmdline_input = {
     view = "cmdline_popup",
-    -- relative = "cursor",
-    -- anchor = "auto",
-    -- position = { row = 2, col = 2 },
-    -- size = {
-    --   min_width = 20,
-    --   width = "auto",
-    --   height = "auto",
-    -- },
+    border = {
+      style = "rounded",
+      padding = { 0, 1 },
+    },
   },
   confirm = {
     backend = "popup",
