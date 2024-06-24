@@ -16,7 +16,7 @@ M._running = false
 ---@param data {client_id: integer, params: lsp.ProgressParams}
 function M.progress(data)
   local client_id = data.client_id
-  local params = data.params or data.result  -- TODO: Remove data.result after nvim 0.10 release
+  local params = data.params or data.result -- TODO: Remove data.result after nvim 0.10 release
   local id = client_id .. "." .. params.token
 
   local message = M._progress[id]
