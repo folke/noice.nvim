@@ -1,5 +1,19 @@
 # Changelog
 
+## [4.3.0](https://github.com/folke/noice.nvim/compare/v4.2.2...v4.3.0) (2024-06-23)
+
+
+### Features
+
+* allow to press Enter to open a window to view message content in telescope ([#796](https://github.com/folke/noice.nvim/issues/796)) ([88ac368](https://github.com/folke/noice.nvim/commit/88ac36864b5976a64b14a8f156c616f41b32f228))
+
+
+### Bug Fixes
+
+* **cmdline_input:** force a border. Set cmdline input view to something else if you don't want inputprompt in a title. Closes [#866](https://github.com/folke/noice.nvim/issues/866) ([d38ca25](https://github.com/folke/noice.nvim/commit/d38ca2535fb750b835bbfff1948f7f729494b804))
+* **mini:** update view options of underlying view. See [#685](https://github.com/folke/noice.nvim/issues/685) ([7ee3649](https://github.com/folke/noice.nvim/commit/7ee3649b9b5f4df5b44ae63ed85b2c9fc834a124))
+* **scrollbar:** fix scrollbar. Fixes [#759](https://github.com/folke/noice.nvim/issues/759). Fixes [#727](https://github.com/folke/noice.nvim/issues/727) ([e292a01](https://github.com/folke/noice.nvim/commit/e292a011d5cf331f35e4d0ffdd6bd6e644a1fcef))
+
 ## [4.2.2](https://github.com/folke/noice.nvim/compare/v4.2.1...v4.2.2) (2024-06-16)
 
 
