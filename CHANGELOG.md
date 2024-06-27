@@ -1,5 +1,13 @@
 # Changelog
 
+## [4.3.1](https://github.com/folke/noice.nvim/compare/v4.3.0...v4.3.1) (2024-06-27)
+
+
+### Bug Fixes
+
+* **pkg:** and don't set event either ([01d57f9](https://github.com/folke/noice.nvim/commit/01d57f9666a4f2a22f9c1f4e549946083f8a827b))
+* **pkg:** don't set `opts = {}`. Too many people manually call setup, so that would break their setup. Sigh.. ([bf971a9](https://github.com/folke/noice.nvim/commit/bf971a9072e738d543aaa8e1fc4b653cebc64db9))
+
 ## [4.3.0](https://github.com/folke/noice.nvim/compare/v4.2.2...v4.3.0) (2024-06-23)
 
 
