@@ -3,6 +3,5 @@ return {
   { "MunifTanjim/nui.nvim", lazy = true },
   {
     "folke/noice.nvim",
-    event = "VeryLazy", -- load noice on the VeryLazy event
   },
 }
