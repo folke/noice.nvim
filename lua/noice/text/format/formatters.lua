@@ -1,7 +1,7 @@
 local require = require("noice.util.lazy")
 
-local Util = require("noice.util")
 local NoiceText = require("noice.text")
+local Util = require("noice.util")
 
 local M = {}
 

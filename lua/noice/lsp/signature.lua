@@ -1,11 +1,11 @@
 local require = require("noice.util.lazy")
 
-local NoiceText = require("noice.text")
+local Config = require("noice.config")
+local Docs = require("noice.lsp.docs")
 local Format = require("noice.lsp.format")
 local Markdown = require("noice.text.markdown")
-local Config = require("noice.config")
+local NoiceText = require("noice.text")
 local Util = require("noice.util")
-local Docs = require("noice.lsp.docs")
 
 ---@class SignatureInformation
 ---@field label string

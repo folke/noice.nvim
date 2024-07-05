@@ -1,14 +1,14 @@
 local require = require("noice.util.lazy")
 
 local Config = require("noice.config")
-local Manager = require("noice.message.manager")
 local Format = require("noice.text.format")
-local pickers = require("telescope.pickers")
+local Manager = require("noice.message.manager")
 local finders = require("telescope.finders")
+local pickers = require("telescope.pickers")
 local conf = require("telescope.config").values
-local previewers = require("telescope.previewers")
-local actions = require("telescope.actions")
 local action_state = require("telescope.actions.state")
+local actions = require("telescope.actions")
+local previewers = require("telescope.previewers")
 
 local M = {}
 
@@ -66,10 +66,12 @@ function M.mappings()
     actions.select_default:replace(function()
       actions.close(prompt_bufnr)
       local selection = action_state.get_selected_entry()
-      if selection == nil then return end
+      if selection == nil then
+        return
+      end
 
       local buf = vim.api.nvim_create_buf(false, true)
-      vim.api.nvim_buf_set_keymap(buf, 'n', 'q', ':q<CR>', { silent = true })
+      vim.api.nvim_buf_set_keymap(buf, "n", "q", ":q<CR>", { silent = true })
 
       local message = Format.format(selection.message, "telescope_preview")
       message:render(buf, Config.ns)
@@ -80,7 +82,6 @@ function M.mappings()
       local height = math.ceil(lines * 0.8 - 4)
       local left = math.ceil((cols - width) * 0.5)
       local top = math.ceil((lines - height) * 0.5)
-
 
       local win = vim.api.nvim_open_win(buf, true, {
         relative = "editor",
@@ -93,7 +94,7 @@ function M.mappings()
       })
 
       vim.api.nvim_win_set_option(win, "wrap", true)
-      vim.api.nvim_buf_set_option(buf, 'modifiable', false)
+      vim.api.nvim_buf_set_option(buf, "modifiable", false)
     end)
 
     return true

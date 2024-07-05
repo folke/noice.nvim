@@ -1,8 +1,8 @@
 local require = require("noice.util.lazy")
 
-local View = require("noice.view")
-local Util = require("noice.util")
 local Scrollbar = require("noice.view.scrollbar")
+local Util = require("noice.util")
+local View = require("noice.view")
 
 local uv = vim.uv or vim.loop
 

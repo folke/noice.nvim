@@ -1,10 +1,10 @@
 local require = require("noice.util.lazy")
 
-local fzf = require("fzf-lua")
-local builtin = require("fzf-lua.previewer.builtin")
 local Config = require("noice.config")
-local Manager = require("noice.message.manager")
 local Format = require("noice.text.format")
+local Manager = require("noice.message.manager")
+local builtin = require("fzf-lua.previewer.builtin")
+local fzf = require("fzf-lua")
 
 local M = {}
 

@@ -1,5 +1,5 @@
-local require = require("noice.util.lazy")
 local Util = require("noice.util")
+local require = require("noice.util.lazy")
 
 local Markdown = require("noice.text.markdown")
 

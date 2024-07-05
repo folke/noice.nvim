@@ -1,7 +1,7 @@
 local require = require("noice.util.lazy")
 
-local Manager = require("noice.message.manager")
 local Config = require("noice.config")
+local Manager = require("noice.message.manager")
 
 ---@type NoiceFilter
 local nothing = { ["not"] = {} }

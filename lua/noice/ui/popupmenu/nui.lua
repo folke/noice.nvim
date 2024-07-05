@@ -1,12 +1,12 @@
 local require = require("noice.util.lazy")
 
-local Util = require("noice.util")
-local Config = require("noice.config")
-local Menu = require("nui.menu")
 local Api = require("noice.api")
+local Config = require("noice.config")
+local Highlights = require("noice.config.highlights")
+local Menu = require("nui.menu")
 local NuiLine = require("nui.line")
 local Scrollbar = require("noice.view.scrollbar")
-local Highlights = require("noice.config.highlights")
+local Util = require("noice.util")
 
 local M = {}
 ---@type NuiMenu|NuiTree

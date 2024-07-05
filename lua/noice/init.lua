@@ -1,8 +1,8 @@
 local require = require("noice.util.lazy")
 
-local Health = require("noice.health")
 local Api = require("noice.api")
 local Config = require("noice.config")
+local Health = require("noice.health")
 
 local M = {}
 

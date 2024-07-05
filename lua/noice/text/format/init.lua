@@ -1,10 +1,10 @@
 local require = require("noice.util.lazy")
 
-local Util = require("noice.util")
 local Config = require("noice.config")
 local FormatConfig = require("noice.config.format")
 local Formatters = require("noice.text.format.formatters")
 local NuiText = require("nui.text")
+local Util = require("noice.util")
 
 local M = {}
 

@@ -1,9 +1,9 @@
 local require = require("noice.util.lazy")
 
 local Config = require("noice.config")
-local Util = require("noice.util")
-local Router = require("noice.message.router")
 local Manager = require("noice.message.manager")
+local Router = require("noice.message.router")
+local Util = require("noice.util")
 
 ---@alias NoiceEvent MsgEvent|CmdlineEvent|NotifyEvent|LspEvent
 ---@alias NoiceKind MsgKind|NotifyLevel|LspKind

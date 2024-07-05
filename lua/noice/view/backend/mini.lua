@@ -1,8 +1,8 @@
 local require = require("noice.util.lazy")
 
-local View = require("noice.view")
 local NuiView = require("noice.view.nui")
 local Util = require("noice.util")
+local View = require("noice.view")
 
 ---@class NoiceMiniOptions
 ---@field timeout integer
@@ -13,7 +13,7 @@ local defaults = { timeout = 5000 }
 ---@field active table<number, NoiceMessage>
 ---@field super NoiceView
 ---@field view? NuiView
----@field timers table<number, vim.loop.Timer>
+---@field timers table<number, uv_timer_t>
 ---@diagnostic disable-next-line: undefined-field
 local MiniView = View:extend("MiniView")
 
@@ -30,7 +30,7 @@ function MiniView:init(opts)
 end
 
 function MiniView:update_options()
-  self._opts = vim.tbl_deep_extend("force", defaults, self._opts)
+  self._opts = vim.tbl_deep_extend("force", defaults, self._opts) --[[@as NoiceViewOptions]]
   if self.view then
     self.view:update_options()
   end

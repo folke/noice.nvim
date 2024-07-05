@@ -1,7 +1,7 @@
 local require = require("noice.util.lazy")
 
-local Hacks = require("noice.util.hacks")
 local Config = require("noice.config")
+local Hacks = require("noice.util.hacks")
 
 local M = {}
 

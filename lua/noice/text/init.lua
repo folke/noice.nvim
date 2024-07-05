@@ -1,9 +1,9 @@
 local require = require("noice.util.lazy")
 
-local NuiText = require("nui.text")
-local Treesitter = require("noice.text.treesitter")
-local Syntax = require("noice.text.syntax")
 local Markdown = require("noice.text.markdown")
+local NuiText = require("nui.text")
+local Syntax = require("noice.text.syntax")
+local Treesitter = require("noice.text.treesitter")
 
 ---@class NoiceExtmark
 ---@field col? number

@@ -1,7 +1,7 @@
 local require = require("noice.util.lazy")
 
-local Util = require("noice.util")
 local Config = require("noice.config")
+local Util = require("noice.util")
 
 ---@class NoicePreset: NoiceConfig
 ---@field enabled? boolean

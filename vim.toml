@@ -5,42 +5,17 @@ name = "vim"
 [vim]
 any = true
 
-[[describe.args]]
-type = "string"
-[[describe.args]]
-type = "function"
-
-[[it.args]]
-type = "string"
-[[it.args]]
-type = "function"
-
-[[before_each.args]]
-type = "function"
-[[after_each.args]]
-type = "function"
-
-[assert.is_not]
+[jit]
 any = true
 
-[[assert.equals.args]]
-type = "any"
-[[assert.equals.args]]
-type = "any"
-[[assert.equals.args]]
-type = "any"
-required = false
+[assert]
+any = true
 
-[[assert.same.args]]
-type = "any"
-[[assert.same.args]]
-type = "any"
+[describe]
+any = true
 
-[[assert.truthy.args]]
-type = "any"
+[it]
+any = true
 
-[[assert.spy.args]]
-type = "any"
-
-[[assert.stub.args]]
-type = "any"
+[before_each.args]
+any = true

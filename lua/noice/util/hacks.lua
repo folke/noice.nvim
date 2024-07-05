@@ -1,9 +1,9 @@
 local require = require("noice.util.lazy")
 
-local Util = require("noice.util")
-local Router = require("noice.message.router")
 local Api = require("noice.api")
 local Cmdline = require("noice.ui.cmdline")
+local Router = require("noice.message.router")
+local Util = require("noice.util")
 
 -- HACK: a bunch of hacks to make Noice behave
 local M = {}

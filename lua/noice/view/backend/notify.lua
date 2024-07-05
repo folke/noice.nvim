@@ -1,9 +1,9 @@
 local require = require("noice.util.lazy")
 
-local Util = require("noice.util")
-local View = require("noice.view")
 local Manager = require("noice.message.manager")
 local NuiText = require("nui.text")
+local Util = require("noice.util")
+local View = require("noice.view")
 
 ---@class NoiceNotifyOptions
 ---@field title string

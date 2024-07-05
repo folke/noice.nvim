@@ -1,9 +1,9 @@
 local require = require("noice.util.lazy")
 
-local Util = require("noice.util")
 local Config = require("noice.config")
 local Lsp = require("noice.lsp")
 local Treesitter = require("noice.text.treesitter")
+local Util = require("noice.util")
 
 local start = vim.health.start or vim.health.report_start
 local ok = vim.health.ok or vim.health.report_ok

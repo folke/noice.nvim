@@ -1,7 +1,7 @@
 local require = require("noice.util.lazy")
 
-local NoiceText = require("noice.text")
 local Config = require("noice.config")
+local NoiceText = require("noice.text")
 
 ---@alias MarkdownBlock {line:string}
 ---@alias MarkdownCodeBlock {code:string[], lang:string}

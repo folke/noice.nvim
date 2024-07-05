@@ -1,9 +1,9 @@
 local require = require("noice.util.lazy")
 
+local Config = require("noice.config")
+local Docs = require("noice.lsp.docs")
 local Format = require("noice.lsp.format")
 local Util = require("noice.util")
-local Docs = require("noice.lsp.docs")
-local Config = require("noice.config")
 
 local M = {}
 

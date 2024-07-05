@@ -1,10 +1,10 @@
 local require = require("noice.util.lazy")
 
+local Cmdline = require("noice.ui.cmdline")
+local Hacks = require("noice.util.hacks")
 local Manager = require("noice.message.manager")
 local Message = require("noice.message")
-local Hacks = require("noice.util.hacks")
 local State = require("noice.ui.state")
-local Cmdline = require("noice.ui.cmdline")
 
 local M = {}
 

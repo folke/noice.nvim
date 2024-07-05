@@ -1,10 +1,10 @@
-local require = require("noice.util.lazy")
 local Markdown = require("noice.text.markdown")
+local require = require("noice.util.lazy")
 
 local Config = require("noice.config")
 local Format = require("noice.lsp.format")
-local Message = require("noice.message")
 local Hacks = require("noice.util.hacks")
+local Message = require("noice.message")
 
 local M = {}
 

@@ -1,11 +1,11 @@
 local require = require("noice.util.lazy")
 
-local View = require("noice.view")
-local Manager = require("noice.message.manager")
 local Config = require("noice.config")
-local Util = require("noice.util")
+local Manager = require("noice.message.manager")
 local Message = require("noice.message")
 local Router = require("noice.message.router")
+local Util = require("noice.util")
+local View = require("noice.view")
 
 ---@class NoiceCommand: NoiceRouteConfig
 ---@field filter_opts NoiceMessageOpts
