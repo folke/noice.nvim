@@ -206,12 +206,11 @@ function M.show(state)
     M.create(items, opts)
   end
 
+  M.on_select(state, false)
   -- redraw is needed when in blocking mode
   if Util.is_blocking() then
     Util.redraw()
   end
-
-  M.on_select(state)
 end
 
 ---@param opts _.NuiPopupOptions
@@ -225,6 +224,7 @@ function M.create(items, opts)
   if M.menu.border then
     Util.tag(M.menu.border.bufnr, "popupmenu.border")
   end
+  vim.wo[M.menu.winid].cursorline = false
 
   M.scroll = Scrollbar({
     winnr = M.menu.winid,
@@ -239,10 +239,19 @@ function M.on_show(state)
 end
 
 ---@param state Popupmenu
-function M.on_select(state)
-  if M.menu and state.selected ~= -1 then
-    vim.api.nvim_win_set_cursor(M.menu.winid, { state.selected + 1, 0 })
-    vim.api.nvim_exec_autocmds("WinScrolled", { modeline = false })
+---@param redraw? boolean
+function M.on_select(state, redraw)
+  if M.menu then
+    if state.selected == -1 then
+      vim.wo[M.menu.winid].cursorline = false
+    else
+      vim.wo[M.menu.winid].cursorline = true
+      vim.api.nvim_win_set_cursor(M.menu.winid, { state.selected + 1, 0 })
+      vim.api.nvim_exec_autocmds("WinScrolled", { modeline = false })
+      if redraw ~= false and Util.is_blocking() then
+        Util.redraw()
+      end
+    end
   end
 end
 
