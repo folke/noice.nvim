@@ -12,4 +12,3 @@ jobs:
     with:
       plugin: noice.nvim
       repo: folke/noice.nvim
-      tests: true
