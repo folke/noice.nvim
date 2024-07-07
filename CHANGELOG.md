@@ -1,5 +1,17 @@
 # Changelog
 
+## [4.4.0](https://github.com/folke/noice.nvim/compare/v4.3.1...v4.4.0) (2024-07-06)
+
+
+### Features
+
+* **popupmenu:** add option to hide scrollbar in popupmenu views. ([#686](https://github.com/folke/noice.nvim/issues/686)) ([cd0cd97](https://github.com/folke/noice.nvim/commit/cd0cd97c40fd8594bc727edab16c9e4a0e43dce0))
+
+
+### Bug Fixes
+
+* **popupmenu:** respect noselect. Fixes [#758](https://github.com/folke/noice.nvim/issues/758) ([d27b118](https://github.com/folke/noice.nvim/commit/d27b118dac86d3a01b025f8a26a33683125ee69e))
+
 ## [4.3.1](https://github.com/folke/noice.nvim/compare/v4.3.0...v4.3.1) (2024-06-27)
 
 
