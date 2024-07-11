@@ -241,7 +241,7 @@ M.defaults = {
     zindex = 210,
     format = { "{confirm}" },
     position = {
-      row = "50%",
+      row = 3,
       col = "50%",
     },
     size = "auto",
