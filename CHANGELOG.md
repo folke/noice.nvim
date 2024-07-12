@@ -1,5 +1,12 @@
 # Changelog
 
+## [4.4.1](https://github.com/folke/noice.nvim/compare/v4.4.0...v4.4.1) (2024-07-12)
+
+
+### Bug Fixes
+
+* **views:** show confirm at the top so it doesn't obscure the buffer ([2a97893](https://github.com/folke/noice.nvim/commit/2a9789310b6b87e197f27c36e5667a9f1bb4bb24))
+
 ## [4.4.0](https://github.com/folke/noice.nvim/compare/v4.3.1...v4.4.0) (2024-07-06)
 
 
