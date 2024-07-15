@@ -18,9 +18,18 @@ local _id = 0
 ---@field cmdline? NoiceCmdline
 ---@field _debug? boolean
 ---@field opts table<string, any>
+---@field _buf_messages table<integer, table<number, true>>
 ---@overload fun(event: NoiceEvent, kind?: NoiceKind, content?: NoiceContent|NoiceContent[]): NoiceMessage
 ---@diagnostic disable-next-line: undefined-field
 local Message = Block:extend("NoiceBlock")
+
+Message._buf_messages = {}
+vim.api.nvim_create_autocmd('BufDelete', {
+  group = vim.api.nvim_create_augroup('noice.message', { clear = true }),
+  callback = function(args)
+      Message._buf_messages[args.buf] = nil
+  end,
+})
 
 ---@param event NoiceEvent
 ---@param kind? NoiceKind
@@ -74,9 +83,7 @@ end
 function Message:on_remove()
   for _, buf in ipairs(vim.api.nvim_list_bufs()) do
     if self:on_buf(buf) then
-      vim.b[buf].messages = vim.tbl_filter(function(b)
-        return b ~= buf
-      end, vim.b[buf].messages)
+      self._buf_messages[buf][self.id] = nil
     end
   end
 end
@@ -86,13 +93,13 @@ function Message:on_win(win)
 end
 
 function Message:on_buf(buf)
-  return vim.b[buf].messages and vim.tbl_contains(vim.b[buf].messages, self.id)
+  return self._buf_messages[buf] and (not not self._buf_messages[buf][self.id])
 end
 
 function Message:_add_buf(buf)
-  local bufs = vim.b[buf].messages or {}
-  table.insert(bufs, self.id)
-  vim.b[buf].messages = bufs
+  local msgs = self._buf_messages[buf] or {}
+  msgs[self.id] = true
+  self._buf_messages[buf] = msgs
 end
 
 ---@param bufnr number buffer number
