@@ -1,5 +1,9 @@
 local M = {}
 
+local function fix(str)
+  return str:gsub("[^%w_%.%-]+", "_")
+end
+
 --- Highlights a region of the buffer with a given language
 ---@param buf buffer buffer to highlight. Defaults to the current buffer if 0
 ---@param ns number namespace for the highlights
@@ -7,6 +11,7 @@ local M = {}
 ---@param lang string treesitter language
 function M.highlight(buf, ns, range, lang)
   vim.api.nvim_buf_call(buf, function()
+    lang = fix(lang)
     local group = "@" .. lang:upper()
 
     -- HACK: reset current_syntax, since some syntax files like markdown won't load if it is already set
