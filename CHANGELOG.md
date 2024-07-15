@@ -1,5 +1,12 @@
 # Changelog
 
+## [4.4.2](https://github.com/folke/noice.nvim/compare/v4.4.1...v4.4.2) (2024-07-15)
+
+
+### Performance Improvements
+
+* **message:** replace vim.b.messages with lua variable ([#898](https://github.com/folke/noice.nvim/issues/898)) ([7ecc05d](https://github.com/folke/noice.nvim/commit/7ecc05d44c3ed8b9bfa5f6196c0da41d58f93218))
+
 ## [4.4.1](https://github.com/folke/noice.nvim/compare/v4.4.0...v4.4.1) (2024-07-12)
 
 
