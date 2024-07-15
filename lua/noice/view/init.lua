@@ -3,9 +3,9 @@ local require = require("noice.util.lazy")
 local Config = require("noice.config")
 local ConfigViews = require("noice.config.views")
 local Format = require("noice.text.format")
+local Message = require("noice.message")
 local Object = require("nui.object")
 local Util = require("noice.util")
-local Message = require("noice.message")
 
 ---@class NoiceViewBaseOptions
 ---@field buf_options? table<string,any>

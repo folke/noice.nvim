@@ -24,10 +24,10 @@ local _id = 0
 local Message = Block:extend("NoiceBlock")
 
 Message._buf_messages = {}
-vim.api.nvim_create_autocmd('BufDelete', {
-  group = vim.api.nvim_create_augroup('noice.message', { clear = true }),
+vim.api.nvim_create_autocmd("BufDelete", {
+  group = vim.api.nvim_create_augroup("noice.message", { clear = true }),
   callback = function(args)
-      Message._buf_messages[args.buf] = nil
+    Message._buf_messages[args.buf] = nil
   end,
 })
 
@@ -93,7 +93,7 @@ function Message:on_win(win)
 end
 
 function Message:on_buf(buf)
-  return self._buf_messages[buf] and (not not self._buf_messages[buf][self.id])
+  return self._buf_messages[buf] and not not self._buf_messages[buf][self.id]
 end
 
 function Message:_add_buf(buf)
