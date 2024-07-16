@@ -1,5 +1,13 @@
 # Changelog
 
+## [4.4.3](https://github.com/folke/noice.nvim/compare/v4.4.2...v4.4.3) (2024-07-16)
+
+
+### Bug Fixes
+
+* **mini:** no need to show scrollbar ([c661f95](https://github.com/folke/noice.nvim/commit/c661f955055b7341768b044160002b25bddd24af))
+* **syntax:** prevent invalid group names. Closes [#903](https://github.com/folke/noice.nvim/issues/903) ([3b5ea55](https://github.com/folke/noice.nvim/commit/3b5ea551448bd769976428458c11ae3f5849b7ba))
+
 ## [4.4.2](https://github.com/folke/noice.nvim/compare/v4.4.1...v4.4.2) (2024-07-15)
 
 
