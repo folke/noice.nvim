@@ -26,6 +26,7 @@ function MiniView:init(opts)
   view_opts.type = "popup"
   view_opts.format = { "{message}" }
   view_opts.timeout = nil
+  view_opts.scrollbar = false
   self.view = NuiView(view_opts)
 end
 
