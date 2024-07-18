@@ -233,7 +233,6 @@ function M.create(items, opts)
     })
     M.scroll:mount()
   end
-  M.scroll:mount()
 end
 
 ---@param state Popupmenu

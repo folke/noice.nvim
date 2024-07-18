@@ -290,8 +290,11 @@ function NuiView:show()
   end
 
   if self._scroll then
-    self._scroll.winnr = self._nui.winid
-    self._scroll:show()
+    if self._scroll.winnr ~= self._nui.winid then
+      self._scroll.winnr = self._nui.winid
+      self._scroll:mount()
+    end
+    self._scroll:update()
   end
   self:fix_border()
   self:autohide()

@@ -39,7 +39,12 @@ function Scrollbar:init(opts)
 end
 
 function Scrollbar:mount()
-  self.autocmd_id = vim.api.nvim_create_autocmd({ "WinScrolled", "CursorMoved" }, {
+  if self.autocmd_id then
+    vim.api.nvim_del_autocmd(self.autocmd_id)
+    self.autocmd_id = nil
+  end
+  self.autocmd_id = vim.api.nvim_create_autocmd("WinScrolled", {
+    pattern = tostring(self.winnr),
     callback = function()
       self:update()
     end,
@@ -158,7 +163,7 @@ function Scrollbar:_open_win(opts)
       noautocmd = true,
     }),
   }
-  vim.api.nvim_win_set_option(ret.winnr, "winhighlight", "Normal:" .. opts.normal)
+  vim.api.nvim_set_option_value("winhighlight", "Normal:" .. opts.normal, { win = ret.winnr })
   return ret
 end
 
