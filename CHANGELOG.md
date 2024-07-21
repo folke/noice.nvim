@@ -1,5 +1,18 @@
 # Changelog
 
+## [4.4.4](https://github.com/folke/noice.nvim/compare/v4.4.3...v4.4.4) (2024-07-21)
+
+
+### Bug Fixes
+
+* **hacks:** schedule fixing cmp. Fixes [#910](https://github.com/folke/noice.nvim/issues/910) ([b7515c0](https://github.com/folke/noice.nvim/commit/b7515c038ad9047e0332ca379a71d7640f53c919))
+* remove a bunch of hacks that are no longer needed ([5e55d0d](https://github.com/folke/noice.nvim/commit/5e55d0d46f672077f6ae0b69f4f6dfeb63b9ea33))
+
+
+### Performance Improvements
+
+* **scrollbar:** only show when needed ([7723c2b](https://github.com/folke/noice.nvim/commit/7723c2b1e699708dbe3b2717b21088a09f0eec75))
+
 ## [4.4.3](https://github.com/folke/noice.nvim/compare/v4.4.2...v4.4.3) (2024-07-16)
 
 
