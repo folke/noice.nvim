@@ -171,13 +171,15 @@ function M.on_module(module, fn)
   end
 
   package.preload[module] = function()
+    if type(package.loaded[module]) == "table" then
+      return on()
+    end
     package.preload[module] = nil
     for _, loader in ipairs(package.loaders) do
       local ret = loader(module)
       if type(ret) == "function" then
-        local mod = ret()
         on()
-        return mod
+        return ret()
       end
     end
   end
