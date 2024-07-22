@@ -1,5 +1,12 @@
 # Changelog
 
+## [4.4.5](https://github.com/folke/noice.nvim/compare/v4.4.4...v4.4.5) (2024-07-22)
+
+
+### Bug Fixes
+
+* **hacks:** cmp loading ([4f5d1b8](https://github.com/folke/noice.nvim/commit/4f5d1b89daa5b5db4a85f3badf35d0e7eea86308))
+
 ## [4.4.4](https://github.com/folke/noice.nvim/compare/v4.4.3...v4.4.4) (2024-07-21)
 
 
