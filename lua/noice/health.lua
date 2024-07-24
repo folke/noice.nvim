@@ -227,7 +227,6 @@ function M.get_source(fn)
   end
   return ret
 end
-M.check({ checkhealth = false })
 
 M.checker = Util.interval(1000, function()
   if Config.is_running() then
