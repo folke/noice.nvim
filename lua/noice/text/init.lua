@@ -113,7 +113,7 @@ function NoiceText:highlight(bufnr, ns_id, linenr, byte_start)
   end
 
   if self.enabled ~= false then
-    NoiceText.super.highlight(self, bufnr, ns_id, linenr, byte_start)
+    pcall(NoiceText.super.highlight, self, bufnr, ns_id, linenr, byte_start)
   end
 
   if self.on_render then
