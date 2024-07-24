@@ -161,27 +161,18 @@ function M.show_cursor()
   end
 end
 
+---@param modname string
 ---@param fn fun(mod)
-function M.on_module(module, fn)
-  local on = vim.schedule_wrap(function()
-    fn(package.loaded[module])
-  end)
-  if package.loaded[module] ~= nil then
-    return on()
+function M.on_module(modname, fn)
+  if type(package.loaded[modname]) == "table" then
+    return fn(package.loaded[modname])
   end
-
-  package.preload[module] = function()
-    if type(package.loaded[module]) == "table" then
-      return on()
-    end
-    package.preload[module] = nil
-    for _, loader in ipairs(package.loaders) do
-      local ret = loader(module)
-      if type(ret) == "function" then
-        on()
-        return ret()
-      end
-    end
+  package.preload[modname] = function()
+    package.preload[modname] = nil
+    package.loaded[modname] = nil
+    local mod = require(modname)
+    fn(mod)
+    return mod
   end
 end
 
