@@ -1,5 +1,13 @@
 # Changelog
 
+## [4.4.6](https://github.com/folke/noice.nvim/compare/v4.4.5...v4.4.6) (2024-07-24)
+
+
+### Bug Fixes
+
+* **health:** dont check health on startup ([9df2913](https://github.com/folke/noice.nvim/commit/9df2913ee9b6440f65d4debf8d2eeec07c249dea))
+* **text:** deal with invalid extmark offsets. Fixes [#875](https://github.com/folke/noice.nvim/issues/875) ([15d63b8](https://github.com/folke/noice.nvim/commit/15d63b8da0a2c6b7ad2d3dbe7b473b78710c90f3))
+
 ## [4.4.5](https://github.com/folke/noice.nvim/compare/v4.4.4...v4.4.5) (2024-07-22)
 
 
