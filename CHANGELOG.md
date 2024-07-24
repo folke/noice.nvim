@@ -1,5 +1,12 @@
 # Changelog
 
+## [4.4.7](https://github.com/folke/noice.nvim/compare/v4.4.6...v4.4.7) (2024-07-24)
+
+
+### Bug Fixes
+
+* **hacks:** better on_module ([c2ba96e](https://github.com/folke/noice.nvim/commit/c2ba96e09c7544e0ebba2120765fb2a081983d7f))
+
 ## [4.4.6](https://github.com/folke/noice.nvim/compare/v4.4.5...v4.4.6) (2024-07-24)
 
 
