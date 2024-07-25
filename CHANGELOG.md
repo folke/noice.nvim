@@ -1,5 +1,12 @@
 # Changelog
 
+## [4.5.0](https://github.com/folke/noice.nvim/compare/v4.4.7...v4.5.0) (2024-07-25)
+
+
+### Features
+
+* redraw improvements ([1698725](https://github.com/folke/noice.nvim/commit/1698725a663aca56bcd07a0e405bc441a5f6613b))
+
 ## [4.4.7](https://github.com/folke/noice.nvim/compare/v4.4.6...v4.4.7) (2024-07-24)
 
 
