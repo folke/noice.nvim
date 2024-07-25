@@ -126,7 +126,6 @@ function NotifyView:_notify(msg)
 
   local opts = {
     title = msg.title or self._opts.title,
-    animate = not Util.is_blocking(),
     timeout = self._opts.timeout,
     replace = self._opts.replace and self.notif,
     keep = function()

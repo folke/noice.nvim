@@ -2,8 +2,8 @@ local require = require("noice.util.lazy")
 
 local Api = require("noice.api")
 local Cmdline = require("noice.ui.cmdline")
-local Router = require("noice.message.router")
 local Util = require("noice.util")
+local uv = vim.uv or vim.loop
 
 -- HACK: a bunch of hacks to make Noice behave
 local M = {}
@@ -19,11 +19,34 @@ function M.enable()
   M.reset_augroup()
   M.fix_cmp()
   M.fix_vim_sleuth()
+  M.fix_redraw()
 
   -- Hacks for Neovim < 0.10
   if vim.fn.has("nvim-0.10") == 0 then
     M.fix_incsearch()
   end
+end
+
+function M.fix_redraw()
+  local timer = uv.new_timer()
+  timer:start(
+    0,
+    30,
+    vim.schedule_wrap(function()
+      if not Util.is_search() then
+        if vim.api.nvim__redraw then
+          vim.api.nvim__redraw({ flush = true, cursor = true })
+        else
+          vim.cmd.redraw()
+        end
+      end
+      Cmdline.fix_cursor()
+    end)
+  )
+  table.insert(M._disable, function()
+    timer:stop()
+    timer:close()
+  end)
 end
 
 function M.fix_vim_sleuth()

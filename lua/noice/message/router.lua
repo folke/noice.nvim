@@ -107,18 +107,6 @@ function M.setup()
   end
 end
 
-function M.check_redraw()
-  if Util.is_blocking() and M._need_redraw then
-    -- don't do full redraw during search
-    if not (Util.is_search() and require("noice.ui.cmdline").real_cursor) then
-      -- NOTE: set to false before actually calling redraw to prevent a loop with ui
-      M._need_redraw = false
-      Util.redraw()
-    end
-    require("noice.ui.cmdline").fix_cursor()
-  end
-end
-
 function M.view_stats()
   local views = M.get_views()
   ---@type table<string,number>
@@ -168,7 +156,6 @@ function M.update()
 
   -- only update on changes
   if M._tick == Manager.tick() then
-    M.check_redraw()
     return
   end
 
@@ -239,7 +226,6 @@ function M.update()
     M._need_redraw = true
   end
 
-  M.check_redraw()
   M._updating = false
 end
 

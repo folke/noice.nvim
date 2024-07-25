@@ -35,7 +35,7 @@ M.real_cursor = vim.api.nvim__redraw ~= nil
 ---@field prompt string
 ---@field indent number
 ---@field level number
----@field block table
+---@field block? table
 
 ---@class CmdlineFormat
 ---@field name string
@@ -229,27 +229,24 @@ end
 M.position = nil
 
 function M.fix_cursor()
-  if not M.position then
+  local win = M.win()
+  if not win or not M.real_cursor then
     return
   end
-  local win = M.position.win
-  local cursor = M.position.cursor
-  if vim.api.nvim_win_is_valid(win) then
-    local height = vim.api.nvim_buf_line_count(M.position.buf)
-    vim.api.nvim_win_set_cursor(win, { height, cursor })
+  local cursor = { vim.api.nvim_buf_line_count(M.position.buf), M.position.cursor }
+  vim.api.nvim_win_set_cursor(win, cursor)
+  local leftcol = math.max(cursor[2] - vim.api.nvim_win_get_width(win) + 1, 0)
+  local view = vim.api.nvim_win_call(win, vim.fn.winsaveview)
+  if view.leftcol ~= leftcol then
     vim.api.nvim_win_call(win, function()
-      local width = vim.api.nvim_win_get_width(win)
-      local leftcol = math.max(cursor - width + 1, 0)
       vim.fn.winrestview({ leftcol = leftcol })
     end)
-    if M.real_cursor then
-      vim.cmd.redrawstatus()
-      vim.api.nvim__redraw({
-        cursor = true,
-        win = win,
-      })
-    end
   end
+  vim.api.nvim__redraw({ cursor = true, win = win })
+end
+
+function M.win()
+  return M.position and M.position.win and vim.api.nvim_win_is_valid(M.position.win) and M.position.win or nil
 end
 
 ---@param buf number
