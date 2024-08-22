@@ -35,7 +35,7 @@ function M.fix_redraw()
     vim.schedule_wrap(function()
       if not Util.is_search() then
         if vim.api.nvim__redraw then
-          vim.api.nvim__redraw({ flush = true, cursor = true })
+          vim.api.nvim__redraw({ flush = true, cursor = false })
         else
           vim.cmd.redraw()
         end
