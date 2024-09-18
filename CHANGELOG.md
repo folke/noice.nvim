@@ -1,5 +1,14 @@
 # Changelog
 
+## [4.5.1](https://github.com/folke/noice.nvim/compare/v4.5.0...v4.5.1) (2024-09-18)
+
+
+### Bug Fixes
+
+* dont redraw when exiting. Fixes [#936](https://github.com/folke/noice.nvim/issues/936). Fixes [#921](https://github.com/folke/noice.nvim/issues/921) ([8c6a024](https://github.com/folke/noice.nvim/commit/8c6a02438f869e79e4d343683bc198ebf4b10d49))
+* **hacks:** dont close timer multiple times during exit ([86a4891](https://github.com/folke/noice.nvim/commit/86a4891583d2374fbd6183c16ed46dc00ce37fba))
+* **hacks:** only redraw cursor when cmdline is active. Fixes [#950](https://github.com/folke/noice.nvim/issues/950). Fixes [#937](https://github.com/folke/noice.nvim/issues/937). Fixes [#923](https://github.com/folke/noice.nvim/issues/923) ([3373ab5](https://github.com/folke/noice.nvim/commit/3373ab568c7cbf83f1244eab922ece9aeccde1fb))
+
 ## [4.5.0](https://github.com/folke/noice.nvim/compare/v4.4.7...v4.5.0) (2024-07-25)
 
 
