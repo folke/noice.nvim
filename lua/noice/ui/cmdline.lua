@@ -253,31 +253,31 @@ end
 ---@param line number
 ---@param byte number
 function M.on_render(_, buf, line, byte)
-  Hacks.cmdline_force_redraw()
   local win = vim.fn.bufwinid(buf)
-  if win ~= -1 then
-    -- FIXME: check with cmp
-    -- FIXME: state.pos?
-    local cmdline_start = byte - (M.last():length() - M.last().offset)
-
-    local cursor = byte - M.last():length() + M.last().state.pos
-
-    local pos = vim.fn.screenpos(win, line, cmdline_start)
-    M.position = {
-      cursor = cursor,
-      buf = buf,
-      win = win,
-      bufpos = {
-        row = line,
-        col = cmdline_start,
-      },
-      screenpos = {
-        row = pos.row,
-        col = pos.col - 1,
-      },
-    }
-    pcall(M.fix_cursor)
+  if win == -1 then
+    return
   end
+
+  Hacks.cmdline_force_redraw()
+
+  local cmdline_start = byte - (M.last():length() - M.last().offset)
+  local cursor = byte - M.last():length() + M.last().state.pos
+  local pos = vim.fn.screenpos(win, line, cmdline_start)
+
+  M.position = {
+    cursor = cursor,
+    buf = buf,
+    win = win,
+    bufpos = {
+      row = line,
+      col = cmdline_start,
+    },
+    screenpos = {
+      row = pos.row,
+      col = pos.col - 1,
+    },
+  }
+  pcall(M.fix_cursor)
 end
 
 function M.last()
