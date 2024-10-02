@@ -1,5 +1,12 @@
 # Changelog
 
+## [4.5.2](https://github.com/folke/noice.nvim/compare/v4.5.1...v4.5.2) (2024-10-02)
+
+
+### Bug Fixes
+
+* **treesitter:** upstream API changes. Fixes [#962](https://github.com/folke/noice.nvim/issues/962) ([5070aae](https://github.com/folke/noice.nvim/commit/5070aaeab3d6bf3a422652e517830162afd404e0))
+
 ## [4.5.1](https://github.com/folke/noice.nvim/compare/v4.5.0...v4.5.1) (2024-09-18)
 
 
