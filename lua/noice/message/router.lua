@@ -15,7 +15,7 @@ local View = require("noice.view")
 ---@field skip boolean
 
 ---@class NoiceRouteConfig
----@field view string
+---@field view? string
 ---@field filter NoiceFilter
 ---@field opts? NoiceRouteOptions|NoiceViewOptions
 
