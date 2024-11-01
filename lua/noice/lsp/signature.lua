@@ -117,6 +117,14 @@ function M.on_attach(buf, client)
           buffer = buf,
           callback = callback,
         })
+        vim.api.nvim_create_autocmd("ModeChanged", {
+          buffer = buf,
+          callback = function(ev)
+            if ev.match == "v:s" then
+              callback(ev)
+            end
+          end,
+        })
       end
     end
   end
