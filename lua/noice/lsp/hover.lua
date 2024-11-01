@@ -7,10 +7,6 @@ local Util = require("noice.util")
 
 local M = {}
 
-function M.setup()
-  vim.lsp.handlers["textDocument/hover"] = M.on_hover
-end
-
 function M.on_hover(_, result, ctx)
   if not (result and result.contents) then
     if Config.options.lsp.hover.silent ~= true then

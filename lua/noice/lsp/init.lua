@@ -17,11 +17,12 @@ M.kinds = {
 
 function M.setup()
   if Config.options.lsp.hover.enabled then
-    require("noice.lsp.hover").setup()
+    vim.lsp.buf.hover = M.hover
   end
 
   if Config.options.lsp.signature.enabled then
     require("noice.lsp.signature").setup()
+    vim.lsp.buf.signature_help = M.signature
   end
 
   if Config.options.lsp.message.enabled then

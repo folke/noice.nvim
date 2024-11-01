@@ -144,14 +144,14 @@ function M.check(opts)
       {
         opt = "lsp.hover",
         enabled = Config.options.lsp.hover.enabled,
-        handler = vim.lsp.handlers["textDocument/hover"],
-        handler_str = 'vim.lsp.handlers["textDocument/hover"]',
+        handler = vim.lsp.buf.hover,
+        handler_str = "vim.lsp.buf.hover",
       },
       {
         opt = "lsp.signature",
         enabled = Config.options.lsp.signature.enabled,
-        handler = vim.lsp.handlers["textDocument/signatureHelp"],
-        handler_str = 'vim.lsp.handlers["textDocument/signatureHelp"]',
+        handler = vim.lsp.buf.signature_help,
+        handler_str = "vim.lsp.buf.signature_help",
       },
       {
         opt = "lsp.message",

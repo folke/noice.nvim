@@ -40,8 +40,6 @@ M.trigger_kind = {
 }
 
 function M.setup()
-  vim.lsp.handlers["textDocument/signatureHelp"] = M.on_signature
-
   if Config.options.lsp.signature.auto_open.enabled then
     -- attach to existing buffers
     for _, client in ipairs((vim.lsp.get_clients or vim.lsp.get_active_clients)()) do
