@@ -1,5 +1,21 @@
 # Changelog
 
+## [4.6.0](https://github.com/folke/noice.nvim/compare/v4.5.2...v4.6.0) (2024-11-02)
+
+
+### Features
+
+* **lsp:** make signature auto_open for snippets configurable ([0783e22](https://github.com/folke/noice.nvim/commit/0783e229e437941bfd624af0e551dd17bf064cd1))
+
+
+### Bug Fixes
+
+* **cmdline:** always flush cmdline in on_render. Fixes [#892](https://github.com/folke/noice.nvim/issues/892) ([973e10a](https://github.com/folke/noice.nvim/commit/973e10a001b50087db5f101d66b367d945607a07))
+* **lsp:** signature help for snippets ([3d5ad39](https://github.com/folke/noice.nvim/commit/3d5ad39f474c426ceacd13341f7599fcd3068aa2))
+* **lsp:** vim.lsp.handlers is deprecated for hover / signature_help. Fixes [#977](https://github.com/folke/noice.nvim/issues/977) ([3cd84d4](https://github.com/folke/noice.nvim/commit/3cd84d402e0b5a56cf06b6c7f644a3cc9a3956a6))
+* **mini:** show at most 10 mini messages at a time ([58ed320](https://github.com/folke/noice.nvim/commit/58ed320eeb86eac20fd1477c4027528a2a983c17))
+* redraw flush when needed. Fixes [#938](https://github.com/folke/noice.nvim/issues/938) ([c897bc8](https://github.com/folke/noice.nvim/commit/c897bc834c915fe4fa6a6de67b553994d1d267cc))
+
 ## [4.5.2](https://github.com/folke/noice.nvim/compare/v4.5.1...v4.5.2) (2024-10-02)
 
 
