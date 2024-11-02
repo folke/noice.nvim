@@ -224,6 +224,7 @@ function M.update()
   if not vim.tbl_isempty(updates) then
     Util.stats.track("router.update.updated")
     M._need_redraw = true
+    Util.redraw()
   end
 
   M._updating = false

@@ -37,11 +37,7 @@ function M.fix_redraw()
         return timer:stop()
       end
       if not Util.is_search() then
-        if vim.api.nvim__redraw then
-          vim.api.nvim__redraw({ flush = true })
-        else
-          vim.cmd.redraw()
-        end
+        Util.redraw()
       end
     end)
   )
