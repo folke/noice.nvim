@@ -242,7 +242,7 @@ function M.fix_cursor()
       vim.fn.winrestview({ leftcol = leftcol })
     end)
   end
-  vim.api.nvim__redraw({ cursor = true, win = win })
+  vim.api.nvim__redraw({ cursor = true, win = win, flush = true })
 end
 
 function M.win()
