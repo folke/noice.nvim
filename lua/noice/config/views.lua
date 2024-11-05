@@ -64,8 +64,21 @@ M.defaults = {
     hl_group = "NoiceVirtualText",
   },
   notify = {
+    view = "snacks",
+    format = "notify",
+    replace = false,
+    merge = false,
+  },
+  nvim_notify = {
     backend = "notify",
     fallback = "mini",
+    format = "notify",
+    replace = false,
+    merge = false,
+  },
+  snacks = {
+    backend = "snacks",
+    fallback = "nvim_notify",
     format = "notify",
     replace = false,
     merge = false,
