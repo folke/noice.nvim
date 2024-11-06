@@ -35,7 +35,9 @@ end
 function M:style(messages, content)
   ---@type snacks.notifier.render
   return function(buf, notif, ctx)
+    vim.bo[buf].modifiable = true
     ctx.notifier:get_render()(buf, notif, ctx)
+    vim.bo[buf].modifiable = false
 
     Util.tag(buf, "notify")
 
