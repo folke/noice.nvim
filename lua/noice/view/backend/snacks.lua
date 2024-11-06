@@ -19,7 +19,7 @@ local defaults = {
 local M = View:extend("SnacksView")
 
 function M.dismiss()
-  Snacks.notifier:hide()
+  Snacks.notifier.hide()
 end
 
 function M:is_available()
@@ -89,7 +89,7 @@ function M:_notify(msg)
     end
   end
 
-  self.notif_id = Snacks.notifier:add(opts)
+  self.notif_id = Snacks.notifier.notify(opts.msg, opts.level, opts)
   for _, m in ipairs(msg.messages) do
     m.opts.notify_id = self.notif_id
   end
@@ -124,7 +124,7 @@ end
 
 function M:hide()
   if self._opts.merge and self.notif_id then
-    Snacks.notifier:hide(self.notif_id)
+    Snacks.notifier.hide(self.notif_id)
     self.notif_id = nil
   end
 end
