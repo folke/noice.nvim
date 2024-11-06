@@ -87,7 +87,10 @@ function M:_notify(msg)
     opts = vim.tbl_deep_extend("force", opts, msg.opts)
     if msg.opts.id then
       local m = Manager.get_by_id(msg.opts.id)
-      opts.id = m and m.opts.notify_id or nil
+      opts.id = m and m.opts.notify_id or msg.opts.id
+      if type(opts.id) == "table" and opts.id.id then
+        opts.id = opts.id.id
+      end
     end
   end
 
