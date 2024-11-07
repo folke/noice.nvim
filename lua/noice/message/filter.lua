@@ -50,7 +50,9 @@ M.filters = {
   end,
   event = function(message, event)
     ---@cast message NoiceMessage
-    event = type(event) == "table" and event or { event }
+    if type(event) == "string" then
+      return event == message.event
+    end
     return vim.tbl_contains(event, message.event)
   end,
   kind = function(message, kind)

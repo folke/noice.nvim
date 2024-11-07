@@ -14,21 +14,30 @@ end
 ---@param name string
 ---@return NoiceStatus
 local function NoiceStatus(name)
+  local m ---@type NoiceMessage|false
+  local tick = 0
+
   local function _get()
     if not Config.is_running() then
       return
     end
+    if m ~= nil and tick == Manager.tick() then
+      return m
+    end
     local filter = Config.options.status[name] or nothing
-    return Manager.get(filter, {
+    tick = Manager.tick()
+    m = Manager.get(filter, {
       count = 1,
       sort = true,
       history = true,
-    })[1]
+    })[1] or false
+    return m
   end
   ---@class NoiceStatus
   return {
     has = function()
-      return _get() ~= nil
+      local ret = _get()
+      return ret ~= nil and ret ~= false
     end,
     get = function()
       local message = _get()
