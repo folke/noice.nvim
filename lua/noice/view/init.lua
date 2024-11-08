@@ -9,7 +9,7 @@ local Util = require("noice.util")
 
 ---@class NoiceViewBaseOptions
 ---@field buf_options? table<string,any>
----@field backend string
+---@field backend string|string[]
 ---@field fallback string Fallback view in case the backend could not be loaded
 ---@field format? NoiceFormat|string
 ---@field align? NoiceAlign
@@ -43,32 +43,39 @@ function View.get_view(view, opts)
   ---@diagnostic disable-next-line: undefined-field
   opts.backend = opts.backend or opts.render or view
 
-  -- check if we already loaded this backend
-  for _, v in ipairs(View._views) do
-    if v.opts.view == opts.view then
-      if v.view._instance == "opts" and vim.deep_equal(opts, v.opts) then
-        return v.view
+  ---@type string[]
+  local backends = type(opts.backend) == "table" and opts.backend or { opts.backend }
+
+  for _, backend in ipairs(backends) do
+    opts.backend = backend
+    -- check if we already loaded this backend
+    for _, v in ipairs(View._views) do
+      if v.opts.view == opts.view then
+        if v.view._instance == "opts" and vim.deep_equal(opts, v.opts) then
+          return v.view
+        end
+        if v.view._instance == "view" then
+          return v.view
+        end
       end
-      if v.view._instance == "view" then
-        return v.view
+      if v.opts.backend == backend then
+        if v.view._instance == "backend" then
+          return v.view
+        end
       end
     end
-    if v.opts.backend == opts.backend then
-      if v.view._instance == "backend" then
-        return v.view
-      end
+
+    ---@type NoiceView
+    local mod = require("noice.view.backend." .. backend)
+    local init_opts = vim.deepcopy(opts)
+    local ret = mod(opts)
+    if ret:is_available() then
+      table.insert(View._views, { view = ret, opts = init_opts })
+      return ret
     end
   end
 
-  ---@type NoiceView
-  local mod = require("noice.view.backend." .. opts.backend)
-  local init_opts = vim.deepcopy(opts)
-  local ret = mod(opts)
-  if not ret:is_available() and opts.fallback then
-    return View.get_view(opts.fallback, opts_orig)
-  end
-  table.insert(View._views, { view = ret, opts = init_opts })
-  return ret
+  return opts.fallback and View.get_view(opts.fallback, opts_orig) or nil
 end
 
 local _id = 0
