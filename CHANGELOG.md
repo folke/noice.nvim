@@ -1,5 +1,27 @@
 # Changelog
 
+## [4.7.0](https://github.com/folke/noice.nvim/compare/v4.6.0...v4.7.0) (2024-11-09)
+
+
+### Features
+
+* added snacks backend and made it the default for notify (when avaiable) ([eb7e855](https://github.com/folke/noice.nvim/commit/eb7e8558880996e8acf58e48a366142e9f3d835d))
+
+
+### Bug Fixes
+
+* **snacks:** honor `Snacks.config.notifier.enabled = false` ([f381a46](https://github.com/folke/noice.nvim/commit/f381a469ddf489f048319c2dbfd4964a3ba8b45f))
+* **snacks:** make buffer modifiable when merging in another message ([46fa519](https://github.com/folke/noice.nvim/commit/46fa519d481bba76a9bc4d9f9e716481a93d2b4d))
+* **snacks:** notifier ([a55b898](https://github.com/folke/noice.nvim/commit/a55b89853846dac6236ee2bdaa49155f1b754f89))
+* **snacks:** pass correct message ids ([73d38cc](https://github.com/folke/noice.nvim/commit/73d38cc939db6553b87e5f72ff732447046bced1))
+* **treesitter:** use markdown_inline instead of markdown ([9039e7d](https://github.com/folke/noice.nvim/commit/9039e7dd35b3ef42dfff2457837af1a4d75d930c))
+* **view:** added support for multiple backends. Fixes [#986](https://github.com/folke/noice.nvim/issues/986) ([eac7e84](https://github.com/folke/noice.nvim/commit/eac7e84b16765066dc235a4d6cf8102d7436f6cd))
+
+
+### Performance Improvements
+
+* **status:** cache status messages ([1a74bde](https://github.com/folke/noice.nvim/commit/1a74bdea1d754c99f782d369b1a6115c0c7770ba))
+
 ## [4.6.0](https://github.com/folke/noice.nvim/compare/v4.5.2...v4.6.0) (2024-11-02)
 
 
