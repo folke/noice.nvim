@@ -23,7 +23,7 @@ function M.dismiss()
 end
 
 function M:is_available()
-  return _G.Snacks ~= nil
+  return _G.Snacks ~= nil and Snacks.config.notifier.enabled
 end
 
 function M:update_options()
