@@ -4,15 +4,18 @@ local Object = require("nui.object")
 local Util = require("noice.util")
 
 ---@class NoiceScrollbar
+---@field id integer
 ---@field winnr integer
 ---@field ns_id integer
----@field autocmd_id integer
+---@field augroup? integer
 ---@field bar {bufnr:integer, winnr:integer}?
 ---@field thumb {bufnr:integer, winnr:integer}?
 ---@field visible boolean
 ---@field opts ScrollbarOptions
 ---@overload fun(opts?:ScrollbarOptions):NoiceScrollbar
 local Scrollbar = Object("NuiScrollbar")
+
+local id = 0
 
 ---@class ScrollbarOptions
 local defaults = {
@@ -36,26 +39,33 @@ function Scrollbar:init(opts)
   self.opts = vim.tbl_deep_extend("force", defaults, opts or {})
   self.winnr = self.opts.winnr == 0 and vim.api.nvim_get_current_win() or self.opts.winnr
   self.visible = false
+  id = id + 1
+  self.id = id
 end
 
 function Scrollbar:mount()
-  if self.autocmd_id then
-    vim.api.nvim_del_autocmd(self.autocmd_id)
-    self.autocmd_id = nil
-  end
-  self.autocmd_id = vim.api.nvim_create_autocmd("WinScrolled", {
+  self.augroup = vim.api.nvim_create_augroup("noice_scrollbar_" .. self.id, { clear = true })
+  vim.api.nvim_create_autocmd("WinScrolled", {
+    group = self.augroup,
     pattern = tostring(self.winnr),
     callback = function()
       self:update()
+    end,
+  })
+  vim.api.nvim_create_autocmd("WinClosed", {
+    group = self.augroup,
+    pattern = tostring(self.winnr),
+    callback = function()
+      self:hide()
     end,
   })
   self:update()
 end
 
 function Scrollbar:unmount()
-  if self.autocmd_id then
-    vim.api.nvim_del_autocmd(self.autocmd_id)
-    self.autocmd_id = nil
+  if self.augroup then
+    pcall(vim.api.nvim_del_augroup_by_id, self.augroup)
+    self.augroup = nil
   end
   self:hide()
 end

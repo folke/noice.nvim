@@ -291,6 +291,7 @@ function NuiView:show()
 
   if self._scroll then
     if self._scroll.winnr ~= self._nui.winid then
+      self._scroll:unmount()
       self._scroll.winnr = self._nui.winid
       self._scroll:mount()
     end
