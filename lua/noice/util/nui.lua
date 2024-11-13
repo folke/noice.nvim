@@ -5,6 +5,18 @@ local _ = require("nui.utils")._
 
 local M = {}
 
+M.transparent = false
+
+local function check_bg()
+  local normal = vim.api.nvim_get_hl(0, { name = "Normal" })
+  M.transparent = not (normal and normal.bg ~= nil)
+end
+check_bg()
+vim.api.nvim_create_autocmd("ColorScheme", {
+  group = vim.api.nvim_create_augroup("noice_transparent", { clear = true }),
+  callback = check_bg,
+})
+
 ---@param opts? NoiceNuiOptions
 ---@return _.NoiceNuiOptions
 function M.normalize(opts)
@@ -27,6 +39,9 @@ function M.normalize_win_options(opts)
   opts = opts or {}
   if opts.win_options and opts.win_options.winhighlight then
     opts.win_options.winhighlight = Util.nui.get_win_highlight(opts.win_options.winhighlight)
+  end
+  if opts.win_options and opts.win_options.winblend and M.transparent then
+    opts.win_options.winblend = 0
   end
 end
 
