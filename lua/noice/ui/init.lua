@@ -119,6 +119,11 @@ function M.enable()
     if Util.is_exiting() then
       return
     end
+    -- HACK: special case for return prompts
+    if event == "msh_show" and kind == "return_prompt" then
+      vim.api.nvim_input("<cr>")
+      return true
+    end
     local handler = M.get_handler(event, kind, ...)
     if not handler then
       return
