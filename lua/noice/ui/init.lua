@@ -73,21 +73,9 @@ function M.enable()
 
   local stack_level = 0
 
-  ---@diagnostic disable-next-line: redundant-parameter
-  vim.ui_attach(Config.ns, options, function(event, kind, ...)
-    if Util.is_exiting() then
-      return true
-    end
-
-    local handler = M.get_handler(event, kind, ...)
-
-    if not handler then
-      return
-    end
-
+  local ui_attach_cb = function(handler, event, kind, ...)
     if stack_level > 50 then
-      Util.panic("Event loop detected. Shutting down...")
-      return true
+      return Util.panic("Event loop detected. Shutting down...")
     end
     stack_level = stack_level + 1
 
@@ -113,7 +101,34 @@ function M.enable()
       Util.stats.track(widget .. ".skipped")
     end
     stack_level = stack_level - 1
+  end
+  local queue = {}
 
+  local timer = (vim.uv or vim.loop).new_timer()
+  local function process()
+    timer:stop()
+    while #queue > 0 do
+      local item = table.remove(queue, 1)
+      ui_attach_cb(vim.F.unpack_len(item))
+    end
+  end
+  local schedule_process = vim.schedule_wrap(process)
+
+  ---@diagnostic disable-next-line: redundant-parameter
+  vim.ui_attach(Config.ns, options, function(event, kind, ...)
+    if Util.is_exiting() then
+      return
+    end
+    local handler = M.get_handler(event, kind, ...)
+    if not handler then
+      return
+    end
+    table.insert(queue, vim.F.pack_len(handler, event, kind, ...))
+    if vim.in_fast_event() then
+      timer:start(0, 0, schedule_process)
+    else
+      process()
+    end
     -- make sure only Noice handles these events
     return true
   end)

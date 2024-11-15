@@ -38,8 +38,8 @@ function Message:init(event, kind, content)
   _id = _id + 1
   self.id = _id
   self.tick = 1
-  self.ctime = vim.fn.localtime()
-  self.mtime = vim.fn.localtime()
+  self.ctime = os.time()
+  self.mtime = os.time()
   self.event = event
   self.kind = kind
   self.opts = {}
