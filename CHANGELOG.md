@@ -1,5 +1,14 @@
 # Changelog
 
+## [4.7.1](https://github.com/folke/noice.nvim/compare/v4.7.0...v4.7.1) (2024-11-15)
+
+
+### Bug Fixes
+
+* **scrollbar:** hide on WinClosed. Fixes [#949](https://github.com/folke/noice.nvim/issues/949) ([ca2e3fe](https://github.com/folke/noice.nvim/commit/ca2e3fea9fb080dcb79d9129d73dac631294fe79))
+* **ui:** fix ext_messages in fast_events. Fixes [#997](https://github.com/folke/noice.nvim/issues/997) ([a802e17](https://github.com/folke/noice.nvim/commit/a802e1778a291e466b499e3bb47b5d98d33cc4a0))
+* **view:** never set winblend when transparent. Fixes [#971](https://github.com/folke/noice.nvim/issues/971) ([fd7625e](https://github.com/folke/noice.nvim/commit/fd7625e8c23491ffeaaf3fddf2a65e12f6ca9238))
+
 ## [4.7.0](https://github.com/folke/noice.nvim/compare/v4.6.0...v4.7.0) (2024-11-09)
 
 
