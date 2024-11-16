@@ -120,7 +120,7 @@ function M.enable()
       return
     end
     -- HACK: special case for return prompts
-    if event == "msh_show" and kind == "return_prompt" then
+    if event == "msg_show" and kind == "return_prompt" then
       vim.api.nvim_input("<cr>")
       return true
     end
