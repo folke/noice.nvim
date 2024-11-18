@@ -175,7 +175,7 @@ function Block:append(contents, highlight)
       ---@type string|table|nil
       local hl_group
       if type(hl_id) == "number" then
-        hl_group = vim.fn.synIDattr(hl_id, "name")
+        hl_group = { hl_group = hl_id }
       elseif type(attr_id) == "number" then
         hl_group = attr_id ~= 0 and Highlight.get_hl_group(attr_id) or nil
       else
