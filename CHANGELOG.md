@@ -1,5 +1,19 @@
 # Changelog
 
+## [4.7.2](https://github.com/folke/noice.nvim/compare/v4.7.1...v4.7.2) (2024-11-18)
+
+
+### Bug Fixes
+
+* **ui:** special handling of msg_show.return_prompt. See [#998](https://github.com/folke/noice.nvim/issues/998) ([6e0c8dc](https://github.com/folke/noice.nvim/commit/6e0c8dcc61282782ac7fa4b9b4b0c910fd3f83d9))
+* **ui:** typo ([71ae386](https://github.com/folke/noice.nvim/commit/71ae3869ecce6a804d57a10ba0cde724d5b1d652))
+
+
+### Performance Improvements
+
+* **block:** use hl_ids directly as hl_group for extmarks. no need to use synIDattr ([742610e](https://github.com/folke/noice.nvim/commit/742610e9958ad4f1146983db2e7356c8105a441c))
+* **hl:** use real hl_group ids on nightly instead of ffi ([d5483a0](https://github.com/folke/noice.nvim/commit/d5483a098e26bb59839efa77d0e64a0a6389c988))
+
 ## [4.7.1](https://github.com/folke/noice.nvim/compare/v4.7.0...v4.7.1) (2024-11-15)
 
 
