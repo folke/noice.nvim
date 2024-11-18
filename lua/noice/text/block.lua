@@ -4,7 +4,7 @@ local Highlight = require("noice.text.highlight")
 local NuiLine = require("nui.line")
 local Object = require("nui.object")
 
----@alias NoiceChunk { [0]: integer, [1]: string}
+---@alias NoiceChunk { [0]: integer, [1]: string, [2]?: integer}
 ---@alias NoiceContent string|NoiceChunk|NuiLine|NuiText|NoiceBlock
 
 ---@class NoiceBlock
@@ -165,7 +165,7 @@ function Block:append(contents, highlight)
       ---@cast content NoiceChunk
       -- Handle newlines
       ---@type number|string|table, string
-      local attr_id, text = unpack(content)
+      local attr_id, text, hl_id = unpack(content)
       -- msg_show messages can contain invalid \r characters
       if self.fix_cr ~= false then
         text = text:gsub("%^M", "\r")
@@ -174,7 +174,9 @@ function Block:append(contents, highlight)
 
       ---@type string|table|nil
       local hl_group
-      if type(attr_id) == "number" then
+      if type(hl_id) == "number" then
+        hl_group = vim.fn.synIDattr(hl_id, "name")
+      elseif type(attr_id) == "number" then
         hl_group = attr_id ~= 0 and Highlight.get_hl_group(attr_id) or nil
       else
         hl_group = attr_id
