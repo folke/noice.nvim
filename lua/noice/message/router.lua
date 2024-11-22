@@ -158,6 +158,7 @@ function M.update()
   if M._tick == Manager.tick() then
     return
   end
+  local next_tick = Manager.tick()
 
   M._updating = true
 
@@ -218,7 +219,7 @@ function M.update()
   end
 
   if not dirty then
-    M._tick = Manager.tick()
+    M._tick = next_tick
   end
 
   if not vim.tbl_isempty(updates) then
