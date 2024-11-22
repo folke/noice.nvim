@@ -47,10 +47,7 @@ function M.defaults()
         any = {
           { event = "msg_show", kind = "confirm" },
           { event = "msg_show", kind = "confirm_sub" },
-          -- { event = "msg_show", kind = { "echo", "echomsg", "" }, before = true },
-          -- { event = "msg_show", kind = { "echo", "echomsg" }, instant = true },
-          -- { event = "msg_show", find = "E325" },
-          -- { event = "msg_show", find = "Found a swap file" },
+          { event = "msg_show", kind = "number_prompt" },
         },
       },
     },
@@ -83,7 +80,7 @@ function M.defaults()
       view = Config.options.messages.view,
       filter = {
         event = "msg_show",
-        kind = { "", "echo", "echomsg", "lua_print" },
+        kind = { "", "echo", "echomsg", "lua_print", "list_cmd" },
       },
       opts = { replace = true, merge = true, title = "Messages" },
     },

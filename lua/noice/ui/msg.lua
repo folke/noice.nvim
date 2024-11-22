@@ -28,7 +28,9 @@ M.kinds = {
   -- input related
   confirm = "confirm", -- |confirm()| or |:confirm| dialog
   confirm_sub = "confirm_sub", -- |:substitute| confirm dialog |:s_c|
+  number_prompt = "number_prompt", -- |inputlist()| prompt for a number
   return_prompt = "return_prompt", -- |press-enter| prompt after a multiple messages
+  list_cmd = "list_cmd", -- |:list| command
   -- error/warnings
   emsg = "emsg", --  Error (|errors|, internal error, |:throw|, …)
   echoerr = "echoerr", -- |:echoerr| message
@@ -83,7 +85,7 @@ end
 function M.on_show(event, kind, content, replace_last)
   if kind == M.kinds.return_prompt then
     return M.on_return_prompt()
-  elseif kind == M.kinds.confirm or kind == M.kinds.confirm_sub then
+  elseif kind == M.kinds.confirm or kind == M.kinds.confirm_sub or kind == M.kinds.number_prompt then
     return M.on_confirm(event, kind, content)
   end
 
