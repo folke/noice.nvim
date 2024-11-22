@@ -48,6 +48,9 @@ function M.notify(msg, level, opts)
     end)
     return
   end
+  if msg ~= nil and type(msg) ~= "string" then
+    msg = tostring(msg)
+  end
 
   level = M.get_level(level)
   local message = Message("notify", level, msg)
