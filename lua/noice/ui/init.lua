@@ -105,12 +105,15 @@ function M.enable()
   local queue = {}
 
   local timer = (vim.uv or vim.loop).new_timer()
+  local processing = false
   local function process()
+    processing = true
     timer:stop()
     while #queue > 0 do
       local item = table.remove(queue, 1)
       ui_attach_cb(vim.F.unpack_len(item))
     end
+    processing = false
   end
   local schedule_process = vim.schedule_wrap(process)
 
@@ -131,7 +134,7 @@ function M.enable()
     table.insert(queue, vim.F.pack_len(handler, event, kind, ...))
     if vim.in_fast_event() then
       timer:start(0, 0, schedule_process)
-    else
+    elseif not processing then
       process()
     end
     -- make sure only Noice handles these events
