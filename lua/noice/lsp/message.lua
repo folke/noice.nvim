@@ -17,7 +17,7 @@ M.message_type = {
 ---@alias ShowMessageParams {type:MessageType, message:string}
 
 function M.setup()
-  vim.lsp.handlers["window/showMessage"] = Util.protect(M.on_message)
+  vim.lsp.handlers["window/showMessage"] = M._on_message
 end
 
 ---@param result ShowMessageParams

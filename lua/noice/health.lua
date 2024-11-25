@@ -65,9 +65,9 @@ function M.check(opts)
       return
     end
   else
-    log.ok("**Neovim** >= 0.9.0")
-    if opts.checkhealth and vim.fn.has("nvim-0.10.0") ~= 1 then
-      log.warn("**Neovim** >= 0.10 is highly recommended, since it fixes some issues related to `vim.ui_attach`")
+    log.ok("*Neovim* >= 0.9.0")
+    if opts.checkhealth and vim.fn.has("nvim-0.11.0") ~= 1 then
+      log.warn("*Neovim* >= 0.11 is highly recommended, since it fixes some issues related to `vim.ui_attach`")
     end
   end
 
@@ -98,17 +98,24 @@ function M.check(opts)
       )
     end
   else
-    log.ok("**vim.go.lazyredraw** is not enabled")
+    log.ok("*vim.go.lazyredraw* is not enabled")
   end
 
   if opts.checkhealth then
-    if not Util.module_exists("notify") then
-      log.warn("Noice needs nvim-notify for routes using the `notify` view")
-      if not opts.checkhealth then
-        return
+    local notify = {
+      { plugin = "snacks.nvim", modname = "snacks.notifier" },
+      { plugin = "nvim-notify", modname = "notify" },
+    }
+    local have = false
+    for _, n in ipairs(notify) do
+      if Util.module_exists(n.modname) then
+        log.ok("`" .. n.plugin .. "` is installed")
+        have = true
       end
-    else
-      log.ok("**nvim-notify** is installed")
+    end
+
+    if not have then
+      log.warn("Noice needs `snacks.nvim` or `nvim-notify` for routes using the `notify` view")
     end
 
     if vim.o.shortmess:find("S") then
@@ -119,57 +126,75 @@ function M.check(opts)
 
     for _, lang in ipairs({ "vim", "regex", "lua", "bash", "markdown", "markdown_inline" }) do
       if Treesitter.has_lang(lang) then
-        log.ok("**TreeSitter " .. lang .. "** parser is installed")
+        log.ok("{TreeSitter} `" .. lang .. "` parser is installed")
       else
         log.warn(
-          "**TreeSitter "
+          "{TreeSitter} `"
             .. lang
-            .. "** parser is not installed. Highlighting of the cmdline for "
+            .. "` parser is not installed. Highlighting of the cmdline for `"
             .. lang
-            .. " might be broken"
+            .. "` might be broken"
         )
       end
     end
   end
 
   if Config.is_running() then
-    ---@type {opt:string[], opt_str?:string, handler:fun(), handler_str:string}
+    ---@type {opt:string[], opt_str?:string, handler:fun(), handler_str:string, want?:fun():unknown}
     local checks = {
       {
         opt = "notify",
         enabled = Config.options.notify.enabled,
         handler = vim.notify,
         handler_str = "vim.notify",
+        want = function()
+          return require("noice.source.notify").notify
+        end,
       },
       {
         opt = "lsp.hover",
         enabled = Config.options.lsp.hover.enabled,
         handler = vim.lsp.buf.hover,
         handler_str = "vim.lsp.buf.hover",
+        want = function()
+          return require("noice.lsp").hover
+        end,
       },
       {
         opt = "lsp.signature",
         enabled = Config.options.lsp.signature.enabled,
         handler = vim.lsp.buf.signature_help,
         handler_str = "vim.lsp.buf.signature_help",
+        want = function()
+          return require("noice.lsp").signature
+        end,
       },
       {
         opt = "lsp.message",
         enabled = Config.options.lsp.message.enabled,
         handler = vim.lsp.handlers["window/showMessage"],
         handler_str = 'vim.lsp.handlers["window/showMessage"]',
+        want = function()
+          return require("noice.lsp.message").on_message
+        end,
       },
       {
         opt = 'lsp.override["vim.lsp.util.convert_input_to_markdown_lines"]',
         enabled = Config.options.lsp.override["vim.lsp.util.convert_input_to_markdown_lines"],
         handler = vim.lsp.util.convert_input_to_markdown_lines,
         handler_str = "vim.lsp.util.convert_input_to_markdown_lines",
+        want = function()
+          return require("noice.lsp.override").convert_input_to_markdown_lines
+        end,
       },
       {
         opt = 'lsp.override["vim.lsp.util.stylize_markdown"]',
         enabled = Config.options.lsp.override["vim.lsp.util.stylize_markdown"],
         handler = vim.lsp.util.stylize_markdown,
         handler_str = "vim.lsp.util.stylize_markdown",
+        want = function()
+          return require("noice.lsp.override").stylize_markdown
+        end,
       },
     }
 
@@ -180,14 +205,17 @@ function M.check(opts)
         enabled = Config.options.lsp.override["cmp.entry.get_documentation"],
         handler = mod.get_documentation,
         handler_str = "cmp.entry.get_documentation",
+        want = function()
+          return require("noice.lsp.override").cmp_get_documentation
+        end,
       })
     end
 
     for _, check in ipairs(checks) do
       if check.handler then
         if check.enabled then
-          local source = M.get_source(check.handler)
-          if source.plugin ~= "noice.nvim" then
+          if check.want() ~= check.handler then
+            local source = M.get_source(check.handler)
             log.error(([[`%s` has been overwritten by another plugin?
 
 Either disable the other plugin or set `config.%s.enabled = false` in your **Noice** config.
