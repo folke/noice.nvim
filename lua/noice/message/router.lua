@@ -23,7 +23,6 @@ local M = {}
 ---@type NoiceRoute[]
 M._routes = {}
 M._tick = 0
-M._need_redraw = false
 ---@type fun()|Interval?
 M._updater = nil
 M._updating = false
@@ -224,7 +223,6 @@ function M.update()
 
   if not vim.tbl_isempty(updates) then
     Util.stats.track("router.update.updated")
-    M._need_redraw = true
     Util.redraw()
   end
 

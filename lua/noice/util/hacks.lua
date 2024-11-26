@@ -19,7 +19,7 @@ function M.enable()
   M.reset_augroup()
   M.fix_cmp()
   M.fix_vim_sleuth()
-  M.fix_redraw()
+  -- M.fix_redraw()
 
   -- Hacks for Neovim < 0.10
   if vim.fn.has("nvim-0.10") == 0 then
