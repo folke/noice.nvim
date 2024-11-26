@@ -46,19 +46,28 @@ function M.setup()
   end
 end
 
+local function make_position_params()
+  if vim.fn.has("nvim-0.11") == 1 then
+    return function(client)
+      return vim.lsp.util.make_position_params(nil, client.offset_encoding)
+    end
+  else
+    ---@diagnostic disable-next-line: missing-parameter
+    return vim.lsp.util.make_position_params()
+  end
+end
+
 function M.scroll(delta)
   return require("noice.lsp.docs").scroll(delta)
 end
 
 function M.hover()
-  ---@diagnostic disable-next-line: missing-parameter
-  local params = vim.lsp.util.make_position_params()
+  local params = make_position_params()
   vim.lsp.buf_request(0, "textDocument/hover", params, require("noice.lsp.hover").on_hover)
 end
 
 function M.signature()
-  ---@diagnostic disable-next-line: missing-parameter
-  local params = vim.lsp.util.make_position_params()
+  local params = make_position_params()
   vim.lsp.buf_request(0, "textDocument/signatureHelp", params, require("noice.lsp.signature").on_signature)
 end
 
