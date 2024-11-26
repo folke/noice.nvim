@@ -14,6 +14,21 @@ M._attached = false
 ---@type table<string, table|false>
 M._handlers = {}
 
+local queue = {}
+
+local timer = (vim.uv or vim.loop).new_timer()
+local processing = false
+
+function M.process_queue()
+  processing = true
+  timer:stop()
+  while #queue > 0 do
+    local item = table.remove(queue, 1)
+    M.ui_attach_cb(vim.F.unpack_len(item))
+  end
+  processing = false
+end
+
 function M.setup()
   local widgets = {
     messages = "msg",
@@ -52,6 +67,37 @@ function M.setup()
   return options
 end
 
+local stack_level = 0
+function M.ui_attach_cb(handler, event, kind, ...)
+  if stack_level > 50 then
+    return Util.panic("Event loop detected. Shutting down...")
+  end
+  stack_level = stack_level + 1
+
+  local tick = Manager.tick()
+  M.safe_handle(handler, event, kind, ...)
+
+  -- check if we need to update the ui
+  if Manager.tick() > tick then
+    Util.debug(function()
+      local _, blocking = Util.is_blocking()
+      return { event, "sl:" .. stack_level, "tick:" .. tick, blocking or false, kind }
+    end)
+    if
+      require("noice.util.ffi").textlock == 0
+      and Util.is_blocking()
+      and event ~= "msg_ruler"
+      and kind ~= "search_count"
+    then
+      Util.try(Router.update)
+    end
+  else
+    local widget = M.parse_event(event)
+    Util.stats.track(widget .. ".skipped")
+  end
+  stack_level = stack_level - 1
+end
+
 function M.enable()
   local options = M.setup()
 
@@ -68,54 +114,9 @@ function M.enable()
     require("noice.ui.msg").setup()
   end
 
-  local safe_handle = Util.protect(M.handle, { msg = "An error happened while handling a ui event" })
   M._attached = true
 
-  local stack_level = 0
-
-  local ui_attach_cb = function(handler, event, kind, ...)
-    if stack_level > 50 then
-      return Util.panic("Event loop detected. Shutting down...")
-    end
-    stack_level = stack_level + 1
-
-    local tick = Manager.tick()
-    safe_handle(handler, event, kind, ...)
-
-    -- check if we need to update the ui
-    if Manager.tick() > tick then
-      Util.debug(function()
-        local _, blocking = Util.is_blocking()
-        return { event, "sl:" .. stack_level, "tick:" .. tick, blocking or false, kind }
-      end)
-      if
-        require("noice.util.ffi").textlock == 0
-        and Util.is_blocking()
-        and event ~= "msg_ruler"
-        and kind ~= "search_count"
-      then
-        Util.try(Router.update)
-      end
-    else
-      local widget = M.parse_event(event)
-      Util.stats.track(widget .. ".skipped")
-    end
-    stack_level = stack_level - 1
-  end
-  local queue = {}
-
-  local timer = (vim.uv or vim.loop).new_timer()
-  local processing = false
-  local function process()
-    processing = true
-    timer:stop()
-    while #queue > 0 do
-      local item = table.remove(queue, 1)
-      ui_attach_cb(vim.F.unpack_len(item))
-    end
-    processing = false
-  end
-  local schedule_process = vim.schedule_wrap(process)
+  local schedule_process = vim.schedule_wrap(M.process_queue)
 
   ---@diagnostic disable-next-line: redundant-parameter
   vim.ui_attach(Config.ns, options, function(event, kind, ...)
@@ -135,7 +136,7 @@ function M.enable()
     if vim.in_fast_event() then
       timer:start(0, 0, schedule_process)
     elseif not processing then
-      process()
+      M.process_queue()
     end
     -- make sure only Noice handles these events
     return true
@@ -212,5 +213,6 @@ end
 function M.handle(handler, event, ...)
   handler(event, ...)
 end
+M.safe_handle = Util.protect(M.handle, { msg = "An error happened while handling a ui event" })
 
 return M
