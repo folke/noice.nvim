@@ -265,13 +265,6 @@ function View:render(buf, opts)
   vim.api.nvim_buf_clear_namespace(buf, Config.ns, linenr - 1, -1)
   Message._buf_messages[buf] = {}
 
-  ---@type number?
-  local win = vim.fn.bufwinid(buf)
-  if win == -1 then
-    win = nil
-  end
-  local cursor = win and vim.api.nvim_win_get_cursor(win)
-
   if not opts.highlight then
     vim.api.nvim_buf_set_lines(buf, linenr - 1, -1, false, {})
   end
@@ -283,11 +276,6 @@ function View:render(buf, opts)
       m:render(buf, Config.ns, linenr)
     end
     linenr = linenr + m:height()
-  end
-
-  if cursor then
-    -- restore cursor
-    pcall(vim.api.nvim_win_set_cursor, win, cursor)
   end
 end
 

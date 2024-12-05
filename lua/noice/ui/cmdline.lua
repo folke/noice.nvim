@@ -233,15 +233,7 @@ function M.fix_cursor()
   if not win or not M.real_cursor then
     return
   end
-  local cursor = { vim.api.nvim_buf_line_count(M.position.buf), M.position.cursor }
-  vim.api.nvim_win_set_cursor(win, cursor)
-  local leftcol = math.max(cursor[2] - vim.api.nvim_win_get_width(win) + 1, 0)
-  local view = vim.api.nvim_win_call(win, vim.fn.winsaveview)
-  if view.leftcol ~= leftcol then
-    vim.api.nvim_win_call(win, function()
-      vim.fn.winrestview({ leftcol = leftcol })
-    end)
-  end
+  vim.api.nvim_win_set_cursor(win, { vim.api.nvim_buf_line_count(M.position.buf), M.position.cursor })
   vim.api.nvim__redraw({ cursor = true, win = win, flush = true })
 end
 
