@@ -169,6 +169,10 @@ function M.get_layout(dim, _opts)
       end
     end
   elseif opts.type == "popup" then
+    if opts.relative == "editor" or type(opts.relative) == "table" and opts.relative.type == "editor" then
+      size.max_width = size.max_width or vim.o.columns - 4
+      size.max_height = size.max_height or vim.o.lines - 4
+    end
     if size.width == "auto" then
       size.width = minmax(size.min_width, size.max_width, dim.width)
       dim.width = size.width
