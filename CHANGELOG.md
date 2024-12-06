@@ -1,5 +1,29 @@
 # Changelog
 
+## [4.8.0](https://github.com/folke/noice.nvim/compare/v4.7.2...v4.8.0) (2024-12-06)
+
+
+### Features
+
+* **msg:** added support for msg_show list_cmd and input_prompt kinds ([21fe733](https://github.com/folke/noice.nvim/commit/21fe733f8a731c9ea69f43d89b51d5594f9b00db))
+
+
+### Bug Fixes
+
+* **cmdline:** dont restore cursor after render. Fixes [#959](https://github.com/folke/noice.nvim/issues/959) ([c49a4b0](https://github.com/folke/noice.nvim/commit/c49a4b008a6e4f9ea2fcdca2120f3bf4b91f015f))
+* **health:** better health checks ([0f5f8c9](https://github.com/folke/noice.nvim/commit/0f5f8c93dd11546574640c559f5843488e460df6))
+* **lsp:** support mixed encoding for lsp clients ([#1004](https://github.com/folke/noice.nvim/issues/1004)) ([c6f6fb1](https://github.com/folke/noice.nvim/commit/c6f6fb178ebe9b4fd90383de743c3399f8c3a37c))
+* **msg:** add new msg_show.lua_print to default routes for messages ([0e9853b](https://github.com/folke/noice.nvim/commit/0e9853b73a2a49fc54f4801fd2f79b4a712e7a51))
+* **notify:** always convert msg to string if not nil and not string ([3efadda](https://github.com/folke/noice.nvim/commit/3efaddaa24ac8e8c59cc2c7d14e6ee9907a75c6d))
+* **nui:** set max size to editor cols ([d9991ca](https://github.com/folke/noice.nvim/commit/d9991ca9ac097d42ab5ec3205a457d930dce63d5))
+* **router:** prevent overriding current tick ([e0fd746](https://github.com/folke/noice.nvim/commit/e0fd746d5bfda56bc3ee63862a0fa3731ec43108))
+* **ui:** always queue incoming events when already processing ([6c7545a](https://github.com/folke/noice.nvim/commit/6c7545a7e8ee887c1136f14087f11d345ebaaa0b))
+
+
+### Performance Improvements
+
+* **hacks:** disable redraw hack. Should not be needed. If it breaks a plugin, then it should be fixed there. ([956e3ac](https://github.com/folke/noice.nvim/commit/956e3acfba2562e0bd11a58c27363c380ee1ac88))
+
 ## [4.7.2](https://github.com/folke/noice.nvim/compare/v4.7.1...v4.7.2) (2024-11-18)
 
 
