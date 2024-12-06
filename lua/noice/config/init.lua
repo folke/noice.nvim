@@ -269,7 +269,7 @@ function M.setup(options)
 end
 
 function M.truncate_log()
-  local stat = vim.loop.fs_stat(M.options.log)
+  local stat = (vim.uv or vim.loop).fs_stat(M.options.log)
   if stat and stat.size > M.options.log_max_size then
     io.open(M.options.log, "w+"):close()
   end

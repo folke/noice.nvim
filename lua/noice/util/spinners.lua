@@ -4,7 +4,7 @@ local M = {}
 function M.spin(name)
   name = name or "dots"
   local spinner = M.spinners[name] or M.spinners["dots"]
-  local ms = vim.loop.hrtime() / 1000000
+  local ms = (vim.uv or vim.loop).hrtime() / 1000000
   local frame = math.floor(ms / spinner.interval) % #spinner.frames
   return spinner.frames[frame + 1]
 end

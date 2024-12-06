@@ -102,7 +102,7 @@ function M.wo(win, options)
 end
 
 function M.debounce(ms, fn)
-  local timer = vim.loop.new_timer()
+  local timer = (vim.uv or vim.loop).new_timer()
   return function(...)
     local argv = vim.F.pack_len(...)
     timer:start(ms, 0, function()
@@ -119,7 +119,7 @@ end
 ---@return F|Interval
 function M.interval(ms, fn, opts)
   opts = opts or {}
-  ---@type vim.loop.Timer?
+  ---@type uv.uv_timer_t
   local timer = nil
 
   ---@class Interval

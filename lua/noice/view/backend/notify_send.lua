@@ -2,6 +2,7 @@ local require = require("noice.util.lazy")
 
 local Util = require("noice.util")
 local View = require("noice.view")
+local uv = vim.uv or vim.loop
 
 ---@class NoiceNotifySendOptions
 ---@field title string
@@ -90,14 +91,14 @@ function NotifySendView:_notify(msg)
   if opts.body then
     table.insert(args, vim.trim(opts.body))
   end
-  local stdout = vim.loop.new_pipe()
-  local stderr = vim.loop.new_pipe()
+  local stdout = assert(uv.new_pipe())
+  local stderr = assert(uv.new_pipe())
 
   local out = ""
   local err = ""
 
   local proc
-  proc = vim.loop.spawn(
+  proc = uv.spawn(
     "notify-send",
     {
       stdio = { nil, stdout, stderr },
@@ -116,12 +117,12 @@ function NotifySendView:_notify(msg)
     end)
   )
 
-  vim.loop.read_start(stdout, function(_, data)
+  uv.read_start(stdout, function(_, data)
     if data then
       out = out .. data
     end
   end)
-  vim.loop.read_start(stderr, function(_, data)
+  uv.read_start(stderr, function(_, data)
     if data then
       err = err .. data
     end

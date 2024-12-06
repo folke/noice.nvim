@@ -47,7 +47,7 @@ end
 
 function MiniView:autohide(id)
   if not self.timers[id] then
-    self.timers[id] = vim.loop.new_timer()
+    self.timers[id] = (vim.uv or vim.loop).new_timer()
   end
   self.timers[id]:start(self._opts.timeout, 0, function()
     if not self.active[id] then
