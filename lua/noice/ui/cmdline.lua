@@ -289,7 +289,6 @@ function M.update()
     end
     Manager.add(M.message)
   else
-    vim.g.ui_cmdline_pos = nil
     Manager.remove(M.message)
     if not M.real_cursor then
       Hacks.show_cursor()
