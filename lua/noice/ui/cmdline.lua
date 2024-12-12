@@ -270,8 +270,8 @@ function M.on_render(_, buf, line, byte)
     },
   }
   vim.g.ui_cmdline_pos = {
-    row = M.position.screenpos.row,
-    col = M.position.screenpos.col - 1,
+    M.position.screenpos.row,
+    M.position.screenpos.col - 1,
   }
   pcall(M.fix_cursor)
 end
