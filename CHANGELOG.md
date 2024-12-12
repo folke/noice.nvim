@@ -1,5 +1,18 @@
 # Changelog
 
+## [4.9.0](https://github.com/folke/noice.nvim/compare/v4.8.0...v4.9.0) (2024-12-12)
+
+
+### Features
+
+* **api:** set vim.g.ui_cmdline_pos to (1,0)-indexed position of the noice cmdline ([a45f997](https://github.com/folke/noice.nvim/commit/a45f9975e1fc92f1cfd4a19cc58356deb5d0736c))
+
+
+### Bug Fixes
+
+* **cmdline:** don't unset `vim.g.ui_cmdline_pos`. Might be useful for others to keep around. ([29a0adb](https://github.com/folke/noice.nvim/commit/29a0adb0b21b087a7209ee3b131cb16af9f60fd4))
+* **cmdline:** make ui_cmdline_pos col 0-based ([324e6a8](https://github.com/folke/noice.nvim/commit/324e6a874fdf78d389ab69be46de0523f3af274e))
+
 ## [4.8.0](https://github.com/folke/noice.nvim/compare/v4.7.2...v4.8.0) (2024-12-06)
 
 
