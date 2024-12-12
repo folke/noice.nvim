@@ -1,5 +1,12 @@
 # Changelog
 
+## [4.9.1](https://github.com/folke/noice.nvim/compare/v4.9.0...v4.9.1) (2024-12-12)
+
+
+### Bug Fixes
+
+* **cmdline:** use number indexed `vim.g.ui_cmdline_pos` ([eaed6cc](https://github.com/folke/noice.nvim/commit/eaed6cc9c06aa2013b5255349e4f26a6b17ab70f))
+
 ## [4.9.0](https://github.com/folke/noice.nvim/compare/v4.8.0...v4.9.0) (2024-12-12)
 
 
