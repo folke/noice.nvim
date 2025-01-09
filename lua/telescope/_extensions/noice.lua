@@ -20,6 +20,10 @@ function M.display(message)
   local byte = 0
   for _, text in ipairs(line._texts) do
     local hl_group = text.extmark and text.extmark.hl_group
+    if type(hl_group) == "number" then
+      hl_group = vim.fn.synIDattr(hl_group, "name")
+    end
+
     if hl_group then
       table.insert(hl, { { byte, byte + text:length() }, hl_group })
     end
