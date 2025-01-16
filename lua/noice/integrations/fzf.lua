@@ -84,7 +84,7 @@ end
 
 ---@param opts? table<string, any>
 function M.open(opts)
-  local messages = M.find()
+  local id_to_message = M.find()
   opts = vim.tbl_deep_extend("force", opts or {}, {
     prompt = false,
     winopts = {
@@ -95,18 +95,36 @@ function M.open(opts)
         title_pos = "center",
       },
     },
-    previewer = M.previewer(messages),
+    previewer = M.previewer(id_to_message),
     fzf_opts = {
       ["--no-multi"] = "",
       ["--with-nth"] = "2..",
     },
     actions = {
-      default = function() end,
+      default = function(entry_str)
+        entry_str = entry_str[1]
+
+        local id = tonumber(entry_str:match("^%d+"))
+        local message_entry = id_to_message[id]
+
+        local buf = vim.api.nvim_create_buf(false, false)
+
+        vim.api.nvim_set_option_value("buftype", "nofile", { buf = buf })
+        vim.api.nvim_set_option_value("bufhidden", "wipe", { buf = buf })
+
+        vim.api.nvim_buf_set_keymap(buf, "n", "q", ":bd<CR>", { silent = true, noremap = true })
+        vim.api.nvim_buf_set_lines(buf, 0, -1, false, vim.split(message_entry.ordinal, "\n"))
+
+        local formatted = Format.format(message_entry.message, "fzf_preview")
+        formatted:render(buf, Config.ns)
+
+        vim.api.nvim_win_set_buf(0, buf)
+      end,
     },
   })
   local lines = vim.tbl_map(function(entry)
     return entry.display
-  end, vim.tbl_values(messages))
+  end, vim.tbl_values(id_to_message))
   return fzf.fzf_exec(lines, opts)
 end
 
