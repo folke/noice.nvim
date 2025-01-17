@@ -3,6 +3,7 @@ local require = require("noice.util.lazy")
 local Config = require("noice.config")
 local Format = require("noice.text.format")
 local Manager = require("noice.message.manager")
+local View = require("noice.view")
 local builtin = require("fzf-lua.previewer.builtin")
 local fzf = require("fzf-lua")
 
@@ -107,18 +108,9 @@ function M.open(opts)
         local id = tonumber(entry_str:match("^%d+"))
         local message_entry = id_to_message[id]
 
-        local buf = vim.api.nvim_create_buf(false, false)
-
-        vim.api.nvim_set_option_value("buftype", "nofile", { buf = buf })
-        vim.api.nvim_set_option_value("bufhidden", "wipe", { buf = buf })
-
-        vim.api.nvim_buf_set_keymap(buf, "n", "q", ":bd<CR>", { silent = true, noremap = true })
-        vim.api.nvim_buf_set_lines(buf, 0, -1, false, vim.split(message_entry.ordinal, "\n"))
-
-        local formatted = Format.format(message_entry.message, "fzf_preview")
-        formatted:render(buf, Config.ns)
-
-        vim.api.nvim_win_set_buf(0, buf)
+        local view = View.get_view("popup", {})
+        view:set(message_entry.message)
+        view:display()
       end,
     },
   })
