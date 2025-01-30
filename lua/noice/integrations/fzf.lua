@@ -72,8 +72,8 @@ function M.previewer(messages)
     m:render(buf, Config.ns)
 
     self:set_preview_buf(buf)
-    self.win:update_title(" Noice ")
-    self.win:update_scrollbar()
+    self.win:update_preview_title(" Noice ")
+    self.win:update_preview_scrollbar()
   end
 
   return previewer
