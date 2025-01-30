@@ -1,5 +1,13 @@
 # Changelog
 
+## [4.9.1](https://github.com/folke/noice.nvim/compare/v4.9.0...v4.9.1) (2025-01-30)
+
+
+### Bug Fixes
+
+* **cmdline:** use number indexed `vim.g.ui_cmdline_pos` ([eaed6cc](https://github.com/folke/noice.nvim/commit/eaed6cc9c06aa2013b5255349e4f26a6b17ab70f))
+* **nui:** don't error when border win was closed. Fixes [#832](https://github.com/folke/noice.nvim/issues/832) ([d2b092a](https://github.com/folke/noice.nvim/commit/d2b092aa769d5beef83ed32b1b61f09aa92f412f))
+
 ## [4.9.0](https://github.com/folke/noice.nvim/compare/v4.8.0...v4.9.0) (2024-12-12)
 
 
