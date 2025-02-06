@@ -19,6 +19,9 @@ function M.entry(message)
   for _, text in ipairs(line._texts) do
     ---@type string?
     local hl_group = text.extmark and text.extmark.hl_group
+    if type(hl_group) == "number" then
+      hl_group = vim.fn.synIDattr(hl_group, "name")
+    end
     hl[#hl + 1] = hl_group and fzf.utils.ansi_from_hl(hl_group, text:content()) or text:content()
   end
   return {
