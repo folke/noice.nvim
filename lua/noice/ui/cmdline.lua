@@ -26,6 +26,13 @@ M.events = {
 M.active = nil
 M.real_cursor = vim.api.nvim__redraw ~= nil
 
+--Neovim > 0.11 handles confirm messages in two steps
+-- 1. msg_show.confirm with the message
+-- 2. cmdline_show with Yes/No/Cancel
+M.handle_confirm = vim.fn.has("nvim-0.11") == 1
+M.confirm_message = nil ---@type NoiceMessage?
+M._on_hide = nil ---@type fun()
+
 ---@alias NoiceCmdlineFormatter fun(cmdline: NoiceCmdline): {icon?:string, offset?:number, view?:NoiceViewOptions}
 
 ---@class CmdlineState
@@ -181,6 +188,19 @@ function M.on_show(event, content, pos, firstc, prompt, indent, level)
     level = level,
   })
 
+  if M.confirm_message then
+    local message = M.confirm_message --[[@as NoiceMessage]]
+    message:append(prompt)
+    M.confirm_message = nil
+    Manager.add(message)
+    M._on_hide = function()
+      vim.schedule(function()
+        Manager.remove(message)
+      end)
+    end
+    return
+  end
+
   -- This was triggered by a force redraw, so skip it
   if c:get():find(Hacks.SPECIAL, 1, true) then
     M.skipped = true
@@ -197,6 +217,10 @@ function M.on_show(event, content, pos, firstc, prompt, indent, level)
 end
 
 function M.on_hide(_, level)
+  if M._on_hide then
+    M._on_hide()
+    M._on_hide = nil
+  end
   if M.cmdlines[level] then
     M.cmdlines[level] = nil
     local active = M.active
@@ -279,6 +303,15 @@ end
 function M.last()
   local last = math.max(1, unpack(vim.tbl_keys(M.cmdlines)))
   return M.cmdlines[last]
+end
+
+---@param message NoiceMessage
+function M.on_confirm(message)
+  if not M.handle_confirm then
+    return false
+  end
+  M.confirm_message = message
+  return true
 end
 
 function M.update()

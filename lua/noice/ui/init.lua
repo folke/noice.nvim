@@ -79,10 +79,6 @@ function M.ui_attach_cb(handler, event, kind, ...)
 
   -- check if we need to update the ui
   if Manager.tick() > tick then
-    Util.debug(function()
-      local _, blocking = Util.is_blocking()
-      return { event, "sl:" .. stack_level, "tick:" .. tick, blocking or false, kind }
-    end)
     if
       require("noice.util.ffi").textlock == 0
       and Util.is_blocking()
@@ -127,6 +123,9 @@ function M.enable()
     if event == "msg_show" and kind == "return_prompt" then
       vim.api.nvim_input("<cr>")
       return true
+    end
+    if Config.options.debug then
+      Util.debug({ event = event, kind = kind, ... })
     end
     local handler = M.get_handler(event, kind, ...)
     if not handler then

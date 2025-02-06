@@ -163,6 +163,10 @@ function M.on_confirm(event, kind, content)
   if not message:content():find("%s+$") then
     message:append(" ")
   end
+  -- On Neovim > 0.11, confirm is handled by the cmdline
+  if Cmdline.on_confirm(message) then
+    return
+  end
   message:append(" ", "NoiceCursor")
   Manager.add(message)
   vim.schedule(function()
