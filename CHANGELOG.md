@@ -1,5 +1,21 @@
 # Changelog
 
+## [4.10.0](https://github.com/folke/noice.nvim/compare/v4.9.0...v4.10.0) (2025-02-06)
+
+
+### Features
+
+* **fzf:** fix fzf integration ([#1048](https://github.com/folke/noice.nvim/issues/1048)) ([f3291db](https://github.com/folke/noice.nvim/commit/f3291db22863021160c16280407bcaf8fe00df61))
+
+
+### Bug Fixes
+
+* **cmdline:** use number indexed `vim.g.ui_cmdline_pos` ([eaed6cc](https://github.com/folke/noice.nvim/commit/eaed6cc9c06aa2013b5255349e4f26a6b17ab70f))
+* **confirm:** fixed `vim.fn.confirm` on nightly (0.11). Closes [#1036](https://github.com/folke/noice.nvim/issues/1036) ([00b5984](https://github.com/folke/noice.nvim/commit/00b598486601974405b2d5135d9ee7fa1638a5c7))
+* **fzf-lua:** update `update_title` and `update_scrollbar` to `update_preview_title` and `update_preview_scrollbar` ([#1034](https://github.com/folke/noice.nvim/issues/1034)) ([5530d78](https://github.com/folke/noice.nvim/commit/5530d78ae8a05ba7982af55a373c35fb18699307)), closes [#1029](https://github.com/folke/noice.nvim/issues/1029)
+* **nui:** don't error when border win was closed. Fixes [#832](https://github.com/folke/noice.nvim/issues/832) ([d2b092a](https://github.com/folke/noice.nvim/commit/d2b092aa769d5beef83ed32b1b61f09aa92f412f))
+* **telescope:** handle hl_group ID correctly in picker ([#1032](https://github.com/folke/noice.nvim/issues/1032)) ([002b202](https://github.com/folke/noice.nvim/commit/002b20226b659c299f6e386e24bc1b8159b999ae)), closes [#1024](https://github.com/folke/noice.nvim/issues/1024)
+
 ## [4.9.0](https://github.com/folke/noice.nvim/compare/v4.8.0...v4.9.0) (2024-12-12)
 
 
