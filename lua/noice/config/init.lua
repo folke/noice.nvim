@@ -265,6 +265,11 @@ function M.setup(options)
   })
 
   require("noice.lsp").setup()
+
+  if Snacks and pcall(require, "snacks.picker") then
+    Snacks.picker.sources.noice = require("noice.integrations.snacks").source
+  end
+
   M._running = true
 end
 

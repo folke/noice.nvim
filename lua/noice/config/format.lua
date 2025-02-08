@@ -46,6 +46,22 @@ M.builtin = {
     "\n",
     "{message}",
   },
+  snacks = {
+    "{level} ",
+    "{date} ",
+    "{title} ",
+    "{message}",
+  },
+  snacks_preview = {
+    "{level} ",
+    "{date} ",
+    "{event}",
+    { "{kind}", before = { ".", hl_group = "NoiceFormatKind" } },
+    "\n",
+    "{title}\n",
+    "\n",
+    "{message}",
+  },
   lsp_progress = {
     {
       "{progress} ",

@@ -61,8 +61,13 @@ function M.setup()
     fzf = function()
       require("noice.integrations.fzf").open({})
     end,
+    snacks = function()
+      require("noice.integrations.snacks").open({})
+    end,
     pick = function()
-      if pcall(_G.require, "telescope.config") then
+      if Snacks and Snacks.config.picker and Snacks.config.picker.enabled then
+        Snacks.picker("noice")
+      elseif pcall(_G.require, "telescope.config") then
         require("telescope").extensions.noice.noice({})
       elseif pcall(_G.require, "fzf-lua") then
         require("noice.integrations.fzf").open({})
