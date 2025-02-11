@@ -35,6 +35,7 @@ end
 function M.highlight(buf, ns, range, lang)
   lang = M.get_lang(lang)
   lang = lang == "markdown" and "markdown_inline" or lang
+  lang = lang:lower()
 
   buf = (buf == 0 or buf == nil) and vim.api.nvim_get_current_buf() or buf
 
