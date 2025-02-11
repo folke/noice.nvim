@@ -60,6 +60,7 @@ function NoiceText:highlight(bufnr, ns_id, linenr, byte_start)
   end
 
   if self.extmark.lang then
+    self.extmark.lang = string.lower(self.extmark.lang)
     local range = { linenr - self.extmark.lines, 0, linenr, byte_start + 1 }
     if self.extmark.col then
       range[2] = byte_start + self.extmark.col - 1
