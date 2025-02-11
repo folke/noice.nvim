@@ -1,5 +1,17 @@
 # Changelog
 
+## [4.11.0](https://github.com/folke/noice.nvim/compare/v4.10.0...v4.11.0) (2025-02-11)
+
+
+### Features
+
+* added snacks integration ([df72b6d](https://github.com/folke/noice.nvim/commit/df72b6ddf6c167b20083f54647ae16dafde3737b))
+
+
+### Bug Fixes
+
+* **treesitter:** parser should be lower-case. Closes [#1055](https://github.com/folke/noice.nvim/issues/1055) ([d71b8eb](https://github.com/folke/noice.nvim/commit/d71b8ebc230df8653ae95280412ad732c488e585))
+
 ## [4.10.0](https://github.com/folke/noice.nvim/compare/v4.9.0...v4.10.0) (2025-02-06)
 
 
