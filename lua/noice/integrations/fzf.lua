@@ -31,24 +31,23 @@ function M.entry(message)
   }
 end
 
+---@return NoiceEntry[]
 function M.find()
   local messages = Manager.get(Config.options.commands.history.filter, {
     history = true,
     sort = true,
     reverse = true,
   })
-  ---@type table<number, NoiceEntry>
-  local ret = {}
 
-  for _, message in ipairs(messages) do
-    ret[message.id] = M.entry(message)
-  end
+  local message_entries = vim.tbl_map(function(message)
+    return M.entry(message)
+  end, messages)
 
-  return ret
+  return message_entries
 end
 
----@param messages table<number, NoiceEntry>
-function M.previewer(messages)
+---@param id_to_message table<string, NoiceEntry>
+function M.previewer(id_to_message)
   local previewer = builtin.buffer_or_file:extend()
 
   function previewer:new(o, opts, fzf_win)
@@ -60,7 +59,7 @@ function M.previewer(messages)
 
   function previewer:parse_entry(entry_str)
     local id = tonumber(entry_str:match("^%d+"))
-    local entry = messages[id]
+    local entry = id_to_message[id]
     assert(entry, "No message found for entry: " .. entry_str)
     return entry
   end
@@ -84,7 +83,13 @@ end
 
 ---@param opts? table<string, any>
 function M.open(opts)
-  local messages = M.find()
+  local message_entries = M.find()
+
+  local id_to_message = {}
+  for _, entry in ipairs(message_entries) do
+    id_to_message[entry.message.id] = entry
+  end
+
   opts = vim.tbl_deep_extend("force", opts or {}, {
     prompt = false,
     winopts = {
@@ -95,7 +100,7 @@ function M.open(opts)
         title_pos = "center",
       },
     },
-    previewer = M.previewer(messages),
+    previewer = M.previewer(id_to_message),
     fzf_opts = {
       ["--no-multi"] = "",
       ["--with-nth"] = "2..",
@@ -106,7 +111,7 @@ function M.open(opts)
   })
   local lines = vim.tbl_map(function(entry)
     return entry.display
-  end, vim.tbl_values(messages))
+  end, vim.tbl_values(message_entries))
   return fzf.fzf_exec(lines, opts)
 end
 
