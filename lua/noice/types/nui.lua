@@ -15,10 +15,14 @@
 ---@class NuiBorder: _.NuiBorder
 ---@field padding? _.NuiBorderPadding|number[]
 
+---@class NuiTimeout
+---@field duration number
+---@field cancel_on_enter? boolean
+
 ---@class _.NuiBaseOptions
 ---@field relative? NuiRelative
 ---@field enter? boolean
----@field timeout? number
+---@field timeout? NuiTimeout
 ---@field buf_options? vim.bo
 ---@field win_options? vim.wo
 ---@field close? {events?:string[], keys?:string[]}

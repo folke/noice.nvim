@@ -22,13 +22,14 @@ function NuiView:init(opts)
 end
 
 function NuiView:autohide()
-  if self._opts.timeout then
-    self._timer:start(self._opts.timeout, 0, function()
-      if self._visible then
+  if self._opts.timeout.duration then
+    self._timer:start(self._opts.timeout.duration, 0, function()
+      if self._visible and not self._stay_visible then
         vim.schedule(function()
           self:hide()
         end)
       end
+      self._stay_visible = false
       self._timer:stop()
     end)
   end
@@ -115,6 +116,12 @@ function NuiView:mount()
     self._nui:map("n", self._opts.close.keys, function()
       self:hide()
     end, { remap = false, nowait = true })
+  end
+
+  if self._opts.timeout.cancel_on_enter then
+    self._nui:on("BufEnter", function()
+      self._stay_visible = true
+    end, { once = false })
   end
 end
 
