@@ -96,6 +96,7 @@ function M.on_signature(_, result, ctx, config)
     Docs.show(message, config.stay)
   end
 end
+
 M.on_signature = Util.protect(M.on_signature)
 
 function M.on_attach(buf, client)
@@ -170,24 +171,24 @@ function M:active_parameter(sig_index)
   return sig.parameters and sig.parameters[1] or nil
 end
 
----@param sig SignatureInformation
+---@param label string
 ---@param param ParameterInformation
-function M:format_active_parameter(sig, param)
-  local label = param.label
-  if type(label) == "string" then
-    local from = sig.label:find(label, 1, true)
+function M:format_active_parameter(label, param)
+  local param_label = param.label
+  if type(param_label) == "string" then
+    local from = label:find(param_label, 1, true)
     if from then
       self.message:append(NoiceText("", {
         hl_group = "LspSignatureActiveParameter",
         col = from - 1,
-        length = vim.fn.strlen(label),
+        length = vim.fn.strlen(param_label),
       }))
     end
   else
     self.message:append(NoiceText("", {
       hl_group = "LspSignatureActiveParameter",
-      col = label[1],
-      length = label[2] - label[1],
+      col = param_label[1],
+      length = param_label[2] - param_label[1],
     }))
   end
 end
@@ -205,14 +206,15 @@ function M:format_signature(sig_index, sig)
     self.message:newline()
   end
 
-  local count = self.message:height()
-  self.message:append(sig.label)
-  self.message:append(NoiceText.syntax(self.ft, self.message:height() - count))
   local param = self:active_parameter(sig_index)
-  if param then
-    self:format_active_parameter(sig, param)
+  for line in sig.label:gmatch("[^\r\n]+") do
+    self.message:append(line)
+    if param then
+      self:format_active_parameter(line, param)
+    end
+    self.message:append(NoiceText.syntax(self.ft, 1))
+    self.message:newline()
   end
-  self.message:newline()
 
   if sig.documentation then
     Markdown.horizontal_line(self.message)
