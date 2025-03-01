@@ -41,23 +41,12 @@ function NoiceText.cursor(col)
 end
 
 ---@param col? number
--- This function creates a syntax-highlighted text object for a specific language
--- Added support for command highlighting with NoiceCmdlineCommand group
 function NoiceText.syntax(lang, lines, col)
-  local text = NoiceText("", {
+  return NoiceText("", {
     lang = lang,
     col = col,
     lines = lines,
   })
-  
-  -- If this is Vim command syntax, we'll handle the first word specially
-  if lang == "vim" then
-    -- The original implementation will still work, but now we can override
-    -- command highlighting with a custom highlight group
-    text.is_vim_command = true
-  end
-  
-  return text
 end
 
 ---@param bufnr number buffer number
