@@ -19,6 +19,8 @@ function M.highlight(buf, ns, range, lang)
     if not pcall(vim.cmd, string.format("syntax include %s syntax/%s.vim", group, lang)) then
       return
     end
+    
+    -- Create basic syntax region
     vim.cmd(
       string.format(
         "syntax region %s start=+\\%%%dl+ end=+\\%%%dl+ contains=%s keepend",
@@ -28,6 +30,16 @@ function M.highlight(buf, ns, range, lang)
         group
       )
     )
+    
+    -- Add custom command word highlighting for Vim commands
+    if lang == "vim" then
+      -- Add a command highlighting rule for the first word in Vim commands
+      -- This will override the standard Statement highlight used for commands
+      pcall(vim.cmd, [[
+        syntax match NoiceCmdlineCommand /\v%(^|\||#)\s*\w+/ contained containedin=@VIM
+        highlight default link NoiceCmdlineCommand Statement
+      ]])
+    end
   end)
 end
 
