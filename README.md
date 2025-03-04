@@ -30,7 +30,7 @@ Check this [tracking issue](https://github.com/folke/noice.nvim/issues/6) for a 
 - Neovim >= 0.9.0 **_(nightly highly recommended)_**
 - [nui.nvim](https://github.com/MunifTanjim/nui.nvim): used for proper rendering and multiple views
 - [nvim-notify](https://github.com/rcarriga/nvim-notify): notification view _**(optional)**_
-- a [Nerd Font](https://www.nerdfonts.com/) **_(optional)_**
+- [Nerd Font](https://www.nerdfonts.com/) **_(optional)_**
 - [nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter/) **_(optional, but highly recommended)_**
   used for highlighting the cmdline and lsp docs. Make sure to install the parsers for
   `vim`, `regex`, `lua`, `bash`, `markdown` and `markdown_inline`
