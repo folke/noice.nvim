@@ -167,10 +167,13 @@ function Block:append(contents, highlight)
       ---@type number|string|table, string
       local attr_id, text, hl_id = unpack(content)
       -- msg_show messages can contain invalid \r characters
+      -- and caret-notation ANSI control sequences
       if self.fix_cr ~= false then
         text = text:gsub("%^M", "\r")
         text = text:gsub("\r\n", "\n")
+        text = text:gsub("%^%[%[[%d;]*%a", "")
       end
+
 
       ---@type string|table|nil
       local hl_group
