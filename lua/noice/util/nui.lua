@@ -194,23 +194,55 @@ function M.get_layout(dim, _opts)
   return { size = size, position = position, relative = opts.relative }
 end
 
-function M.anchor(width, height)
-  local anchor = ""
-  local lines_above = vim.fn.screenrow() - 1
-  local lines_below = vim.fn.winheight(0) - lines_above
+---@param _opts? NuiPopupOptions
+---@return _.NuiPopupOptions
+function M.anchorAndResizePopup(_opts)
+  ---@type _.NuiPopupOptions
+  local opts = vim.deepcopy(_opts or {})
 
-  if height < lines_below then
+  if type(opts.size.width) ~= "number" or type(opts.size.height) ~= "number" then
+    return opts
+  end
+
+  local col = opts.position and opts.position.col
+  local row = opts.position and opts.position.row
+  local border_height = (opts.border and opts.border.style ~= "none") and 2 or 0
+
+  local width = opts.size.width
+  local height = opts.size.height
+  ---@cast height number
+
+  local lines_above = vim.fn.screenrow() - 1
+  -- use vim.go.lines instead of winheight since we want to allow overlapping other windows
+  local lines_below = vim.go.lines - 1 - lines_above
+  local anchor = ""
+
+  if lines_below >= lines_above then
     anchor = anchor .. "N"
+
+    -- resize popup so it doesn't overflow and display on top of current line
+    opts.size.height = math.min(height, lines_below - border_height)
   else
     anchor = anchor .. "S"
+    -- adjust the position, accounting for border
+    opts.position.row = -row + 1 + border_height
+
+    -- resize popup so it doesn't overflow and display on top of current line
+    opts.size.height = math.min(height, lines_above - border_height)
   end
 
   if vim.go.columns - vim.fn.screencol() > width then
     anchor = anchor .. "W"
   else
     anchor = anchor .. "E"
+
+    -- we're displatying to the left, account for border
+    opts.position.col = col + 1 + border_height
   end
-  return anchor
+
+  opts.anchor = anchor
+
+  return opts
 end
 
 function M.scroll(win, delta)

@@ -63,24 +63,7 @@ function NuiView:update_options()
   end
   if self._opts.anchor == "auto" then
     if self._opts.type == "popup" and self._opts.size then
-      local width = self._opts.size.width
-      local height = self._opts.size.height
-      if type(width) == "number" and type(height) == "number" then
-        local col = self._opts.position and self._opts.position.col
-        local row = self._opts.position and self._opts.position.row
-        local has_border = self._opts.border and self._opts.border.style ~= "none"
-        -- need to consider border when anchoring
-        self._opts.anchor = Util.nui.anchor(width, height + (has_border and 2 or 0))
-        if self._opts.anchor:find("S") and row then
-          -- if we're anchoring at the bottom, need to offset by border size
-          self._opts.position.row = -row + 1 + (has_border and 2 or 0)
-        end
-        if self._opts.anchor:find("E") and col then
-          self._opts.position.col = -col
-        end
-      end
-    else
-      self._opts.anchor = "NW"
+      self._opts = Util.nui.anchorAndResizePopup(self._opts --[[@as NuiPopupOptions]])
     end
   end
 end
