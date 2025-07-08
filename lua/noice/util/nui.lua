@@ -210,6 +210,8 @@ function M.anchorAndResizePopup(_opts)
   local has_border = (opts.border and opts.border.style and opts.border.style ~= "none")
   local border_offset = has_border and 2 or 0
 
+  local width = opts.size.width
+  ---@cast width number
   local height = opts.size.height
   ---@cast height number
 
@@ -224,7 +226,6 @@ function M.anchorAndResizePopup(_opts)
     -- first, adjust for the desired row offset (this will also handle borders)
     -- then adjust for padding (only worry about bottom padding when going down)
     opts.size.height = math.min(height, lines_below - row - padding.bottom)
-    vim.notify("h:" .. lines_below - padding.bottom - row)
   else
     anchor = anchor .. "S"
     -- when anchoring S, we invert the row position to draw "up" but
@@ -239,7 +240,7 @@ function M.anchorAndResizePopup(_opts)
     opts.size.height = math.min(height, lines_above - row - padding.top)
   end
 
-  if vim.go.columns - vim.fn.screencol() > opts.size.width then
+  if vim.go.columns - vim.fn.screencol() > width then
     anchor = anchor .. "W"
   else
     anchor = anchor .. "E"
@@ -248,10 +249,10 @@ function M.anchorAndResizePopup(_opts)
     -- we have to back out the border offset first since borders are
     -- drawn "inside" the col position
     -- then we apply any padding
-    vim.notify(vim.inspect(opts.position))
-    opts.position.col = -(col - border_offset) + 1 + opts.border.padding.left + opts.border.padding.right
-    vim.notify(vim.inspect(opts.position))
+    opts.position.col = -(col - border_offset) + 1 + padding.left + padding.right
   end
+
+  opts.size.width = math.min(width, vim.go.columns - padding.left - padding.right - border_offset)
 
   opts.anchor = anchor
 
