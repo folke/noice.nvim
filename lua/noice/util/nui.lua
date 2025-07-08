@@ -206,9 +206,10 @@ function M.anchorAndResizePopup(_opts)
 
   local col = opts.position and opts.position.col
   local row = opts.position and opts.position.row
-  local border_height = (opts.border and opts.border.style ~= "none") and 2 or 0
+  local padding = opts.border.padding or { top = 0, bottom = 0, right = 0, left = 0 }
+  local has_border = (opts.border and opts.border.style and opts.border.style ~= "none")
+  local border_offset = has_border and 2 or 0
 
-  local width = opts.size.width
   local height = opts.size.height
   ---@cast height number
 
@@ -219,25 +220,37 @@ function M.anchorAndResizePopup(_opts)
 
   if lines_below >= lines_above then
     anchor = anchor .. "N"
-
     -- resize popup so it doesn't overflow and display on top of current line
-    opts.size.height = math.min(height, lines_below - border_height)
+    -- first, adjust for the desired row offset (this will also handle borders)
+    -- then adjust for padding (only worry about bottom padding when going down)
+    opts.size.height = math.min(height, lines_below - row - padding.bottom)
+    vim.notify("h:" .. lines_below - padding.bottom - row)
   else
     anchor = anchor .. "S"
-    -- adjust the position, accounting for border
-    opts.position.row = -row + 1 + border_height
+    -- when anchoring S, we invert the row position to draw "up" but
+    -- we have to back out the border offset first since borders are
+    -- drawn "inside" the row position.
+    -- then we need to account for padding (even though it'll almost always be 0)
+    opts.position.row = -(row - border_offset) + 1 + padding.top + padding.bottom
 
     -- resize popup so it doesn't overflow and display on top of current line
-    opts.size.height = math.min(height, lines_above - border_height)
+    -- first, adjust for the desired row offset (this will also handle borders)
+    -- then adjust for padding (only worry about top padding when going up)
+    opts.size.height = math.min(height, lines_above - row - padding.top)
   end
 
-  if vim.go.columns - vim.fn.screencol() > width then
+  if vim.go.columns - vim.fn.screencol() > opts.size.width then
     anchor = anchor .. "W"
   else
     anchor = anchor .. "E"
 
-    -- we're displatying to the left, account for border
-    opts.position.col = col + 1 + border_height
+    -- when anchoring E, we have to invert the col position to draw "left" but
+    -- we have to back out the border offset first since borders are
+    -- drawn "inside" the col position
+    -- then we apply any padding
+    vim.notify(vim.inspect(opts.position))
+    opts.position.col = -(col - border_offset) + 1 + opts.border.padding.left + opts.border.padding.right
+    vim.notify(vim.inspect(opts.position))
   end
 
   opts.anchor = anchor
