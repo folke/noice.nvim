@@ -83,18 +83,16 @@ function M.on_signature(_, result, ctx, config)
 
   local message = Docs.get("signature")
 
-  if config.trigger or not message:focus() then
-    result.ft = vim.bo[ctx.bufnr].filetype
-    result.message = message
-    M.new(result):format()
-    if message:is_empty() then
-      if not config.trigger then
-        vim.notify("No signature help available")
-      end
-      return
+  result.ft = vim.bo[ctx.bufnr].filetype
+  result.message = message
+  M.new(result):format()
+  if message:is_empty() then
+    if not config.trigger then
+      vim.notify("No signature help available")
     end
-    Docs.show(message, config.stay)
+    return
   end
+  Docs.show(message, config.stay)
 end
 M.on_signature = Util.protect(M.on_signature)
 
