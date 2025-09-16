@@ -202,8 +202,8 @@ function M.format(message, text, opts)
         for _, t in ipairs(M.get_highlights(block.line)) do
           message:append(t)
         end
-        md_lines = md_lines + 1
       end
+      md_lines = md_lines + 1
     end
   end
   emit_md()
