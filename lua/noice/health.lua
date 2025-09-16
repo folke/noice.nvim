@@ -236,6 +236,13 @@ Either disable the other plugin or set `config.%s.enabled = false` in your **Noi
 end
 
 function M.get_source(fn)
+  if type(fn) ~= "function" then
+    return {
+      line = 0,
+      source = "unknown",
+      plugin = "unknown",
+    }
+  end
   local info = debug.getinfo(fn, "S")
   local source = info.source:sub(2)
   ---@class FunSource
