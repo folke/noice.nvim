@@ -171,6 +171,7 @@ function Scrollbar:_open_win(opts)
       col = 0,
       style = "minimal",
       noautocmd = true,
+      border = "none",
     }),
   }
   vim.api.nvim_set_option_value("winhighlight", "Normal:" .. opts.normal, { win = ret.winnr })
