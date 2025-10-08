@@ -1,4 +1,4 @@
-*noice.nvim.txt*            For Neovim           Last change: 2025 February 11
+*noice.nvim.txt*            For Neovim            Last change: 2025 October 08
 
 ==============================================================================
 Table of Contents                               *noice.nvim-table-of-contents*
@@ -55,8 +55,8 @@ issues have already been fixed upstream. Check this tracking issue
 REQUIREMENTS             *noice.nvim-noice-(nice,-noise,-notice)-requirements*
 
 - Neovim >= 0.9.0 **(nightly highly recommended)**
-- nui.nvim <https://github.com/MunifTanjim/nui.nvim>used for proper rendering and multiple views
-- nvim-notify <https://github.com/rcarriga/nvim-notify>notification view _(optional)_
+- nui.nvim <https://github.com/MunifTanjim/nui.nvim>: used for proper rendering and multiple views
+- nvim-notify <https://github.com/rcarriga/nvim-notify>: notification view _(optional)_
 - a Nerd Font <https://www.nerdfonts.com/> **(optional)**
 - nvim-treesitter <https://github.com/nvim-treesitter/nvim-treesitter/> **(optional, but highly recommended)**
     used for highlighting the cmdline and lsp docs. Make sure to install the parsers for
@@ -437,12 +437,12 @@ VIEWS                           *noice.nvim-noice-(nice,-noise,-notice)-views*
 
 **Noice** comes with the following built-in backends:
 
-- **popup**powered by nui.nvim <https://github.com/MunifTanjim/nui.nvim>
-- **split**powered by nui.nvim <https://github.com/MunifTanjim/nui.nvim>
-- **notify**powered by nvim-notify <https://github.com/rcarriga/nvim-notify>
-- **virtualtext**shows the message as virtualtext (for example for `search_count`)
-- **mini**similar to notifier.nvim <https://github.com/vigoux/notifier.nvim> & fidget.nvim <https://github.com/j-hui/fidget.nvim>
-- **notify_send**generate a desktop notification
+- **popup**: powered by nui.nvim <https://github.com/MunifTanjim/nui.nvim>
+- **split**: powered by nui.nvim <https://github.com/MunifTanjim/nui.nvim>
+- **notify**: powered by nvim-notify <https://github.com/rcarriga/nvim-notify>
+- **virtualtext**: shows the message as virtualtext (for example for `search_count`)
+- **mini**: similar to notifier.nvim <https://github.com/vigoux/notifier.nvim> & fidget.nvim <https://github.com/j-hui/fidget.nvim>
+- **notify_send**: generate a desktop notification
 
 A **View** (`config.views`) is a combination of a `backend` and options.
 **Noice** comes with the following built-in views with sane defaults:
@@ -551,18 +551,18 @@ defaults, please refer to config.format
 
 **Noice** includes the following formatters:
 
-- **level**message level with optional `icon` and `hl_group` per level
-- **text**any text with optional `hl_group`
-- **title**message title with optional `hl_group`
-- **event**message event with optional `hl_group`
-- **kind**message kind with optional `hl_group`
-- **date**formatted date with optional date format string
-- **message**message content itself with optional `hl_group` to override message highlights
-- **confirm**only useful for `confirm` messages. Will format the choices as buttons.
-- **cmdline**will render the cmdline in the message that generated the message.
-- **progress**progress bar used by lsp progress
-- **spinner**spinners used by lsp progress
-- **data**render any custom data from `Message.opts`. Useful in combination with the opts passed to `vim.notify`
+- **level**: message level with optional `icon` and `hl_group` per level
+- **text**: any text with optional `hl_group`
+- **title**: message title with optional `hl_group`
+- **event**: message event with optional `hl_group`
+- **kind**: message kind with optional `hl_group`
+- **date**: formatted date with optional date format string
+- **message**: message content itself with optional `hl_group` to override message highlights
+- **confirm**: only useful for `confirm` messages. Will format the choices as buttons.
+- **cmdline**: will render the cmdline in the message that generated the message.
+- **progress**: progress bar used by lsp progress
+- **spinner**: spinners used by lsp progress
+- **data**: render any custom data from `Message.opts`. Useful in combination with the opts passed to `vim.notify`
 
 Formatters are used in `format` definitions. **Noice** includes the following
 built-in formats:
@@ -607,9 +607,9 @@ ROUTES                         *noice.nvim-noice-(nice,-noise,-notice)-routes*
 
 A **route** has a `filter`, `view` and optional `opts` attribute.
 
-- **view**one of the views (built-in or custom)
+- **view**: one of the views (built-in or custom)
 - **filter** a filter for messages matching this route
-- **opts**options for the view and the route
+- **opts**: options for the view and the route
 
 Route options can be any of the view options above, or one of:
 
@@ -658,10 +658,10 @@ STATUSLINE COMPONENTS*noice.nvim-noice-(nice,-noise,-notice)-statusline-componen
 **Noice** comes with the following statusline components:
 
 - **ruler**
-- **message**last line of the last message (`event=show_msg`)
-- **command**`showcmd`
-- **mode**`showmode` (@recording messages)
-- **search**search count messages
+- **message**: last line of the last message (`event=show_msg`)
+- **command**: `showcmd`
+- **mode**: `showmode` (@recording messages)
+- **search**: search count messages
 
 See noice.config.status
 <https://github.com/folke/noice.nvim/blob/main/lua/noice/config/status.lua> for
@@ -671,9 +671,9 @@ You can add custom statusline components in setup under the `status` key.
 
 Statusline components have the following methods:
 
-- **get**gets the content of the message **without** highlights
-- **get_hl**gets the content of the message **with** highlights
-- **has**checks if the component is available
+- **get**: gets the content of the message **without** highlights
+- **get_hl**: gets the content of the message **with** highlights
+- **has**: checks if the component is available
 
 Example of configuring lualine.nvim ~
 
