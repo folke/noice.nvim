@@ -100,9 +100,13 @@ M.on_signature = Util.protect(M.on_signature)
 
 function M.on_attach(buf, client)
   if client.server_capabilities.signatureHelpProvider then
+    local triggerChars = client.server_capabilities.signatureHelpProvider.triggerCharacters
+    local retriggerChars = client.server_capabilities.signatureHelpProvider.retriggerCharacters
     ---@type string[]
-    local chars = client.server_capabilities.signatureHelpProvider.triggerCharacters
-    if chars and #chars > 0 then
+    local chars = {}
+    if triggerChars then for _, c in ipairs(triggerChars) do chars[#chars + 1] = c end end
+    if retriggerChars then for _, c in ipairs(retriggerChars) do chars[#chars + 1] = c end end
+    if #chars > 0 then
       local callback = M.check(buf, chars, client.offset_encoding)
       if Config.options.lsp.signature.auto_open.luasnip then
         vim.api.nvim_create_autocmd("User", {
