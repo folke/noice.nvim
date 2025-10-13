@@ -124,6 +124,12 @@ function M.check(opts)
       )
     end
 
+    if package.loaded["nvim-treesitter"] then
+      log.ok("Package `nvim-treesitter` is loaded.")
+    else
+      log.warn("Package `nvim-treesitter` is not loaded. Syntax highlighting might be broken.")
+    end
+
     for _, lang in ipairs({ "vim", "regex", "lua", "bash", "markdown", "markdown_inline" }) do
       if Treesitter.has_lang(lang) then
         log.ok("{TreeSitter} `" .. lang .. "` parser is installed")
