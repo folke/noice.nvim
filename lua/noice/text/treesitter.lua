@@ -3,8 +3,12 @@ M.queries = {}
 
 function M.get_query(lang)
   if not M.queries[lang] then
-    ---@diagnostic disable-next-line: deprecated
-    M.queries[lang] = (vim.treesitter.query.get or vim.treesitter.query.get_query)(lang, "highlights")
+    local query_func = (vim.treesitter.query.get or vim.treesitter.query.get_query)
+    local ok, query = pcall(query_func, lang, "highlights")
+    if not ok then
+      return
+    end
+    M.queries[lang] = query
   end
   return M.queries[lang]
 end
