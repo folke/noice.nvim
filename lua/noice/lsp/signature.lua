@@ -41,22 +41,32 @@ M.trigger_kind = {
 
 function M.setup()
   if Config.options.lsp.signature.auto_open.enabled then
-    -- attach to existing buffers
-    for _, client in ipairs((vim.lsp.get_clients or vim.lsp.get_active_clients)()) do
-      for _, buf in ipairs(vim.lsp.get_buffers_by_client_id(client.id)) do
-        M.on_attach(buf, client)
-      end
+    local check = Util.debounce(Config.options.lsp.signature.auto_open.throttle, M.check)
+
+    local group = vim.api.nvim_create_augroup("noice_lsp_signature", { clear = true })
+
+    if Config.options.lsp.signature.auto_open.luasnip then
+      vim.api.nvim_create_autocmd("User", {
+        group = group,
+        pattern = "LuasnipInsertNodeEnter",
+        callback = check,
+      })
     end
 
-    -- attach to new buffers
-    vim.api.nvim_create_autocmd("LspAttach", {
-      group = vim.api.nvim_create_augroup("noice_lsp_signature", { clear = true }),
-      callback = function(args)
-        if args.data ~= nil then
-          M.on_attach(args.buf, vim.lsp.get_client_by_id(args.data.client_id))
-        end
-      end,
-    })
+    if Config.options.lsp.signature.auto_open.trigger then
+      vim.api.nvim_create_autocmd({ "TextChangedI", "TextChangedP", "InsertEnter" }, {
+        group = group,
+        callback = check,
+      })
+    end
+
+    if Config.options.lsp.signature.auto_open.snipppets then
+      vim.api.nvim_create_autocmd("ModeChanged", {
+        group = group,
+        pattern = "*:s",
+        callback = check,
+      })
+    end
   end
 end
 
@@ -98,57 +108,24 @@ function M.on_signature(_, result, ctx, config)
 end
 M.on_signature = Util.protect(M.on_signature)
 
-function M.on_attach(buf, client)
-  if client.server_capabilities.signatureHelpProvider then
-    ---@type string[]
-    local chars = client.server_capabilities.signatureHelpProvider.triggerCharacters
-    if chars and #chars > 0 then
-      local callback = M.check(buf, chars, client.offset_encoding)
-      if Config.options.lsp.signature.auto_open.luasnip then
-        vim.api.nvim_create_autocmd("User", {
-          pattern = "LuasnipInsertNodeEnter",
-          callback = callback,
-        })
-      end
-      if Config.options.lsp.signature.auto_open.trigger then
-        vim.api.nvim_create_autocmd({ "TextChangedI", "TextChangedP", "InsertEnter" }, {
-          buffer = buf,
-          callback = callback,
-        })
-      end
-      if Config.options.lsp.signature.auto_open.snipppets then
-        vim.api.nvim_create_autocmd("ModeChanged", {
-          buffer = buf,
-          callback = function(ev)
-            if ev.match == "v:s" then
-              callback(ev)
-            end
-          end,
-        })
-      end
-    end
+function M.check()
+  local buf = vim.api.nvim_get_current_buf()
+  local client = vim.lsp.get_clients({ bufnr = buf, method = "textDocument/signatureHelp" })[1]
+  local chars = client and client.server_capabilities.signatureHelpProvider.triggerCharacters or nil --[[@as string[]?]]
+  if not (client and chars and #chars > 0) then
+    return
   end
-end
-
-function M.check(buf, chars, encoding)
-  encoding = encoding or "utf-16"
-  return Util.debounce(Config.options.lsp.signature.auto_open.throttle, function(_event)
-    if vim.api.nvim_get_current_buf() ~= buf then
-      return
-    end
-
-    if vim.tbl_contains(chars, M.get_char(buf)) then
-      local params = vim.lsp.util.make_position_params(0, encoding)
-      vim.lsp.buf_request(buf, "textDocument/signatureHelp", params, function(err, result, ctx)
-        M.on_signature(err, result, ctx, {
-          trigger = true,
-          stay = function()
-            return vim.tbl_contains(chars, M.get_char(buf))
-          end,
-        })
-      end)
-    end
-  end)
+  if vim.tbl_contains(chars, M.get_char(buf)) then
+    local params = vim.lsp.util.make_position_params(0, client.offset_encoding)
+    vim.lsp.buf_request(buf, "textDocument/signatureHelp", params, function(err, result, ctx)
+      M.on_signature(err, result, ctx, {
+        trigger = true,
+        stay = function()
+          return vim.tbl_contains(chars, M.get_char(buf))
+        end,
+      })
+    end)
+  end
 end
 
 ---@param help SignatureHelp
