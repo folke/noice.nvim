@@ -1,5 +1,27 @@
 # Changelog
 
+## [4.11.0](https://github.com/folke/noice.nvim/compare/v4.10.0...v4.11.0) (2025-10-21)
+
+
+### Features
+
+* added snacks integration ([df72b6d](https://github.com/folke/noice.nvim/commit/df72b6ddf6c167b20083f54647ae16dafde3737b))
+
+
+### Bug Fixes
+
+* **health:** prevent crash in checkhealth when handler is not a function ([#1153](https://github.com/folke/noice.nvim/issues/1153)) ([3988250](https://github.com/folke/noice.nvim/commit/3988250998da3ea909aad9ea0d2966ecb933dd56))
+* **html:** rendering of nbsp characters ([#1147](https://github.com/folke/noice.nvim/issues/1147)) ([f193e98](https://github.com/folke/noice.nvim/commit/f193e98f6d359421826210b269ba3ec83b284dad))
+* **markdown:** fix render lines count ([#1152](https://github.com/folke/noice.nvim/issues/1152)) ([31b261b](https://github.com/folke/noice.nvim/commit/31b261b22733043c1b21595b605a22c652668cdb))
+* **notify:** log level / urgency ([#1146](https://github.com/folke/noice.nvim/issues/1146)) ([c86aea5](https://github.com/folke/noice.nvim/commit/c86aea584d98be7ee1167ce4d4ef946fbd7f3ae0))
+* **treesitter:** parser should be lower-case. Closes [#1055](https://github.com/folke/noice.nvim/issues/1055) ([d71b8eb](https://github.com/folke/noice.nvim/commit/d71b8ebc230df8653ae95280412ad732c488e585))
+* **ui:** set scrollbar window border to none ([#1155](https://github.com/folke/noice.nvim/issues/1155)) ([7766097](https://github.com/folke/noice.nvim/commit/77660974a9d42dd17791b24e8e203baedb46259c))
+
+
+### Performance Improvements
+
+* **lsp.signature:** refactored autocmds needed for signature help. Now at most 3 in total for all buffers. Closes [#1158](https://github.com/folke/noice.nvim/issues/1158) ([3234438](https://github.com/folke/noice.nvim/commit/32344382607df1974e21864dfe2dedb01f8dc623))
+
 ## [4.10.0](https://github.com/folke/noice.nvim/compare/v4.9.0...v4.10.0) (2025-02-06)
 
 
