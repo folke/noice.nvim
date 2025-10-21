@@ -169,8 +169,25 @@ function NuiView:destroy()
   self._loading = false
 end
 
+function NuiView:get_relative()
+  local relative = nil
+  if self._opts and self._opts.relative then
+    relative = self._opts.relative
+  end
+
+  if type(relative) == "table" then
+    relative = relative.type
+  end
+
+  return relative
+end
+
 function NuiView:hide()
+  local relative = self:get_relative()
   self._timer:stop()
+  if relative == "win" or relative == "buf" or relative == "cursor" then
+    self:destroy()
+  end
   if self._nui then
     self._visible = false
 
