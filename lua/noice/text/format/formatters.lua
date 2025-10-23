@@ -190,8 +190,17 @@ function M.confirm(message, opts, input)
       end
     end
 
-    local padding = math.floor((message:width() - message:last_line():width()) / 2)
-    table.insert(message:last_line()._texts, 1, NoiceText((" "):rep(padding)))
+    if opts.choices then
+      if opts.choices.align == "center" then
+        local padding = math.floor((message:width() - message:last_line():width()) / 2)
+        table.insert(message:last_line()._texts, 1, NoiceText((" "):rep(padding)))
+      elseif opts.choices.align == "right" then
+        local padding = math.floor((message:width() - message:last_line():width()))
+        table.insert(message:last_line()._texts, 1, NoiceText((" "):rep(padding)))
+      elseif opts.choices.align ~= "left" then
+        Util.panic("Invalid confirm formatter align value %s", opts.choices.align)
+      end
+    end
   end
 end
 
