@@ -187,7 +187,7 @@ M.spinners = {
   circleHalves = { frames = { "◐", "◓", "◑", "◒" }, interval = 50 },
   circleQuarters = { frames = { "◴", "◷", "◶", "◵" }, interval = 120 },
   circleFull = {
-    frames = { "", "󰪞", "󰪟", "󰪠", "󰪢", "󰪣", "󰪤", "󰪥" },
+    frames = { "󰄰", "󰪞", "󰪟", "󰪠", "󰪢", "󰪣", "󰪤", "󰪥" },
     interval = 120,
   },
   clock = {
