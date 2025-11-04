@@ -80,7 +80,7 @@ function M.defaults()
       view = Config.options.messages.view,
       filter = {
         event = "msg_show",
-        kind = { "", "echo", "echomsg", "lua_print", "list_cmd" },
+        kind = { "", "echo", "echomsg", "lua_print", "list_cmd", "shell_out", "shell_err", "shell_ret" },
       },
       opts = { replace = true, merge = true, title = "Messages" },
     },
