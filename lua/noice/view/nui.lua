@@ -63,21 +63,7 @@ function NuiView:update_options()
   end
   if self._opts.anchor == "auto" then
     if self._opts.type == "popup" and self._opts.size then
-      local width = self._opts.size.width
-      local height = self._opts.size.height
-      if type(width) == "number" and type(height) == "number" then
-        local col = self._opts.position and self._opts.position.col
-        local row = self._opts.position and self._opts.position.row
-        self._opts.anchor = Util.nui.anchor(width, height)
-        if self._opts.anchor:find("S") and row then
-          self._opts.position.row = -row + 1
-        end
-        if self._opts.anchor:find("E") and col then
-          self._opts.position.col = -col
-        end
-      end
-    else
-      self._opts.anchor = "NW"
+      self._opts = Util.nui.anchorAndResizePopup(self._opts --[[@as NuiPopupOptions]])
     end
   end
 end

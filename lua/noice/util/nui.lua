@@ -194,23 +194,69 @@ function M.get_layout(dim, _opts)
   return { size = size, position = position, relative = opts.relative }
 end
 
-function M.anchor(width, height)
-  local anchor = ""
-  local lines_above = vim.fn.screenrow() - 1
-  local lines_below = vim.fn.winheight(0) - lines_above
+---@param _opts? NuiPopupOptions
+---@return _.NuiPopupOptions
+function M.anchorAndResizePopup(_opts)
+  ---@type _.NuiPopupOptions
+  local opts = vim.deepcopy(_opts or {})
 
-  if height < lines_below then
+  if type(opts.size.width) ~= "number" or type(opts.size.height) ~= "number" then
+    return opts
+  end
+
+  local col = opts.position and opts.position.col
+  local row = opts.position and opts.position.row
+  local padding = opts.border.padding or { top = 0, bottom = 0, right = 0, left = 0 }
+  local has_border = (opts.border and opts.border.style and opts.border.style ~= "none")
+  local border_offset = has_border and 2 or 0
+
+  local width = opts.size.width
+  ---@cast width number
+  local height = opts.size.height
+  ---@cast height number
+
+  local lines_above = vim.fn.screenrow() - 1
+  -- use vim.go.lines instead of winheight since we want to allow overlapping other windows
+  local lines_below = vim.go.lines - 1 - lines_above
+  local anchor = ""
+
+  if lines_below >= lines_above then
     anchor = anchor .. "N"
+    -- resize popup so it doesn't overflow and display on top of current line
+    -- first, adjust for the desired row offset (this will also handle borders)
+    -- then adjust for padding (only worry about bottom padding when going down)
+    opts.size.height = math.min(height, lines_below - row - padding.bottom)
   else
     anchor = anchor .. "S"
+    -- when anchoring S, we invert the row position to draw "up" but
+    -- we have to back out the border offset first since borders are
+    -- drawn "inside" the row position.
+    -- then we need to account for padding (even though it'll almost always be 0)
+    opts.position.row = -(row - border_offset) + 1 + padding.top + padding.bottom
+
+    -- resize popup so it doesn't overflow and display on top of current line
+    -- first, adjust for the desired row offset (this will also handle borders)
+    -- then adjust for padding (only worry about top padding when going up)
+    opts.size.height = math.min(height, lines_above - row - padding.top)
   end
 
   if vim.go.columns - vim.fn.screencol() > width then
     anchor = anchor .. "W"
   else
     anchor = anchor .. "E"
+
+    -- when anchoring E, we have to invert the col position to draw "left" but
+    -- we have to back out the border offset first since borders are
+    -- drawn "inside" the col position
+    -- then we apply any padding
+    opts.position.col = -(col - border_offset) + 1 + padding.left + padding.right
   end
-  return anchor
+
+  opts.size.width = math.min(width, vim.go.columns - padding.left - padding.right - border_offset)
+
+  opts.anchor = anchor
+
+  return opts
 end
 
 function M.scroll(win, delta)
