@@ -140,9 +140,11 @@ function Scrollbar:update()
   thumb_height = math.max(1, thumb_height)
 
   local view = vim.api.nvim_win_call(self.winnr, vim.fn.winsaveview)
-
-  local pct = math.min(view.topline / (buf_height - dim.height + 1), 1)
-
+  local max_scroll = buf_height - dim.height
+  local pct = 0
+  if max_scroll > 0 then
+    pct = math.min((view.topline - 1) / max_scroll, 1)
+  end
   local thumb_offset = math.floor(pct * (dim.height - thumb_height) + 0.5)
 
   Util.win_apply_config(self.thumb.winnr, {

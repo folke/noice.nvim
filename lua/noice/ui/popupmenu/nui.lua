@@ -249,7 +249,7 @@ function M.on_select(state, redraw)
     else
       vim.wo[M.menu.winid].cursorline = true
       vim.api.nvim_win_set_cursor(M.menu.winid, { state.selected + 1, 0 })
-      vim.api.nvim_exec_autocmds("WinScrolled", { modeline = false })
+      vim.api.nvim_exec_autocmds("WinScrolled", { pattern = tostring(M.menu.winid), modeline = false })
       if redraw ~= false and Util.is_blocking() then
         Util.redraw()
       end
