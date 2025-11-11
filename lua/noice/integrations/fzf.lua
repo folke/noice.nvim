@@ -3,6 +3,7 @@ local require = require("noice.util.lazy")
 local Config = require("noice.config")
 local Format = require("noice.text.format")
 local Manager = require("noice.message.manager")
+local View = require("noice.view")
 local builtin = require("fzf-lua.previewer.builtin")
 local fzf = require("fzf-lua")
 
@@ -84,7 +85,7 @@ end
 
 ---@param opts? table<string, any>
 function M.open(opts)
-  local messages = M.find()
+  local id_to_message = M.find()
   opts = vim.tbl_deep_extend("force", opts or {}, {
     prompt = false,
     winopts = {
@@ -95,18 +96,27 @@ function M.open(opts)
         title_pos = "center",
       },
     },
-    previewer = M.previewer(messages),
+    previewer = M.previewer(id_to_message),
     fzf_opts = {
       ["--no-multi"] = "",
       ["--with-nth"] = "2..",
     },
     actions = {
-      default = function() end,
+      default = function(entry_str)
+        entry_str = entry_str[1]
+
+        local id = tonumber(entry_str:match("^%d+"))
+        local message_entry = id_to_message[id]
+
+        local view = View.get_view("popup", {})
+        view:set(message_entry.message)
+        view:display()
+      end,
     },
   })
   local lines = vim.tbl_map(function(entry)
     return entry.display
-  end, vim.tbl_values(messages))
+  end, vim.tbl_values(id_to_message))
   return fzf.fzf_exec(lines, opts)
 end
 
