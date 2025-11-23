@@ -151,6 +151,9 @@ M.defaults = {
   },
   ---@class NoiceFormatOptions.confirm
   confirm = {
+    choices = {
+      align = "center",
+    },
     hl_group = {
       choice = "NoiceFormatConfirm",
       default_choice = "NoiceFormatConfirmDefault",
