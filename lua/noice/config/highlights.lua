@@ -16,6 +16,7 @@ M.defaults = {
   CmdlinePopupBorder = "DiagnosticSignInfo", -- Cmdline popup border
   CmdlinePopupTitle = "DiagnosticSignInfo", -- Cmdline popup border
   CmdlinePopupBorderSearch = "DiagnosticSignWarn", -- Cmdline popup border for search
+  CmdlineCommand = "Statement", -- Highlight for the command (first word) in the cmdline
   Confirm = "Normal", -- Normal for the confirm view
   ConfirmBorder = "DiagnosticSignInfo", -- Border for the confirm view
   Cursor = "Cursor", -- Fake Cursor

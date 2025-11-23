@@ -19,6 +19,7 @@ function M.highlight(buf, ns, range, lang)
     if not pcall(vim.cmd, string.format("syntax include %s syntax/%s.vim", group, lang)) then
       return
     end
+    
     vim.cmd(
       string.format(
         "syntax region %s start=+\\%%%dl+ end=+\\%%%dl+ contains=%s keepend",
@@ -28,6 +29,23 @@ function M.highlight(buf, ns, range, lang)
         group
       )
     )
+    
+    if lang == "vim" then
+      local ok = pcall(vim.cmd, string.format([[
+        syntax match NoiceCmdlineCommand /\v^\s*\w+/ display
+        highlight default link NoiceCmdlineCommand Statement
+      ]]))
+      
+      if ok then
+        local line = vim.api.nvim_buf_get_lines(buf, 0, 1, false)[1]
+        if line then
+          local cmd_end = line:find("%s") or #line + 1
+          if cmd_end > 1 then
+            vim.api.nvim_buf_add_highlight(buf, ns, "NoiceCmdlineCommand", 0, 0, cmd_end - 1)
+          end
+        end
+      end
+    end
   end)
 end
 

@@ -151,7 +151,24 @@ function Cmdline:format(message, text_only)
 
   local cmd = self:get():sub(self.offset)
 
-  message:append(cmd)
+  -- Apply custom command highlighting instead of appending the whole string at once
+  if format.lang == "vim" and cmd:match("^%s*%w+") then
+    -- Find the first word (the command)
+    local first_word_end = cmd:find("%s") or #cmd + 1
+    local command_part = cmd:sub(1, first_word_end-1)
+    local rest_part = first_word_end <= #cmd and cmd:sub(first_word_end) or ""
+    
+    -- Highlight the command part with NoiceCmdlineCommand
+    message:append(command_part, "NoiceCmdlineCommand")
+    
+    -- Append the rest normally
+    if rest_part ~= "" then
+      message:append(rest_part)
+    end
+  else
+    -- Original behavior for non-vim language or when there's no command
+    message:append(cmd)
+  end
 
   if format.lang then
     message:append(NoiceText.syntax(format.lang, 1, -vim.fn.strlen(cmd)))
@@ -317,6 +334,12 @@ end
 function M.update()
   M.message:clear()
   local cmdline = M.last()
+
+  -- Force define NoiceCmdlineCommand highlight only if it doesn't exist
+  local exists = pcall(function() return vim.api.nvim_get_hl(0, {name = "NoiceCmdlineCommand"}).fg end)
+  if not exists then
+    vim.api.nvim_set_hl(0, "NoiceCmdlineCommand", { link = "Statement" })
+  end
 
   if cmdline then
     cmdline:format(M.message)
