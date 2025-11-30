@@ -137,16 +137,15 @@ end
 M.SPECIAL = "Þ"
 ---@deprecated
 function M.cmdline_force_redraw()
-  if vim.fn.has("nvim-0.11") == 1 then
-    -- no longer needed on nightly
-    return
-  end
   if not require("noice.util.ffi").cmdpreview then
     return
   end
 
   -- HACK: this will trigger redraw during substitute and cmdpreview
+  local cmdpos = vim.fn.getcmdpos()
+  local cmdline = vim.fn.getcmdline()
   vim.api.nvim_feedkeys(M.SPECIAL .. Util.BS, "n", true)
+  vim.fn.setcmdline(cmdline, cmdpos)
 end
 
 ---@type string?
