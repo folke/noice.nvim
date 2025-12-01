@@ -43,6 +43,9 @@ function M.open(uri)
     cmd = { "cmd.exe", "/c", "start", '""', vim.fn.shellescape(uri) }
   elseif vim.fn.has("macunix") == 1 then
     cmd = { "open", uri }
+  elseif vim.fn.has("wsl") == 1 then
+    -- use powershell to open the uri in wsl
+    cmd = { "powershell.exe", "-NoProfile", "-Command", "Start-Process", vim.fn.shellescape(uri) }
   else
     cmd = { "xdg-open", uri }
   end
