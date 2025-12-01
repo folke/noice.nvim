@@ -63,7 +63,7 @@ end
 
 function M.hover()
   local params = make_position_params()
-  vim.lsp.buf_request(0, "textDocument/hover", params, require("noice.lsp.hover").on_hover)
+  vim.lsp.buf_request_all(0, "textDocument/hover", params, require("noice.lsp.hover").on_hover)
 end
 
 function M.signature()
