@@ -55,6 +55,18 @@ function M.clear(filter)
   end, filter)
 end
 
+---@param filter? NoiceFilter
+function M.clear_history(filter)
+  if not filter then
+    M._history = {}
+    return
+  end
+  M.with(function(message)
+    M._history[message.id] = nil
+    next_tick()
+  end, filter, { history = true })
+end
+
 ---@param max number
 function M.prune(max)
   local keep = M.get(nil, { count = max })
