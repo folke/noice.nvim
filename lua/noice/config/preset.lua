@@ -94,6 +94,11 @@ M.presets = {
           winhighlight = { Normal = "Normal", FloatBorder = "NoiceCmdlinePopupBorder" },
         },
       },
+      confirm = {
+        position = {
+          row = 6,
+        },
+      },
     },
   },
   long_message_to_split = {
