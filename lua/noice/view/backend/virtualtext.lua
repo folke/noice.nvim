@@ -18,11 +18,35 @@ function VirtualText:show()
   line = line - 1
 
   if self._messages[1] then
-    self.extmark = vim.api.nvim_buf_set_extmark(self.buf, Config.ns, line, col, {
-      virt_text_pos = "eol",
-      virt_text = { { vim.trim(self._messages[1]:content()), self._opts.hl_group or "DiagnosticVirtualTextInfo" } },
-      hl_mode = "combine",
-    })
+    local text = vim.trim(self._messages[1]:content())
+    local hl = self._opts.hl_group or "DiagnosticVirtualTextInfo"
+    local pos = self._opts.virt_text_pos or "right_inline"
+
+    local extmark_opts = { hl_mode = "combine" }
+
+    -- Compute code-line boundaries (first and last non-blank columns)
+    local line_text = vim.api.nvim_buf_get_lines(self.buf, line, line + 1, false)[1] or ""
+    local indent = vim.fn.strdisplaywidth(line_text:match("^%s*") or "")
+    local content_end = vim.fn.strdisplaywidth((line_text:match("^(.-)%s*$") or ""))
+
+    if pos == "right_inline" then
+      extmark_opts.virt_text = { { text, hl } }
+      extmark_opts.virt_text_pos = "eol"
+    elseif pos == "left_upper" or pos == "left_lower" then
+      local pad = string.rep(" ", indent)
+      extmark_opts.virt_lines = { { { pad, "" }, { text, hl } } }
+      extmark_opts.virt_lines_above = (pos == "left_upper")
+    elseif pos == "right_upper" or pos == "right_lower" then
+      local text_width = vim.fn.strdisplaywidth(text)
+      local pad = math.max(content_end - text_width, 0)
+      extmark_opts.virt_lines = { { { string.rep(" ", pad), "" }, { text, hl } } }
+      extmark_opts.virt_lines_above = (pos == "right_upper")
+    else
+      extmark_opts.virt_text = { { text, hl } }
+      extmark_opts.virt_text_pos = "eol"
+    end
+
+    self.extmark = vim.api.nvim_buf_set_extmark(self.buf, Config.ns, line, col, extmark_opts)
   end
 end
 
