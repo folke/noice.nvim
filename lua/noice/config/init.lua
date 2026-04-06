@@ -184,6 +184,9 @@ function M.defaults()
         ["^%s*(See also:)"] = "@text.title",
         ["{%S-}"] = "@parameter",
       },
+      icons = {
+        heading = "󰫎 ",
+      },
     },
     health = {
       checker = true, -- Disable if you don't want health checks to run
