@@ -14,7 +14,7 @@ function M.is_rule(line)
 end
 
 function M.is_heading(line)
-  return line and line:find("^#*%s+")
+  return line and line:find("^#+%s+")
 end
 
 function M.is_code_block(line)
