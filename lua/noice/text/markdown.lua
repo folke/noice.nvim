@@ -14,13 +14,18 @@ function M.is_rule(line)
 end
 
 function M.is_code_block(line)
-  return line and line:find("^%s*```")
+  return line and line:find("^%s*````*")
 end
 
 function M.is_empty(line)
   return line and line:find("^%s*$")
 end
 
+local code_block_end = ""
+
+local function is_code_block_end(line)
+  return line and line:find(code_block_end)
+end
 -- TODO:: upstream to treesitter
 -- ((backslash_escape) @conceal (#set! conceal "_") (#contains? @conceal "\_"))
 
@@ -92,9 +97,12 @@ function M.parse(text, opts)
       end
     elseif M.is_code_block(line) then
       ---@type string
-      local lang = line:match("```%s*(%S+)") or opts.ft or "text"
+      local lang = line:match("````*%s*([^%s`]+)") or opts.ft or "text"
+      local backticks = line:match("````*")
+      code_block_end = "^%s*" .. backticks
+
       local block = { lang = lang, code = {} }
-      while lines[l + 1] and not M.is_code_block(lines[l + 1]) do
+      while lines[l + 1] and not is_code_block_end(lines[l + 1]) do
         table.insert(block.code, lines[l + 1])
         l = l + 1
       end
