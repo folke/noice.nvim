@@ -6,15 +6,25 @@ local _ = require("nui.utils")._
 local M = {}
 
 M.transparent = false
+M.multigrid_ui = false
 
-local function check_bg()
+local function check_bg_ui()
   local normal = vim.api.nvim_get_hl(0, { name = "Normal" })
   M.transparent = not (normal and normal.bg ~= nil)
+
+  for _, ui in ipairs(vim.api.nvim_list_uis()) do
+    if ui.ext_multigrid then
+      M.multigrid_ui = true
+      return
+    end
+  end
 end
-check_bg()
+
+check_bg_ui()
+
 vim.api.nvim_create_autocmd("ColorScheme", {
   group = vim.api.nvim_create_augroup("noice_transparent", { clear = true }),
-  callback = check_bg,
+  callback = check_bg_ui,
 })
 
 ---@param opts? NoiceNuiOptions
@@ -40,7 +50,7 @@ function M.normalize_win_options(opts)
   if opts.win_options and opts.win_options.winhighlight then
     opts.win_options.winhighlight = Util.nui.get_win_highlight(opts.win_options.winhighlight)
   end
-  if opts.win_options and opts.win_options.winblend and M.transparent then
+  if opts.win_options and opts.win_options.winblend and M.transparent and not M.multigrid_ui then
     opts.win_options.winblend = 0
   end
 end
