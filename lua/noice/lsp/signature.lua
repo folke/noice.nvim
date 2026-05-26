@@ -85,7 +85,7 @@ end
 function M.on_signature(_, result, ctx, config)
   config = config or {}
   if not (result and result.signatures) then
-    if not config.trigger then
+    if not config.trigger and not Config.options.lsp.signature.silent then
       vim.notify("No signature help available")
     end
     return
@@ -98,7 +98,7 @@ function M.on_signature(_, result, ctx, config)
     result.message = message
     M.new(result):format()
     if message:is_empty() then
-      if not config.trigger then
+      if not config.trigger and not Config.options.lsp.signature.silent then
         vim.notify("No signature help available")
       end
       return

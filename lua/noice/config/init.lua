@@ -142,6 +142,7 @@ function M.defaults()
       },
       signature = {
         enabled = true,
+        silent = false, -- set to true to not show a message if signature is not available
         auto_open = {
           enabled = true,
           trigger = true, -- Automatically show signature help when typing a trigger character from the LSP
