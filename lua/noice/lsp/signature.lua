@@ -93,7 +93,7 @@ function M.on_signature(_, result, ctx, config)
 
   local message = Docs.get("signature")
 
-  if config.trigger or not message:focus() then
+  if config.trigger or not message:win() then
     result.ft = vim.bo[ctx.bufnr].filetype
     result.message = message
     M.new(result):format()
