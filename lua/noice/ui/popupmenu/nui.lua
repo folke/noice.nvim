@@ -112,10 +112,22 @@ function M.opts(state)
     opts.relative = { type = "cursor" }
     local border = vim.tbl_get(opts, "border", "style")
     local offset = (border == nil or border == "none") and 0 or 1
-    opts.position = {
-      row = 1 + offset,
-      col = -padding.left,
-    }
+    local lines_above = vim.fn.screenrow() - 1
+    local lines_below = vim.fn.winheight(0) - lines_above
+    local configured_height = opts.size and type(opts.size.height) == "number" and opts.size.height
+    local popup_height = (configured_height or #state.items) + offset * 2
+    if popup_height < lines_below then
+      opts.position = {
+        row = 1 + offset,
+        col = -padding.left,
+      }
+    else
+      opts.anchor = "SW"
+      opts.position = {
+        row = 0,
+        col = -padding.left,
+      }
+    end
   end
 
   -- manage left/right padding on the line
