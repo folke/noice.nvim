@@ -114,7 +114,8 @@ function M.opts(state)
     local offset = (border == nil or border == "none") and 0 or 1
     local lines_above = vim.fn.screenrow() - 1
     local lines_below = vim.fn.winheight(0) - lines_above
-    local popup_height = #state.items + offset * 2
+    local configured_height = opts.size and type(opts.size.height) == "number" and opts.size.height
+    local popup_height = (configured_height or #state.items) + offset * 2
     if popup_height < lines_below then
       opts.position = {
         row = 1 + offset,
