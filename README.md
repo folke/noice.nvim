@@ -122,7 +122,7 @@ Check the [wiki](https://github.com/folke/noice.nvim/wiki/Configuration-Recipes)
       search_up = { kind = "search", pattern = "^%?", icon = " ", lang = "regex" },
       filter = { pattern = "^:%s*!", icon = "$", lang = "bash" },
       lua = { pattern = { "^:%s*lua%s+", "^:%s*lua%s*=%s*", "^:%s*=%s*" }, icon = "", lang = "lua" },
-      help = { pattern = "^:%s*he?l?p?%s+", icon = "" },
+      help = { pattern = "^:%s*he?l?p?%s+", icon = "󰋖" },
       input = { view = "cmdline_input", icon = "󰥻 " }, -- Used by input()
       -- lua = false, -- to disable a format, set to `false`
     },
