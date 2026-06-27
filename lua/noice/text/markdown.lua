@@ -13,6 +13,10 @@ function M.is_rule(line)
   return line and line:find("^%s*[%*%-_][%*%-_][%*%-_]+%s*$")
 end
 
+function M.is_heading(line)
+  return line and line:find("^#+%s+")
+end
+
 function M.is_code_block(line)
   return line and line:find("^%s*```")
 end
@@ -197,6 +201,8 @@ function M.format(message, text, opts)
       message:newline()
       if M.is_rule(block.line) then
         M.horizontal_line(message)
+      elseif M.is_heading(block.line) then
+        M.heading(message, block.line)
       else
         message:append(block.line)
         for _, t in ipairs(M.get_highlights(block.line)) do
@@ -252,6 +258,15 @@ function M.horizontal_line(message)
     virt_text_win_col = 0,
     virt_text = { { string.rep("─", vim.go.columns), "@punctuation.special.markdown" } },
     priority = 100,
+  }))
+end
+
+---@param message NoiceMessage
+---@param line string
+function M.heading(message, line)
+  local level, title = line:match("^(#*)%s+(.*)$")
+  message:append(NoiceText(Config.options.markdown.icons.heading .. title, {
+    hl_group = "MarkdownH" .. #level,
   }))
 end
 
