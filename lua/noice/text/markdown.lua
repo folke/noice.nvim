@@ -265,10 +265,8 @@ end
 ---@param line string
 function M.heading(message, line)
   local level, title = line:match("^(#*)%s+(.*)$")
-  message:append(NoiceText("", {
-    virt_text_win_col = 0,
-    virt_text = { { Config.options.markdown.icons.heading .. title, "MarkdownH" .. #level } },
-    priority = 100,
+  message:append(NoiceText(Config.options.markdown.icons.heading .. title, {
+    hl_group = "MarkdownH" .. #level,
   }))
 end
 
