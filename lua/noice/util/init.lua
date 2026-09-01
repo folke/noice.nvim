@@ -279,10 +279,10 @@ function M.notify(msg, level, ...)
     require("notify").notify(msg:format(...), level, {
       title = "noice.nvim",
       on_open = function(win)
-        vim.api.nvim_win_set_option(win, "conceallevel", 3)
+        M.wo(win, { conceallevel = 3 })
         local buf = vim.api.nvim_win_get_buf(win)
-        vim.api.nvim_buf_set_option(buf, "filetype", "markdown")
-        vim.api.nvim_win_set_option(win, "spell", false)
+        vim.api.nvim_set_option_value("filetype", "markdown", { scope = "local", buf = buf })
+        vim.api.nvim_set_option_value("spell", false, { scope = "local", win = win })
       end,
     })
   else
