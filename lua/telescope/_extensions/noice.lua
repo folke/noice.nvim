@@ -56,7 +56,7 @@ function M.previewer()
   return previewers.new_buffer_previewer({
     title = "Message",
     define_preview = function(self, entry, _status)
-      vim.api.nvim_win_set_option(self.state.winid, "wrap", true)
+      vim.api.nvim_set_option_value("wrap", true, { scope = "local", win = self.state.winid })
 
       ---@type NoiceMessage
       local message = Format.format(entry.message, "telescope_preview")
@@ -97,8 +97,8 @@ function M.mappings()
         border = "rounded",
       })
 
-      vim.api.nvim_win_set_option(win, "wrap", true)
-      vim.api.nvim_buf_set_option(buf, "modifiable", false)
+      vim.api.nvim_set_option_value("wrap", true, { scope = "local", win = win })
+      vim.api.nvim_set_option_value("modifiable", false, { scope = "local", buf = buf })
     end)
 
     return true
