@@ -6,6 +6,7 @@ local Manager = require("noice.message.manager")
 local Message = require("noice.message")
 local NoiceText = require("noice.text")
 local Object = require("nui.object")
+local State = require("noice.ui.state")
 
 local M = {}
 M.message = Message("cmdline", nil)
@@ -30,7 +31,7 @@ M.real_cursor = vim.api.nvim__redraw ~= nil
 -- 1. msg_show.confirm with the message
 -- 2. cmdline_show with Yes/No/Cancel
 M.handle_confirm = vim.fn.has("nvim-0.11") == 1
-M.confirm_message = nil ---@type NoiceMessage?
+M.confirm = nil ---@type {message: NoiceMessage, prompt?: string, hidden?: boolean}?
 M._on_hide = nil ---@type fun()
 
 ---@alias NoiceCmdlineFormatter fun(cmdline: NoiceCmdline): {icon?:string, offset?:number, view?:NoiceViewOptions}
@@ -188,14 +189,27 @@ function M.on_show(event, content, pos, firstc, prompt, indent, level)
     level = level,
   })
 
-  if M.confirm_message then
-    local message = M.confirm_message --[[@as NoiceMessage]]
-    message:append(prompt)
-    M.confirm_message = nil
-    Manager.add(message)
+  if M.confirm then
+    if not M.confirm.prompt then
+      M.confirm.message:append(prompt)
+      M.confirm.prompt = prompt
+    elseif M.confirm.prompt ~= prompt then
+      M.confirm = nil
+    end
+  end
+
+  -- Confirm prompt redrawn without a new msg_show
+  if M.confirm then
+    M.confirm.hidden = false
+    Manager.add(M.confirm.message)
     M._on_hide = function()
+      M.confirm.hidden = true
+      -- Same M.confirm message can be shown again
+      State.clear("msg_show")
       vim.schedule(function()
-        Manager.remove(message)
+        if M.confirm.hidden then
+          Manager.remove(M.confirm.message)
+        end
       end)
     end
     return
@@ -310,7 +324,7 @@ function M.on_confirm(message)
   if not M.handle_confirm then
     return false
   end
-  M.confirm_message = message
+  M.confirm = { message = message }
   return true
 end
 
