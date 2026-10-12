@@ -63,7 +63,12 @@ end
 
 function M.hover()
   local params = make_position_params()
-  vim.lsp.buf_request(0, "textDocument/hover", params, require("noice.lsp.hover").on_hover)
+  local bufnr = vim.api.nvim_get_current_buf()
+  -- one callback for all clients, so a later answer does not focus the window of an earlier one
+  -- Neovim < 0.11 calls the handler without ctx
+  vim.lsp.buf_request_all(bufnr, "textDocument/hover", params, function(results, ctx)
+    require("noice.lsp.hover").on_hover(results, ctx or { bufnr = bufnr })
+  end)
 end
 
 function M.signature()
