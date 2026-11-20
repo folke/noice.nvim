@@ -169,11 +169,7 @@ function M:format_active_parameter(sig, param)
   end
 end
 
---- dddd
--- function M:format_signature(boo) end
-
 ---@param sig SignatureInformation
----@overload fun() # goooo
 function M:format_signature(sig_index, sig)
   if sig_index ~= 1 then
     self.message:newline()
