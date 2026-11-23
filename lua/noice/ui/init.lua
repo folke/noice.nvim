@@ -170,6 +170,9 @@ end
 ---@param event string
 function M.get_handler(event, ...)
   local event_group, event_type = event:match("([a-z]+)_(.*)")
+  if not event_type then
+    return
+  end
   local on = "on_" .. event_type
 
   local handler = M._handlers[event_group]
